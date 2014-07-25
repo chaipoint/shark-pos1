@@ -59,23 +59,25 @@ i {
 				var msg = "";
 				if(username.trim() == ""){msg += "<li>Provide Username</li>";}
 				if(password.trim() == ""){msg += "<li>Provide Password</li>"}
-				if(msg){$("#error_message").show();$("#error_message ul").html(msg);}else{$("#error_message").hide();$("#error_message ul").html("");}
-				$.ajax({
-			  		type: 'POST',
-			  		url: "index.php",
-			  		data : {username:username,password:password}
+				if(msg){$("#error_message").show();$("#error_message ul").html(msg);
+				}else{$("#error_message").hide();$("#error_message ul").html("");
+					$.ajax({
+				  		type: 'POST',
+				  		url: "index.php",
+				  		data : {username:username,password:password}
 
-				}).done(function(response) {
-					var $res =  $.parseJSON(response);
-					console.log($res);
-					if($res.error){
-						msg = $res.message;
-						$("#error_message").show();$("#error_message ul").html(msg);
-					}else{
-						window.location = "select_store.php";
-					}
-			  		//$( this ).addClass( "done" );
-				});
+					}).done(function(response) {
+						var $res =  $.parseJSON(response);
+						console.log($res);
+						if($res.error){
+							msg = $res.message;
+							$("#error_message").show();$("#error_message ul").html(msg);
+						}else{
+							window.location = "select_store.php";
+						}
+				  		//$( this ).addClass( "done" );
+					});
+				}
 				event.preventDefault();
 			});
 	});
