@@ -1,8 +1,8 @@
 <?php
 
 function getTableData($table,$type){
-	$con = mysql_connect('localhost','root','root');
-	mysql_select_db('cpos');
+	$con = mysql_connect('localhost','root','');
+	mysql_select_db('cabbeein_cpos');
 	$query = "SELECT * from ".$table;
 	$result = mysql_query($query);
 	$finalreturn = array();
@@ -11,7 +11,7 @@ function getTableData($table,$type){
 		$id = $row['id'];
 		unset($row['id']);
 		$finalreturn[$i] = $row;
-//		$finalreturn[$i]['password'] = md5(base64_decode($row['password']));
+		$finalreturn[$i]['password'] = md5(base64_decode($row['password']));
 		$finalreturn[$i]['mysql_id'] = $id;
 		$finalreturn[$i]['cd_doc_type'] = $type;
 		$i++;
