@@ -7,11 +7,16 @@
 		$result = current($storeDataList['rows']);
 		//print_r($result['value']);
 		$catList = array();
+		//var_dump($catList);
 		$productList = array();
+		//print_r($result['value']['menu_items']);
 		foreach($result['value']['menu_items'] as $key => $Items){
-			$catList[$Items['category_id']] = $Items['category']; 
-			$productList[$Items['category_id']][] = $Items;
+			if(!empty($Items['category_id'])){
+				$catList[$Items['category_id']] = $Items['category']; 
+				$productList[$Items['category_id']][] = $Items;
+			}
  		}
+
  		ksort($catList);
  	$catList[99] = 'AKESH';
  		 		$catList[] = 'AEWEKESH';
@@ -28,7 +33,7 @@
 <head>
 <meta charset="utf-8">
 <base href="http://localhost/pos/" />
-<title>POS | Simple POS</title>
+<title>Chai Point POS</title>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <link rel="shortcut icon"
 	href="http://localhost/pos/images/icon.png" />
@@ -37,11 +42,15 @@
 	charset="utf-8">
 <link rel="stylesheet" href="css/posajax.css" type="text/css"
 	charset="utf-8">
+
 <link rel="stylesheet" href="css/non-responsive.css" type="text/css">
 <link rel="stylesheet" href="css/print.css" type="text/css"
 	media="print">
 <script src="js/jquery.min.js"></script>
+
+
 <script src="js/purl.js"></script>
+<script src="js/moment.js"></script>
 <style>
 .btn-product {
 	background: #EEE;
@@ -68,6 +77,11 @@
 ?>
 <script>
 	$(document).ready(function(){
+
+		var now = moment().format("dddd, MMMM Do, YYYY, h:mm:ss A");
+        $('#cur-time').text(now);
+       
+
 		var $billingItems = new Object();
 		var $totalBillItems = 0;
 		var $totalBillCost = 0.0;
@@ -115,7 +129,7 @@
 					$billingItems[productData.mysql_id].price = productData.price;
 					$totalBillItems 	+= 	parseInt($billingItems[productData.mysql_id].qty);
 					$totalBillCost 		+=  parseFloat(productData.price)
-					$("#saletbl tbody").append('<tr billing-product="'+productData.mysql_id+'"><td><span class="glyphicon glyphicon-remove-sign"></span></td><td>'+productData.name+'</td><td><span class="qty">'+(1)+'</span></td><td><span class="price text-right">'+productData.price+'</span></td></tr>');
+					$("#saletbl tbody").append('<tr billing-product="'+productData.mysql_id+'"><td><span class="glyphicon glyphicon-remove-sign"></span></td><td class="btn-warning">'+productData.name+'&nbsp;@&nbsp;'+productData.price+'</td><td><span class="qty">'+(1)+'</span></td><td><span class="price text-right">'+productData.price+'</span></td></tr>');
 					//				console.log($billingItems[productData.mysql_id]);
 					//				console.log($billingItems);
 				}
@@ -139,7 +153,7 @@
 						<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 							class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand"> Simple POS </a>
+					<a class="navbar-brand"> Chai Point POS </a>
 				</div>
 				<ul class="nav navbar-nav">
 					<li class="dropdown"><a class="dropdown-toggle tip"
@@ -155,7 +169,7 @@
 									class="language-img"> &nbsp;&nbsp; English </a></li>
 						</ul>
 					</li>
-					<li><a href=""
+					<li><a href="sales.php"
 						class="tip" data-placement="right" title="Sales"><i
 							class="glyphicon glyphicon-list"></i> </a></li>
 				</ul>
@@ -167,12 +181,12 @@
 				</ul>
 				<a
 					class="btn btn-success btn-sm pull-right external"
-					style="padding: 5px 8px; margin: 5px 0 5px 5px;"
+					style="padding: 5px 8px; margin: 10px 0 5px 5px;"
 					data-toggle="modal" data-target="#saleModal"> Today's Sale </a> <a
 					data-toggle="modal"
 					data-target="#opModal"
 					class="btn btn-info btn-sm pull-right external" id="ob"
-					style="padding: 5px 8px; margin: 5px 5px 5px 5px;"> Opened Bills </a>
+					style="padding: 5px 8px; margin: 10px 5px 5px 5px;"> Opened Bills </a>
 				
 				<ul class="nav navbar-nav navbar-right">
 					<li><a class="hov"><span id="cur-time"></span> </a></li>
@@ -331,7 +345,7 @@
 											<div class="btn-con">
 												<button id="previous" type="button" class="btn btn-default"
 													style='z-index: 10002;'>
-													<i class="glyphicon glyphicon-chevron-left"></i>
+													<i  style="margin-bottom:100%;"class="glyphicon glyphicon-chevron-left"></i>
 												</button>
 												<button id="next" type="button" class="btn btn-default"
 													style='z-index: 10003;'>
@@ -1049,7 +1063,7 @@ var sproduct_name;
 var slast;
 var total_cp = 0;
 
-
+//$('#opModal').bind().on('click','a',function(){var pg=$.url($(this).attr("href")).param("per_page");
 </script>
 </body>
 </html>
