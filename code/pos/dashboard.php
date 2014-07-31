@@ -1,4 +1,34 @@
 <?php
+require_once 'httpapi.php';
+	
+	if(array_key_exists('request_type', $_POST) && $_POST['request_type'] == 'save_bill'){
+		
+		$_POST['cd_doc_type'] = 'store_menu_bill';
+		$_POST['billed_by'] = 2;
+		$_POST['bill_time'] = date("Y-m-d H:i:s");
+		require_once 'httpapi.php';
+
+		$url = "http://127.0.0.1:5984/pos/_design/billing/_update/getbillno/bill_counter";
+		$currentBillNo = curl($url,array(1=>1));
+		$_POST['bill_no'] = $currentBillNo;
+
+		$url = 'http://127.0.0.1:5984/pos/';
+		$result = json_decode(curl($url,$_POST,array('is_content_type_allowed'=>true,'contentType'=>'application/json')),true);
+		if(array_key_exists('ok', $result)){
+			echo '{"error":false,"bill_no":"'.$currentBillNo.'"}';			
+		}
+
+		return;
+	}
+	if(array_key_exists('request_type', $_POST) && $_POST['request_type'] == 'todays_bill'){
+		$url = 'http://127.0.0.1:5984/pos/_design/billing/_view/bill_by_date?key="'.date('Y-m-d').'"';
+		$bills = json_decode(curl($url),true);
+		//($bills);
+		echo json_encode($bills['rows']);
+		return;
+	}
+	//
+
 	$catList = array();
 	if(array_key_exists('store', $_GET) && is_numeric($_GET['store']) && $_GET['store'] >0){
 		$url = 'http://127.0.0.1:5984/pos/_design/store/_view/store_list?key="'.$_GET['store'].'"';
@@ -37,7 +67,6 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <link rel="shortcut icon"
 	href="http://localhost/pos/images/icon.png" />
-<script type="text/javascript">if(parent.frames.length>0)top.location='http://localhost/pos/index.php?module=pos'</script>
 <link rel="stylesheet" href="css/bootstrap.css" type="text/css"
 	charset="utf-8">
 <link rel="stylesheet" href="css/posajax.css" type="text/css"
@@ -70,6 +99,7 @@
 				var productList = \''.json_encode($productList).'\';
 				var productArray = $.parseJSON(productList);
 				var selectedCat = '.$firstCat.';
+				var store = '.$_GET['store'].';
 			</script>
 		';
 	}
@@ -78,6 +108,7 @@
 <script>
 	$(document).ready(function(){
 
+
 		var now = moment().format("dddd, MMMM Do, YYYY, h:mm:ss A");
         $('#cur-time').text(now);
        
@@ -85,6 +116,153 @@
 		var $billingItems = new Object();
 		var $totalBillItems = 0;
 		var $totalBillCost = 0.0;
+
+
+		$("#submit-sale").click(function(){
+
+			if(!$('#paid-amount').val()){
+				bootbox.alert("Before Saving Bill Make Payment");
+				return false;
+			}
+			if(parseInt($('#paid-amount').val()) < $totalBillCost){
+				bootbox.alert("Please Make Full Payment");
+				return false;
+			}
+			var billDetails = new Object();
+			billDetails.total_qty = $totalBillItems;
+			billDetails.total_amount = $totalBillCost;
+			billDetails.payment_type = $("#paid_by").val();
+			billDetails.customer = $("#billing_customer").val();
+			billDetails.store = store;
+
+			billDetails.items = new Object();
+			
+			//console.log(JSON.stringify($billingItems));
+			var i = 0;
+			$.each($billingItems,function(index,val){
+				billDetails.items[i] = new Object();
+				billDetails.items[i].p_id = index;
+				billDetails.items[i].qty = val.qty;
+				billDetails.items[i].name = val.name;
+				billDetails.items[i].price = val.price;
+				billDetails.items[i].total_amount = val.total_amount;
+				billDetails.request_type = 'save_bill';
+				i++;
+			});
+//			console.log(JSON.stringify(billDetails));
+			$.ajax({
+				type: 'POST',
+				url: "dashboard.php",
+		  		data : billDetails,
+			}).done(function(response) {
+				console.log(response);
+				$('#payModal').modal('hide');
+				result = $.parseJSON(response);
+				bootbox.alert('Bill Successfully Saved <a class="label label-primary print-bill-today" href="billprint.php?bill_no='+result.bill_no+'" target="_blank">Print</a>');
+			});
+		});
+
+		/*todays_sale*/
+		$('#todays_sale').click(function(){
+			$.ajax({
+				type: 'POST',
+				url: "dashboard.php",
+		  		data : {request_type:'todays_bill'},
+			}).done(function(response) {
+				var result = $.parseJSON(response);
+				var totalBills = result.length;
+				if(totalBills>0){
+					var trs = "";
+					$.each(result,function(index,details){
+						console.log(index+"=>"+JSON.stringify(details));
+						trs += '<tr><td>'+details.value.customer+'</td><td>'+
+								details.value.total_qty+'</td><td>'+
+								details.value.total_amount+'</td><td><a class="label label-primary print-bill-today" href="billprint.php?bill_no='+details.value.bill_no+'" target="_blank">Print</a></td><td><a class="label label-warning print-bill-today" href="billprint.php?bill_no='+details.value.bill_no+'" target="_blank">Edit</a></td><td><a class="label label-danger print-bill-today" href="billprint.php?bill_no='+details.value.bill_no+'" target="_blank">Delete</a></td></tr>';
+					});
+					$("#today-sale-table tbody").html(trs);
+				} 
+			});
+		});
+		$("#today-sale-table tbody").on('click','.print-bill-today',function(){
+	//		window.location = 'billprint.php?bill_no='+$(this).data('href');
+		});
+		
+
+		$("#payment").click(function(){
+			$("#fcount").text($totalBillItems);
+			$("#twt").text($totalBillCost);
+			if($totalBillItems == 0){
+				bootbox.alert('Please add product to sale first');
+			}else{
+				$('#payModal').modal();
+			}
+		});
+
+		$("#payModal").on('click','.showCModal',function(){
+			$('#payModal').modal('hide');
+			$('#customerModal').modal('show');
+			return false;
+		});
+
+		$('#paid-amount').keyboard({
+				restrictInput:true,
+				preventPaste:true,
+				autoAccept:true,
+				alwaysOpen:false,
+				openOn:'click',
+				layout:'costom',
+				display:{
+					'a':'\u2714:Accept (Shift-Enter)',
+					'accept':'Accept:Accept (Shift-Enter)',
+					'b':'\u2190:Backspace',
+					'bksp':'Bksp:Backspace',
+					'c':'\u2716:Cancel (Esc)',
+					'cancel':'Cancel:Cancel (Esc)',
+					'clear':'C:Clear'
+				},
+				position:{
+					of:null,
+					my:'center top',
+					at:'center top',
+					at2:'center bottom'
+				},
+				usePreview:false,
+				customLayout:{
+					'default':['1 2 3 {clear}','4 5 6 .','7 8 9 0','{accept} {cancel}']
+				},
+				beforeClose:function(e,keyboard,el,accepted){
+					if(accepted){
+						var paid=parseFloat(el.value);
+						if(paid < $totalBillCost){
+							bootbox.alert('Paid amount is less than payable amount');
+							$("#balance").text('')
+							return false;
+						}else{
+							$("#balance").append( paid- $totalBillCost );
+						}
+					}
+				}
+			});
+
+
+/*		$('input[id^="paid-amount"]').keydown(function(e){
+			alert("HELLO");
+			paid=$(this).val();
+			if(e.keyCode==13){
+				if(paid<total){
+					bootbox.alert('Paid amount is less than payable amount');
+					return false
+				}
+				$("#balance").empty();
+				var balance=paid-twt;
+				balance=parseFloat(balance).toFixed(2);
+				$("#balance").append(balance);
+				e.preventDefault();
+				return false;
+			}
+		});/**/
+
+
 
 		$("#cancel").click(function(){
 			$billingItems = new Object();
@@ -114,30 +292,41 @@
 				var productData = productArray[selectedCat][selectedSequence];
 				if($billingItems[productData.mysql_id]){
 					$billingItems[productData.mysql_id].qty = parseInt($billingItems[productData.mysql_id].qty) + 1;
-					$billingItems[productData.mysql_id].price = parseInt($billingItems[productData.mysql_id].price) + parseInt(productData.price);
+					//$billingItems[productData.mysql_id].price =  parseFloat(productData.price);
+					$billingItems[productData.mysql_id].total_amount = parseFloat($billingItems[productData.mysql_id].total_amount) + parseFloat(productData.price);
 					var bIO = $('tr[billing-product="'+productData.mysql_id+'"]');					
 					bIO.find(".qty").text($billingItems[productData.mysql_id].qty);
-					bIO.find(".price").text($billingItems[productData.mysql_id].price);
+					bIO.find(".price").text($billingItems[productData.mysql_id].total_amount.toFixed(2));
 					
 					$totalBillItems +=  1;
-					$totalBillCost += parseFloat(productData.price);
 
-					//console.log($billingItems);
+
+					$totalBillCost = parseFloat($totalBillCost) + parseFloat(productData.price);
+					console.log("Inside Existing = " + $totalBillCost);
+
 				}else{
 					$billingItems[productData.mysql_id] = new Object();
 					$billingItems[productData.mysql_id].qty = 1;
-					$billingItems[productData.mysql_id].price = productData.price;
+					$billingItems[productData.mysql_id].price = parseFloat(productData.price);
+					$billingItems[productData.mysql_id].name = productData.name;
+					$billingItems[productData.mysql_id].total_amount = productData.price;
+
 					$totalBillItems 	+= 	parseInt($billingItems[productData.mysql_id].qty);
-					$totalBillCost 		+=  parseFloat(productData.price)
-					$("#saletbl tbody").append('<tr billing-product="'+productData.mysql_id+'"><td><span class="glyphicon glyphicon-remove-sign"></span></td><td class="btn-warning">'+productData.name+'&nbsp;@&nbsp;'+productData.price+'</td><td><span class="qty">'+(1)+'</span></td><td><span class="price text-right">'+productData.price+'</span></td></tr>');
+					$totalBillCost 		= 	parseFloat($totalBillCost) + parseFloat(productData.price);
+
+					$("#saletbl tbody").append('<tr billing-product="'+productData.mysql_id+'"><td><span class="glyphicon glyphicon-remove-sign"></span></td><td class="btn-warning">'+productData.name+'&nbsp;@&nbsp;'+productData.price+'</td><td><span class="qty">'+(1)+'</span></td><td><span class="price text-right">'+parseFloat(productData.price).toFixed(2)+'</span></td></tr>');
 					//				console.log($billingItems[productData.mysql_id]);
 					//				console.log($billingItems);
+						console.log(productData.name);
+						console.log(productData['name']);
 				}
 				$("#count").text($totalBillItems);		
+				$totalBillCost = $totalBillCost.toFixed(2);
 				$("#total").text($totalBillCost);
 				$("#total-payable").text($totalBillCost);		
+				console.log("OUtside = " + $totalBillCost);
 
-		});
+		});	
 		$('.btn-category').bxSlider({minSlides:5,maxSlides:5,slideWidth:600,slideMargin:0,ticker:false,infiniteLoop:false,hideControlOnEnd:true,mode:'horizontal'});
 
 	});
@@ -182,7 +371,7 @@
 				<a
 					class="btn btn-success btn-sm pull-right external"
 					style="padding: 5px 8px; margin: 10px 0 5px 5px;"
-					data-toggle="modal" data-target="#saleModal"> Today's Sale </a> <a
+					data-toggle="modal" data-target="#saleModal" id="todays_sale"> Today's Sale </a> <a
 					data-toggle="modal"
 					data-target="#opModal"
 					class="btn btn-info btn-sm pull-right external" id="ob"
@@ -210,11 +399,6 @@
 											value="d18c90a451393f634f543c90f9a24b6d" />
 									</div>
 									<div class="well well-sm" id="leftdiv">
-										<div id="lefttop">
-											<input name="code" id="scancode"
-												class="form-control input-sm" placeholder="Barcode Scanner"
-												style="margin-bottom: 10px;" />
-										</div>
 										<div id="printhead">
 											<h2>
 												<strong>Simple POS</strong>
@@ -382,7 +566,30 @@
 		</div>
 	</div>
 	<div class="modal fade" id="saleModal" tabindex="-1" role="dialog"
-		aria-labelledby="saleModalLabel" aria-hidden="true"></div>
+		aria-labelledby="saleModalLabel" aria-hidden="true">
+
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header modal-primary">
+					<button type="button" class="close" data-dismiss="modal"
+						aria-hidden="true">
+						<i class="glyphicon glyphicon-remove"></i>
+					</button>
+					<h4 class="modal-title" id="today-sale-header"><?php echo "Sale Of : ".date("M,d Y");?></h4>
+				</div>
+				<div class="modal-body">
+					<table class="table table-striped" style="margin-bottom: 0;" id="today-sale-table">
+						<tbody>
+						</tbody>
+
+					</table>
+				</div>
+				<div class="modal-footer">
+				</div>
+			</div>
+		</div>
+
+	</div>
 	<div class="modal fade" id="opModal" tabindex="-1" role="dialog"
 		aria-labelledby="opModalLabel" aria-hidden="true"></div>
 
@@ -401,223 +608,17 @@
 					<table class="table table-striped" style="margin-bottom: 0;">
 						<tbody>
 							<tr>
-								<td width="50%">Customer <a href="#"
+								<td width="50%">Customer <!--<a href="#"
 									class="btn btn-primary btn-xs showCModal"><i
-										class="glyphicon glyphicon-plus-sign"></i> Add Customer </a>
+										class="glyphicon glyphicon-plus-sign"></i> Add Customer </a>-->
 								</td>
-								<td width="50%"><span class="inv_cus_con"> <select
-										class="form-control pcustomer"
-										style="padding: 2px !important; height: auto !important;">
-											<option value="3">Walk-in Client</option>
-											<option value="4">Mendim</option>
-											<option value="5">MESA 1</option>
-											<option value="6">ry</option>
-											<option value="7">chris</option>
-											<option value="8">Em Name Table 1</option>
-											<option value="9">Internal Affairs</option>
-											<option value="10">Joe Smith</option>
-											<option value="11">Visitante</option>
-											<option value="12">Leo</option>
-											<option value="13">Maam Loyola</option>
-											<option value="14">adil</option>
-											<option value="15">MRK</option>
-											<option value="16">Simourad SiFerm</option>
-											<option value="17">Jeremy Frank</option>
-											<option value="18">Jeremy Frank</option>
-											<option value="19">Numpty Shavings</option>
-											<option value="20">Pragash Rajarathnam</option>
-											<option value="21">PEOOEP</option>
-											<option value="22">test name</option>
-											<option value="23">Elvis Perez</option>
-											<option value="24">ozan</option>
-											<option value="25">Tester</option>
-											<option value="26">Humza</option>
-											<option value="27">testing test</option>
-											<option value="28">new customer</option>
-											<option value="29">JAMES</option>
-											<option value="30">error</option>
-											<option value="31">error catch</option>
-											<option value="32">Ok Testing</option>
-											<option value="33">Saleem Acct</option>
-											<option value="34">Alan Wee</option>
-											<option value="35">Ahmed raza</option>
-											<option value="36">Ban 1</option>
-											<option value="37">Gregory Santana</option>
-											<option value="38">asek</option>
-											<option value="39">Pelo Pelovic</option>
-											<option value="40">Fero Hora</option>
-											<option value="41">growictafrica.org</option>
-											<option value="42">sds</option>
-											<option value="43">Alexander Fickel</option>
-											<option value="44">testpeter</option>
-											<option value="45">Jack Jones</option>
-											<option value="46">123456test</option>
-											<option value="47">irfan</option>
-											<option value="48">Alexis Juventino Valdez Garcia</option>
-											<option value="49">Abdul Bloggs</option>
-											<option value="50">ini customer</option>
-											<option value="51">Teste</option>
-											<option value="52">Fero Hora</option>
-											<option value="53">da</option>
-											<option value="54">sammy</option>
-											<option value="55">Davide Brunello</option>
-											<option value="56">Jorge</option>
-											<option value="57">Selim</option>
-											<option value="58">Shimul</option>
-											<option value="59">Monira Khatun</option>
-											<option value="60">Yovani Martinez</option>
-											<option value="61">some one</option>
-											<option value="62">jack neo</option>
-											<option value="63">John Smith</option>
-											<option value="64">teet 01</option>
-											<option value="65">Customer</option>
-											<option value="66">Bala</option>
-											<option value="67">kaushal</option>
-											<option value="68">Mubarak Al-Mutawa</option>
-											<option value="69">Jim Corners</option>
-											<option value="70">rtret</option>
-											<option value="71">qaisar</option>
-											<option value="72">Talvinder</option>
-											<option value="73">paijo</option>
-											<option value="74">j</option>
-											<option value="75">Ibrahim</option>
-											<option value="76">Rodrigo Carvalho de Lima</option>
-											<option value="77">Rodrigo Carvalho de Lima</option>
-											<option value="78">anas</option>
-											<option value="79">Edson Lemes</option>
-											<option value="80">sample client</option>
-											<option value="81">cristiangarcia</option>
-											<option value="82">rr</option>
-											<option value="83">MOOI</option>
-											<option value="84">sto br 2</option>
-											<option value="85">texs SADD</option>
-											<option value="86">sobhi</option>
-											<option value="87">Pedro Perez</option>
-											<option value="88">Emilio Fuentes</option>
-											<option value="89">Subbu</option>
-											<option value="90">Pancho</option>
-											<option value="91">Rajesh</option>
-											<option value="92">Rohit</option>
-											<option value="93">cgvb</option>
-											<option value="94">ff</option>
-											<option value="95">czxczxc</option>
-											<option value="96">branco design</option>
-											<option value="97">Joa Pinga</option>
-											<option value="98">Pedro Perez</option>
-											<option value="99">hbhjbhjb</option>
-											<option value="100">adam</option>
-											<option value="101">emirsyaf</option>
-											<option value="102">emir</option>
-											<option value="103">affan</option>
-											<option value="104">test</option>
-											<option value="105">jesus peres</option>
-											<option value="106">Jennifer L</option>
-											<option value="107">Mario Rossi</option>
-											<option value="108">Akshay Sharma</option>
-											<option value="109">hhfjfh jhghg</option>
-											<option value="110">Daaa</option>
-											<option value="111">Steve James</option>
-											<option value="112">eng james</option>
-											<option value="113">test</option>
-											<option value="114">Hasan Al Masud</option>
-											<option value="115">ogit syafarul mabrur</option>
-											<option value="116">uuuuu</option>
-											<option value="117">Alamin Mollah</option>
-											<option value="118">Akshay</option>
-											<option value="119">Ahmet Baki</option>
-											<option value="120">Pan</option>
-											<option value="121">uonikm</option>
-											<option value="122">AAAA</option>
-											<option value="123">Table3</option>
-											<option value="124">Ryan</option>
-											<option value="125">emir</option>
-											<option value="126">bram</option>
-											<option value="127">bramandita</option>
-											<option value="128">bram</option>
-											<option value="129">mordhwajh sadfsdaf</option>
-											<option value="130">Test customer</option>
-											<option value="131">bram</option>
-											<option value="132">VAGELAS</option>
-											<option value="133">XXXXX</option>
-											<option value="134">Jack Robinson</option>
-											<option value="135">Razvan</option>
-											<option value="136">asd asd asd</option>
-											<option value="137">keivn</option>
-											<option value="138">joseph West field</option>
-											<option value="139">navidaziz</option>
-											<option value="140">smith</option>
-											<option value="141">shashi</option>
-											<option value="142">sgdgdfgdf</option>
-											<option value="143">Demo</option>
-											<option value="144">Hossain</option>
-											<option value="145">Alpina vaerga</option>
-											<option value="146">dodi</option>
-											<option value="147">Josemar Dias Soares</option>
-											<option value="148">test user</option>
-											<option value="149">Eduardo</option>
-											<option value="150">Chris Giles</option>
-											<option value="151">dsadsa</option>
-											<option value="152">ma</option>
-											<option value="153">Will Kumvag</option>
-											<option value="154">Adan Adan</option>
-											<option value="155">jesse</option>
-											<option value="156">0440044933</option>
-											<option value="157">Juan Geldres</option>
-											<option value="158">Chris Giles</option>
-											<option value="159">Joseph Camblat</option>
-											<option value="160">Ramón</option>
-											<option value="161">Test Tyler</option>
-											<option value="162">andy bayt</option>
-											<option value="163">Alex</option>
-											<option value="164">Allan ou Rozi</option>
-											<option value="165">Chartlotte</option>
-											<option value="166">
-												<a class="__cf_email__"
-													href="http://www.cloudflare.com/email-protection"
-													data-cfemail="ecb8899f98ac98899f98c28f8381">[email&nbsp;protected]</a>
-											</option>
-											<option value="167">Ali</option>
-											<option value="168">11</option>
-											<option value="169">Mohon Robidas</option>
-											<option value="170">Mohon Robidas 2</option>
-											<option value="171">Rodrigo Carvalho</option>
-											<option value="172">asad</option>
-											<option value="173">llllll</option>
-											<option value="174">assdc</option>
-											<option value="175">test111111</option>
-											<option value="176">An Nguyen</option>
-											<option value="177">Pedro</option>
-											<option value="178">fulando de tal</option>
-											<option value="179">sadasd</option>
-											<option value="180">asdasd</option>
-											<option value="181">Fred bloggs</option>
-											<option value="182">John smith</option>
-											<option value="183">allay</option>
-											<option value="184">abc</option>
-											<option value="185">sabbir</option>
-											<option value="186">d</option>
-											<option value="187">marco</option>
-											<option value="188">h</option>
-											<option value="189">Test</option>
-											<option value="190">Hello</option>
-											<option value="191">vcxvcx ffsdfsddf</option>
-											<option value="192">Tony Suprano</option>
-											<option value="193">Christian renato cueva vega</option>
-											<option value="194">ALE</option>
-											<option value="195">vikasync</option>
-											<option value="196">shihab</option>
-											<option value="197">imran</option>
-											<option value="198">JOAO COSTA</option>
-											<option value="199">aaa</option>
-											<option value="200">Nahuel Garraza</option>
-											<option value="201">Emilio Garraza</option>
-											<option value="202">erererdftgdfgfg</option>
-											<option value="203">suman</option>
-											<option value="204">ata js</option>
-											<option value="205">srgraja</option>
-											<option value="206">Jim Beam</option>
-									</select>
-								</span></td>
+								<td width="50%">
+									<span class="inv_cus_con"> 
+										<select class="form-control pcustomer" id="billing_customer">
+											<option value="wic">Walk-in Client</option>
+										</select>
+									</span>
+								</td>
 							</tr>
 							<tr>
 								<td>Total Payable Amount :</td>
@@ -634,17 +635,13 @@
 							</tr>
 
 							<td>Paid by :</td>
-							<td><select name="paid_by" id="paid_by" class="form-control"
-								style="padding: 2px !important; height: auto !important;">
+							<td><select name="paid_by" id="paid_by" class="form-control">
 									<option value="cash">Cash</option>
-									<option value="CC">Credit Card</option>
-									<option value="Cheque">Cheque</option>
 							</select></td>
 							</tr>
 							<tr class="pcash">
 								<td>Paid :</td>
-								<td><input type="text" id="paid-amount" class="form-control"
-									style="padding: 2px !important; height: auto !important;" /></td>
+								<td><input type="text" id="paid-amount" class="form-control"/></td>
 							</tr>
 							<tr class="pcash">
 								<td>Return Change :</td>
@@ -815,213 +812,6 @@
 										class="form-control pcustomer"
 										style="padding: 2px !important; height: auto !important;">
 											<option value="3">Walk-in Client</option>
-											<option value="4">Mendim</option>
-											<option value="5">MESA 1</option>
-											<option value="6">ry</option>
-											<option value="7">chris</option>
-											<option value="8">Em Name Table 1</option>
-											<option value="9">Internal Affairs</option>
-											<option value="10">Joe Smith</option>
-											<option value="11">Visitante</option>
-											<option value="12">Leo</option>
-											<option value="13">Maam Loyola</option>
-											<option value="14">adil</option>
-											<option value="15">MRK</option>
-											<option value="16">Simourad SiFerm</option>
-											<option value="17">Jeremy Frank</option>
-											<option value="18">Jeremy Frank</option>
-											<option value="19">Numpty Shavings</option>
-											<option value="20">Pragash Rajarathnam</option>
-											<option value="21">PEOOEP</option>
-											<option value="22">test name</option>
-											<option value="23">Elvis Perez</option>
-											<option value="24">ozan</option>
-											<option value="25">Tester</option>
-											<option value="26">Humza</option>
-											<option value="27">testing test</option>
-											<option value="28">new customer</option>
-											<option value="29">JAMES</option>
-											<option value="30">error</option>
-											<option value="31">error catch</option>
-											<option value="32">Ok Testing</option>
-											<option value="33">Saleem Acct</option>
-											<option value="34">Alan Wee</option>
-											<option value="35">Ahmed raza</option>
-											<option value="36">Ban 1</option>
-											<option value="37">Gregory Santana</option>
-											<option value="38">asek</option>
-											<option value="39">Pelo Pelovic</option>
-											<option value="40">Fero Hora</option>
-											<option value="41">growictafrica.org</option>
-											<option value="42">sds</option>
-											<option value="43">Alexander Fickel</option>
-											<option value="44">testpeter</option>
-											<option value="45">Jack Jones</option>
-											<option value="46">123456test</option>
-											<option value="47">irfan</option>
-											<option value="48">Alexis Juventino Valdez Garcia</option>
-											<option value="49">Abdul Bloggs</option>
-											<option value="50">ini customer</option>
-											<option value="51">Teste</option>
-											<option value="52">Fero Hora</option>
-											<option value="53">da</option>
-											<option value="54">sammy</option>
-											<option value="55">Davide Brunello</option>
-											<option value="56">Jorge</option>
-											<option value="57">Selim</option>
-											<option value="58">Shimul</option>
-											<option value="59">Monira Khatun</option>
-											<option value="60">Yovani Martinez</option>
-											<option value="61">some one</option>
-											<option value="62">jack neo</option>
-											<option value="63">John Smith</option>
-											<option value="64">teet 01</option>
-											<option value="65">Customer</option>
-											<option value="66">Bala</option>
-											<option value="67">kaushal</option>
-											<option value="68">Mubarak Al-Mutawa</option>
-											<option value="69">Jim Corners</option>
-											<option value="70">rtret</option>
-											<option value="71">qaisar</option>
-											<option value="72">Talvinder</option>
-											<option value="73">paijo</option>
-											<option value="74">j</option>
-											<option value="75">Ibrahim</option>
-											<option value="76">Rodrigo Carvalho de Lima</option>
-											<option value="77">Rodrigo Carvalho de Lima</option>
-											<option value="78">anas</option>
-											<option value="79">Edson Lemes</option>
-											<option value="80">sample client</option>
-											<option value="81">cristiangarcia</option>
-											<option value="82">rr</option>
-											<option value="83">MOOI</option>
-											<option value="84">sto br 2</option>
-											<option value="85">texs SADD</option>
-											<option value="86">sobhi</option>
-											<option value="87">Pedro Perez</option>
-											<option value="88">Emilio Fuentes</option>
-											<option value="89">Subbu</option>
-											<option value="90">Pancho</option>
-											<option value="91">Rajesh</option>
-											<option value="92">Rohit</option>
-											<option value="93">cgvb</option>
-											<option value="94">ff</option>
-											<option value="95">czxczxc</option>
-											<option value="96">branco design</option>
-											<option value="97">Joa Pinga</option>
-											<option value="98">Pedro Perez</option>
-											<option value="99">hbhjbhjb</option>
-											<option value="100">adam</option>
-											<option value="101">emirsyaf</option>
-											<option value="102">emir</option>
-											<option value="103">affan</option>
-											<option value="104">test</option>
-											<option value="105">jesus peres</option>
-											<option value="106">Jennifer L</option>
-											<option value="107">Mario Rossi</option>
-											<option value="108">Akshay Sharma</option>
-											<option value="109">hhfjfh jhghg</option>
-											<option value="110">Daaa</option>
-											<option value="111">Steve James</option>
-											<option value="112">eng james</option>
-											<option value="113">test</option>
-											<option value="114">Hasan Al Masud</option>
-											<option value="115">ogit syafarul mabrur</option>
-											<option value="116">uuuuu</option>
-											<option value="117">Alamin Mollah</option>
-											<option value="118">Akshay</option>
-											<option value="119">Ahmet Baki</option>
-											<option value="120">Pan</option>
-											<option value="121">uonikm</option>
-											<option value="122">AAAA</option>
-											<option value="123">Table3</option>
-											<option value="124">Ryan</option>
-											<option value="125">emir</option>
-											<option value="126">bram</option>
-											<option value="127">bramandita</option>
-											<option value="128">bram</option>
-											<option value="129">mordhwajh sadfsdaf</option>
-											<option value="130">Test customer</option>
-											<option value="131">bram</option>
-											<option value="132">VAGELAS</option>
-											<option value="133">XXXXX</option>
-											<option value="134">Jack Robinson</option>
-											<option value="135">Razvan</option>
-											<option value="136">asd asd asd</option>
-											<option value="137">keivn</option>
-											<option value="138">joseph West field</option>
-											<option value="139">navidaziz</option>
-											<option value="140">smith</option>
-											<option value="141">shashi</option>
-											<option value="142">sgdgdfgdf</option>
-											<option value="143">Demo</option>
-											<option value="144">Hossain</option>
-											<option value="145">Alpina vaerga</option>
-											<option value="146">dodi</option>
-											<option value="147">Josemar Dias Soares</option>
-											<option value="148">test user</option>
-											<option value="149">Eduardo</option>
-											<option value="150">Chris Giles</option>
-											<option value="151">dsadsa</option>
-											<option value="152">ma</option>
-											<option value="153">Will Kumvag</option>
-											<option value="154">Adan Adan</option>
-											<option value="155">jesse</option>
-											<option value="156">0440044933</option>
-											<option value="157">Juan Geldres</option>
-											<option value="158">Chris Giles</option>
-											<option value="159">Joseph Camblat</option>
-											<option value="160">Ramón</option>
-											<option value="161">Test Tyler</option>
-											<option value="162">andy bayt</option>
-											<option value="163">Alex</option>
-											<option value="164">Allan ou Rozi</option>
-											<option value="165">Chartlotte</option>
-											<option value="166">
-												<a class="__cf_email__"
-													href="http://www.cloudflare.com/email-protection"
-													data-cfemail="edb9889e99ad99889e99c38e8280">[email&nbsp;protected]</a>
-											</option>
-											<option value="167">Ali</option>
-											<option value="168">11</option>
-											<option value="169">Mohon Robidas</option>
-											<option value="170">Mohon Robidas 2</option>
-											<option value="171">Rodrigo Carvalho</option>
-											<option value="172">asad</option>
-											<option value="173">llllll</option>
-											<option value="174">assdc</option>
-											<option value="175">test111111</option>
-											<option value="176">An Nguyen</option>
-											<option value="177">Pedro</option>
-											<option value="178">fulando de tal</option>
-											<option value="179">sadasd</option>
-											<option value="180">asdasd</option>
-											<option value="181">Fred bloggs</option>
-											<option value="182">John smith</option>
-											<option value="183">allay</option>
-											<option value="184">abc</option>
-											<option value="185">sabbir</option>
-											<option value="186">d</option>
-											<option value="187">marco</option>
-											<option value="188">h</option>
-											<option value="189">Test</option>
-											<option value="190">Hello</option>
-											<option value="191">vcxvcx ffsdfsddf</option>
-											<option value="192">Tony Suprano</option>
-											<option value="193">Christian renato cueva vega</option>
-											<option value="194">ALE</option>
-											<option value="195">vikasync</option>
-											<option value="196">shihab</option>
-											<option value="197">imran</option>
-											<option value="198">JOAO COSTA</option>
-											<option value="199">aaa</option>
-											<option value="200">Nahuel Garraza</option>
-											<option value="201">Emilio Garraza</option>
-											<option value="202">erererdftgdfgfg</option>
-											<option value="203">suman</option>
-											<option value="204">ata js</option>
-											<option value="205">srgraja</option>
-											<option value="206">Jim Beam</option>
 									</select>
 								</span></td>
 							</tr>
