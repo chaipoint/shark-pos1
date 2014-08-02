@@ -28,16 +28,32 @@
 					$userData["name"] = $result['data']['name'];
 					$userData["username"] = $result['data']['username'];
 					$userData["email"] = $result['data']['email'];
-					$userData["phone_1"] = $result['data']['phone_1'];
-					$userData["phone_2"] = $result['data']['phone_2'];
+					$userData["phone"] = $result['data']['phone'];
 					$userData["address"] = $result['data']['address'];
 					$userData["location"]['id'] = $result['data']['location_id'];
+					$userData["location"]['name'] = $result['data']['location_name'];
+					$userData["title"]['id'] = $result['data']['title_id'];
+					$userData["title"]['name'] = $result['data']['title_name'];
+
+					$loginHistory['cd_doc_type'] = 'login_history';
+					$loginHistory['id'] = $userData["mysql_id"];
+					$loginHistory['store'] = '';
+					$loginHistory['login_time'] = $this->getCDTime();
+					$loginHistory['logout_time'] = '';
+
+					$result = json_decode($couch->saveDocument()->execute($loginHistory),true);
+					if(array_key_exists('ok', $result)){
+							$userData['login']['id'] = $result['id'];
+					}
+
 					$_SESSION['user'] = $userData;
 					$returnData['data']['redirect'] = 'index.php?dispatch=store.select'; 
 					//$returnData['data']['redirect'] = 'index.php?dispatch=billing.index'; 
+
+
 				}else{
-					$returnData['error'] = $result['error'];
-					$returnData['message'] = $result['message'];
+					$returnData['error'] = true;
+					$returnData['message'] = 'OOPS! Some Problem Please Contact Admin';
 				}
 			}else{
 				$returnData['error'] = true;

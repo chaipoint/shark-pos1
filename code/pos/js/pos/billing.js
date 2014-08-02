@@ -4,8 +4,9 @@ $(document).ready(function(){
 	var $billingItems = new Object();
 	var $totalBillItems = 0;
 	var $totalBillCost = 0.0;
-
-
+	var $taxAmount = 0.0;
+	var $totalTaxAmount = 0.0;
+	var $totalBillCostAfterTaxAD = 0.0;
 	//---START--- Categories Silder Starts
 	/*On Load of DOM Manages Categores Silder*/
 		$('.btn-category').bxSlider({
@@ -51,11 +52,19 @@ $(document).ready(function(){
 					$billingItems[productData.mysql_id].qty = parseInt($billingItems[productData.mysql_id].qty) + 1;
 					//$billingItems[productData.mysql_id].price =  parseFloat(productData.price);
 					$billingItems[productData.mysql_id].total_amount = parseFloat($billingItems[productData.mysql_id].total_amount) + parseFloat(productData.price);
-					var bIO = $('tr[billing-product="'+productData.mysql_id+'"]');					
+					var bIO = $('tr[billing-product="'+productData.mysql_id+'"]');
 					bIO.find(".qty").text($billingItems[productData.mysql_id].qty);
 					bIO.find(".price").text($billingItems[productData.mysql_id].total_amount.toFixed(2));
 					$totalBillItems +=  1;
 					$totalBillCost = parseFloat($totalBillCost) + parseFloat(productData.price);
+
+
+					$taxAmount = (productData.price * (productData.tax.rate));
+					
+					$totalTaxAmount = parseFloat($totalTaxAmount) + $taxAmount; 
+					$totalBillCostAfterTaxAD = parseFloat($totalBillCostAfterTaxAD) + $taxAmount + parseFloat(productData.price);
+
+
 					//console.log("Inside Existing = " + $totalBillCost);
 				}else{
 					$billingItems[productData.mysql_id] = new Object();
@@ -63,6 +72,14 @@ $(document).ready(function(){
 					$billingItems[productData.mysql_id].price = parseFloat(productData.price);
 					$billingItems[productData.mysql_id].name = productData.name;
 					$billingItems[productData.mysql_id].total_amount = productData.price;
+					$billingItems[productData.mysql_id].tax = productData.tax.rate;
+
+//					$taxTrace[productData.mysql_id] = new Object();
+//					$taxTrace
+
+					$taxAmount = (productData.price * (productData.tax.rate));
+					$totalTaxAmount = parseFloat($totalTaxAmount) + $taxAmount; 
+					$totalBillCostAfterTaxAD = parseFloat($totalBillCostAfterTaxAD) + $taxAmount + parseFloat(productData.price);
 
 					$totalBillItems 	+= 	parseInt($billingItems[productData.mysql_id].qty);
 					$totalBillCost 		= 	parseFloat($totalBillCost) + parseFloat(productData.price);
@@ -76,7 +93,11 @@ $(document).ready(function(){
 				$("#count").text($totalBillItems);		
 				$totalBillCost = $totalBillCost.toFixed(2);
 				$("#total").text($totalBillCost);
-				$("#total-payable").text($totalBillCost);		
+
+				$totalBillCostAfterTaxAD = $totalBillCostAfterTaxAD.toFixed(2)
+				$("#total-payable").text($totalBillCostAfterTaxAD);	
+				$totalTaxAmount = $totalTaxAmount.toFixed(4);
+				$("#ts_con").text($totalTaxAmount);	
 				//console.log("OUtside = " + $totalBillCost);
 		});	
 		//---END--- Event For Product Selection
@@ -140,11 +161,11 @@ $(document).ready(function(){
 		  		data : billDetails,
 			}).done(function(response) {
 				console.log(response);
-				$('#payModal').modal('hide');
 				result = $.parseJSON(response);
 				if(result.error){
 					bootbox.alert('OOPS! Some Error Please Contect Admin');
 				}else{
+					$('#payModal').modal('hide');
 					bootbox.alert('Bill Successfully Saved <a class="label label-primary print-bill-today" href="billprint.php?bill_no='+result.data.bill_no+'" target="_blank">Print</a>');
 				}
 			});
@@ -178,6 +199,92 @@ $(document).ready(function(){
 		});
 		//---END--- Todays Sale Request
 
+		//---START-TAX POPUP --//
+		$("#add_tax").click(function(){
+
+			console.log($billingItems);
+			$viewData = '<table class="table table-striped table-condensed table-hover protable" width="100%" border="0" cellspacing="0" cellpadding="0">'+
+							'<thead>'+
+								'<tr>'+
+									'<th>Menu Item</th><th>Tax Rate</th><th>Qty</th><th>Price</th><th>Tax Amount</th>'+
+								'</tr>'+
+							'</thead>'+
+						'<tbody>';
+			var QtyTotal = 0;
+			var totalTaxAmountCheck = 0.0;
+			$.each($billingItems, function(index,data){
+				QtyTotal += data.qty;
+				taxAM = (data.qty * data.tax * data.price).toFixed(4);
+				totalTaxAmountCheck += parseFloat(taxAM); 
+				$viewData += '<tr>'+
+								'<td>'+data.name+'</td>'+
+								'<td>'+
+									'<input type="text" class="form-control input-sm" value="'+data.tax+'"/>'+
+								'</td>'+
+								'<td>'+data.qty+'</td>'+
+								'<td>'+data.price+'</td>'+
+								'<td>'+taxAM+'</td>'+
+							'</tr>';
+			});
+			$viewData += '</tbody><tfoot><th colspan="2">Total</th><th>'+QtyTotal+'</th><th></th><th>'+totalTaxAmountCheck.toFixed(2)+'</th></tfoot><table>';
+
+			bootbox.dialog({
+				message:$viewData,
+				title:"Menu Tax Rate",
+			});
+		});
+/*			$("#add_tax").click(function(){
+				var tval=$('#tax_val').val(); 
+				bootbox.dialog({
+					message:"<input type='text' class='form-control input-sm' id='get_ts' onClick='this.select();' value='"+tval+"'></input>",
+					title:"Tax Rate (5 or 5%)",
+					buttons:{
+						main:{
+							label:"Update",
+							className:"btn-primary btn-sm",
+							callback:function(){
+								var ts=$('#get_ts').val();
+								if(ts.length!=0){
+									$('#tax_val').val(ts);
+									if(ts.indexOf("%")!==-1){
+										var pts=ts.split("%");
+										if(!isNaN(pts[0])){
+											var tax=(total*parseFloat(pts[0]))/100;
+											var g_total=(total+tax)-parseFloat($('#ds_con').text());
+											grand_total=parseFloat(g_total).toFixed(2);
+											$("#ts_con").text(tax.toFixed(2));
+											$("#total-payable").text(grand_total)
+										}else{
+											$('#get_ts').val('0');
+											$('#tax_val').val('0');
+											var g_total=(total)-parseFloat($('#ds_con').text());
+											grand_total=parseFloat(g_total).toFixed(2);
+											$("#ts_con").text('0');
+											$("#total-payable").text(grand_total)
+										}
+									}else{
+										if(!isNaN(ts)&&ts!=0){
+											var g_total=(total+parseFloat(ts))-parseFloat($('#ds_con').text());
+											grand_total=parseFloat(g_total).toFixed(2);
+											$("#ts_con").text(parseFloat(ts).toFixed(2));
+											$("#total-payable").text(grand_total)
+										}else{
+											$('#get_ts').val('0');
+											$('#tax_val').val('0');
+											var g_total=(total)-parseFloat($('#ds_con').text());
+											grand_total=parseFloat(g_total).toFixed(2);
+											$("#ts_con").text('0');
+											$("#total-payable").text(grand_total)
+										}
+									}
+								}
+							}
+						}
+					}
+				});
+				return false
+			});/**/
+		//---END TAX POPUP--//
 
 	//---END--- Functions Work After Page Load via Events
 

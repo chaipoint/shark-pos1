@@ -36,7 +36,7 @@
 						<div class="padded" style="text-align: center; margin-top: 40px;">
 							<img src="http://tecdemo.com/spos3/assets/images/logo1.png"
 								alt="Simple POS" />
-							<div class="panel panel-primary" style="margin-top: 20px;">
+							<div class="panel panel-primary">
 								<div class="panel-heading">Login</div>
 								<div class="panel-body" style="padding-bottom: 0;">
 

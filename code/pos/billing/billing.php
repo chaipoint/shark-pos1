@@ -1,5 +1,6 @@
 <?php
 	session_start();
+	//print_r($_SESSION);
 	class Billing extends App_config{
 		private $cDB;
 		function __construct(){
@@ -15,9 +16,9 @@
 			$catList = array();
 			$productList = array();
 			foreach($result['menu_items'] as $key => $Items){
-				if(!empty($Items['category_id'])){
-					$catList[$Items['category_id']] = $Items['category']; 
-					$productList[$Items['category_id']][] = $Items;
+				if(!empty($Items['category']['id'])){
+					$catList[$Items['category']['id']] = $Items['category']['name']; 
+					$productList[$Items['category']['id']][] = $Items;
 				}
 	 		}
 	 		ksort($catList);
@@ -39,12 +40,18 @@
 					$_POST['cd_doc_type'] = 'store_menu_bill';
 					$_POST['billed_by'] = $_SESSION['user'][$this->userIdField];
 					$_POST['bill_time'] = $this->getCDTime();
-					$currentBillNo = $couch->getDesign('billing')->getUpdate('getbillno','bill_counter')->execute(array('month'=>$this->getCMonth()));
-					$_POST['bill_no'] = $currentBillNo;
-					unset($_POST['request_type']);					
-					$result = json_decode($couch->saveDocument()->execute($_POST),true);
-					if(array_key_exists('ok', $result)){
-						$return['data']['bill_no'] = $currentBillNo;
+					$currentBillNo = $couch->getDesign('billing')->getUpdate('getbillno','generateBill')->execute(array('month'=>$this->getCMonth()));
+					if(is_numeric($currentBillNo)){
+						$_POST['bill_no'] = $currentBillNo;
+						unset($_POST['request_type']);					
+
+						$result = json_decode($couch->saveDocument()->execute($_POST),true);
+						if(array_key_exists('ok', $result)){
+							$return['data']['bill_no'] = $currentBillNo;
+						}
+					}else{
+						$return['error'] = true;
+						$return['message'] = 'OOPS! Some Error Contact Admin.';
 					}
 				}else{
 					$return['error'] = true;
