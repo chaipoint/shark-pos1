@@ -72,10 +72,13 @@ class CouchPHP{
 		$this->genUrl .= "/_list/".$list."/".$map;
 		return $this;
 	}
-	public function getUpdate($update,$docId){
-		$this->genUrl .= "/_update/".$update."/".$docId;
-		return $this;
-	}
+	 public function getUpdate($update,$docId,$qury=""){
+  $this->genUrl .= "/_update/".$update."/".$docId;
+  if(!empty($qury)){
+   echo $this->genUrl .= '?'.$qury;
+  }
+  return $this;
+ }
 	public function execute($data = array()){
 		if(is_array($data) && count($data)>0){
 			$this->isPost = true;
