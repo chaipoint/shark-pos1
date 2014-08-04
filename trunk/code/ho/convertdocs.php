@@ -31,7 +31,7 @@ function getTableData($type){
 echo "<pre>";
 	require_once 'httpapi.php';
 	
-	print_r(curl("http://54.249.247.15:5984/cpos_ho/_bulk_docs",array("docs"=>getTableData('staff_master')),array('contentType'=>'application/json','is_content_type_allowed'=>true)));
+	//print_r(curl("http://54.249.247.15:5984/cpos_ho/_bulk_docs",array("docs"=>getTableData('staff_master')),array('contentType'=>'application/json','is_content_type_allowed'=>true)));
 
 echo "</pre>";
 
