@@ -1,6 +1,6 @@
 <?php			
-	$con = mysql_connect('localhost','cabbeein_cpos','cpos@7764');
-	mysql_select_db('cabbeein_cpos');
+	$con = mysql_connect('localhost','cabbeein_cpos','cpos@7764') or die("unable to connect");
+	mysql_select_db('cabbeein_cpos') or die("unable to select db");
 
 			$getStoreNameQuery = "select sm.id mysql_id, sm.name, sm.code, sm.type, sm.address, sm.phone_1, sm.phone_2, photo, weekly_off, lm.id location_id, lm.name location_name, sm.sms, sm.foe_allowed is_foe, sm.active, sm.store_time store_open_schedule
 from store_master sm
@@ -107,7 +107,7 @@ where sm.active = 'Y'";
 
 					//print_r($return);
 					require_once 'httpapi.php';
-//			print_r(curl("http://127.0.0.1:5984/pos/_bulk_docs",array("docs"=>$return),array('contentType'=>'application/json','is_content_type_allowed'=>true)));
+			print_r(curl("http://54.249.247.15:5984/cpos_ho/_bulk_docs",array("docs"=>$return),array('contentType'=>'application/json','is_content_type_allowed'=>true)));
 
 						echo "<pre>";
 //							print_r($return);
