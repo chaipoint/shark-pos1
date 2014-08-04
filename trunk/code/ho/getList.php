@@ -1,5 +1,5 @@
 <?php			
-	$con = mysql_connect('localhost','cabbeein_cpos','cpos@7764') or die("unable to connect");
+	$con = mysql_connect('localhost','root','root') or die("unable to connect");
 	mysql_select_db('cabbeein_cpos') or die("unable to select db");
 
 			$getStoreNameQuery = "select sm.id mysql_id, sm.name, sm.code, sm.type, sm.address, sm.phone_1, sm.phone_2, photo, weekly_off, lm.id location_id, lm.name location_name, sm.sms, sm.foe_allowed is_foe, sm.active, sm.store_time store_open_schedule
