@@ -24,6 +24,7 @@
         return $result;
     }
 /*
+http://54.249.247.15:5984/cpos_ho
     $post['docs'][0] = array("class"=>"10");
     $post['docs'][1] = array("class"=>"11");
     $post['docs'][2] = array("class"=>"12");
