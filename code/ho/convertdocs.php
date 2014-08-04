@@ -1,6 +1,6 @@
 <?php
 function getTableData($type){
-	$con = mysql_connect('localhost','cabbeein_cpos','cpos@7764');
+	$con = mysql_connect('localhost','root','root');
 	mysql_select_db('cabbeein_cpos');
 	$query = 'SELECT   sm.id mysql_id, sm.name, sm.username, sm.code, sm.password, sm.address, sm.photo, sm.email,sm.phone_1,sm.phone_2,lm.id location_id, lm.name location_name,tm.id title_id, tm.name title_name, sm.active 
 			from staff_master sm
