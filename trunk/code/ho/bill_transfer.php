@@ -7,7 +7,7 @@
 
 	$couch = new CouchPHP();
 	$result = json_decode($couch->getDesign('billing')->getView('bill_by_no_mid')->execute(),true);
-	//echo "<pre>";
+	echo "<pre>";
 	//print_r($result);
 	$docsData = array();
 	if(array_key_exists('rows', $result)){
@@ -43,7 +43,7 @@
 			foreach($lValue as $pKey => $pValue){
 				$productsArray[] = "(".$lastInsertID.",".$pValue['p_id'].",".$pValue['qty'].",".$pValue['price'].",".$pValue['total_amount'].")";
 			}
-			$couch->getDesign('billing')->getUpdate('insert_mysql_id',$lKey,'mysql_id='.$lastInsertID)->execute(array('mysql_id'=>$lastInsertID));
+			print_r($couch->getDesign('billing')->getUpdate('insert_mysql_id',$lKey,'mysql_id='.$lastInsertID)->execute(array('mysql_id'=>$lastInsertID)));
 			$lastInsertID++;
 		}
 		$insertProducst = 'insert into cp_pos_storeorders_products (order_id, product_id, qty, product_cost, cost) values '.implode(',',$productsArray);
@@ -55,4 +55,4 @@
  curl -X POST http://127.0.0.1:5984/en/_design/billing/_update/insert_mysql_id/d9f339937a869d61241dde14d2004026?mysql_id=5
 
 */
-//	echo "</pre>";
+	echo "</pre>";
