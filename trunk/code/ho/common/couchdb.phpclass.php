@@ -17,7 +17,7 @@ class CouchPHP{
 	private $allowContentType = false;
 	function __construct(){
 		$this->port = "5984";
-		$this->url = 'http://54.249.247.15:'.$this->port."/";
+		$this->url = 'http://admin:pos@54.249.247.15:'.$this->port."/";
 		$this->db = 'cpos_ho';
 		$this->userName = '';
 		$this->password = '';
