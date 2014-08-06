@@ -44,7 +44,7 @@ $(document).ready(function(){
 				$buttonList = "";
 				selectedCat = $(this).data('category');
 				$.each(productArray[selectedCat],function(key,value){
-					$buttonList += '<button type="button" class="btn btn-prni hov category-product" value="'+value.mysql_id+'" category-product-sequence="'+key+'">'+value.name+'</button>';
+					$buttonList += '<button type="button" style="width:25%;" class="btn btn-success btn-lg btn3d category-product" value="'+value.mysql_id+'" category-product-sequence="'+key+'">'+value.name+'</button>';
 				});
 				$("#proajax").html($buttonList);
 			}
@@ -52,7 +52,8 @@ $(document).ready(function(){
 		//---END--- Category SElection Ends
 
 		//---START--- Event For Product Selection
-		$("#proajax").on("click",".category-product",function(){
+		$("#proajax").on("click",".category-product",function(){ 
+			    $(this).css('background-color','#663300');
 				var selectedSequence = $(this).attr('category-product-sequence');
 				var productData = productArray[selectedCat][selectedSequence];
 				var productID = productData.mysql_id;
@@ -62,62 +63,56 @@ $(document).ready(function(){
 				var discountAmountWT = priceWT * $intDiscount/100;
 				var discountAmountWOT = priceWOT * $intDiscount/100;
 				//console.log(productData.tax.rate);
-				var previousQty = 0;
+
 
 				if(! (productID in $billingItems)){
 					$billingItems[productID] = new Object();
 					$billingItems[productID].name = productData.name;
-					$billingItems[productID].id = productID;
-					$billingItems[productID].price = productData.price;
-					$billingItems[productID].tax = productData.tax.rate;
-					$billingItems[productID].priceBT = (productData.tax.rate) ? (productData.price / ( 1 + parseFloat(productData.tax.rate) )) : productData.price;
-					$billingItems[productID].discount = $intDiscount;
-					$billingItems[productID].discountAmount = $billingItems[productID].priceBT * $billingItems[productID].discount/100;
-					$billingItems[productID].taxAbleAmount = $billingItems[productID].priceBT - $billingItems[productID].discountAmount;
-					$billingItems[productID].taxAmount = $billingItems[productID].taxAbleAmount * $billingItems[productID].tax;
-	
-					$billingItems[productID].totalAmount = $billingItems[productID].taxAbleAmount + $billingItems[productID].taxAmount;
-
 					$billingItems[productID].qty = 1;
-					$billingItems[productID].netAmount = $billingItems[productID].qty * $billingItems[productID].totalAmount;
 
-		
+					$billingItems[productID].price = new Object();
+					$billingItems[productID].price.wod = new Object();
+					$billingItems[productID].price.wod.wt = priceWT;
+					$billingItems[productID].price.wod.wot = priceWOT;
+
+					$billingItems[productID].price.wd = new Object();
+					$billingItems[productID].price.wd.wt = priceWT - discountAmountWT;
+					$billingItems[productID].price.wd.wot = priceWOT - discountAmountWOT;
+
+					$billingItems[productID].discount = new Object();
+					$billingItems[productID].discount.rate = $intDiscount;
+					$billingItems[productID].discount.amount = discountAmountWOT;
+
+					$billingItems[productID].tax = new Object();
+					$billingItems[productID].tax.rate = productData.tax.rate;
+
+					$billingItems[productID].amount = new Object();
+					$billingItems[productID].amount.wt = $billingItems[productID].qty * $billingItems[productID].price.wd.wt;
+					$billingItems[productID].amount.wot = $billingItems[productID].qty * $billingItems[productID].price.wd.wot;
 				}else{
-					previousQty = $billingItems[productID].qty;
 					$billingItems[productID].qty += 1;
-					$billingItems[productID].netAmount += $billingItems[productID].totalAmount;
+					$billingItems[productID].amount.wt = $billingItems[productID].qty * $billingItems[productID].price.wd.wt;
+					$billingItems[productID].amount.wot = $billingItems[productID].qty * $billingItems[productID].price.wd.wot;
 				}
-
 				$totalBillQty += 1;
-
-				var subTotal = $billingItems[productID].qty * $billingItems[productID].priceBT;
-				var totalDiscount = $billingItems[productID].qty * $billingItems[productID].discountAmount;
-
-				var totalTax = $billingItems[productID].qty * $billingItems[productID].taxAmount;
-
-				$totalAmountWOT += ($intDiscount > 0) ? $billingItems[productID].taxAbleAmount : $billingItems[productID].priceBT ;
-				$totalAmountWT += ($billingItems[productID].totalAmount) ;
-				$totalTaxAmount += $billingItems[productID].taxAmount;
+				$totalAmountWT += $billingItems[productID].price.wd.wt;
+				$totalAmountWOT += $billingItems[productID].price.wd.wot;
+				$totalTaxAmount += ($billingItems[productID].price.wd.wt - $billingItems[productID].price.wd.wot);
 
 				var tableRow ='<tr billing-product="'+productID+'">'+
 								'<td style="width:9%"><span class="glyphicon glyphicon-remove-sign del_row"></span></td>'+
-								'<td style="width:53%" class="btn-warning">'+$billingItems[productID].name+'&nbsp;@&nbsp;'+$billingItems[productID].price+'</td>'+
+								'<td style="width:53%" class="btn-warning">'+$billingItems[productID].name+'&nbsp;@&nbsp;'+$billingItems[productID].price.wod.wt+'</td>'+
 								'<td style="width:12%"><span class="bill_item_qty"><input type="text" class="keyboard nkb-input bill_qty_input" value="'+$billingItems[productID].qty+'"/></span></td>'+
-								'<td style="width:26%"><span class="bill_item_price text-right">'+($billingItems[productID].qty * $billingItems[productID].taxAbleAmount).toFixed(2)+'</span></td>'+
+								'<td style="width:26%"><span class="bill_item_price text-right">'+($billingItems[productID].amount.wot).toFixed(2)+'</span></td>'+
 							'</tr>';
 
 
 				$('#saletbl tbody tr[billing-product="'+productID+'"]').remove();
 				$("#saletbl tbody").append(tableRow);
-				$("#count").text($totalBillQty);
+				$("#count").text($totalBillQty);	
 				$("#total").text($totalAmountWOT.toFixed(2));
-				$("#total-payable").text($totalAmountWT.toFixed(2));
 				$("#ts_con").text(($totalTaxAmount).toFixed(2));
-
-
-
-					
-				console.log($billingItems);	
+				$("#total-payable").text($totalAmountWT.toFixed(2));	
 		});	
 
 		$("#saletbl").on("click",".del_row",function(){
@@ -145,26 +140,27 @@ $(document).ready(function(){
 			var billItem = $billingItems[pID];
 					/*First Remove Item From Bill with qty and amount*/
 				$totalBillQty = ($totalBillQty - billItem.qty);
-				$totalAmountWOT = ($totalAmountWOT - billItem.newAmount);
-				$totalAmountWT = ($totalAmountWT - billItem.newAmount);
+				$totalAmountWOT = ($totalAmountWOT - billItem.amount.wot);
+				$totalAmountWT = ($totalAmountWT - billItem.amount.wt);
 
 					/*After removing qty and price ADD latest qty and PRICE*/
 				$billingItems[pID].qty = isNaN(newQty) ? 0 : newQty; //Check if newQty is empty from input
-				$billingItems[pID].newAmount = $billingItems[pID].qty * $billingItems[pID].totalAmount;
+				$billingItems[pID].amount.wt = $billingItems[pID].qty * billItem.price.wd.wt;
+				$billingItems[pID].amount.wot = $billingItems[pID].qty * billItem.price.wd.wot;
 					
 					//Process if newQty is empty
-				$billingItems[pID].newAmount = isNaN($billingItems[pID].newAmount ) ? 0.0 : $billingItems[pID].newAmount;
+				$billingItems[pID].amount.wt = isNaN($billingItems[pID].amount.wt ) ? 0.0 : $billingItems[pID].amount.wt;
+				$billingItems[pID].amount.wot = isNaN($billingItems[pID].amount.wot) ? 0.0 : $billingItems[pID].amount.wot;
 				
 					//Calculate total Qty and Total bill amount with and without tax.
 				$totalBillQty += $billingItems[pID].qty;
-				$totalAmountWOT += ($intDiscount > 0) ? $billingItems[pID].taxAbleAmount : $billingItems[pID].priceBT ;
-				$totalAmountWT += ($billingItems[pID].totalAmount) ;
-				$totalTaxAmount += $billingItems[pID].taxAmount;
+				$totalAmountWOT += $billingItems[pID].amount.wot;
+				$totalAmountWT += $billingItems[pID].amount.wt;
 
 
 				//console.log($billingItems[pID]);//+'==='+$(this).val());
 					//SET new Price to Grid and Update Bill Payment Details
-				itemTr.find('.bill_item_price').text(($billingItems[pID].qty * $billingItems[pID].taxAbleAmount).toFixed(2));
+				itemTr.find('.bill_item_price').text(($billingItems[pID].amount.wot).toFixed(2));
 				$("#count").text($totalBillQty);	
 				$("#total").text($totalAmountWOT.toFixed(2));
 				$("#ts_con").text(($totalAmountWT-$totalAmountWOT).toFixed(2));
