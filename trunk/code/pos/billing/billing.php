@@ -38,8 +38,16 @@
 			if($_SERVER['REQUEST_METHOD'] == 'POST'){
 				if(array_key_exists('request_type', $_POST) && $_POST['request_type'] == 'save_bill'){
 					$_POST['cd_doc_type'] = 'store_menu_bill';
-					$_POST['billed_by'] = $_SESSION['user'][$this->userIdField];
 					$_POST['bill_time'] = $this->getCDTime();
+
+					$_POST['store_id'] = $_SESSION['user']['store']['id'];
+					$_POST['store_name'] = $_SESSION['user']['store']['name'];
+					$_POST['staff_id'] = $_SESSION['user'][$this->userIdField];
+					$_POST['staff_name'] = $_SESSION['user']['name'];
+					$_POST['location_id'] = $_SESSION['user']['store']['location']['id'];
+					$_POST['location_name'] = $_SESSION['user']['store']['location']['name'];
+
+
 					$currentBillNo = $couch->getDesign('billing')->getUpdate('getbillno','generateBill')->execute(array('month'=>$this->getCMonth()));
 					if(is_numeric($currentBillNo)){
 						$_POST['bill_no'] = $currentBillNo;
