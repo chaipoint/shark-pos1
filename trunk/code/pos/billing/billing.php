@@ -67,7 +67,7 @@
 		public function getSaleBills(){
 			$return = array('error'=>false,'message'=>'','data'=>array());
 			if($_SERVER['REQUEST_METHOD'] == 'POST'){
-				$bills = json_decode($this->cDB->getDesign('billing')->getView('bill_by_date',date('Y-m-d'))->execute(),true);
+				$bills = json_decode($this->cDB->getDesign('billing')->getView('bill_by_date')->setParam(array("group"=>"true","startkey"=>'["'.$this->getcDate().'"]',"endkey"=>'["'.$this->getcDate().'",{}]'))->execute(),true);
 				$return['data']  = array_reverse($bills['rows']);
 			}else{
 				$return['error'] = true;
