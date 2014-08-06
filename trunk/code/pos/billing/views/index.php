@@ -104,10 +104,10 @@
 										<div id="botbuttons" style="text-align: center;">
 											<button type="button" class="btn btn-danger" id="cancel"
 												style="width: 90px;">Cancel</button>
-											<button type="button" class="btn btn-info" id="hold"
-												style="width: 90px;">Hold</button>
+											<!--<button type="button" class="btn btn-info" id="hold"
+												style="width: 90px;">Hold</button>-->
 											<button type="button" class="btn btn-success" id="payment"
-												style="margin-right: 0; width: 180px;">Payment</button>
+												style="margin-right: 90px; width: 180px;">Payment</button>
 										</div>
 									</div>
 								</form>
@@ -132,7 +132,7 @@
 													<?php
 														if(array_key_exists($firstCat, $productList))
 														foreach($productList[$firstCat] as $pKey => $pValue){
-															echo '<button type="button" class="btn btn-prni hov category-product" value="'.$pValue['mysql_id'].'" category-product-sequence="'.$pKey.'">'.$pValue['name'].'</button>';
+															echo '<button type="button" style="width:25%;" class="btn btn-success btn-lg btn3d category-product" value="'.$pValue['mysql_id'].'" category-product-sequence="'.$pKey.'">'.$pValue['name'].'</button>';
 														}
 
 													?>
