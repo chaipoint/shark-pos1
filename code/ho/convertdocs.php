@@ -21,6 +21,14 @@ function getStaffData($type){
 		$finalreturn[$i]['cd_doc_type'] = $type;
 		$finalreturn[$i]['phone'][] = $finalreturn[$i]['phone_1'];
 		$finalreturn[$i]['phone'][] = $finalreturn[$i]['phone_2'];
+		$finalreturn[$i]['location']['id'] = $finalreturn[$i]['location_id'];
+		$finalreturn[$i]['location']['name'] = $finalreturn[$i]['location_name'];
+		$finalreturn[$i]['title']['id'] = $finalreturn[$i]['title_id'];
+		$finalreturn[$i]['title']['name'] = $finalreturn[$i]['title_name'];
+		unset($finalreturn[$i]['location_id']);
+		unset($finalreturn[$i]['location_name']);
+		unset($finalreturn[$i]['title_id']);
+		unset($finalreturn[$i]['title_name']);
 		unset($finalreturn[$i]['phone_1']);
 		unset($finalreturn[$i]['phone_2']);
 		$i++;
