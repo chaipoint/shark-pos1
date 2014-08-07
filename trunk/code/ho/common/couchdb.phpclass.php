@@ -30,9 +30,12 @@ class CouchPHP{
 	public function getAllDbs(){
 		return $this->curl($this->url."_all_dbs");		
 	}
-	public function saveDocument(){
+	public function saveDocument($bulk=false){
 		$this->allowContentType = true;
 		$this->genUrl = $this->url.$this->db;
+		if($bulk){
+			$this->genUrl .="_bulk_docs";
+		}
 		return $this;
 	}
 
