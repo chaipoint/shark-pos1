@@ -1,5 +1,5 @@
 <?php
-function getTableData($type){
+function getStaffData($type){
 	$con = mysql_connect('localhost','root','root');
 	mysql_select_db('cabbeein_cpos');
 	$query = 'SELECT   sm.id mysql_id, sm.name, sm.username, sm.code, sm.password, sm.address, sm.photo, sm.email,sm.phone_1,sm.phone_2,lm.id location_id, lm.name location_name,tm.id title_id, tm.name title_name, sm.active 
@@ -29,8 +29,8 @@ function getTableData($type){
 	return $finalreturn;
 }
 echo "<pre>";
-	require_once 'httpapi.php';
-	
+	//require_once 'httpapi.php';
+	//$couch->saveDocument()->execute(array("docs"=>getStaffData('staff_master')));
 	//print_r(curl("http://54.249.247.15:5984/cpos_ho/_bulk_docs",array("docs"=>getTableData('staff_master')),array('contentType'=>'application/json','is_content_type_allowed'=>true)));
 
 echo "</pre>";
