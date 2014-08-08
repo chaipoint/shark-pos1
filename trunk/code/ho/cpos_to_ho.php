@@ -62,12 +62,12 @@ function updateStaff(){
       
       $updateArray[$i]['phone'][] = $updateArray[$i]['phone_1'];
 	  $updateArray[$i]['phone'][] = $updateArray[$i]['phone_2'];
-	  $updateArray[$i]['location']['id'] = $updateArray[$i]['location_id'];
-	  $updateArray[$i]['location']['name'] = $updateArray[$i]['location_name'];
+	//  $updateArray[$i]['location']['id'] = $updateArray[$i]['location_id'];
+	 // $updateArray[$i]['location']['name'] = $updateArray[$i]['location_name'];
 	  $updateArray[$i]['title']['id'] = $updateArray[$i]['title_id'];
 	  $updateArray[$i]['title']['name'] = $updateArray[$i]['title_name'];
-	  unset($updateArray[$i]['location_id']);
-	  unset($updateArray[$i]['location_name']);
+	 // unset($updateArray[$i]['location_id']);
+	  //unset($updateArray[$i]['location_name']);
 	  unset($updateArray[$i]['title_id']);
 	  unset($updateArray[$i]['title_name']);
 	  unset($updateArray[$i]['phone_1']);
