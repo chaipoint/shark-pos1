@@ -17,8 +17,8 @@ class CouchPHP{
 	private $allowContentType = false;
 	function __construct(){
 		$this->port = "5984";
-		$this->url = 'http://admin:pos@54.249.247.15:'.$this->port."/";
-		$this->db = 'cpos_ho';
+		$this->url = 'http://54.249.247.15:'.$this->port."/";
+		$this->db = 'rakesh_cpos_ho';
 		$this->userName = '';
 		$this->password = '';
 	}
@@ -34,7 +34,7 @@ class CouchPHP{
 		$this->allowContentType = true;
 		$this->genUrl = $this->url.$this->db;
 		if($bulk){
-			$this->genUrl .="_bulk_docs";
+			$this->genUrl .="/_bulk_docs";
 		}
 		return $this;
 	}
@@ -87,10 +87,12 @@ class CouchPHP{
 			$this->isPost = true;
 			$this->postData = $data;
 		}
+
 		return $this->curl($this->genUrl);
 	}
 	private function curl($url){
 		$ch = curl_init();
+		//echo $url;
        	curl_setopt($ch, CURLOPT_URL,$url);
        	if($this->isPost){
        		$this->isPost = false;
