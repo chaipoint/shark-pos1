@@ -1,14 +1,16 @@
 <?php			
-	$con = mysql_connect('localhost','root','root') or die("unable to connect");
-	mysql_select_db('cabbeein_cpos') or die("unable to select db");
+	include_once 'common/connection.php' ;
 
-			$getStoreNameQuery = "select sm.id mysql_id, sm.name, sm.code, sm.type, sm.address, sm.phone_1, sm.phone_2, photo, weekly_off, lm.id location_id, lm.name location_name, sm.sms, sm.foe_allowed is_foe, sm.active, sm.store_time store_open_schedule
-from store_master sm
-LEFT JOIN  location_master lm 
-ON lm.id = sm.location_id 
+	function getStoreData($type){
 
-
-where sm.active = 'Y'";
+	$getStoreNameQuery = "select sm.id mysql_id, sm.name, sm.code,
+	                      sm.type, sm.address, sm.phone_1, sm.phone_2, photo,
+	                      weekly_off, lm.id location_id, lm.name location_name,
+	                      sm.sms, sm.foe_allowed is_foe, sm.active, sm.store_time store_open_schedule
+                          from store_master sm
+                          LEFT JOIN  location_master lm ON lm.id = sm.location_id 
+                          where sm.active = 'Y'";
+						
 						$storeResult = mysql_query($getStoreNameQuery);
 						$i = 0;
 					while($row = mysql_fetch_assoc($storeResult)){
@@ -105,16 +107,12 @@ where sm.active = 'Y'";
 								$i++;
 					}
 
-					//print_r($return);
-					require_once 'httpapi.php';
-			//print_r(curl("http://54.249.247.15:5984/cpos_ho/_bulk_docs",array("docs"=>$return),array('contentType'=>'application/json','is_content_type_allowed'=>true)));
-
-						echo "<pre>";
-//							print_r($return);
-						echo "</pre>";
-
-						?>
-						<!--
-
-{"_id":"_design/staff","_rev":"80-117d19e2905a4677ea4d07c43c602f54","language":"javascript","views":{"staff_code":{"map":"function(doc) {\n\tif(doc.type && doc.type == 'staff_master')\n  \t\temit(doc.username, doc);\n}"}},"shows":{"validateuser":"function(res, req) { var msg = ''; for (var i in req){\n /*msg += '\\n\\n'+i+'=>'+( typeof req[i] == 'string' ? req[i] : '');  /**/ if(typeof req[i] != 'string') {  msg+='\\n';  for(var j in req[i]) { msg+= '\\n\\t\\t['+i+']['+j+'] =>'+ req[i][j];} } }  msg+= '\\n\\n'; return msg; /*return { body: req.query.name, headers : {'Content-Type' : 'application/json'} }/**/}","other":"function(res, req) {return 'hello\\n';} "},"lists":{"getuser":"function(head, req) { var userfound = false; var reqData = req.form; var obj = new Object(); obj.error = false; obj.message = ''; obj.data = new Object(); var data = ''; for(var i in reqData){ data = JSON.parse(i); break;}  while(row = getRow()){  if(row.key == data.username) {  if(row.value.password == (data.password).toUpperCase()){ obj.data = row.value; } else{ obj.error = true; obj.message = 'Password Wrong';}  userfound = true; break;} } if( !userfound ) { obj.error = true; obj.message = 'User Unavailable';} return JSON.stringify(obj);}"}}
-						-->
+					return $return;
+}
+require_once 'common/couchdb.phpclass.php';
+$couch = new CouchPHP();
+//$result = $couch->saveDocument(true)->execute(array("docs"=>getStoreData('store_master')));
+echo '<pre>';
+$result = getStoreData('store_master');
+print_r($result);
+echo '</pre>';
