@@ -19,8 +19,8 @@ class CouchPHP{
 		$this->port = "5984";
 		$this->url = 'http://54.249.247.15:'.$this->port."/";
 		$this->db = 'rakesh_cpos_ho';
-		$this->userName = '';
-		$this->password = '';
+		$this->userName = 'pos';
+		$this->password = 'pos';
 	}
 	
 	public function version(){
