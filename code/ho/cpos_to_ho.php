@@ -23,14 +23,14 @@ switch ($action){
 
 function updateStaff(){
 	$couch = new CouchPHP();
-	$result = json_decode($couch->getDesign('staff')->getView('staff_code')->execute(),true);
+	$result = json_decode($couch->getDesign('staff')->getView('staff_mysql_id')->setParam(array("include_docs"=>"true"))->execute(),true);
 	
 	$itemList = array();
 
 	if(array_key_exists('rows', $result)){
 		$docs = $result['rows'];
 		foreach($docs as $dKey => $dValue){
-	    $itemList[$dValue['value']['mysql_id']] = $dValue['value'];	
+	    $itemList[$dValue['doc']['mysql_id']] = $dValue['doc'];	
 	  }
 	}
 	
@@ -98,14 +98,14 @@ return $result;
 
 function updateStore(){
     $couch = new CouchPHP();
-	$result = json_decode($couch->getDesign('store')->getView('store_list')->execute(),true);
+	$result = json_decode($couch->getDesign('store')->getView('store_mysql_id')->setParam(array("include_docs"=>"true"))->execute(),true);
 	$storeList = array();
 
     if(array_key_exists('rows', $result)){
 		$docs = $result['rows'];
 		 
 		foreach($docs as $dKey => $dValue){
-	$storeList[$dValue['value']['mysql_id']] = $dValue['value'];	
+	$storeList[$dValue['doc']['mysql_id']] = $dValue['doc'];	
 	  }
 	}
 
