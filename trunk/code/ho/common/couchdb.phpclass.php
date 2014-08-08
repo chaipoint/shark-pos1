@@ -17,7 +17,7 @@ class CouchPHP{
 	private $allowContentType = false;
 	function __construct(){
 		$this->port = "5984";
-		$this->url = 'http://54.249.247.15:'.$this->port."/";
+		$this->url = 'http://pos:pos@54.249.247.15:'.$this->port."/";
 		$this->db = 'rakesh_cpos_ho';
 		$this->userName = 'pos';
 		$this->password = 'pos';
@@ -26,6 +26,11 @@ class CouchPHP{
 	public function version(){
 		return $this->curl($this->url);
 	}
+
+	 public function setParam($paramList){
+      $this->genUrl .= '?'.http_build_query($paramList);
+      return $this;
+    }
 
 	public function getAllDbs(){
 		return $this->curl($this->url."_all_dbs");		
