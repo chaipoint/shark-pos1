@@ -1,18 +1,16 @@
+var $billingItems = new Object();
+var $totalBillItems = 0;
+var $totalTaxAmount = 0.0;
+var $totalBillCostAfterTaxAD = 0.0;
+var $totalAmountWOT = 0.0;
+var $totalAmountWT = 0.0;
+var $totalBillQty = 0;
+var $intDiscount = 0;
+var $totalDiscountAmount = 0.0;
+
 $(document).ready(function(){
 	//---START--- Initial Configurations on Load Of Page
 
-	var $billingItems = new Object();
-	var $totalBillItems = 0;
-	var $totalBillCost = 0.0;
-//	var $taxAmount = 0.0;
-	var $totalTaxAmount = 0.0;
-
-	var $totalBillCostAfterTaxAD = 0.0;
-
-	var $totalAmountWOT = 0.0;
-	var $totalAmountWT = 0.0;
-	var $totalBillQty = 0;
-	var $intDiscount = 10;
 
 	//---START--- Categories Silder Starts
 	/*On Load of DOM Manages Categores Silder*/
@@ -44,7 +42,7 @@ $(document).ready(function(){
 				$buttonList = "";
 				selectedCat = $(this).data('category');
 				$.each(productArray[selectedCat],function(key,value){
-					$buttonList += '<button type="button" class="btn btn-prni hov category-product" value="'+value.mysql_id+'" category-product-sequence="'+key+'">'+value.name+'</button>';
+					$buttonList += '<button type="button" class="btn btn-success btn-lg btn3d category-product" value="'+value.mysql_id+'" category-product-sequence="'+key+'">'+value.name+'</button>';
 				});
 				$("#proajax").html($buttonList);
 			}
@@ -101,7 +99,7 @@ $(document).ready(function(){
 				$totalAmountWOT += ($intDiscount > 0) ? $billingItems[productID].taxAbleAmount : $billingItems[productID].priceBT ;
 				$totalAmountWT += ($billingItems[productID].totalAmount) ;
 				$totalTaxAmount += $billingItems[productID].taxAmount;
-
+				$totalDiscountAmount += $billingItems[productID].discountAmount;
 				var tableRow ='<tr billing-product="'+productID+'">'+
 								'<td style="width:9%"><span class="glyphicon glyphicon-remove-sign del_row"></span></td>'+
 								'<td style="width:53%" class="btn-warning">'+$billingItems[productID].name+'&nbsp;@&nbsp;'+$billingItems[productID].price+'</td>'+
@@ -116,7 +114,7 @@ $(document).ready(function(){
 				$("#total").text($totalAmountWOT.toFixed(2));
 				$("#total-payable").text($totalAmountWT.toFixed(2));
 				$("#ts_con").text(($totalTaxAmount).toFixed(2));
-
+				$("#ds_con").text(($totalDiscountAmount).toFixed(2));
 
 
 					
@@ -126,65 +124,50 @@ $(document).ready(function(){
 		$("#saletbl").on("click",".del_row",function(){
 			var tableTR = $(this).closest('tr');
 			var pID = tableTR.attr('billing-product');
-				//Remove Items and cost + tax From Bill and set Bill;			
-			$totalBillQty = ($totalBillQty - $billingItems[pID].qty);
-			$totalAmountWOT = ($totalAmountWOT - $billingItems[pID].amount.wot);
-			$totalAmountWT = ($totalAmountWT - $billingItems[pID].amount.wt);
-				//console.log($billingItems[pID]);
-			tableTR.remove();
 			delete $billingItems[pID];
-			console.log($billingItems);
-			$("#count").text($totalBillQty);	
-			$("#total").text($totalAmountWOT.toFixed(2));
-			$("#ts_con").text(($totalAmountWT-$totalAmountWOT).toFixed(2));
-			$("#total-payable").text($totalAmountWT.toFixed(2));	
-
+			generateSalesTable();
 		});
 
 		$("#saletbl").on("keyup",".bill_qty_input",function(event){
 			var newQty = parseInt($(this).val());
+			newQty = isNaN(newQty) ? 0 : newQty;
 			var pID = $(this).closest('tr').attr('billing-product');
 			var itemTr = $(this).closest('tr');
 			var billItem = $billingItems[pID];
-					/*First Remove Item From Bill with qty and amount*/
-				$totalBillQty = ($totalBillQty - billItem.qty);
-				$totalAmountWOT = ($totalAmountWOT - billItem.newAmount);
-				$totalAmountWT = ($totalAmountWT - billItem.newAmount);
+				//Reset Qty + amount + tax Amount
+			$totalBillQty -= billItem.qty;
+			$totalAmountWT -= billItem.netAmount;
+			$totalAmountWOT -= billItem.qty * billItem.taxAbleAmount;
+			$totalTaxAmount -= billItem.qty * billItem.taxAmount;
+			$totalDiscountAmount -= billItem.qty * billItem.discountAmount;
 
-					/*After removing qty and price ADD latest qty and PRICE*/
-				$billingItems[pID].qty = isNaN(newQty) ? 0 : newQty; //Check if newQty is empty from input
-				$billingItems[pID].newAmount = $billingItems[pID].qty * $billingItems[pID].totalAmount;
-					
-					//Process if newQty is empty
-				$billingItems[pID].newAmount = isNaN($billingItems[pID].newAmount ) ? 0.0 : $billingItems[pID].newAmount;
-				
-					//Calculate total Qty and Total bill amount with and without tax.
-				$totalBillQty += $billingItems[pID].qty;
-				$totalAmountWOT += ($intDiscount > 0) ? $billingItems[pID].taxAbleAmount : $billingItems[pID].priceBT ;
-				$totalAmountWT += ($billingItems[pID].totalAmount) ;
-				$totalTaxAmount += $billingItems[pID].taxAmount;
+			$billingItems[pID].qty = newQty;
+			$billingItems[pID].netAmount = $billingItems[pID].qty * billItem.totalAmount ;
+
+				// Increase Qty + tax amount + total amount			
+			$totalBillQty += newQty;
+			$totalAmountWT += $billingItems[pID].netAmount;
+			$totalAmountWOT += $billingItems[pID].qty * $billingItems[pID].taxAbleAmount;
+			$totalTaxAmount += $billingItems[pID].qty * $billingItems[pID].taxAmount;
+			$totalDiscountAmount += $billingItems[pID].qty * $billingItems[pID].discountAmount;
 
 
-				//console.log($billingItems[pID]);//+'==='+$(this).val());
-					//SET new Price to Grid and Update Bill Payment Details
+			//console.log("billItem => "+JSON.stringify($billingItems[pID]));
+
+
 				itemTr.find('.bill_item_price').text(($billingItems[pID].qty * $billingItems[pID].taxAbleAmount).toFixed(2));
 				$("#count").text($totalBillQty);	
 				$("#total").text($totalAmountWOT.toFixed(2));
-				$("#ts_con").text(($totalAmountWT-$totalAmountWOT).toFixed(2));
+				$("#ts_con").text($totalTaxAmount.toFixed(2));
 				$("#total-payable").text($totalAmountWT.toFixed(2));	
+				$("#ds_con").text(($totalDiscountAmount).toFixed(2));
 				event.preventDefault();
 		});
 
 		//---END--- Event For Product Selection
 		//onCancel Of Bill
 		$("#cancel").click(function(){
-			$billingItems = new Object();
-			$totalBillItems = 0;
-			$totalBillCost = 0.0;
-			$("#count").text(0);		
-			$("#total").text(0);
-			$("#total-payable").text(0);	
-			$("#saletbl tbody").html("");	
+			resetBill(true);
 		});
 		//---START--- Payment Event After Products selection  or Without Product Selection
 		$("#payment").click(function(){
@@ -204,7 +187,8 @@ $(document).ready(function(){
 				bootbox.alert("Please Enter Payment Amount");
 				return false;
 			}
-			if(parseInt($('#paid-amount').val()) < $totalBillCost){
+			if(parseInt($('#paid-amount').val()) < Math.ceil($totalAmountWT)){
+				console.log(Math.ceil($totalAmountWT));
 				bootbox.alert("Paid Amount is Less");
 				return false;
 			}
@@ -216,11 +200,10 @@ $(document).ready(function(){
 
 			billDetails.sub_total = $totalAmountWOT.toFixed(2);
 			billDetails.total_tax = ($totalTaxAmount).toFixed(2);
-			billDetails.total_discount = "Need Changes";
-			billDetails.round_off = "Need Changes";
-			billDetails.due_discount = "Need Changes";
-			billDetails.counter = "Need Changes";
-			billDetails.shift = "Need Changes";
+			billDetails.total_discount = $totalDiscountAmount;
+			billDetails.round_off = Math.ceil(billDetails.total_amount) - billDetails.total_amount;
+			billDetails.due_amount = billDetails.total_amount + billDetails.round_off;
+			billDetails.discount = $intDiscount;
 
 /*			billDetails.location_id = $totalBillQty;
 			billDetails.location_name = $totalBillQty;
@@ -261,6 +244,7 @@ $(document).ready(function(){
 				}else{
 					$('#payModal').modal('hide');
 					bootbox.alert('Bill Successfully Saved <a class="label label-primary print-bill-today" href="billprint.php?bill_no='+result.data.bill_no+'" target="_blank">Print</a>');
+					resetBill(true);					
 				}
 			});
 		});
@@ -415,14 +399,87 @@ $(document).ready(function(){
 				beforeClose:function(e,keyboard,el,accepted){
 					if(accepted){
 						var paid=parseFloat(el.value);
-						if(paid < $totalBillCost){
+						if(paid < Math.ceil($totalAmountWT)){
+							console.log(Math.ceil($totalAmountWT));
 							bootbox.alert('Paid amount is less than payable amount');
 							$("#balance").text('')
 							return false;
 						}else{
-							$("#balance").text( paid - $totalBillCost );
+							$("#balance").text( paid - Math.ceil($totalAmountWT) );
 						}
 					}
 				}
 			});
+
+
+
+	$("#add_discount").click(function(){
+		var dval=$('#discount_val').val(); 
+		bootbox.dialog({
+			message:"<input type='text' class='form-control input-sm' id='get_ds' onClick='this.select();' value='"+$intDiscount+"'></input>",
+			title:"Discount (%)",
+			buttons:{
+				main:{
+					label:"Update",
+					className:"btn-primary btn-sm",
+					callback:function(){
+						$intDiscount = parseInt($('#get_ds').val()); 
+						generateSalesTable();
+					}
+				}
+			}
+		});
+		return false
+	});
+
 });
+function generateSalesTable(){
+	resetBill(false);
+	var tableRows = '';
+	for(var index in $billingItems){
+		$billingItems[index].discount = $intDiscount;
+		$billingItems[index].discountAmount = $billingItems[index].priceBT * $billingItems[index].discount/100;
+		$billingItems[index].taxAbleAmount = $billingItems[index].priceBT - $billingItems[index].discountAmount;
+		$billingItems[index].taxAmount = $billingItems[index].taxAbleAmount * $billingItems[index].tax;
+		$billingItems[index].totalAmount = $billingItems[index].taxAbleAmount + $billingItems[index].taxAmount;
+		$billingItems[index].netAmount = $billingItems[index].qty * $billingItems[index].totalAmount;
+		tableRows +='<tr billing-product="'+index+'">'+
+			'<td style="width:9%"><span class="glyphicon glyphicon-remove-sign del_row"></span></td>'+
+			'<td style="width:53%" class="btn-warning">'+$billingItems[index].name+'&nbsp;@&nbsp;'+$billingItems[index].price+'</td>'+
+			'<td style="width:12%"><span class="bill_item_qty"><input type="text" class="keyboard nkb-input bill_qty_input" value="'+$billingItems[index].qty+'"/></span></td>'+
+			'<td style="width:26%"><span class="bill_item_price text-right">'+($billingItems[index].qty * $billingItems[index].taxAbleAmount).toFixed(2)+'</span></td>'+
+			'</tr>';
+
+		$totalBillQty += $billingItems[index].qty;
+		$totalAmountWOT += ($billingItems[index].qty * $billingItems[index].taxAbleAmount);
+		$totalAmountWT += $billingItems[index].netAmount;
+
+		$totalTaxAmount += ( $billingItems[index].qty * $billingItems[index].taxAmount );
+		$totalDiscountAmount += ( $billingItems[index].qty * $billingItems[index].discountAmount );
+
+	}
+	$('#saletbl tbody').html(tableRows);
+	$("#count").text($totalBillQty);	
+	$("#total").text($totalAmountWOT.toFixed(2));
+	$("#ts_con").text($totalTaxAmount.toFixed(2));
+	$("#total-payable").text($totalAmountWT.toFixed(2));	
+	$("#ds_con").text(($totalDiscountAmount).toFixed(2));
+}
+function resetBill(refresh){
+	if(refresh){
+		$billingItems = new Object();
+		delete $billingItems;
+	}
+	$totalBillItems = 0;
+	$totalBillQty = 0;
+	$totalAmountWOT = 0.0;
+	$totalAmountWT = 0.0;
+	$totalTaxAmount = 0.0;
+	$totalDiscountAmount = 0.0;
+	$("#count").text($totalBillQty);		
+	$("#total").text($totalAmountWOT);
+	$("#total-payable").text($totalAmountWT);	
+	$("#ts_con").text($totalTaxAmount);
+	$("#saletbl tbody").html("");	
+	$("#ds_con").text($totalDiscountAmount);
+}
