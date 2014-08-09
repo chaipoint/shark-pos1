@@ -46,7 +46,7 @@
 				$productsArray[] = "(".$lastInsertID.",".$pValue['id'].",".$pValue['qty'].",".$pValue['price'].",".$pValue['netAmount'].")";
 			}
 			$couch->getDesign('billing')->getUpdate('insert_mysql_id',$lKey)->setParam(array('mysql_id'=>$lastInsertID))->execute();
-			echo "<br/>".$this->getLastUrl();	
+			echo "<br/>".$couch->getLastUrl();	
 			$lastInsertID++;
 		}
 
