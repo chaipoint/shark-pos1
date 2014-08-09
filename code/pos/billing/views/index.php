@@ -75,7 +75,7 @@
 														<tr class="success">
 															<td width="25%">Total Items</td>
 															<td><span id="count">0</span></td>
-															<td width="25%">Total</td>
+															<td width="25%">SubTotal</td>
 															<td class="text_right" colspan="2"><span id="total">0</span>
 															</td>
 														</tr>
@@ -85,9 +85,9 @@
 																	class="glyphicon glyphicon-pencil"></i> </a>
 															</td>
 															<td><span id="ds_con">0</span></td>
-															<td width="25%">Tax <a href="#" id="add_tax"
+															<td width="25%">Tax <!--<a href="#" id="add_tax"
 																style="color: #FFF; font-size: 0.80em"><i
-																	class="glyphicon glyphicon-pencil"></i> </a>
+																	class="glyphicon glyphicon-pencil"></i>--> </a>
 															</td>
 															<td class="text_right"><span id="ts_con">0</span></td>
 														</tr>

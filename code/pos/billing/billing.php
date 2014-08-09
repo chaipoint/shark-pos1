@@ -50,9 +50,16 @@
 					$_POST['location_id'] = $_SESSION['user']['store']['location']['id'];
 					$_POST['location_name'] = $_SESSION['user']['store']['location']['name'];
 					$_POST['bill_status'] = 'open';
+					$_POST['reprint'] = 0;
+					$_POST['is_updated'] = 'N';
+					$_POST['channel'] = 'store';
+					$_POST['card_no'] = 'XXXXX';
+					$_POST['coupon_code'] = 'XXXXX';
+					$_POST['counter'] = '1';
+					$_POST['shift'] = '1';
 
 
-					$currentBillNo = $couch->getDesign('billing')->getUpdate('getbillno','generateBill')->setParam(array('month'=>$this->getCMonth()))->execute(array('post'=>true));
+					$currentBillNo = $couch->getDesign('billing')->getUpdate('getbillno','generateBill')->setParam(array('month'=>$this->getCMonth()))->execute();
 					if(is_numeric($currentBillNo)){
 						$_POST['bill_no'] = $currentBillNo;
 						unset($_POST['request_type']);					
