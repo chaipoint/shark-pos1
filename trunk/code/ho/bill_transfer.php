@@ -41,6 +41,7 @@
 
 
 		$productsArray = array();
+		print_r($itemList);
 		foreach($itemList as $lKey => $lValue){
 			$doc_idList[$lKey] = $lastInsertID;
 			foreach($lValue as $pKey => $pValue){
