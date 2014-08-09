@@ -6,6 +6,7 @@
 
 	$couch = new CouchPHP();
 	$result = $couch->getDesign('billing')->getView('bill_by_no_mid')->setParam(array('include_docs'=>'true'))->execute();
+	echo $couch->getLastUrl();
 	echo "<pre>";
 	print_r($result);
 	$docsData = array();
