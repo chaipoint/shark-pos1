@@ -31,7 +31,7 @@ $(document).ready(function(){
 						var $res =  $.parseJSON(response); //Parse result of response
 						console.log($res);
 					if($res.status=='Sucess'){
-							window.location='select.php';
+							window.location='dashboard.php';
 						}
 						else{
                         $("#error_message").show();
