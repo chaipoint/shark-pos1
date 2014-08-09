@@ -27,10 +27,11 @@
 							class="glyphicon glyphicon-list"></i> </a></li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a
-						
-						class="tip" data-placement="left" title="Hi, User! Logout"><i
-							class="glyphicon glyphicon-log-out"></i> </a></li>
+					<li>
+						<a class="tip" data-placement="left" title="Logout" href="index.php?dispatch=login.out">
+							<i class="glyphicon glyphicon-log-out"></i> 
+						</a>
+					</li>
 				</ul>
 				<a
 					class="btn btn-success btn-sm pull-right external"
