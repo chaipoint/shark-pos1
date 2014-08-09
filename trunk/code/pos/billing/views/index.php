@@ -15,10 +15,6 @@
 				var productList = \''.json_encode($productList).'\';
 				var productArray = $.parseJSON(productList);
 				var selectedCat = '.$firstCat.';
-				var store_id = '.$_SESSION['user']['store']['id'].';
-				var store_name = "'.$_SESSION['user']['store']['name'].'";
-				var staff_id = '.$_SESSION['user']['mysql_id'].';
-				var staff_name = "'.$_SESSION['user']['name'].'";
 			</script>
 		';
 	}
