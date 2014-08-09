@@ -92,10 +92,13 @@
 							"map"=>"function(doc) {if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill') { var bill_date = doc.bill_time.split(' '); emit([bill_date[0],doc.payment_type],parseInt(doc.total_amount)); }}",
 	           				"reduce" => "function(key, value){ return sum(value);}"
 						),
+					"bill_by_no_mid" => array(
+           				"map"=> "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill' && !doc.mysql_id){ emit(doc.bill_no, null); } }"
+       				)
 				),
 				'updates' => array( 
        				'getbillno' =>  "function(doc,req){ if(req.query.month) { if(doc.current_month != req.query.month){doc.current = 0; doc.current_month = req.query.month;} var newCurrent =  doc.current+1; doc.current = newCurrent; return [doc,newCurrent.toString()];}}",
-       				'insert_mysql_id' => "function(doc,req){ doc.mysql_id = req.mysql_id; return [doc,null]}",
+       				'insert_mysql_id' => "function(doc,req){ doc.mysql_id = req.query.mysql_id; return [doc,req.query.mysql_id]}",
    				)
 			);
 			$store = array(
