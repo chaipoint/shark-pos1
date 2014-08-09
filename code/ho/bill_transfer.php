@@ -39,14 +39,13 @@
 
 
 		$productsArray = array();
-		var_dump($itemList);
 		foreach($itemList as $lKey => $lValue){
 			$doc_idList[$lKey] = $lastInsertID;
 			foreach($lValue as $pKey => $pValue){
 				$productsArray[] = "(".$lastInsertID.",".$pValue['id'].",".$pValue['qty'].",".$pValue['price'].",".$pValue['netAmount'].")";
 			}
 			$couch->getDesign('billing')->getUpdate('insert_mysql_id',$lKey)->setParam(array('mysql_id'=>$lastInsertID))->execute();
-			echo "<br/>".$couch->getLastUrl();	
+			echo "<br/>".$couch->getLastUrl();
 			$lastInsertID++;
 		}
 
