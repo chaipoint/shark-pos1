@@ -30,7 +30,6 @@
 			$itemList[$dValue['doc']['_id']] = $dValue['doc']['items'];
 		}
 	}
-	print_r($docsData);
 	if( count($docsData) >0 ){
 		//Insert and get ID of first Inserted Element
 		$insertQuery = 'insert into cp_pos_storeorders (bill_no,bill_datetime,store_id,counter_id,employee_id,channel_id,paymentmethod,card_no,total_products,total_amount,total_discount,total_tax,net_amount,cash_payment,card_payment,card_balancebeforepayment,status,reason_code,reprint_count) 
@@ -40,6 +39,7 @@
 
 
 		$productsArray = array();
+		echo $lastInsertID;
 		foreach($itemList as $lKey => $lValue){
 			$doc_idList[$lKey] = $lastInsertID;
 			foreach($lValue as $pKey => $pValue){
