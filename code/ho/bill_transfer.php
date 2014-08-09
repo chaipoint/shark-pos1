@@ -1,8 +1,8 @@
 <?php
 	require_once 'common/couchdb.phpclass.php';
 
-	mysql_connect('localhost','root','root');
-	mysql_select_db('cabbeein_cpos');
+	mysql_connect('localhost','root','root') or die('Unable to connect');
+	mysql_select_db('cabbeein_cpos') or die('Unable to Select');
 
 
 	$couch = new CouchPHP();
