@@ -114,7 +114,7 @@ class CouchPHP{
 		return $this;
 
 	}
-	public getLastUrl(){
+	public function getLastUrl(){
 		return $this->genUrl;
 	}
 	private function curl($url){
