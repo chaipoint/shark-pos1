@@ -1,4 +1,4 @@
-<?php
+<?php session_start();
 	class App_config{
 		private $module = 'login';
 		private $mode = 'index'; 
@@ -41,7 +41,11 @@
 					}
 				}
 			}
-
+			if($this->module != 'login' && $this->module != 'utils'){
+				if(!array_key_exists('user', is_array(@$_SESSION) ? $_SESSION : array())){
+					header("Location:".$this->url);
+				}
+			}
 		}
 		public function getApp(){
 			return $this->app;

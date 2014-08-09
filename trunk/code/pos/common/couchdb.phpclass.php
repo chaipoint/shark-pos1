@@ -15,14 +15,24 @@ class CouchPHP{
 	private $isPost = false;
 	private $postData = array();
 	private $allowContentType = false;
+	private $remote;
 	function __construct(){
 		$this->port = "5984";
 		$this->url = 'http://127.0.0.1:'.$this->port."/";
-		$this->db = 'pos';
+		$this->db = 'cpos_pos';
 		$this->userName = '';
 		$this->password = '';
+		$this->remote = 'http://pos:pos@54.249.247.15:5984/rakesh_cpos_ho';
 	}
-	
+	public function getUrl(){
+		return $this->url;
+	}
+	public function getRemote(){
+		return $this->remote;
+	}
+	public function getDB(){
+		return $this->db;
+	}
 	public function version(){
 		return $this->curl($this->url);
 	}
@@ -30,9 +40,12 @@ class CouchPHP{
 	public function getAllDbs(){
 		return $this->curl($this->url."_all_dbs");		
 	}
-	public function saveDocument(){
+	public function saveDocument($bulk = false){
 		$this->allowContentType = true;
 		$this->genUrl = $this->url.$this->db;
+		if($bulk){
+			$this->genUrl .= "/_bulk_docs";
+		}
 		return $this;
 	}
 
@@ -72,16 +85,35 @@ class CouchPHP{
 		$this->genUrl .= "/_list/".$list."/".$map;
 		return $this;
 	}
-	public function getUpdate($update,$docId){
+	public function replicate(){
+		$this->genUrl = $this->url.'_replicate';
+		return $this;
+	}
+	public function getUpdate($update,$docId,$qury=""){
 		$this->genUrl .= "/_update/".$update."/".$docId;
+		if(!empty($qury)){
+			echo $this->genUrl .= '?'.$qury;
+		}
 		return $this;
 	}
 	public function execute($data = array()){
 		if(is_array($data) && count($data)>0){
 			$this->isPost = true;
 			$this->postData = $data;
+			$this->allowContentType = true;
 		}
 		return $this->curl($this->genUrl);
+	}
+	public function executeRemote($extra = ''){
+		$url = $this->remote.'/'.$extra;
+		$result = $this->curl($url);
+		
+		return $result;
+	}
+	public function setParam($paramList){
+		$this->genUrl .= '?'.http_build_query($paramList);
+		return $this;
+
 	}
 	private function curl($url){
 		$ch = curl_init();
@@ -89,7 +121,8 @@ class CouchPHP{
        	if($this->isPost){
        		$this->isPost = false;
        		curl_setopt($ch, CURLOPT_POST, TRUE); 
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($this->postData));
+            curl_setopt($ch, CURLOPT_POSTFIELDS, stripslashes(json_encode($this->postData)));
+            //echo json_encode($this->postData);
        		$this->postData = array();
        	}
        	if($this->allowContentType){
@@ -100,6 +133,6 @@ class CouchPHP{
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); 
        	$result = curl_exec($ch); 
        	curl_close($ch);
-       	return $result;
+       	return json_decode($result,true);
 	}
 }
