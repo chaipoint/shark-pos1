@@ -4,11 +4,10 @@
 	mysql_connect('localhost','root','root') or die('Unable to connect');
 	mysql_select_db('cabbeein_cpos') or die('Unable to Select');
 
-echo "HELLO";
 	$couch = new CouchPHP();
 	$result = $couch->getDesign('billing')->getView('bill_by_no_mid')->setParam(array('include_docs'=>'true'))->execute();
 	echo "<pre>";
-	//print_r($result);
+	print_r($result);
 	$docsData = array();
 	if(array_key_exists('rows', $result)){
 		$docs = $result['rows'];
