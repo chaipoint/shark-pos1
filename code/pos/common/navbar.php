@@ -36,11 +36,7 @@
 				<a
 					class="btn btn-success btn-sm pull-right external"
 					style="padding: 5px 8px; margin: 10px 0 5px 5px;"
-					data-toggle="modal" data-target="#saleModal" id="todays_sale"> Today's Sale </a> <a
-					data-toggle="modal"
-					data-target="#opModal"
-					class="btn btn-info btn-sm pull-right external" id="ob"
-					style="padding: 5px 8px; margin: 10px 5px 5px 5px;"> Opened Bills </a>
+					data-toggle="modal" data-target="#saleModal" id="todays_sale"> Today's Sale </a>
 				
 				<ul class="nav navbar-nav navbar-right">
 					<li><a class="hov"><span id="cur-time"></span> </a></li>
