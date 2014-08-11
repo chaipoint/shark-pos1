@@ -45,18 +45,18 @@
 										</ul>
 									</div>
 								
-									<form id="loginform" action="" method="post" accept-charset="utf-8" class="separate-sections form-horizontal">
+									<form id="loginform" action="" method="post" accept-charset="utf-8" class="separate-sections form-horizontal" autocomplete="off">
 			    							<div class="input-group">
 											<span class="input-group-addon"> <i
 												class="glyphicon glyphicon-user"></i>
 											</span> <input type="text" name="identity" value=""
-												id="username" class="form-control" placeholder="Email" />
+												id="username" class="form-control" placeholder="Email" autocomplete="off"/>
 										</div>
 										<div class="input-group">
 											<span class="input-group-addon"><i
 												class="glyphicon glyphicon-lock"></i> </span> <input
 												type="password" name="password" value="" id="password"
-												class="form-control" placeholder="Password" />
+												class="form-control" placeholder="Password" autocomplete="off"/>
 										</div>
 										<div class="row">
 
@@ -67,7 +67,6 @@
 											</div>
 											<div class="col-md-12">
 												<a href="" class="">
-													
 													Forgot Password? 
 												</a>
 											</div>
