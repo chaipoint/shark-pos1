@@ -89,11 +89,10 @@ class CouchPHP{
 		$this->genUrl = $this->url.'_replicate';
 		return $this;
 	}
-	public function getUpdate($update,$docId,$qury=""){
+	public function getUpdate($update,$docId){
+		$this->isPost = true;
+		$this->postData = array();
 		$this->genUrl .= "/_update/".$update."/".$docId;
-		if(!empty($qury)){
-			echo $this->genUrl .= '?'.$qury;
-		}
 		return $this;
 	}
 	public function execute($data = array()){
@@ -115,6 +114,10 @@ class CouchPHP{
 		return $this;
 
 	}
+	public function getLastUrl(){
+		return $this->genUrl;
+	}
+
 	private function curl($url){
 		$ch = curl_init();
        	curl_setopt($ch, CURLOPT_URL,$url);
