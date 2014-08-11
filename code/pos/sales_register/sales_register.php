@@ -10,7 +10,7 @@
 		}
 		function index(){
 			global $couch;
-			$resultJSON = json_decode($couch->getDesign('billing')->getView('bill_by_current_date')->setParam(array("endkey"=>'["'.(date('Y-m-d')).'"]',"descending"=>"true"))->execute(),true);
+			$resultJSON = $couch->getDesign('billing')->getView('bill_by_current_date')->setParam(array("endkey"=>'["'.(date('Y-m-d')).'"]',"descending"=>"true"))->execute();
 			$result = $resultJSON['rows'];
 			
 			$this->commonView('html_header');
