@@ -35,4 +35,22 @@ $(document).ready(function(){
 				}
 				event.preventDefault(); 	//Privents Formto Submit
 			});
+
+
+
+
+//KEYBORD TO ENTER PAYMENT
+			$('.form-control').keyboard({
+				restrictInput:true,
+				preventPaste:true,
+				autoAccept:false,
+				alwaysOpen:false,
+				openOn:'click',
+				beforeClose:function(e,keyboard,el,accepted){
+				}
+			});
+
+
+
+
 });

@@ -110,6 +110,8 @@ $(document).ready(function(){
 
 				$('#saletbl tbody tr[billing-product="'+productID+'"]').remove();
 				$("#saletbl tbody").append(tableRow);
+							$('.bill_qty_input').keyboard({layout:'num'});
+
 				$("#count").text($totalBillQty);
 				$("#total").text($totalAmountWOT.toFixed(2));
 				$("#total-payable").text($totalAmountWT.toFixed(2));
@@ -128,7 +130,8 @@ $(document).ready(function(){
 			generateSalesTable();
 		});
 
-		$("#saletbl").on("keyup",".bill_qty_input",function(event){
+		$("#saletbl")
+		.on("keyup",".bill_qty_input",function(event){
 			var newQty = parseInt($(this).val());
 			newQty = isNaN(newQty) ? 0 : newQty;
 			var pID = $(this).closest('tr').attr('billing-product');
@@ -373,7 +376,7 @@ $(document).ready(function(){
 			$('#paid-amount').keyboard({
 				restrictInput:true,
 				preventPaste:true,
-				autoAccept:true,
+				autoAccept:false,
 				alwaysOpen:false,
 				openOn:'click',
 				layout:'costom',
@@ -459,6 +462,8 @@ function generateSalesTable(){
 
 	}
 	$('#saletbl tbody').html(tableRows);
+	$('.bill_qty_input').keyboard();
+
 	$("#count").text($totalBillQty);	
 	$("#total").text($totalAmountWOT.toFixed(2));
 	$("#ts_con").text($totalTaxAmount.toFixed(2));
