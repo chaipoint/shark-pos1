@@ -96,10 +96,10 @@
            				"map"=> "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill' && !doc.mysql_id){ emit(doc.bill_no, null); } }"
        				),
        				"bill_by_current_date" => array(
-       					"map": "function(doc) {if(doc.cd_doc_type && doc.cd_doc_type == 'store_menu_bill') { var bill_date = doc.bill_time.split(' '); emit([bill_date[0],doc.payment_type],doc); }}"
+       					"map": "function(doc) {if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill') { var bill_date = doc.bill_time.split(' '); emit([bill_date[0],doc.payment_type],doc); }}"
        				),
        				"sales_summary" => array(
-       					"map": "function(doc) {if(doc.cd_doc_type && doc.cd_doc_type == 'store_menu_bill') { var bill_date = doc.bill_time.split(' '); for(var product_id in doc.items){ emit([bill_date[0],doc.items[product_id].categroy_name,doc.payment_type],parseInt(doc.items[product_id].netAmount));}}}",
+       					"map": "function(doc) {if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill') { var bill_date = doc.bill_time.split(' '); for(var product_id in doc.items){ emit([bill_date[0],doc.items[product_id].categroy_name,doc.payment_type],parseInt(doc.items[product_id].netAmount));}}}",
        					"reduce": "function(key,value){ var sum=0; value.forEach(function(v){sum+= parseInt(v);}); return sum; }"
        				)
 				),
