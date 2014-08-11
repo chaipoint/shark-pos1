@@ -22,7 +22,7 @@
 									class="language-img"> &nbsp;&nbsp; English </a></li>
 						</ul>
 					</li>
-					<li><a
+					<li><a href="index.php?dispatch=sales_register.index"
 						class="tip" data-placement="right" title="Sales"><i
 							class="glyphicon glyphicon-list"></i> </a></li>
 				</ul>
