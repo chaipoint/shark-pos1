@@ -29,7 +29,7 @@
 						<a class="btn btn-success btn-sm external" style="padding: 5px 8px; margin: 10px 0 5px 5px;" data-toggle="modal" data-target="" id="pos_attendance">Attendance</a>
 					</li>
 					<li>
-						<a class="btn btn-success btn-sm external" style="padding: 5px 8px; margin: 10px 0 5px 5px;" data-toggle="modal" data-target="" id="pos_sync">Sync</a>
+						<a class="btn btn-success btn-sm external" style="padding: 5px 8px; margin: 10px 0 5px 5px;" data-toggle="modal" data-target="" id="pos_sync">Data Sync</a>
 					</li>
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
