@@ -23,7 +23,7 @@ switch ($action){
 
 function updateStaff(){
 	$couch = new CouchPHP();
-	$result = json_decode($couch->getDesign('staff')->getView('staff_mysql_id')->setParam(array("include_docs"=>"true"))->execute(),true);
+	$result = $couch->getDesign('staff')->getView('staff_mysql_id')->setParam(array("include_docs"=>"true"))->execute();
 	
 	$itemList = array();
 
@@ -34,7 +34,7 @@ function updateStaff(){
 	  }
 	}
 	
-    $getStaff = 'SELECT   sm.id mysql_id, sm.name, sm.username, sm.code,
+ $getStaff = 'SELECT   sm.id mysql_id, sm.name, sm.username, sm.code,
 	          sm.password, sm.address, sm.photo, sm.email,sm.phone_1,
 	          sm.phone_2,lm.id location_id, lm.name location_name,tm.id title_id,
 	          tm.name title_name, sm.active 
@@ -79,15 +79,16 @@ function updateStaff(){
 if (is_array($updateArray) && count($updateArray)>0){
  $result=$couch->saveDocument(true)->execute(array("docs"=>$updateArray));
 
-  if($result){
-    $html['error'] = false;
-	$html['update'] = true;
-	$html['msg'] = "$updateCounter RECORD UPDATED SUCCESSFULLY";
-  }
-  else{
+  if(array_key_exists('error', $result)){
   	$html['error'] = true;
 	$html['update'] = false;
 	$html['msg'] = 'Some Error Please Contact Admin';
+    
+  }
+  else{
+  	$html['error'] = false;
+	$html['update'] = true;
+	$html['msg'] = "$updateCounter RECORD UPDATED SUCCESSFULLY";
   }
 }
 $result = json_encode($html,true);
@@ -98,7 +99,7 @@ return $result;
 
 function updateStore(){
     $couch = new CouchPHP();
-	$result = json_decode($couch->getDesign('store')->getView('store_mysql_id')->setParam(array("include_docs"=>"true"))->execute(),true);
+	$result = $couch->getDesign('store')->getView('store_mysql_id')->setParam(array("include_docs"=>"true"))->execute();
 	$storeList = array();
 
     if(array_key_exists('rows', $result)){
@@ -142,6 +143,7 @@ function updateStore(){
 							unset($updateArray[$i]['phone_2']);
 							unset($updateArray[$i]['location_id']);
 							unset($updateArray[$i]['location_name']);
+							unset($updateArray[$i]['address']);
 
 							$selectSchedule = "SELECT * FROM  `cp_store_timings` WHERE store_id =".$storeDetails['mysql_id'];
 							$resultSchedule = mysql_query($selectSchedule);
@@ -212,17 +214,19 @@ function updateStore(){
 					}
     
 if (is_array($updateArray) && count($updateArray)>0){
+
 $result=$couch->saveDocument(true)->execute(array("docs"=>$updateArray));
-  
-  if($result){
-    $html['error'] = false;
-	$html['update'] = true;
-	$html['msg'] = "$updateCounter RECORD UPDATED SUCCESSFULLY";
-  }
-  else{
+ 
+  if(array_key_exists('error', $result)){
   	$html['error'] = true;
 	$html['update'] = false;
 	$html['msg'] = 'Some Error Please Contact Admin';
+    
+  }
+  else{
+  	$html['error'] = false;
+	$html['update'] = true;
+	$html['msg'] = "$updateCounter RECORD UPDATED SUCCESSFULLY";
   }
 }
 $result = json_encode($html,true);
@@ -234,7 +238,7 @@ return $result;
 function updateConfig(){
 
     $couch = new CouchPHP();
-	$result = json_decode($couch->getDesign('config')->getView('config_list')->execute(),true);
+	$result = $couch->getDesign('config')->getView('config_list')->execute();
 	$categoryList = array();
 
     if(array_key_exists('rows', $result)){
@@ -283,18 +287,19 @@ function updateConfig(){
   
    if (is_array($updateArray) && count($updateArray)>0){
    	
-   $result1=$couch->saveDocument(true)->execute(array("docs"=>$updateArray));
+   $result=$couch->saveDocument(true)->execute(array("docs"=>$updateArray));
   // print_r($result1);
   
-  if($result){
-    $html['error'] = false;
-	$html['update'] = true;
-	$html['msg'] = "$updateCounter RECORD UPDATED SUCCESSFULLY";
-  }
-  else{
-  	$html['error'] = true;
+  if(array_key_exists('error', $result)){
+    $html['error'] = true;
 	$html['update'] = false;
 	$html['msg'] = 'Some Error Please Contact Admin';
+  }
+  else{
+  	$html['error'] = false;
+	$html['update'] = true;
+	$html['msg'] = "$updateCounter RECORD UPDATED SUCCESSFULLY";
+  	
   }
 }
 $result = json_encode($html,true);

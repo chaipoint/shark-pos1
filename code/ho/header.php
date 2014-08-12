@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>HO</title>	
-	    <link rel="stylesheet" href="css/bootstrap-theme.min.css" type="text/css">
+		<title>HO Version 1.1</title>	
+	    <!--<link rel="stylesheet" href="css/bootstrap-theme.min.css" type="text/css">-->
 	    <link rel="stylesheet" href="css/bootstrap.css">
 		<link rel="stylesheet" href="css/non-responsive.css" type="text/css">
 		<link rel="stylesheet" href="css/login.css" type="text/css">
+		
 
 
 		<script src="js/jquery.min.js"></script>
