@@ -4,10 +4,12 @@
 		private $mode = 'index'; 
 
 		private $app;
+		private $root;
 		private $base_path;
 		private $url;
 		private $css;
 		private $js;
+		private $img;
 		private $defaultViewDir = 'views';
 		private $commonDir = 'common';
 		private $cDTime;
@@ -16,6 +18,8 @@
 		private $cMonth;
 		private $cYear;
 		private $cDay;
+		public $store;
+		public $iniConfigFile;
 		public $userIdField = 'mysql_id';
 		protected $return;
 		public function __construct(){
@@ -27,6 +31,8 @@
 			$this->url 	= 	"http://".$_SERVER['HTTP_HOST'].$this->app."/";
 			$this->css 	= 	$this->url.'css/';	
 			$this->js 	= 	$this->url.'js/';
+			$this->img 	= 	$this->url.'images/';
+			$this->root 	= 	$_SERVER['DOCUMENT_ROOT'];
 
 			if(array_key_exists('dispatch', $_GET)){
 				$queryArray = explode(".",$_GET['dispatch']);
@@ -47,6 +53,38 @@
 				}
 			}
 		}
+		public function getInstallationConfig(){
+			$iniFile = $this->root."/pos.ini";
+			$this->iniConfigFile = $iniFile;
+			$return = array('error'=>false, 'message'=>'');
+			if(file_exists($iniFile)){
+				if(is_writable($iniFile) && is_readable($iniFile)){
+					$configData = parse_ini_file($this->root."/pos.ini", true);
+					$return['data'] = $configData;
+				}else{
+					$return['error'] = true;
+					$return['message'] = 'Unable to read or write file';					
+				}
+			}else{
+				$return['error'] = true;
+				$return['message'] = 'Configuration File Not exits';
+			}
+			return $return;
+		}
+		public function setIniFile($file,$data){
+			$result = '';
+			foreach($data as $key => $value){
+				$result .= '['.$key.']'."\r\n";
+				foreach($value as $innerKey => $innerValue){
+					if($innerKey == 'is_configured'){
+						$result .= $innerKey.' = true'."\r\n";						
+					}else{						
+						$result .= $innerKey.' = '.$innerValue."\r\n";						
+					}
+				}
+			}
+			file_put_contents($file, $result);
+		}
 		public function getApp(){
 			return $this->app;
 		}
@@ -56,6 +94,9 @@
 		}
 		public function getCss(){
 			return $this->css;
+		}
+		public function getImg(){
+			return $this->img;
 		}
 		public function getJs(){
 			return $this->js;
@@ -81,9 +122,16 @@
 			}
 		}
 
-		protected function commonView($view){
+		protected function commonView($view, $var = array()){			
 			$viewFile = $this->base_path.$this->commonDir."/".$view.".php";
 			if(file_exists($viewFile)){
+				if(count($var)>0){
+					foreach($var as $varKeys => $varValues){
+						if(!is_numeric($varKeys)){
+							$$varKeys = $varValues;
+						}
+					}
+				}
 				require_once $viewFile;
 			}		
 		}
