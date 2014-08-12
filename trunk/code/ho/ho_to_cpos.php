@@ -1,9 +1,14 @@
 <?php
     include_once 'common/connection.php' ;
 	require_once 'common/couchdb.phpclass.php';
+	require_once 'common/logger.php';
+    
+    $logger = Logger::getLogger("HO_TO_CPOS API");
+    $logger->trace("Calling HO_TO_CPOS API");
+   
     $action = @$_REQUEST['action'];
-
-switch ($action){
+   
+   switch ($action){
         
         case "uploadBill":
 		echo uploadBill();
@@ -13,6 +18,8 @@ switch ($action){
 /* Function To Upload Bill On CPOS*/
 
 function uploadBill(){
+	global $logger;
+	$logger->debug("Calling Upload Bill Function");
 
     $couch = new CouchPHP();
 	$result = $couch->getDesign('billing')->getView('bill_by_no_mid')->setParam(array('include_docs'=>'true'))->execute();
@@ -65,6 +72,7 @@ function uploadBill(){
 			            card_no,coupon_id,coupon_code,shift,total_qty,total_amount,sub_total,total_discount,discount,
 			            total_tax,round_off,due_amount,bill_status,reprint) 
 		values '. implode(',',$docsData);
+		$logger->trace("Query To Insert Order In cp_pos_storeorders Table: ".($insertQuery));
 		$result = mysql_query($insertQuery);
 		$lastInsertID = mysql_insert_id();
         
@@ -80,14 +88,16 @@ function uploadBill(){
 		}
 
 		$insertProducst = 'insert into cp_pos_storeorders_products (order_id, product_id, product_name, category_id, category_name, qty, price, tax, priceBT, discount, discount_amount, taxable_amount, tax_amount, total_amount, net_amount) values '.implode(',',$productsArray);
-		//echo $insertProducst; 
+		$logger->trace("Query To Insert Order Product In cp_pos_storeorders_products Table: ".($insertProducst)); 
 		$insertProducstResult = mysql_query($insertProducst);
 		if($insertProducstResult)
 		{
+		 $logger->debug("Bill Uploaded Successfully In CPOS Database");	
          $html['error'] = false;
 	     $html['update'] = true;
 	     $html['msg'] = "BILL UPDATED SUCCESSFULLY"; 
 		}else{
+		$logger->debug("ERROR:Bill Not Uploaded In CPOS Database");
         $html['error'] = true;
 	    $html['update'] = false;
 	    $html['msg'] = 'Some Error Please Contact Admin';
@@ -95,10 +105,12 @@ function uploadBill(){
 		//print_r($doc_idList);
 	}
 	else{
+    $logger->debug("No Bill To Upload");
     $html['error'] = true;
 	$html['update'] = false;
 	$html['msg'] = 'Sorry No Bill To Be Upload';
 	}
 $result = json_encode($html,true);
+$logger->debug("End OF Uplaod Bill Function");
 return $result;
 }
