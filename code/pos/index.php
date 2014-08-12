@@ -5,6 +5,7 @@
 	require_once 'common/couchdb.phpclass.php';
 
 	$appConfig = new App_config();
+
 	$couch = new CouchPHP();
 
 		/*Constant's For App*/
@@ -14,7 +15,7 @@
 	define(	'JS',		$appConfig->getJs()		);
 	define(	'MODULE',	$appConfig->getModule()	);
 	define(	'MODE',		$appConfig->getMode()	);
-
+	define(	'IMG',		$appConfig->getImg()	);
 
 	if(file_exists(MODULE."/".MODULE.".php")){
 		require_once MODULE."/".MODULE.".php";
@@ -24,7 +25,6 @@
 	}
 
 	$accessedClass = ucfirst(MODULE);
-
 	$class = new $accessedClass();
 	if(method_exists($class, MODE)){
 		$method = MODE;
