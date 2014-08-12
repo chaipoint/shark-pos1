@@ -1,7 +1,4 @@
-<?php
-	
-	global $cStore;
-	$cStore = 1;
+<?php	
 	class Billing extends App_config{
 		private $cDB;
 		function __construct(){
@@ -10,12 +7,15 @@
 			$this->cDB = $couch;
 		}
 		function index(){
-			global $cStore;
-			$resultJSON = $this->cDB->getDesign('store')->getView('store_mysql_id')->setParam(array('include_docs'=>'true',"key"=>'"'.$cStore.'"'))->execute();
-			$result = $resultJSON['rows'][0]['doc'];
-			if(!array_key_exists('store', $_SESSION['user'])){
-				$_SESSION['user']['store'] = $resultJSON['rows'][0]['value'];
+			$resultJSON = $this->cDB->getDesign('store')->getView('store_mysql_id')->setParam(array('include_docs'=>'true',"key"=>'"'.$_SESSION['user']['store']['id'].'"'))->execute();
+			$result = $resultJSON['rows'][0]['value'];
+			if(!array_key_exists('mysql_id', $_SESSION['user']['store'])){
+				unset($resultJSON['rows'][0]['value']['menu_items']);
+				foreach($resultJSON['rows'][0]['value'] as $key => $data){
+					$_SESSION['user']['store'][$key] = $data;
+				}
 			}
+			
 			$catList = array();
 			$productList = array();
 			foreach($result['menu_items'] as $key => $Items){
