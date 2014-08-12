@@ -1,12 +1,32 @@
 <?php
 	class Login extends App_config{
 		private $cDB;
+		private $configData;
 		public function __construct(){
 			parent::__construct();
 			global $couch;
 			$this->cDB = $couch;
 			unset($_SESSION);
 			session_destroy();
+
+			$this->configData = $this->getInstallationConfig();
+			if(array_key_exists('data', $this->configData)){
+				if(!$this->configData['data']['store_config']['is_configured']){
+					$this->config($this->configData);
+					die();
+				}else{
+					$this->store = $this->configData['data']['store_config']['store_id'];
+				}
+			}else{
+				$this->config($this->configData);
+				die();
+			}
+		}
+
+		public function config($data){
+			$this->commonView('html_header');
+			$this->commonView('initial.config', array('data'=>$data));
+			$this->commonView('html_footer');			
 		}
 		
 		public function index(){
@@ -48,10 +68,11 @@
 					$userData["location"]['name'] = $result['data']['location_name'];
 					$userData["title"]['id'] = $result['data']['title']['id'];
 					$userData["title"]['name'] = $result['data']['title']['name'];
+					$userData["store"]['id'] = $this->store;
 
 					$loginHistory['cd_doc_type'] = 'login_history';
 					$loginHistory['id'] = $userData["mysql_id"];
-					$loginHistory['store'] = '';
+					$loginHistory['store'] = $this->store;
 					$loginHistory['login_time'] = $this->getCDTime();
 					$loginHistory['logout_time'] = '';
 

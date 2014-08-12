@@ -65,11 +65,6 @@
 													Login <i class="glyphicon glyphicon-log-in"></i>
 												</button>
 											</div>
-											<div class="col-md-12">
-												<a href="" class="">
-													Forgot Password? 
-												</a>
-											</div>
 										</div>
 									</form>
 									</div>
