@@ -14,9 +14,23 @@
 					<h4 class="modal-title" id="today-sale-header">Data Sync</h4>
 				</div>
 				<div class="modal-body">
-							<a class="btn btn-success sync-bt" id="store_sync_bt">Store</a>
-							<a class="btn btn-success sync-bt" id="staff_sync_bt">Staff</a>
-							<a class="btn btn-success sync-bt" id="billing_sync_bt">Billing</a>
+					<table class="table table-condensed">
+						<thead><tr><th>Download</th><th>Upload</th></tr></thead>
+						<tbody>
+							<tr>
+								<td class="text-center"><a class="btn btn-success sync-bt" id="store_sync_bt">Store</a></td>
+								<td class="text-center"><a class="btn btn-success sync-bt" id="billing_sync_bt">Billing</a></td>
+							</tr>
+							<tr>
+								<td class="text-center"><a class="btn btn-success sync-bt" id="staff_sync_bt">Staff</a></td>
+								<td class="text-center">Attendance</td>
+							</tr>
+							<tr>
+								<td class="text-center">Config</td>
+								<td class="text-center"></td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-success" data-dismiss="modal" aria-hidden="true">
