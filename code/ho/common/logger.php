@@ -1,0 +1,1 @@
+﻿<?php	$dir = dirname(dirname(__FILE__));	require_once $dir.'/log4php/Logger.php' ;	Logger::configure($dir.'/common/config.xml');	$logger = Logger::getLogger("MAIN");?>
