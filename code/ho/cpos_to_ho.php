@@ -1,6 +1,11 @@
 <?php
-    include_once 'common/connection.php' ;
+    require_once 'common/connection.php' ;
 	require_once 'common/couchdb.phpclass.php';
+	require_once 'common/logger.php';
+    
+    $logger = Logger::getLogger("CPOS_TO_HO API");
+    $logger->trace("Calling CPOS_TO_HO API");
+    
     $action = @$_REQUEST['action'];
 
 switch ($action){
@@ -22,18 +27,23 @@ switch ($action){
 /* Function To Update Staff Data */
 
 function updateStaff(){
+	global $logger;
+	$logger->debug("Calling Update Staff Function");
+    
 	$couch = new CouchPHP();
 	$result = $couch->getDesign('staff')->getView('staff_mysql_id')->setParam(array("include_docs"=>"true"))->execute();
 	
 	$itemList = array();
-
-	if(array_key_exists('rows', $result)){
+    if(array_key_exists('rows', $result)){
+    	$logger->debug("Creating Array of Existing Staff In CouchDB");
 		$docs = $result['rows'];
 		foreach($docs as $dKey => $dValue){
-	    $itemList[$dValue['doc']['mysql_id']] = $dValue['doc'];	
-	  }
+	    $itemList[$dValue['doc']['mysql_id']] = $dValue['doc'];
+       }
+       $logger->trace("Array of Existing Staff IN CouchDB: ".json_encode($itemList));
 	}
 	
+ $logger->debug("Get All The Staff From CPOS Database");
  $getStaff = 'SELECT   sm.id mysql_id, sm.name, sm.username, sm.code,
 	          sm.password, sm.address, sm.photo, sm.email,sm.phone_1,
 	          sm.phone_2,lm.id location_id, lm.name location_name,tm.id title_id,
@@ -43,6 +53,9 @@ function updateStaff(){
               LEFT JOIN  title_master tm ON tm.id = sm.title_id AND tm.active ="Y" 
               where sm.active = "Y"';
     $result = mysql_query($getStaff);
+    $logger->trace("Query To Get All The Staff From CPOS Database: ".($getStaff));
+	
+	$logger->debug("Creating Array To Update Staff In CouchDb");
 	$updateArray = array();
 	$html = array();
 	$i = 0;
@@ -75,41 +88,48 @@ function updateStaff(){
 	  $i++;
 	  $insertCounter++;
 	}
+$logger->trace("Array To Update Staff In CouchDb: ".json_encode($updateArray));
 
 if (is_array($updateArray) && count($updateArray)>0){
- $result=$couch->saveDocument(true)->execute(array("docs"=>$updateArray));
+$result=$couch->saveDocument(true)->execute(array("docs"=>$updateArray));
 
   if(array_key_exists('error', $result)){
+  	$logger->debug("ERROR:Staff Not Updated IN CouchDb");
   	$html['error'] = true;
 	$html['update'] = false;
 	$html['msg'] = 'Some Error Please Contact Admin';
-    
-  }
+   }
   else{
+  	$logger->debug("Staff Updated Successfully IN CouchDb");
   	$html['error'] = false;
 	$html['update'] = true;
 	$html['msg'] = "$updateCounter RECORD UPDATED SUCCESSFULLY";
   }
 }
 $result = json_encode($html,true);
+$logger->debug("End OF updateStaff Function");
 return $result;
 }
 
-/* Function To Update Stre Data */
+/* Function To Update Store Data */
 
 function updateStore(){
+    global $logger;
+	$logger->debug("Calling Update Store Function");
+
     $couch = new CouchPHP();
 	$result = $couch->getDesign('store')->getView('store_mysql_id')->setParam(array("include_docs"=>"true"))->execute();
 	$storeList = array();
 
     if(array_key_exists('rows', $result)){
 		$docs = $result['rows'];
-		 
+		$logger->debug("Creating Array of Existing Store In CouchDB"); 
 		foreach($docs as $dKey => $dValue){
-	$storeList[$dValue['doc']['mysql_id']] = $dValue['doc'];	
+	    $storeList[$dValue['doc']['mysql_id']] = $dValue['doc'];	
 	  }
+	    $logger->trace("Array of Existing Store IN CouchDB: ".json_encode($storeList));
 	}
-
+   
 	$getStoreNameQuery = "select sm.id mysql_id, sm.name, sm.code,
 	                      sm.type, sm.address, sm.phone_1, sm.phone_2, photo,
 	                      weekly_off, lm.id location_id, lm.name location_name,
@@ -117,13 +137,14 @@ function updateStore(){
                           from store_master sm
                           LEFT JOIN  location_master lm ON lm.id = sm.location_id 
                           where sm.active = 'Y'";
-						
+						$logger->trace("Query To Get All The Store From CPOS Database: ".($getStoreNameQuery));
 						$storeResult = mysql_query($getStoreNameQuery);
 						$updateArray = array();
 	                    $html = array();
 						$i = 0;
 						$updateCounter = 0;
 						$insertCounter = 0;
+						$logger->debug("Creating Array To Update Store In CouchDb");
 					    while($row = mysql_fetch_assoc($storeResult)){
                             $storeDetails = $row;
                             $updateArray[$i] = $storeDetails;
@@ -212,41 +233,48 @@ function updateStore(){
 				
 						$i++;
 					}
-    
+
+$logger->trace("Array To Update Store In CouchDb: ".json_encode($updateArray));   
 if (is_array($updateArray) && count($updateArray)>0){
 
 $result=$couch->saveDocument(true)->execute(array("docs"=>$updateArray));
  
   if(array_key_exists('error', $result)){
+  	$logger->debug("ERROR:Store Not Updated IN CouchDb");
   	$html['error'] = true;
 	$html['update'] = false;
 	$html['msg'] = 'Some Error Please Contact Admin';
     
   }
   else{
+  	$logger->debug("Store Updated Successfully IN CouchDb");
   	$html['error'] = false;
 	$html['update'] = true;
 	$html['msg'] = "$updateCounter RECORD UPDATED SUCCESSFULLY";
   }
 }
 $result = json_encode($html,true);
+$logger->debug("End OF update Store Function");
 return $result;
 }
 
 /* Function To Update Stre Data */
 
 function updateConfig(){
-
+	global $logger;
+	$logger->debug("Calling Update Config Function");
+    
     $couch = new CouchPHP();
 	$result = $couch->getDesign('config')->getView('config_list')->execute();
 	$categoryList = array();
 
     if(array_key_exists('rows', $result)){
 		$docs = $result['rows'];
-		 
+		$logger->debug("Creating Array of Existing Config Setting In CouchDB");
 		foreach($docs as $dKey => $dValue){
-	$categoryList[$dValue['value']['category_name']] = $dValue['value'];	
+	    $categoryList[$dValue['value']['category_name']] = $dValue['value'];	
 	  }
+	    $logger->trace("Array of Existing Config Setting IN CouchDB: ".json_encode($categoryList));
 	}
 
     $getConfigDetail = 'SELECT GROUP_CONCAT(cpc.id) as mysql_id, category as category_id, crm.name as category_name,
@@ -255,11 +283,12 @@ function updateConfig(){
 	                    LEFT JOIN cp_reference_master crm ON crm.id = cpc.category AND crm.active = "Y"
 	                    WHERE cpc.active = "Y"
 	                    GROUP BY cpc.category';
-
+    $logger->trace("Query To Get All The Config Setting From CPOS Database: ".($getConfigDetail));
 	$result = mysql_query($getConfigDetail);
 	$updateArray = array();
 	$updateCounter = 0;
 	$j = 0;
+	$logger->debug("Creating Array To Update Config Setting In CouchDb");
 	while($row = mysql_fetch_assoc($result)){
        if(array_key_exists($row['category_name'],$categoryList)){
 		$updateArray[$j]['_id'] = $categoryList[$row['category_name']]['_id'];
@@ -284,18 +313,19 @@ function updateConfig(){
 		//$finalreturn[$row['category_name']] = $row;
       $j++;
 	}
-  
+   $logger->trace("Array To Update Config Setting In CouchDb: ".json_encode($updateArray));
+   
    if (is_array($updateArray) && count($updateArray)>0){
-   	
    $result=$couch->saveDocument(true)->execute(array("docs"=>$updateArray));
-  // print_r($result1);
   
   if(array_key_exists('error', $result)){
+  	$logger->debug("ERROR:Config Setting Not Updated IN CouchDb");
     $html['error'] = true;
 	$html['update'] = false;
 	$html['msg'] = 'Some Error Please Contact Admin';
   }
   else{
+  	$logger->debug("Config Setting Updated Successfully IN CouchDb");
   	$html['error'] = false;
 	$html['update'] = true;
 	$html['msg'] = "$updateCounter RECORD UPDATED SUCCESSFULLY";
@@ -303,6 +333,7 @@ function updateConfig(){
   }
 }
 $result = json_encode($html,true);
+$logger->debug("End OF update Config Function");
 return $result;
 }
 
