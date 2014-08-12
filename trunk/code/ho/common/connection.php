@@ -1,7 +1,7 @@
 <?php
 
 	$dir = dirname(dirname(__FILE__));
-	//include_once $dir.'/common/logger.php' ;
+	include_once $dir.'/common/logger.php' ;
 	include_once $dir.'/common/classes/db.php' ;
 	
 	date_default_timezone_set('Asia/Calcutta');
