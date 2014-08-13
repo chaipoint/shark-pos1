@@ -266,7 +266,29 @@
 					'bill_replication' =>"function(doc, req){ if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill' && !doc.mysql_id){ return true;} else { return false;}} "
 				),
 			);
-			$arrayBulk = array("docs"=>array($billCounter, $billing, $store, $staff ,$replication,$logout));
+
+			$config = array(
+				"_id" => "_design/config",
+   				"language" => "javascript",
+   				"views" => array(
+   						"config_list" => array(
+   								"map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type=='config_master'){  emit(doc.category_name, doc); }}"
+   							)
+   					)
+			);
+
+			$sales = array(
+				"_id" => "_design/sales",
+   				"language" => "javascript",
+   				"views" => array(
+   						"top_store" => array(
+   								"map" => "function(doc) {if(doc.cd_doc_type && doc.cd_doc_type=='store_bill'){ var bill_date=doc.bill_time.split(' ');emit([bill_date[0],doc.store_name], parseInt(doc.total_amount));}}",
+   								"reduce" => "function(key,value) {var sum=0; value.forEach(function(v){sum+= parseInt(v);}); return (sum); }"
+   							)
+   					)
+			);
+
+			$arrayBulk = array("docs"=>array($billCounter, $billing, $store, $staff ,$replication,$logout,$sales, $config));
 			$result = $this->cDB->saveDocument(true)->execute($arrayBulk);
 
 
