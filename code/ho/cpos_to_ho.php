@@ -60,7 +60,7 @@ function updateStaff(){
 	$html = array();
 	$i = 0;
 	$updateCounter = 0;
-	$insertCounter = 0;
+	
 	while($row = mysql_fetch_assoc($result)){
 	  $updateArray[$i] = $row;
 	  if(array_key_exists($row['mysql_id'],$itemList)){
@@ -86,8 +86,9 @@ function updateStaff(){
 	  unset($updateArray[$i]['phone_1']);
 	  unset($updateArray[$i]['phone_2']);
 	  $i++;
-	  $insertCounter++;
+	  
 	}
+$insertCounter = $i-$updateCounter;	
 $logger->trace("Array To Update Staff In CouchDb: ".json_encode($updateArray));
 
 if (is_array($updateArray) && count($updateArray)>0){
@@ -103,7 +104,8 @@ $result=$couch->saveDocument(true)->execute(array("docs"=>$updateArray));
   	$logger->debug("Staff Updated Successfully IN CouchDb");
   	$html['error'] = false;
 	$html['update'] = true;
-	$html['msg'] = "$updateCounter RECORD UPDATED SUCCESSFULLY";
+	$html['msg'] = ( $insertCounter>0 ? ($updateCounter==0 ? "$insertCounter RECORD INSERTED SUCCESSFULLY." : "$insertCounter RECORD INSERTED AND $updateCounter RECORD UPDATED SUCCESSFULLY." ) : "$updateCounter RECORD UPDATED SUCCESSFULLY.");
+	//$html['msg'] = "$updateCounter RECORD UPDATED SUCCESSFULLY <br> dfsf";
   }
 }
 $result = json_encode($html,true);
@@ -233,7 +235,7 @@ function updateStore(){
 				
 						$i++;
 					}
-
+$insertCounter = $i-$updateCounter;
 $logger->trace("Array To Update Store In CouchDb: ".json_encode($updateArray));   
 if (is_array($updateArray) && count($updateArray)>0){
 
@@ -250,7 +252,7 @@ $result=$couch->saveDocument(true)->execute(array("docs"=>$updateArray));
   	$logger->debug("Store Updated Successfully IN CouchDb");
   	$html['error'] = false;
 	$html['update'] = true;
-	$html['msg'] = "$updateCounter RECORD UPDATED SUCCESSFULLY";
+	$html['msg'] = $html['msg'] = ($insertCounter>0 ? ($updateCounter==0 ? "$insertCounter RECORD INSERTED SUCCESSFULLY." : "$insertCounter RECORD INSERTED AND $updateCounter RECORD UPDATED SUCCESSFULLY." ) : "$updateCounter RECORD UPDATED SUCCESSFULLY.");
   }
 }
 $result = json_encode($html,true);
@@ -258,7 +260,7 @@ $logger->debug("End OF update Store Function");
 return $result;
 }
 
-/* Function To Update Stre Data */
+/* Function To Update Config Setting */
 
 function updateConfig(){
 	global $logger;
@@ -290,6 +292,7 @@ function updateConfig(){
 	$j = 0;
 	$logger->debug("Creating Array To Update Config Setting In CouchDb");
 	while($row = mysql_fetch_assoc($result)){
+       
        if(array_key_exists($row['category_name'],$categoryList)){
 		$updateArray[$j]['_id'] = $categoryList[$row['category_name']]['_id'];
         $updateArray[$j]['_rev'] = $categoryList[$row['category_name']]['_rev'];
@@ -313,6 +316,7 @@ function updateConfig(){
 		//$finalreturn[$row['category_name']] = $row;
       $j++;
 	}
+	$insertCounter = $j-$updateCounter;
    $logger->trace("Array To Update Config Setting In CouchDb: ".json_encode($updateArray));
    
    if (is_array($updateArray) && count($updateArray)>0){
@@ -328,7 +332,7 @@ function updateConfig(){
   	$logger->debug("Config Setting Updated Successfully IN CouchDb");
   	$html['error'] = false;
 	$html['update'] = true;
-	$html['msg'] = "$updateCounter RECORD UPDATED SUCCESSFULLY";
+	$html['msg'] = $html['msg'] = $html['msg'] = ($insertCounter>0 ? ($updateCounter==0 ? "$insertCounter RECORD INSERTED SUCCESSFULLY." : "$insertCounter RECORD INSERTED AND $updateCounter RECORD UPDATED SUCCESSFULLY." ) : "$updateCounter RECORD UPDATED SUCCESSFULLY.");
   	
   }
 }
@@ -336,5 +340,129 @@ $result = json_encode($html,true);
 $logger->debug("End OF update Config Function");
 return $result;
 }
+
+
+function init(){
+   
+   $billCounter = array('_id'=>'generateBill','cd_doc_type' => 'bill_counter', 'current' => 0, 'current_month' => 0);
+   $staff = array(
+    '_id'=>'_design/staff',
+    'language' => 'javascript', 
+    'views' => array(
+     "staff_mysql_id"=>array(
+      "map"=>"function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'staff_master'){ emit([doc.mysql_id,doc.code], null); } }"
+      ),
+     "staff_username"=>array(
+       "map"=>"function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'staff_master'){ emit(doc.username, doc); } }",
+      ),
+     "staff_location"=>array(
+       "map"=>"function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'staff_master'){ emit(doc.location_id, null); } }",
+      ),
+    ),
+    'lists' => array( 
+           'getuser' =>  "function(head, req) { var userfound = false;    var jData = (JSON.parse(req.body));var username = jData.username; var password = jData.password; var obj = new Object(); obj.error = false; obj.message = ''; obj.data = new Object();      while(row = getRow()){ if(row.key == username) { if((row.value.password).toUpperCase() == (password).toUpperCase()){ obj.data = row.value; } else{ obj.error = true; obj.message = 'Password Wrong';} userfound = true; break;} } if( !userfound ) { obj.error = true; obj.message = 'User Unavailable';} return JSON.stringify(obj);}"
+       )
+   );
+   $billing = array(
+    '_id'=>'_design/billing',
+    'language' => 'javascript', 
+    'views' => array(
+     "bill_no"=>array(
+      "map"=>"function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill'){ emit(doc.bill_no,null); } }"
+      ),
+     "bill_by_date"=>array(
+       "map"=>"function(doc) {if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill') { var bill_date = doc.bill_time.split(' '); emit([bill_date[0],doc.payment_type],parseInt(doc.total_amount)); }}",
+                "reduce" => "function(key, value){ return sum(value);}"
+      ),
+     "bill_by_no_mid" => array(
+               "map"=> "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill' && !doc.mysql_id){ emit(doc.bill_no, null); } }"
+           ),
+           "bill_by_current_date" => array(
+            "map" => "function(doc) {if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill') { var bill_date = doc.bill_time.split(' '); emit([bill_date[0],doc.payment_type],doc); }}"
+           ),
+           "sales_summary" => array(
+            "map" => "function(doc) {if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill') { var bill_date = doc.bill_time.split(' '); for(var product_id in doc.items){ emit([bill_date[0],doc.items[product_id].categroy_name,doc.payment_type],parseInt(doc.items[product_id].netAmount));}}}",
+            "reduce" => "function(key,value){ var sum=0; value.forEach(function(v){sum+= parseInt(v);}); return sum; }"
+           )
+    ),
+    'updates' => array( 
+           'getbillno' =>  "function(doc,req){ if(req.query.month) { if(doc.current_month != req.query.month){doc.current = 0; doc.current_month = req.query.month;} var newCurrent =  doc.current+1; doc.current = newCurrent; return [doc,newCurrent.toString()];}}",
+           'insert_mysql_id' => "function(doc,req){ doc.mysql_id = req.query.mysql_id; return [doc,req.query.mysql_id]}",
+       )
+   );
+   $store = array(
+    '_id'=>'_design/store',
+    'language' => 'javascript', 
+    'views' => array(
+     "store_mysql_id"=>array(
+      "map"=>"function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'store_master'){ emit(doc.mysql_id,doc); } }"
+      )
+    )
+   );
+   $logout = array(
+    '_id'=>'_design/login',
+    'language' => 'javascript', 
+    'views' => array(
+     "logout"=>array(
+      "map"=>"function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'login_history'){ emit(doc._id, null); } }"
+      )
+    ),
+    "updates" => array('login_history'=>"function(doc, req){ doc.logout_time = req.query.logout_time; return [doc,'true'];"),
+   );
+   $replication = array(
+    '_id'=>'_design/doc_replication',
+    'language' => 'javascript', 
+    'views' => array(
+     "replication"=>array(
+      "map"=>"function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'master'){ emit(doc.location.id, doc); } }"
+      )
+    ), 
+    'filters'=> array(
+     'staff_replication' => "function(doc,req){ if(doc.cd_doc_type && doc.cd_doc_type == 'staff_master' && doc.location_id == req.query.location) { return  true;}else{return  false;} }",
+     'store_replication' => "function(doc,req){ if(doc.cd_doc_type && doc.cd_doc_type == 'store_master' && doc.mysql_id == req.query.mysql_id) {return  true;}else{return  false;} }",
+     'design_replication' => "function(doc,req){ if(doc.language || (doc.cd_doc_type && doc.cd_doc_type == 'bill_counter')) {return  true;}else{return  false;} }",
+     'bill_replication' =>"function(doc, req){ if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill' && !doc.mysql_id){ return true;} else { return false;}} "
+    ),
+   );
+   $config = array(
+    "_id" => "_design/config",
+       "language" => "javascript",
+       "views" => array(
+         "config_list" => array(
+           "map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type=='config_master'){  emit(doc.category_name, doc); }}"
+          )
+        )
+   );
+   $config = array(
+    "_id" => "_design/config",
+       "language" => "javascript",
+       "views" => array(
+         "config_list" => array(
+           "map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type=='config_master'){  emit(doc.category_name, doc); }}"
+          )
+        )
+   );
+
+   $sales = array(
+    "_id" => "_design/sales",
+       "language" => "javascript",
+       "views" => array(
+         "top_store" => array(
+           "map" => "function(doc) {if(doc.cd_doc_type && doc.cd_doc_type=='store_bill'){ var bill_date=doc.bill_time.split(' ');emit([bill_date[0],doc.store_name], parseInt(doc.total_amount));}}",
+           "reduce" => "function(key,value) {var sum=0; value.forEach(function(v){sum+= parseInt(v);}); return (sum); }"
+          )
+        )
+   );
+
+   $arrayBulk = array("docs"=>array($billCounter, $billing, $store, $staff ,$replication,$logout,$sales, $config));
+   $result = $couch->saveDocument(true)->execute($arrayBulk);
+//   $bulkDocs = $array();
+   //$result = $this->cDB->saveDocument()->execute(array('_id'=>'generateBill','cd_doc_type' => 'bill_counter', 'current' => 0, 'current_month' => 0));
+   echo "<pre>";
+//   $result = $this->cDB->saveDocument()->execute($replication);
+   print_r($result);   
+   echo "</pre>";
+
+  }
 
 ?>
