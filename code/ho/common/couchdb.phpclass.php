@@ -18,7 +18,8 @@ class CouchPHP{
 	private $remote;
 	function __construct(){
 		$this->port = "5984";
-		$this->url = 'http://pos:pos@54.249.247.15:'.$this->port."/";
+		//$this->url = 'http://pos:pos@54.249.247.15:'.$this->port."/";
+		$this->url = 'http://127.0.0.1:'.$this->port."/";
 		$this->db = 'vente_ho_db';
 		$this->userName = '';
 		$this->password = '';

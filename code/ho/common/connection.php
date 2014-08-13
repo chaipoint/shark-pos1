@@ -15,10 +15,10 @@
 	global $currentDateTime24, $currentDateTime,$currentTime,$currentDate,$currentTime12,$currentTime24;
 	
 	$sql_host = 'localhost' ;
-	$sql_user = 'root';
-	$sql_password = 'root';
-    //$sql_user = 'root';
-	//$sql_password = '';
+	//$sql_user = 'root';
+	//$sql_password = 'root';
+    $sql_user = 'root';
+	$sql_password = '';
 	$sql_db = 'cabbeein_cpos';/**/
 	$db = new Database();
 ?>
