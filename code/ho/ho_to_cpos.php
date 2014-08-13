@@ -80,7 +80,7 @@ function uploadBill(){
 		foreach($itemList as $lKey => $lValue){
 			$doc_idList[$lKey] = $lastInsertID;
 			foreach($lValue as $pKey => $pValue){
-				$productsArray[] = "(".$lastInsertID.",".$pValue['id'].",'".$pValue['name']."',".$pValue['category_id'].",'".$pValue['category_name']."',".$pValue['qty'].",".$pValue['price'].",".$pValue['tax'].",".$pValue['priceBT'].",".$pValue['discount'].",".$pValue['discountAmount'].",".$pValue['taxAbleAmount'].",".$pValue['taxAmount'].",".$pValue['totalAmount'].",".$pValue['netAmount'].")";
+				$productsArray[] = "(".$lastInsertID.",".$pValue['id'].",'".$pValue['name']."',".$pValue['category_id'].",'".$pValue['category_name']."',".$pValue['qty'].",".$pValue['price'].",'".$pValue['tax']."',".$pValue['priceBT'].",'".$pValue['discount']."',".$pValue['discountAmount'].",".$pValue['taxAbleAmount'].",".$pValue['taxAmount'].",".$pValue['totalAmount'].",".$pValue['netAmount'].")";
 			}
 		    $couch->getDesign('billing')->getUpdate('insert_mysql_id',$lKey)->setParam(array('mysql_id'=>$lastInsertID))->execute();
 			//echo "<br/>".$couch->getLastUrl();
