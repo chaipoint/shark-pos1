@@ -3,7 +3,7 @@
         <layout class="LoggerLayoutPattern">
             <param name="conversionPattern" value="%date [%logger] %message%newline" />
         </layout>
-        <param name="file" value="/holog/ho/log/ho.log" />
+        <param name="file" value="/var/cpos/log/ho.log" />
     </appender>
     <root>
         <level value="ALL" />
