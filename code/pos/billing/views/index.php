@@ -80,14 +80,15 @@
 															</td>
 														</tr>
 														<tr class="success">
-															<td width="25%">Discount <a href="#" id="add_discount"
-																style="color: #FFF; font-size: 0.80em"><i
+															<td width="25%"><a href="#" id="add_discount"
+																style="color: #FFF;">Discount <i
 																	class="glyphicon glyphicon-pencil"></i> </a>
 															</td>
 															<td><span id="ds_con">0</span></td>
-															<td width="25%">Tax <!--<a href="#" id="add_tax"
-																style="color: #FFF; font-size: 0.80em"><i
-																	class="glyphicon glyphicon-pencil"></i>--> </a>
+															<td width="25%"> <a href="#" id="add_tax"
+																style="color: #FFF;">Tax <i
+																	class="glyphicon glyphicon-pencil"></i> 
+																</a>
 															</td>
 															<td class="text_right"><span id="ts_con">0</span></td>
 														</tr>
@@ -127,25 +128,25 @@
 									<div style="clear: both;"></div>
 									<div id="ajaxproducts">
 										<div class="btn-product clearfix">
-											<div id="proajax" style="overflow:scroll;max-height:400px;">
+											<div id="proajax" style="overflow:scroll;height:500px;">
 													<?php
 														if(array_key_exists($firstCat, $productList))
 														foreach($productList[$firstCat] as $pKey => $pValue){
-															echo '<button type="button" style="width:25%;" class="btn btn-success btn-lg btn3d category-product" value="'.$pValue['mysql_id'].'" category-product-sequence="'.$pKey.'">'.$pValue['name'].'</button>';
+															echo '<button type="button" class="btn btn-success btn-lg btn3d btn25 category-product" value="'.$pValue['mysql_id'].'" category-product-sequence="'.$pKey.'">'.$pValue['name'].'</button>';
 														}
 
 													?>
 
 												<div style="clear: both;"></div>
 											</div>
-											<div class="btn-con">
+											<!--<div class="btn-con">
 												<button id="previous" type="button" class="btn btn-default">
 													<i class="glyphicon glyphicon-chevron-left"></i>
 												</button>
 												<button id="next" type="button" class="btn btn-default">
 													<i class="glyphicon glyphicon-chevron-right"></i>
 												</button>
-											</div>
+											</div>-->
 										</div>
 									</div>
 								</div>

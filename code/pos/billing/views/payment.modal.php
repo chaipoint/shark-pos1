@@ -2,7 +2,7 @@
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header modal-primary">
-				<button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="glyphicon glyphicon-remove"></i></button>
+				<button type="button" class="close close-model" data-dismiss="modal" aria-hidden="true"><i class="glyphicon glyphicon-remove"></i></button>
 				<h4 class="modal-title" id="payModalLabel">Payment</h4>
 			</div>
 			<div class="modal-body">
@@ -24,21 +24,21 @@
 						<tr>
 							<td>Total Payable Amount :</td>
 							<td>
-								<span id="twt" class="label label-warning"></span> 
+								<h3 style="margin:0px;"><span id="twt" class="label label-warning"></span></h3> 
 							</td>
 						</tr>
 						<tr>
 							<td>Total Purchased Items :</td>
 							<td>
-								<span class="label label-warning" id="fcount"></span> 
+								<h3 style="margin:0px;"><span class="label label-warning" id="fcount"></span></h3>
 							</td>
 						</tr>
 						<tr>
-							<td>Paid by (* Need Change) :</td>
+							<td>Paid by:</td>
 							<td>
-								<select name="paid_by" id="paid_by" class="form-control">
-									<option value="cash">Cash</option>
-								</select>
+								<a class="btn btn-sm btn-success payment-type-bt" data-value="cash">Cash</a>
+								<a class="btn btn-sm btn-default" data-value="ppc">PPC</a>
+								<input type="hidden" name="paid_by" id="paid_by">
 							</td>
 						</tr>
 						<tr class="pcash">
@@ -48,15 +48,16 @@
 						<tr class="pcash">
 							<td>Return Change :</td>
 							<td>
-								<span class="label label-warning" id="balance">0</span>
+								<h3 style="margin:0px;"><span class="label label-warning" id="balance">0</span></h3>
 							</td>
 						</tr>
-						<!--	<tr class="pcc" style="display: none;">
-								<td>Credit Card No :</td>
-								<td><input type="text" id="pcc" class="form-control"
-									style="padding: 2px !important; height: auto !important;" /></td>
-							</tr>
-							<tr class="pcc" style="display: none;">
+						<tr class="ppc" style="display: none;">
+								<td>Card No :</td>
+								<td>
+									<input type="text" id="ppc" class="form-control"/>
+								</td>
+						</tr>
+						<!--<tr class="pcc" style="display: none;">
 								<td>Credit Card Holder :</td>
 								<td><input type="text" id="pcc_holder" class="form-control"
 									style="padding: 2px !important; height: auto !important;" /></td>
@@ -71,7 +72,7 @@
 					</table>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+					<button type="button" class="close-model btn btn-primary" data-dismiss="modal">Close</button>
 					<button class="btn btn-success" id="submit-sale">Submit</button>
 				</div>
 			</div>
