@@ -168,7 +168,8 @@ $(document).ready(function(){
 					bootbox.alert('OOPS! Some Error Please Contect Admin');
 				}else{
 					$('#payModal').modal('hide');
-					bootbox.alert('Bill Successfully Saved <a class="label label-primary print-bill-today" href="billprint.php?bill_no='+result.data.bill_no+'" target="_blank">Print</a>');
+					bootbox.alert('Bill Successfully Saved');
+					//<a class="label label-primary print-bill-today" href="billprint.php?bill_no='+result.data.bill_no+'" target="_blank">Print</a>
 					resetBill(true);					
 				}
 			});
