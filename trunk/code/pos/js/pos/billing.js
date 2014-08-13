@@ -216,6 +216,10 @@ $(document).ready(function(){
 								'</tr>'+
 							'</thead>'+
 						'<tbody>';
+						var qty = 0;
+						var netAmount = 0.0;
+						var taxAmount = 0.0;
+						var discountAmount = 0.0;
 			$.each($billingItems, function(index,data){
 				$viewData += '<tr class="text-center">'+
 								'<td>'+data.name+'</td>'+
@@ -223,18 +227,24 @@ $(document).ready(function(){
 								'<td>'+(parseFloat(data.priceBT)).toFixed(2)+'</td>'+
 								'<td>'+(parseFloat(data.discountAmount)).toFixed(2)+'</td>'+
 								'<td>'+(parseFloat(data.taxAbleAmount)).toFixed(2)+'</td>'+
-								'<td>'+data.tax+'</td>'+
+								'<td>'+(((data.tax) ? data.tax : 0) * 100).toFixed(2)+'</td>'+
 								'<td>'+(parseFloat(data.taxAmount)).toFixed(2)+'</td>'+
 								'<td>'+data.qty+'</td>'+
 								'<td>'+(parseFloat(data.totalAmount)).toFixed(2)+'</td>'+
 								'<td>'+(parseFloat(data.netAmount)).toFixed(2)+'</td>'+
 							'</tr>';
+							qty += data.qty;
+							netAmount += data.netAmount;
+							taxAmount += (data.taxAmount  * data.qty);
+							discountAmount += (data.discountAmount * data.qty);
 			});
-			$viewData += '</tbody></table>';
+			$viewData += '</tbody>'+
+						'<tfoot><tr><th>Total</th><th></th><th></th><th class="text-center">'+(discountAmount).toFixed(2)+'</th><th></th><th></th><th class="text-center">'+(taxAmount).toFixed(2)+'</th><th class="text-center">'+qty+'</th><th></th><th class="text-center">'+(netAmount).toFixed(2)+'</th></tr></tfoot>'
+						+'</table>';
 
 			bootbox.dialog({
 				message:$viewData,
-				title:"Menu Tax Rate",
+				title:"Product Pricing Details",
 				className: "bootbox-dialog-modal",
 				buttons:{
 					main:{
