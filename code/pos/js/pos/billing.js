@@ -42,7 +42,7 @@ $(document).ready(function(){
 				$buttonList = "";
 				selectedCat = $(this).data('category');
 				$.each(productArray[selectedCat],function(key,value){
-					$buttonList += '<button type="button" class="btn btn-success btn-lg btn3d category-product" value="'+value.mysql_id+'" category-product-sequence="'+key+'">'+value.name+'</button>';
+					$buttonList += '<button type="button" class="btn btn-success btn-lg btn3d btn25 category-product '+(value.mysql_id in $billingItems ? 'active-btn' : '')+'" value="'+value.mysql_id+'" category-product-sequence="'+key+'">'+value.name+'</button>';
 				});
 				$("#proajax").html($buttonList);
 			}
@@ -58,7 +58,7 @@ $(document).ready(function(){
 		});
 
 		$("#saletbl")
-		.on("keyup",".bill_qty_input",function(event){
+		.on("change",".bill_qty_input",function(event){
 			var newQty = parseInt($(this).val());
 			newQty = isNaN(newQty) ? 0 : newQty;
 			var pID = $(this).closest('tr').attr('billing-product');
@@ -90,14 +90,30 @@ $(document).ready(function(){
 			resetBill(true);
 		});
 		//---START--- Payment Event After Products selection  or Without Product Selection
+		$(".payment-type-bt").click(function(){
+			var type = $(this).data('value');
+			$("#paid_by").val(type);
+			if(type == 'ppc'){
+				$(".ppc").show();				
+			}else{
+				$(".ppc").hide();								
+			}
+		});
 		$("#payment").click(function(){
 			$("#fcount").text($totalBillQty);
 			$("#twt").text($totalAmountWT.toFixed(2));
 			if($totalBillQty == 0){
 				bootbox.alert('Please add product to sale first');
 			}else{
+				//$("div.ui-keyboard").remove();
+				$("#paid_by").val('');
+				$("#paid-amount").val('');
+				$("#balance").text(0);
 				$('#payModal').modal();
 			}
+		});
+		$(".close-model").click(function(){
+			$("div.ui-keyboard").hide();
 		});
 		//---END--- Payment Event After Products selection  or Without Product Selection
 
@@ -111,6 +127,10 @@ $(document).ready(function(){
 				console.log(Math.ceil($totalAmountWT));
 				bootbox.alert("Paid Amount is Less");
 				return false;
+			}
+			if(!$("#paid_by").val()){
+				bootbox.alert("Please Select Paid By");
+				return false;				
 			}
 			var billDetails = new Object();
 			billDetails.total_qty = $totalBillQty;
@@ -136,7 +156,7 @@ $(document).ready(function(){
 			billDetails.items = new Object();
 			billDetails.items = $billingItems;
 			billDetails.request_type = 'save_bill';
-
+			$("div.ui-keyboard").hide();
 			$.ajax({
 				type: 'POST',
 				url: "index.php?dispatch=billing.save",
@@ -192,31 +212,37 @@ $(document).ready(function(){
 			$viewData = '<table class="table table-striped table-condensed table-hover protable" width="100%" border="0" cellspacing="0" cellpadding="0">'+
 							'<thead>'+
 								'<tr>'+
-									'<th>Menu Item</th><th>Tax Rate</th><th>Qty</th><th>Price</th><th>Tax Amount</th>'+
+									'<th>Product Name</th><th>Menu Price</th><th>Price Before Tax</th><th>Discount Amount</th><th>Taxable Amount</th><th>Tax %</th><th>Tax</th><th>Qty</th><th>Total</th><th>Net Amount</th>'+
 								'</tr>'+
 							'</thead>'+
 						'<tbody>';
-			var QtyTotal = 0;
-			var totalTaxAmountCheck = 0.0;
 			$.each($billingItems, function(index,data){
-				QtyTotal += data.qty;
-				taxAM = (data.qty * data.tax * data.price).toFixed(4);
-				totalTaxAmountCheck += parseFloat(taxAM); 
-				$viewData += '<tr>'+
+				$viewData += '<tr class="text-center">'+
 								'<td>'+data.name+'</td>'+
-								'<td>'+
-									'<input type="text" class="form-control input-sm" value="'+data.tax+'"/>'+
-								'</td>'+
+								'<td>'+(parseFloat(data.price)).toFixed(2)+'</td>'+
+								'<td>'+(parseFloat(data.priceBT)).toFixed(2)+'</td>'+
+								'<td>'+(parseFloat(data.discountAmount)).toFixed(2)+'</td>'+
+								'<td>'+(parseFloat(data.taxAbleAmount)).toFixed(2)+'</td>'+
+								'<td>'+data.tax+'</td>'+
+								'<td>'+(parseFloat(data.taxAmount)).toFixed(2)+'</td>'+
 								'<td>'+data.qty+'</td>'+
-								'<td>'+data.price+'</td>'+
-								'<td>'+taxAM+'</td>'+
+								'<td>'+(parseFloat(data.totalAmount)).toFixed(2)+'</td>'+
+								'<td>'+(parseFloat(data.netAmount)).toFixed(2)+'</td>'+
 							'</tr>';
 			});
-			$viewData += '</tbody><tfoot><th colspan="2">Total</th><th>'+QtyTotal+'</th><th></th><th>'+totalTaxAmountCheck.toFixed(2)+'</th></tfoot><table>';
+			$viewData += '</tbody></table>';
 
 			bootbox.dialog({
 				message:$viewData,
 				title:"Menu Tax Rate",
+				className: "bootbox-dialog-modal",
+				buttons:{
+					main:{
+						label:"Close",
+						className:"btn-primary btn-sm",
+					}
+			}
+
 			});
 		});
 /*			$("#add_tax").click(function(){
@@ -328,16 +354,42 @@ $(document).ready(function(){
 					label:"Update",
 					className:"btn-primary btn-sm",
 					callback:function(){
-						$intDiscount = parseInt($('#get_ds').val()); 
-						generateSalesTable();
+						if(parseInt($('#get_ds').val())>100){
+
+						}else{
+							$intDiscount = parseInt($('#get_ds').val());
+							generateSalesTable();
+						}
+						$("div.ui-keyboard").hide();
 					}
 				}
 			}
 		});
+
+$('#get_ds').keyboard({
+		layout:'custom',
+		customLayout:{
+					'default':['0 1 2 3 4','5 6 7 8 9','{clear} {bksp} {accept} {cancel}']
+				},
+		beforeClose:function(e,keyboard,el,accepted){
+			if(accepted){
+
+			//	console.log($('input',".ui-keyboard").val());
+			//	console.log(keyboard.$el[0].value)				
+			}
+/*			console.log(e);
+			console.log(keyboard);
+			console.log(el);
+			console.log(accepted);/**/
+		}
+	});
+
+
 		return false
 	});
 			//---START--- Event For Product Selection
 		$("#proajax").on("click",".category-product",function(){
+			$(this).addClass('active-btn');
 				var selectedSequence = $(this).attr('category-product-sequence');
 				var productData = productArray[selectedCat][selectedSequence];
 				var productID = productData.mysql_id;
@@ -387,7 +439,7 @@ function generateSalesTable(productId, qty, productData){
 			'<td style="width:9%"><span class="glyphicon glyphicon-remove-sign del_row"></span></td>'+
 			'<td style="width:53%" class="btn-warning">'+$billingItems[index].name+'&nbsp;@&nbsp;'+$billingItems[index].price+'</td>'+
 			'<td style="width:12%"><span class="bill_item_qty"><input type="text" class="keyboard nkb-input bill_qty_input" value="'+$billingItems[index].qty+'"/></span></td>'+
-			'<td style="width:26%"><span class="bill_item_price text-right">'+($billingItems[index].qty * $billingItems[index].taxAbleAmount).toFixed(2)+'</span></td>'+
+			'<td style="width:26%" class="text-right"><span class="bill_item_price text-right">'+($billingItems[index].qty * $billingItems[index].taxAbleAmount).toFixed(2)+'</span></td>'+
 			'</tr>';
 
 		$totalBillQty += $billingItems[index].qty;
@@ -402,8 +454,19 @@ function generateSalesTable(productId, qty, productData){
 	$('.bill_qty_input').keyboard({
 		layout:'custom',
 		customLayout:{
-					'default':['0 1 2 3 4','5 6 7 8 9','{clear} {accept} {cancel}']
+					'default':['0 1 2 3 4','5 6 7 8 9','{clear} {bksp} {accept} {cancel}']
 				},
+		beforeClose:function(e,keyboard,el,accepted){
+			if(accepted){
+
+			//	console.log($('input',".ui-keyboard").val());
+			//	console.log(keyboard.$el[0].value)				
+			}
+/*			console.log(e);
+			console.log(keyboard);
+			console.log(el);
+			console.log(accepted);/**/
+		}
 	});
 
 	$("#count").text($totalBillQty);	
@@ -416,6 +479,7 @@ function resetBill(refresh){
 	if(refresh){
 		$billingItems = new Object();
 		delete $billingItems;
+		$('button',proajax).removeClass('active-btn');
 	}
 	$totalBillItems = 0;
 	$totalBillQty = 0;
