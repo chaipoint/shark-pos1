@@ -19,10 +19,10 @@ class CouchPHP{
 	function __construct(){
 		$this->port = "5984";
 		$this->url = 'http://127.0.0.1:'.$this->port."/";
-		$this->db = 'testing';
+		$this->db = 'cpos_pos';
 		$this->userName = '';
 		$this->password = '';
-		$this->remote = 'http://pos:pos@54.249.247.15:5984/rakesh_cpos_ho';
+		$this->remote = 'http://pos:pos@54.249.247.15:5984/vente_pos_db';
 	}
 	public function getUrl(){
 		return $this->url;
