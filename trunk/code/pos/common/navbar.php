@@ -22,7 +22,7 @@
 									class="language-img"> &nbsp;&nbsp; English </a></li>
 						</ul>
 					</li>
-					<li><a href="index.php?dispatch=sales_register.index"
+					<li><a href="index.php?dispatch=<?php echo (MODULE == 'sales_register' ? 'billing' : 'sales_register');?>.index"
 						class="tip" data-placement="right" title="Sales"><i
 							class="glyphicon glyphicon-list"></i> </a></li>
 					<li>
