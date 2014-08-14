@@ -34,8 +34,13 @@
 			<script src="<?php echo JS;?>pos/login.js" type="text/javascript"></script>
 			<div class="col-md-4 col-md-offset-4" id="login-box">
 						<div class="padded" style="text-align: center; margin-top: 40px;">
+<<<<<<< .mine
+							<img src="<?php echo IMG;?>logo.png"
+								alt="ChaiPoint" />
+=======
 							<img src="images/logo.png"
 								alt="Simple POS" />
+>>>>>>> .r154
 							<div class="panel panel-primary">
 								<div class="panel-heading">Login</div>
 								<div class="panel-body" style="padding-bottom: 0;">
