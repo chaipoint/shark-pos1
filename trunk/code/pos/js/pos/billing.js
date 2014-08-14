@@ -26,9 +26,7 @@ $(document).ready(function(){
 		});
 	//---END---Categories Silder Ends
 
-	//Add Time in Header or Navigation Panel 
-	var now = moment().format("dddd, MMMM Do, YYYY, h:mm:ss A");
-    $('#cur-time').text(now);
+	
 
 	//---END--- Initial Configurations on Load Of Page
 
@@ -107,9 +105,9 @@ $(document).ready(function(){
 			}else{
 				//$("div.ui-keyboard").remove();
 				$("#paid_by").val('');
-				$("#paid-amount").val('');
 				$("#balance").text(0);
 				$('#payModal').modal();
+				$("#paid-amount").val('').focusin();
 			}
 		});
 		$(".close-model").click(function(){
@@ -210,10 +208,10 @@ $(document).ready(function(){
 		$("#add_tax").click(function(){
 
 			console.log($billingItems);
-			$viewData = '<table class="table table-striped table-condensed table-hover protable" width="100%" border="0" cellspacing="0" cellpadding="0">'+
+			$viewData = '<table class="table table-striped table-condensed table-hover protable small" width="100%" border="0" cellspacing="0" cellpadding="0">'+
 							'<thead>'+
-								'<tr>'+
-									'<th>Product Name</th><th>Menu Price</th><th>Price Before Tax</th><th>Discount Amount</th><th>Taxable Amount</th><th>Tax %</th><th>Tax</th><th>Qty</th><th>Total</th><th>Net Amount</th>'+
+								'<tr class="active">'+
+									'<th>Product Name</th><th>Menu Price</th><th>Price Before Tax</th><th>Discount Amount</th><th>Taxable Amount</th><th>Qty</th><th>SubTotal</th><th>Tax %</th><th>Tax</th><th>Net Amount</th>'+
 								'</tr>'+
 							'</thead>'+
 						'<tbody>';
@@ -221,26 +219,28 @@ $(document).ready(function(){
 						var netAmount = 0.0;
 						var taxAmount = 0.0;
 						var discountAmount = 0.0;
+						var subTotalSum = 0.0;
 			$.each($billingItems, function(index,data){
-				$viewData += '<tr class="text-center">'+
-								'<td>'+data.name+'</td>'+
+				$viewData += '<tr class="text-right">'+
+								'<td class="text-left">'+data.name+'</td>'+
 								'<td>'+(parseFloat(data.price)).toFixed(2)+'</td>'+
 								'<td>'+(parseFloat(data.priceBT)).toFixed(2)+'</td>'+
 								'<td>'+(parseFloat(data.discountAmount)).toFixed(2)+'</td>'+
 								'<td>'+(parseFloat(data.taxAbleAmount)).toFixed(2)+'</td>'+
-								'<td>'+(((data.tax) ? data.tax : 0) * 100).toFixed(2)+'</td>'+
-								'<td>'+(parseFloat(data.taxAmount)).toFixed(2)+'</td>'+
 								'<td>'+data.qty+'</td>'+
-								'<td>'+(parseFloat(data.totalAmount)).toFixed(2)+'</td>'+
+								'<td>'+(parseFloat(data.taxAbleAmount) * data.qty).toFixed(2)+'</td>'+
+								'<td>'+(((data.tax) ? data.tax : 0) * 100).toFixed(2)+'</td>'+
+								'<td>'+(parseFloat(data.taxAmount) * data.qty).toFixed(2)+'</td>'+
 								'<td>'+(parseFloat(data.netAmount)).toFixed(2)+'</td>'+
 							'</tr>';
 							qty += data.qty;
 							netAmount += data.netAmount;
 							taxAmount += (data.taxAmount  * data.qty);
 							discountAmount += (data.discountAmount * data.qty);
+							subTotalSum += data.taxAbleAmount * data.qty;
 			});
 			$viewData += '</tbody>'+
-						'<tfoot><tr><th>Total</th><th></th><th></th><th class="text-center">'+(discountAmount).toFixed(2)+'</th><th></th><th></th><th class="text-center">'+(taxAmount).toFixed(2)+'</th><th class="text-center">'+qty+'</th><th></th><th class="text-center">'+(netAmount).toFixed(2)+'</th></tr></tfoot>'
+						'<tfoot><tr class="active"><th>Total</th><th></th><th></th><th class="text-right">'+(discountAmount).toFixed(2)+'</th><th></th><th class="text-right">'+qty+'</th><th class="text-right">'+subTotalSum.toFixed(2)+'</th><th></th><th class="text-right">'+(taxAmount).toFixed(2)+'</th><th class="text-right">'+(netAmount).toFixed(2)+'</th></tr></tfoot>'
 						+'</table>';
 
 			bootbox.dialog({
@@ -334,7 +334,7 @@ $(document).ready(function(){
 					at:'center top',
 					at2:'center bottom'
 				},
-				usePreview:false,
+				usePreview:true,
 				customLayout:{
 					'default':['1 2 3 {clear}','4 5 6 .','7 8 9 0','{accept} {cancel}']
 				},
@@ -347,7 +347,8 @@ $(document).ready(function(){
 							$("#balance").text('')
 							return false;
 						}else{
-							$("#balance").text( paid - Math.ceil($totalAmountWT) );
+							var balance = paid - Math.ceil($totalAmountWT);
+							$("#balance").text( isNaN(balance) ? 0 : balance );
 						}
 					}
 				}
