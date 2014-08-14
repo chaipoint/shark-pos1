@@ -25,11 +25,11 @@
 		<td class="text-center"><?php echo $value['value']['bill_no']; ?></td>
     <td class="text-center"><?php echo $value['value']['bill_time']; ?></td>
 		<td class="text-center"><?php echo $value['value']['total_qty']; ?></td>
-    <td><?php echo $value['value']['total_discount']; ?></td>
-    <td><?php echo $value['value']['sub_total']; ?></td>
-    <td><?php echo $value['value']['total_tax']; ?></td>
-    <td><?php echo $value['value']['total_amount']; ?></td>
-		<td><?php echo $value['value']['due_amount']; ?></td>
+    <td><?php echo number_format($value['value']['total_discount'],2); ?></td>
+    <td><?php echo number_format($value['value']['sub_total'],2); ?></td>
+    <td><?php echo number_format($value['value']['total_tax'],2); ?></td>
+    <td><?php echo number_format($value['value']['total_amount'],2); ?></td>
+		<td><?php echo number_format($value['value']['due_amount'],2); ?></td>
 		<td class="text-center"><?php echo $value['value']['payment_type']; ?></td>
 		<td class="text-left">
 			<a href="#"  class="tip btn btn-primary btn-xs" title="View Invoice">
@@ -45,7 +45,7 @@
     </tr>
     <?php $totaAmount+=$value['value']['total_amount'];
           $totalTax+=$value['value']['total_tax'];
-          $totalDiscount+=$value['value']['discount'];
+          $totalDiscount+=$value['value']['total_discount'];
           $totalSubTotal+=$value['value']['sub_total'];
           $totalDueAmount+=$value['value']['due_amount'];
       } 
@@ -55,11 +55,11 @@
         <th class="text-center">Total</th>
         <th></th>
         <th></th>
-        <th class="text-right"><?php echo $totalDiscount; ?></th>
-        <th class="text-right"><?php echo $totalSubTotal; ?></th>
-        <th class="text-right"><?php echo $totalTax; ?></th>
-        <th class="text-right"><?php echo $totaAmount; ?></th>
-        <th class="text-right"><?php echo $totalDueAmount; ?></th>
+        <th class="text-right"><?php echo number_format($totalDiscount,2); ?></th>
+        <th class="text-right"><?php echo number_format($totalSubTotal,2); ?></th>
+        <th class="text-right"><?php echo number_format($totalTax,2); ?></th>
+        <th class="text-right"><?php echo number_format($totaAmount,2); ?></th>
+        <th class="text-right"><?php echo number_format($totalDueAmount,2); ?></th>
         <th></th>
         <th></th>
     </tr>		
