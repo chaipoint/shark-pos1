@@ -36,7 +36,7 @@
 						<tr>
 							<td>Paid by:</td>
 							<td>
-								<a class="btn btn-sm btn-success payment-type-bt" data-value="cash">Cash</a>
+								<a class="btn btn-sm btn-primary payment-type-bt" data-value="cash">Cash</a>
 								<a class="btn btn-sm btn-default" data-value="ppc">PPC</a>
 								<input type="hidden" name="paid_by" id="paid_by">
 							</td>
