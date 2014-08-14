@@ -35,7 +35,7 @@ $(document).ready(function(){
 						}
 						else{
                         $("#error_message").show();
-                        msg = "<li>Enter Currect Username/Password</li>";
+                        msg = "<li style='font-size:12px;'>Wrong Username or Password</li>";
 					    $("#error_message ul").html(msg);
 						}
 						
