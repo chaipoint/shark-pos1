@@ -67,7 +67,7 @@
 				}
 			}else{
 				$return['error'] = true;
-				$return['message'] = 'Configuration File Not exits';
+				$return['message'] = 'Configuration File Not exists';
 			}
 			return $return;
 		}
