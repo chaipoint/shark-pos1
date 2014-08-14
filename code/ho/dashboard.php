@@ -24,7 +24,7 @@
         </div>
       </div>
     <!--Progress Bar Div End -->
-    
+
       <!-- Main component for a primary marketing message or call to action -->
       <div class="jumbotron">
       <h2>Dashboard</h2>
@@ -46,7 +46,7 @@
      }
      krsort($topStoreArray);
 ?>
-        <h4>Todays Sale(Rs.<?php echo $totalSale;?>)</h4>
+        <h4>Today's Sale (Rs.<?php echo $totalSale;?>)</h4>
         <div class="panel panel-default" style="float:left;width:45%;">
   <!-- Default panel contents -->
   <div class="panel-heading">Top 5 Stores</div>
@@ -69,7 +69,14 @@
            <td><?php echo $key; ?></td>
          </tr>
       <?php $i++;}} ?>
+      <?php for($j=$i;$j<=5;$j++) { ?>
+         <tr>
+           <td><?php echo $j;?></td>
+           <td></td>
+           <td></td>
+         </tr>
 
+    <?php } ?>
     </tbody>
   </table>
 </div>
@@ -91,33 +98,33 @@
     <tbody>
       <tr>
         <td>1</td>
-        <td>Masala Chai</td>
-        <td>20</td>
-        <td>500</td>
+        <td>Item 1</td>
+        <td></td>
+        <td></td>
       </tr>
       <tr>
         <td>2</td>
-        <td>Ginger Chai</td>
-        <td>15</td>
-        <td>400</td>
+        <td>Item 2</td>
+        <td></td>
+        <td></td>
       </tr>
       <tr>
         <td>3</td>
-        <td>Vegg Puff</td>
-        <td>10</td>
-        <td>300</td>
+        <td>Item 3</td>
+        <td></td>
+        <td></td>
       </tr>
       <tr>
         <td>4</td>
-        <td>Egg Puff</td>
-        <td>5</td>
-        <td>200</td>
+        <td>Item 4</td>
+        <td></td>
+        <td></td>
       </tr>
       <tr>
         <td>5</td>
-        <td>Samosa</td>
-        <td>4</td>
-        <td>100</td>
+        <td>Item 5</td>
+        <td></td>
+        <td></td>
       </tr>
 
     </tbody>
@@ -142,32 +149,32 @@
       <tr>
         <td>1</td>
         <td>Direct Store</td>
-        <td>30</td>
-        <td>10000</td>
+        <td></td>
+        <td></td>
       </tr>
       <tr>
         <td>2</td>
         <td>Food Court</td>
-        <td>20</td>
-        <td>8000</td>
+        <td></td>
+        <td></td>
       </tr>
       <tr>
         <td>3</td>
         <td>Facebook</td>
-        <td>15</td>
-        <td>5000</td>
+        <td></td>
+        <td></td>
       </tr>
       <tr>
         <td>4</td>
         <td>Website</td>
-        <td>10</td>
-        <td>2000</td>
+        <td></td>
+        <td></td>
       </tr>
       <tr>
         <td>5</td>
         <td>Food Panda</td>
-        <td>6</td>
-        <td>1000</td>
+        <td></td>
+        <td></td>
       </tr>
 
     </tbody>
@@ -177,48 +184,48 @@
 
 <div class="panel panel-default" style="float:right;width:45%;">
   <!-- Default panel contents -->
-  <div class="panel-heading" >Top 5 Items</div>
+  <div class="panel-heading" >Top 5 Saler</div>
   
 <!-- Table -->
   <table class="table">
     <thead>
       <tr>
         <th>#</th>
-        <th>Item Name</th>
-        <th>Item Qty</th>
+        <th>Saler Name</th>
+        
         <th>Sale Amount(Rs)</th>
       </tr>
     </thead>
     <tbody>
       <tr>
         <td>1</td>
-        <td>Masala Chai</td>
-        <td>20</td>
-        <td>500</td>
+        <td>Saler 1</td>
+        
+        <td></td>
       </tr>
       <tr>
         <td>2</td>
-        <td>Ginger Chai</td>
-        <td>15</td>
-        <td>400</td>
+        <td>Saler 2</td>
+        
+        <td></td>
       </tr>
       <tr>
         <td>3</td>
-        <td>Vegg Puff</td>
-        <td>10</td>
-        <td>300</td>
+        <td>Saler 3</td>
+        
+        <td></td>
       </tr>
       <tr>
         <td>4</td>
-        <td>Egg Puff</td>
-        <td>5</td>
-        <td>200</td>
+        <td>Saler 4</td>
+        
+        <td></td>
       </tr>
       <tr>
         <td>5</td>
-        <td>Samosa</td>
-        <td>4</td>
-        <td>100</td>
+        <td>Saler 5</td>
+        
+        <td></td>
       </tr>
 
     </tbody>
