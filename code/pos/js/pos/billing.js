@@ -100,7 +100,7 @@ $(document).ready(function(){
 		});
 		$("#payment").click(function(){
 			$("#fcount").text($totalBillQty);
-			$("#twt").text($totalAmountWT.toFixed(2));
+			$("#twt").text(Math.ceil($totalAmountWT.toFixed(2)));
 			if($totalBillQty == 0){
 				bootbox.alert('Please add product to sale first');
 			}else{
