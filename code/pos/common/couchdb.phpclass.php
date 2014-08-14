@@ -17,7 +17,6 @@ class CouchPHP{
 	private $allowContentType = false;
 	private $remote;
 	function __construct(){
-		date_default_timezone_set('Asia/Calcutta');
 		$this->port = "5984";
 		$this->url = 'http://127.0.0.1:'.$this->port."/";
 		$this->db = 'vente_pos_db';
