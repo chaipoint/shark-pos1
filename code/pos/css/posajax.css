@@ -56,12 +56,18 @@
 	width: 4em;
 }
 
-
+.ui-keyboard-preview-wrapper{
+	text-align: center;
+}
 .ui-keyboard-preview {
 	text-align: left;
 	margin: 0 0 3px 0;
 	display: inline;
-	width: 99%;
+	width: 50%;
+	background: rgb(250, 255, 189);
+	font-weight: bold;
+	font-size: 18px;
+
 }
 .ui-keyboard-keyset {
 	text-align: center;
