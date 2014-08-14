@@ -258,10 +258,13 @@
 
     </tbody>
   </table>
-</div>
-</div>
 
-</div> 
+</div>
+</div>
+</div>
 <!-- /container -->
-
+<!-- footer -->
+<div style="text-align:center;">
+<?php include 'footer.php';?>
+</div>
 
