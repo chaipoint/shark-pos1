@@ -34,7 +34,7 @@
 			<script src="<?php echo JS;?>pos/login.js" type="text/javascript"></script>
 			<div class="col-md-4 col-md-offset-4" id="login-box">
 						<div class="padded" style="text-align: center; margin-top: 40px;">
-							<img src="http://tecdemo.com/spos3/assets/images/logo1.png"
+							<img src="images/logo.png"
 								alt="Simple POS" />
 							<div class="panel panel-primary">
 								<div class="panel-heading">Login</div>
