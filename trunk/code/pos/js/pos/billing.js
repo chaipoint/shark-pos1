@@ -91,6 +91,7 @@ $(document).ready(function(){
 		$(".payment-type-bt").click(function(){
 			var type = $(this).data('value');
 			$("#paid_by").val(type);
+			$(this).removeClass('btn-primary').addClass('btn-success');
 			if(type == 'ppc'){
 				$(".ppc").show();				
 			}else{
@@ -108,6 +109,7 @@ $(document).ready(function(){
 				$("#balance").text(0);
 				$('#payModal').modal();
 				$("#paid-amount").val('').focusin();
+				$(".payment-type-bt").removeClass('btn-success').addClass('btn-primary');
 			}
 		});
 		$(".close-model").click(function(){
