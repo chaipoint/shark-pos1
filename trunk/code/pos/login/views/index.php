@@ -50,7 +50,7 @@
 											<span class="input-group-addon"> <i
 												class="glyphicon glyphicon-user"></i>
 											</span> <input type="text" name="identity" value=""
-												id="username" class="form-control" placeholder="Email" autocomplete="off"/>
+												id="username" class="form-control" placeholder="Employee Code" autocomplete="off"/>
 										</div>
 										<div class="input-group">
 											<span class="input-group-addon"><i
@@ -69,7 +69,7 @@
 									</form>
 									</div>
 							</div>
-							<div class="row"><div class="col-md-8 col-md-offset-2">&copy; 2014 Simple POS</div></div>
+							<div class="row"><div class="col-md-8 col-md-offset-2">Copyright &copy; 2014 ChaiPoint</div></div>
 						</div>
 					</div>
 		</div>
