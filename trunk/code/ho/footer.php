@@ -1,1 +1,1 @@
-<div class="row"><div class="col-md-8 col-md-offset-2">&copy; 2014 Simple POS</div></div>
+<div class="row"><div class="col-md-12 col-md-offset-0">Copyright @ 2014 ChaiPoint</div></div>
