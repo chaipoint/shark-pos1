@@ -1,4 +1,6 @@
 <?php
+	date_default_timezone_set('Asia/Calcutta');
+
 	global $couch;
 	/*Configuration Class For Whole Application*/
 	require_once 'common/app.config.php';
