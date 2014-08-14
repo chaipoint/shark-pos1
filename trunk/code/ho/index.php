@@ -1,4 +1,4 @@
-<?php include 'header.php'; ?>
+<?php require_once 'common/header.php'; ?>
 
 <div class="container">
       <div class="col-md-4 col-md-offset-4" id="login-box">
@@ -37,7 +37,7 @@
                   </form>
                   </div>
               </div>
-              <?php include 'footer.php';?>
+              <?php require_once 'common/footer.php';?>
             </div>
           </div>
     </div>
