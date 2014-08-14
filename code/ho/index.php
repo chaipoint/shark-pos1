@@ -3,7 +3,7 @@
 <div class="container">
       <div class="col-md-4 col-md-offset-4" id="login-box">
             <div class="padded" style="text-align: center; margin-top: 40px;">
-              <img src="http://tecdemo.com/spos3/assets/images/logo1.png" alt="Simple POS" />
+              <img src="images/logo.png" alt="Simple POS" />
               <div class="panel panel-primary">
               <div class="panel-heading">Login</div>
               <div class="panel-body" style="padding-bottom: 0;">
