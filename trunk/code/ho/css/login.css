@@ -1,49 +1,30 @@
-body {
-    background: #eee !important;    
-}
+ .container {
+        width: 100%;
+        max-width: 100%;
+      }
 
-.wrapper {  
-    margin-top: 80px;
-  margin-bottom: 80px;
-}
+      .container.padded>.row {
+        margin: 0;
+      }
 
-.form-signin {
-  max-width: 380px;
-  padding: 15px 35px 45px;
-  margin: 0 auto;
-  background-color: #fff;
-  border: 1px solid rgba(0,0,0,0.1);  
+      .padded {
+        padding: 15px;
+      }
 
-  .form-signin-heading,
-    .checkbox {
-      margin-bottom: 30px;
-    }
+      .separate-sections {
+        margin: 0;
+        list-style: none;
+        padding-bottom: 5px;
+      }
 
-    .checkbox {
-      font-weight: normal;
-    }
+      .separate-sections>li,.separate-sections>div {
+        margin-bottom: 15px !important;
+      }
 
-    .form-control {
-      position: relative;
-      font-size: 16px;
-      height: auto;
-      padding: 10px;
-        @include box-sizing(border-box);
+      .separate-sections>li:last-child,.separate-sections>div:last-child {
+        margin-bottom: 0px;
+      }
 
-        &:focus {
-          z-index: 2;
-        }
-    }
-
-    input[type="text"] {
-      margin-bottom: -1px;
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-    }
-
-    input[type="password"] {
-      margin-bottom: 20px;
-      border-top-left-radius: 0;
-      border-top-right-radius: 0;
-    }
-}
+      i {
+        margin: 0 10px;
+      }
