@@ -14,6 +14,10 @@
 					<h4 class="modal-title" id="today-sale-header">Data Sync</h4>
 				</div>
 				<div class="modal-body">
+				<div class="text-center hide" id="loading_image">
+					<img src="<?php echo IMG;?>loader.gif"/>
+				</div>
+
 					<table class="table table-condensed">
 						<thead><tr><th>Download</th><th>Upload</th></tr></thead>
 						<tbody>

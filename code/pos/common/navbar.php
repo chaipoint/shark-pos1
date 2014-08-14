@@ -35,7 +35,7 @@
 				<ul class="nav navbar-nav navbar-right">
 					<li>
 						<a>
-							<?php echo $_SESSION['user']['username']." (".$_SESSION['user']['code']."), ".$_SESSION['user']['store']['name'];?>
+							<?php echo $_SESSION['user']['name']." (".$_SESSION['user']['code']."), ".$_SESSION['user']['store']['name'];?>
 						</a>
 					</li>
 					<li>
