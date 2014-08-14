@@ -34,6 +34,11 @@
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li>
+						<a>
+							<?php echo $_SESSION['user']['username']." (".$_SESSION['user']['code']."), ".$_SESSION['user']['store']['name'];?>
+						</a>
+					</li>
+					<li>
 										<a
 					class="btn btn-success btn-sm external"
 					style="padding: 5px 8px; margin: 10px 0 5px 5px;"
@@ -45,10 +50,6 @@
 							<i class="glyphicon glyphicon-log-out"></i> 
 						</a>
 					</li>
-				</ul>
-				
-				<ul class="nav navbar-nav navbar-right">
-					<li><a class="hov"><span id="cur-time"></span> </a></li>
 				</ul>
 			</div>
 		</div>
