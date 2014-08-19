@@ -267,18 +267,18 @@ function updateConfig(){
 	$logger->debug("Calling Update Config Function");
     
     $couch = new CouchPHP();
-	$result = $couch->getDesign('config')->getView('config_list')->execute();
+	$result = $couch->getDesign('config')->getView('config_list')->setParam(array('include_docs'=>'true'))->execute();
 	$categoryList = array();
 
     if(array_key_exists('rows', $result)){
 		$docs = $result['rows'];
 		$logger->debug("Creating Array of Existing Config Setting In CouchDB");
 		foreach($docs as $dKey => $dValue){
-	    $categoryList[$dValue['value']['category_name']] = $dValue['value'];	
+	    $categoryList[$dValue['doc']['category_id']] = $dValue['doc'];	
 	  }
 	    $logger->trace("Array of Existing Config Setting IN CouchDB: ".json_encode($categoryList));
 	}
-
+	
     $getConfigDetail = 'SELECT GROUP_CONCAT(cpc.id) as mysql_id, category as category_id, crm.name as category_name,
 	                    GROUP_CONCAT(doc_key)AS doc_key, GROUP_CONCAT(doc_value)AS doc_value, crm.code as category_code
 	                    FROM cp_pos_config cpc
@@ -293,7 +293,7 @@ function updateConfig(){
 	$logger->debug("Creating Array To Update Config Setting In CouchDb");
 	while($row = mysql_fetch_assoc($result)){
        
-       if(array_key_exists($row['category_name'],$categoryList)){
+       if(array_key_exists($row['category_id'],$categoryList)){
 		$updateArray[$j]['_id'] = $categoryList[$row['category_name']]['_id'];
         $updateArray[$j]['_rev'] = $categoryList[$row['category_name']]['_rev'];
         $updateCounter++;
