@@ -308,11 +308,8 @@ function updateConfig(){
         $updateArray[$j]['cd_doc_type'] = 'config_master';
 		
 		for ($i=0; $i <count($keyexplode) ; $i++) {
-		$updateArray[$j]['category_data'][$i]['mysql_id'] = $idexplode[$i]; 
-		$updateArray[$j]['category_data'][$i]['key'] = $keyexplode[$i];
-		$updateArray[$j]['category_data'][$i]['value'] = $valueexplode[$i];
-
-		}
+		$updateArray[$j]['category_data'][$keyexplode[$i]] = $valueexplode[$i];
+        }
 		//$finalreturn[$row['category_name']] = $row;
       $j++;
 	}
