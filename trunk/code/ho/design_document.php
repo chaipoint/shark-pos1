@@ -90,7 +90,7 @@ function init(){
        "language" => "javascript",
        "views" => array(
          "config_list" => array(
-           "map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type=='config_master'){  emit(doc.category_name, doc); }}"
+           "map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type=='config_master'){  emit(doc.category_code, doc); }}"
           )
         )
    );
