@@ -280,7 +280,7 @@ function updateConfig(){
 	}
 
     $getConfigDetail = 'SELECT GROUP_CONCAT(cpc.id) as mysql_id, category as category_id, crm.name as category_name,
-	                    GROUP_CONCAT(doc_key)AS doc_key, GROUP_CONCAT(doc_value)AS doc_value
+	                    GROUP_CONCAT(doc_key)AS doc_key, GROUP_CONCAT(doc_value)AS doc_value, crm.code as category_code
 	                    FROM cp_pos_config cpc
 	                    LEFT JOIN cp_reference_master crm ON crm.id = cpc.category AND crm.active = "Y"
 	                    WHERE cpc.active = "Y"
@@ -305,6 +305,7 @@ function updateConfig(){
 
         $updateArray[$j]['category_id'] = $row['category_id'];
         $updateArray[$j]['category_name'] = $row['category_name'];
+        $updateArray[$j]['category_code'] = $row['category_code'];
         $updateArray[$j]['cd_doc_type'] = 'config_master';
 		
 		for ($i=0; $i <count($keyexplode) ; $i++) {
