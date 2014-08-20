@@ -18,7 +18,6 @@
 			</script>
 		';
 	}
-
 ?>
 	<div class="container">
 			<div id="wrapper">
@@ -160,5 +159,5 @@
 			</div>
 		</div>
 	</div>
-	<?php require_once 'payment.modal.php';?>
-	<?php require_once 'today_sale.modal.php';?>
+	<?php require_once 'modal_payment.php';?>
+	<?php require_once 'modal_today_sale.php';?>
