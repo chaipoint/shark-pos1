@@ -91,7 +91,9 @@ $(document).ready(function(){
 		$(".payment-type-bt").click(function(){
 			var type = $(this).data('value');
 			$("#paid_by").val(type);
+			$('.payment-type-bt').removeClass('btn-success').addClass('btn-primary');
 			$(this).removeClass('btn-primary').addClass('btn-success');
+
 			if(type == 'ppc'){
 				$(".ppc").show();				
 			}else{
@@ -105,11 +107,12 @@ $(document).ready(function(){
 				bootbox.alert('Please add product to sale first');
 			}else{
 				//$("div.ui-keyboard").remove();
-				$("#paid_by").val('');
 				$("#balance").text(0);
 				$('#payModal').modal();
-				$("#paid-amount").val('').focusin();
+				$("#paid_by").val('');
 				$(".payment-type-bt").removeClass('btn-success').addClass('btn-primary');
+				$("#paid-amount").prop('autofocus',true);
+
 			}
 		});
 		$(".close-model").click(function(){
@@ -131,6 +134,9 @@ $(document).ready(function(){
 			if(!$("#paid_by").val()){
 				bootbox.alert("Please Select Paid By");
 				return false;				
+			}
+			if($("#paid_by").val() == 'ppc' ){
+
 			}
 			var billDetails = new Object();
 			billDetails.total_qty = $totalBillQty;
