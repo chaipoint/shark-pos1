@@ -5,6 +5,7 @@
 				<button type="button" class="close close-model" data-dismiss="modal" aria-hidden="true"><i class="glyphicon glyphicon-remove"></i></button>
 				<h4 class="modal-title" id="payModalLabel">Payment</h4>
 			</div>
+			<form method="post" name="payment-form" id="payment-form">
 			<div class="modal-body">
 				<table class="table table-striped">
 					<tbody>
@@ -37,7 +38,7 @@
 							<td>Paid by:</td>
 							<td>
 								<a class="btn btn-sm btn-primary payment-type-bt" data-value="cash">Cash</a>
-								<a class="btn btn-sm btn-default" data-value="ppc">PPC</a>
+								<a class="btn btn-sm btn-primary payment-type-bt" data-value="ppc">PPC</a>
 								<input type="hidden" name="paid_by" id="paid_by">
 							</td>
 						</tr>
@@ -75,6 +76,7 @@
 					<button type="button" class="close-model btn btn-primary" data-dismiss="modal">Close</button>
 					<button class="btn btn-success" id="submit-sale">Submit</button>
 				</div>
+				</form>
 			</div>
 		</div>
 	</div>
