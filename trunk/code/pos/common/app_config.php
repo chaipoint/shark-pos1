@@ -1,7 +1,11 @@
 <?php session_start();
 	class App_config{
+		public $log;
+
 		private $module = 'login';
 		private $mode = 'index'; 
+
+
 
 		private $app;
 		private $root;
@@ -23,6 +27,7 @@
 		public $userIdField = 'mysql_id';
 		protected $return;
 		public function __construct(){
+			$this->log = Logger::getLogger("CP-POS|APP-CONFIG");
 			$this->return = array('error'=>false,'message'=>'','data'=>array());
 
 			/*Set all Config things like application base folder and Others Directory as URL, CSS, JS*/
@@ -35,6 +40,9 @@
 			$this->root 	= 	$_SERVER['DOCUMENT_ROOT'];
 
 			if(array_key_exists('dispatch', $_GET)){
+
+				//$this->log->trace("parameter ".$_GET['dispatch']);
+
 				$queryArray = explode(".",$_GET['dispatch']);
 				if(empty($queryArray[0])){
 						die("Redirect to not Found");
@@ -46,6 +54,8 @@
 						$this->mode = $queryArray[1];	
 					}
 				}
+			}else{
+				//$this->log->trace("default ".$this->getModule().'.'.$this->getMode());
 			}
 			if($this->module != 'login' && $this->module != 'utils'){
 				if(!array_key_exists('user', is_array(@$_SESSION) ? $_SESSION : array())){

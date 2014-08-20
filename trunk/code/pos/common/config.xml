@@ -1,0 +1,13 @@
+<configuration xmlns="http://logging.apache.org/log4php/">
+    <appender name="CPFileAppender" class="LoggerAppenderDailyFile">
+        <layout class="LoggerLayoutPattern">
+            <param name="conversionPattern" value="%date [%logger] %message%newline" />
+        </layout>
+        <param name="file" value="/var/pos/log/pos-%s.log" />
+         <param name="datePattern" value="Y-m-d" />
+    </appender>
+    <root>
+        <level value="ALL" />
+        <appender_ref ref="CPFileAppender" />
+    </root>
+</configuration>
