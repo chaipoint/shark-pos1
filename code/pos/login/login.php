@@ -4,6 +4,10 @@
 		private $configData;
 		public function __construct(){
 			parent::__construct();
+
+			$this->log =  Logger::getLogger("CP-POS|LOGIN");
+			
+
 			global $couch;
 			$this->cDB = $couch;
 			unset($_SESSION);
@@ -24,15 +28,15 @@
 		}
 
 		public function config($data){
-			$this->commonView('html_header');
-			$this->commonView('initial.config', array('data'=>$data));
-			$this->commonView('html_footer');			
+			$this->commonView('header_html');
+			$this->commonView('initial_config', array('data'=>$data));
+			$this->commonView('footer_html');			
 		}
 		
 		public function index(){
-			$this->commonView('html_header');
+			$this->commonView('header_html');
 			$this->view();
-			$this->commonView('html_footer');
+			$this->commonView('footer_html');
 
 		}
 		public function out(){
@@ -50,8 +54,12 @@
 		public function validate(){
 			$returnData = array('error'=>false,'message'=>"",'data'=>array());
 			if($_SERVER['REQUEST_METHOD'] === 'POST'){
+
+				$this->log->trace('POST DATA '."\r\n".json_encode($_POST));
+
 				$_POST['password'] = md5($_POST['password']);
-				$resultJSON = $this->cDB->getDesign('staff')->getList('getuser','staff_username')->execute($_POST);
+				$resultJSON = $this->cDB->getDesign('staff')->getList('getuser','staff_username')->execute($_POST);			
+
 				$result = $resultJSON;
 				if(!$result['error']){
 					session_start();
@@ -85,10 +93,12 @@
 					}
 					$_SESSION['user'] = $userData;
 
+					$this->log->trace('LOGIN HISTORY '."\r\n".json_encode($loginHistory));
+					$this->log->trace('SESSION DATA '."\r\n".json_encode($userData));
+
 
 					$returnData['data']['redirect'] = 'index.php?dispatch=billing.index'; 
 					//$returnData['data']['redirect'] = 'index.php?dispatch=billing.index'; 
-
 
 				}else{
 					$returnData['error'] = true;
@@ -102,6 +112,8 @@
 				$returnData['error'] = true;
 				$returnData['message'] = "Invalid Request";
 			}
-			return json_encode($returnData);
+			$re = json_encode($returnData);
+			$this->log->trace('RESPONSE '."\r\n".$re);
+			return $re;
 		}
 	}
