@@ -1,3 +1,8 @@
+
+window.addEventListener("offline", function(e) {alert("offline");})
+window.addEventListener("online", function(e) {alert("online");})
+//navigator.onLine
+
 $(document).ready(function(){
 
 			$("#error_message").hide(); //Hide Error Message Block on Load of Content
