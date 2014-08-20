@@ -26,12 +26,37 @@
 								$return['message'] = $result['message'];								
 							}
 						break;
+					case 'config_sync_bt':
+							$result = $this->repConfig();
+					break;
+					case 'design_sync_bt':
+							$result = $this->repDesign();
+					break;
+					case 'billing_stop_sync_bt':
+							$rep = json_decode('[{"pid":"<0.19819.0>","checkpoint_interval":5000,"checkpointed_source_seq":259,"continuous":true,"doc_id":null,"doc_write_failures":0,"docs_read":1,"docs_written":1,"missing_revisions_found":1,"progress":100,"replication_id":"21b9ee56f33d6ec7e12c737f46f4a7b6+continuous","revisions_checked":1,"source":"http://127.0.0.1:5984/testing/","source_seq":259,"started_on":1408442813,"target":"http://pos:*****@54.249.247.15:5984/vente_ho_db/","type":"replication","updated_on":1408443075},{"pid":"<0.20189.0>","checkpoint_interval":5000,"checkpointed_source_seq":259,"continuous":true,"doc_id":null,"doc_write_failures":0,"docs_read":256,"docs_written":256,"missing_revisions_found":256,"progress":100,"replication_id":"cee10645c91448e7e411aff39d56a9f1+continuous","revisions_checked":257,"source":"testing","source_seq":259,"started_on":1408443071,"target":"rk","type":"replication","updated_on":1408443076}]',true);
+							//print_r($rep);
+							foreach($rep as $key => $value){
+								$this->cDB->replicate()->execute(array('replication_id'=>$value['replication_id'], 'cancel'=>true));
+							}
+					break;
 				}
 			}else{
 				$return['error'] = true;
 				$return['message'] = "Not allowed to follow this action";
 			}
 			return  json_encode($return);
+		}
+		function repConfig(){
+			$return = array('error'=>false, 'message'=>'');
+			$source = $this->cDB->getRemote();
+			$target = $this->cDB->getUrl().$this->cDB->getDB();
+			$result = $this->cDB->replicate()->execute(array('source'=>$source, 'target'=>$target, 'filter'=>'doc_replication/config_replication'));
+			if(array_key_exists('ok', $result) && $result['ok']){
+
+			}else{
+				$return = array('error'=>true, 'message'=>'OOPS! Some Problem Contact Admin');
+			}			
+			return $return;
 		}
 		function initial(){
 			$return = array('error'=>false, 'message'=>'');
@@ -66,6 +91,7 @@
 			return $return; 
 
 		}
+
 		function getStaff($location, $rep){
 			$return = array('error'=>false,'message'=>'');
 			if(empty($location)){
@@ -139,13 +165,13 @@
 		}
 		function repDesign($rev = false){
 			$return = array('error'=>false, 'message'=>'');
-			if($rev){
+			//if($rev){
 				$source = $this->cDB->getRemote();
 				$target = $this->cDB->getUrl().$this->cDB->getDB();
-			}else{
+		//	}else{
 				$source = $this->cDB->getUrl().$this->cDB->getDB();
 				$target = $this->cDB->getRemote();
-			}
+		//	}
 			$result = $this->cDB->replicate()->execute(array('source'=>$source, 'target'=>$target, 'filter'=>'doc_replication/design_replication'));
 			if(array_key_exists('ok', $result) && $result['ok']){
 
@@ -220,7 +246,7 @@
            				"map"=> "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill' && !doc.mysql_id){ emit(doc.bill_no, null); } }"
        				),
        				"bill_by_current_date" => array(
-       					"map" => "function(doc) {if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill') { var bill_date = doc.bill_time.split(' '); emit([bill_date[0],doc.payment_type],doc); }}"
+       					"map" => "function(doc) {if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill') { var bill_date = doc.bill_time.split(' '); emit([bill_date[0],doc.payment_type],null); }}"
        				),
        				"sales_summary" => array(
        					"map" => "function(doc) {if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill') { var bill_date = doc.bill_time.split(' '); for(var product_id in doc.items){ emit([bill_date[0],doc.items[product_id].categroy_name,doc.payment_type],parseInt(doc.items[product_id].netAmount));}}}",
@@ -237,7 +263,7 @@
 				'language' => 'javascript', 
 				'views' => array(
 					"store_mysql_id"=>array(
-						"map"=>"function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'store_master'){ emit(doc.mysql_id,doc); } }"
+						"map"=>"function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'store_master'){ emit(doc.mysql_id,null); } }"
 						)
 				)
 			);
@@ -263,7 +289,8 @@
 					'staff_replication' => "function(doc,req){ if(doc.cd_doc_type && doc.cd_doc_type == 'staff_master' && doc.location_id == req.query.location) { return  true;}else{return  false;} }",
 					'store_replication' => "function(doc,req){ if(doc.cd_doc_type && doc.cd_doc_type == 'store_master' && doc.mysql_id == req.query.mysql_id) {return  true;}else{return  false;} }",
 					'design_replication' => "function(doc,req){ if(doc.language || (doc.cd_doc_type && doc.cd_doc_type == 'bill_counter')) {return  true;}else{return  false;} }",
-					'bill_replication' =>"function(doc, req){ if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill' && !doc.mysql_id){ return true;} else { return false;}} "
+					'bill_replication' =>"function(doc, req){ if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill' && !doc.mysql_id){ return true;} else { return false;}}",
+					'config_replication' => "function(doc, req){ if(doc.cd_doc_type && doc.cd_doc_type == 'config_master'){ return true;} else { return false;}}"
 				),
 			);
 
@@ -272,7 +299,7 @@
    				"language" => "javascript",
    				"views" => array(
    						"config_list" => array(
-   								"map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type=='config_master'){  emit(doc.category_name, doc); }}"
+   								"map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type=='config_master'){  for( var key in doc.category_data){ emit([doc.category_code, key], doc.category_data[key]); }}}"
    							)
    					)
 			);
