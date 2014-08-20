@@ -1,0 +1,2 @@
+﻿<?php /* This file encoded by Raizlabs PHP Obfuscator http://www.raizlabs.com/software */ ?>
+<?php               class SVType {    const SWITCH_LOYALTY = 1;    const WEBPOS_GIFTCARD = 2;    const WEBPOS_LOYALTY = 3;   }      ?>
