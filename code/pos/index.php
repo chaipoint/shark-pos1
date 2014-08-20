@@ -3,8 +3,14 @@
 
 	global $couch;
 	/*Configuration Class For Whole Application*/
-	require_once 'common/app.config.php';
-	require_once 'common/couchdb.phpclass.php';
+
+	require_once 'lib/log4php/Logger.php';
+	Logger::configure('common/config.xml');
+	$logger = Logger::getLogger("CP-POS|INDEX");;
+	
+
+	require_once 'common/app_config.php';
+	require_once 'common/couchdb_phpclass.php';
 
 	$appConfig = new App_config();
 
@@ -18,10 +24,13 @@
 	define(	'MODULE',	$appConfig->getModule()	);
 	define(	'MODE',		$appConfig->getMode()	);
 	define(	'IMG',		$appConfig->getImg()	);
-
+	
+	$logger->trace('Dispatch '.MODULE.".".MODE);
+	
 	if(file_exists(MODULE."/".MODULE.".php")){
 		require_once MODULE."/".MODULE.".php";
 	}else{
+		$logger->trace('Module Not Found {'.MODULE.'}');
 		echo "Unable To Process Request, Call To Undifiend Module";
 		die();
 	}
@@ -32,6 +41,7 @@
 		$method = MODE;
 		echo $class->$method();
 	}else{
+		$logger->trace('Mode Not Found '.MODULE.'{'.MODE.'}');
 		echo "Unable To Process Request, Call To Undifiend File";
 	}
 
