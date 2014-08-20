@@ -5,13 +5,15 @@
 			parent::__construct();
 			global $couch;
 			$this->cDB = $couch;
+			$this->log =  Logger::getLogger("CP-POS|BILLING");
 		}
 		function index(){
 			$resultJSON = $this->cDB->getDesign('store')->getView('store_mysql_id')->setParam(array('include_docs'=>'true',"key"=>'"'.$_SESSION['user']['store']['id'].'"'))->execute();
-			$result = $resultJSON['rows'][0]['value'];
+//			print_r();
+			$result = $resultJSON['rows'][0]['doc'];
 			if(!array_key_exists('mysql_id', $_SESSION['user']['store'])){
-				unset($resultJSON['rows'][0]['value']['menu_items']);
-				foreach($resultJSON['rows'][0]['value'] as $key => $data){
+				unset($resultJSON['rows'][0]['doc']['menu_items']);
+				foreach($resultJSON['rows'][0]['doc'] as $key => $data){
 					$_SESSION['user']['store'][$key] = $data;
 				}
 			}
@@ -29,17 +31,19 @@
   			$firstCat = $currectCat[0];
 
 
-			$this->commonView('html_header');
+			$this->commonView('header_html');
 			$this->commonView('navbar');
 			$this->view(array('catList'=>$catList,'productList'=>$productList,'firstCat'=>$firstCat));
-			$this->commonView('inner_footer');
-			$this->commonView('html_footer');
+			$this->commonView('footer_inner');
+			$this->commonView('footer_html');
 		}
 		function save(){
 			global $couch;
 			$return = array('error'=>false,'message'=>'','data'=>array());
 			if($_SERVER['REQUEST_METHOD'] == 'POST'){
 				if(array_key_exists('request_type', $_POST) && $_POST['request_type'] == 'save_bill'){
+					$this->log->trace("DATA \r\n".json_encode($_POST));
+
 					$_POST['cd_doc_type'] = 'store_bill';
 					$_POST['bill_time'] = $this->getCDTime();
 
@@ -80,7 +84,9 @@
 				$return['error'] = true;
 				$return['message'] = 'Request Method Not Allowed';
 			}
-			return json_encode($return);
+			$re = json_encode($return);
+			$this->log->trace("RESPONSE \r\n".$re);
+			return $re;
 		}
 
 		public function getSaleBills(){
