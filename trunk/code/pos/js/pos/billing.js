@@ -7,8 +7,41 @@ var $totalAmountWT = 0.0;
 var $totalBillQty = 0;
 var $intDiscount = 0;
 var $totalDiscountAmount = 0.0;
-
+var order = 0;
+var loadedBill = null;
 $(document).ready(function(){
+
+
+	var url = $.url(window.location);
+	order = url.param('order');
+	if(order && order > 0 && ! isNaN(order)){
+		/*
+		*	PLEASE Don't Change This code Block Without Prior Permission
+		*/
+		var orderData = $.parseJSON(localStorage.getItem(order));
+		loadedBill = orderData;
+		//console.log(loadedBill);
+		if(orderData){
+			localStorage.removeItem(order);			
+			var productNewList = new Object();
+			$.each(productArray, function(index, data){
+				var category = index;
+				$.each(data, function(pIndex, pData){
+					productNewList[pData.mysql_id]  = new Object();
+					productNewList[pData.mysql_id].cat = category;
+					productNewList[pData.mysql_id].seq = pIndex;
+				});
+			});
+
+
+			$.each(orderData.products, function (index, data){
+				var productData = productArray[productNewList[data['id']].cat] [productNewList[data['id']].seq];
+				$('#proajax button[category-product-sequence="'+productNewList[data['id']].seq+'"]').addClass('active-btn');
+				generateSalesTable(data['id'], parseInt(data['qty']), productData);
+			});
+		}
+	}
+	//console.log();
 	//---START--- Initial Configurations on Load Of Page
 
 
@@ -112,6 +145,10 @@ $(document).ready(function(){
 				$("#paid_by").val('');
 				$(".payment-type-bt").removeClass('btn-success').addClass('btn-primary');
 				$("#paid-amount").prop('autofocus',true);
+				if(loadedBill){
+					$('.payment-type-bt[data-value="'+loadedBill.payment_method+'"]').trigger('click');
+					$("#paid-amount").val(Math.ceil($totalAmountWT.toFixed(2)));
+				}
 
 			}
 		});
@@ -121,7 +158,8 @@ $(document).ready(function(){
 		//---END--- Payment Event After Products selection  or Without Product Selection
 
 		//---START--- SUbmit Payment Bill
-		$("#submit-sale").click(function(){
+		$("#submit-sale").click(function(event){
+			event.preventDefault();
 			if(!$('#paid-amount').val()){
 				bootbox.alert("Please Enter Payment Amount");
 				return false;
@@ -150,7 +188,6 @@ $(document).ready(function(){
 			billDetails.round_off = Math.ceil(billDetails.total_amount) - billDetails.total_amount;
 			billDetails.due_amount = billDetails.total_amount + billDetails.round_off;
 			billDetails.discount = $intDiscount;
-
 /*			billDetails.location_id = $totalBillQty;
 			billDetails.location_name = $totalBillQty;
 			billDetails.store_id = store_id;
@@ -162,7 +199,11 @@ $(document).ready(function(){
 			billDetails.items = new Object();
 			billDetails.items = $billingItems;
 			billDetails.request_type = 'save_bill';
+			billDetails.order_no = (loadedBill && loadedBill.order_id) ? loadedBill.order_id : 0;
+
+
 			$("div.ui-keyboard").hide();
+
 			$.ajax({
 				type: 'POST',
 				url: "index.php?dispatch=billing.save",
@@ -171,7 +212,7 @@ $(document).ready(function(){
 				console.log(response);
 				result = $.parseJSON(response);
 				if(result.error){
-					bootbox.alert('OOPS! Some Error Please Contect Admin');
+					bootbox.alert(result.message);
 				}else{
 					$('#payModal').modal('hide');
 					bootbox.alert('Bill Successfully Saved');
