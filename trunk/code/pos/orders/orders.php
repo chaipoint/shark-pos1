@@ -3,24 +3,40 @@
 		function __construct(){
 			parent::__construct();
 			$this->log =  Logger::getLogger("CP-POS|ORDERS");
+			global $sql_host, $sql_user, $sql_password, $sql_db;
+			$sql_host = 'localhost' ;
+			$sql_user = 'root';
+			$sql_password = 'root';
+			$sql_db = 'cpos';			
+			$this->db = new Database();
+
 		}	
 		function updateOrderStatus(){
-			print_r($_POST);
-			/*Array( [new_status] => Dispatched [current_status] => Confirmed)*/
+			$return = array('error' => false, 'message' => '', 'data' => array());
 			if(array_key_exists('new_status', $_POST) && array_key_exists('current_status', $_POST)){
 				$current = $_POST['current_status'];
 				$new = $_POST['new_status'];
 				if(array_key_exists('order', $_POST) && is_numeric($_POST['order'])){
 					$order = $_POST['order'];
+						$updateStatus = "UPDATE cp_orders SET ".(array_key_exists('reason', $_POST) ? " cancel_reason = '".mysql_real_escape_string($_POST['reason'])."', " : '')." status = '".$new."', updated_by = ".$_SESSION['user']['mysql_id'].", updated_date = '".$this->getCDTime()."' where id = ".$order." and status = '".$current."'";
+						$this->db->db_query($updateStatus);
+						if( ! $this->db->db_affected_rows()){
+							$selectStatus = "SELECT status FROM cp_orders Where id = ".$order;
+							$result = $this->db->func_query_first($selectStatus);
+							$return = array('error' => true, 'message' => 'Status Already Changed to <b>'.$result['status'].'</b>', 'data' => array('status'=>$result['status']));
+						}
 				}else{
-
+					$return['error'] = true;
+					$return['message'] = "Invalid Order";
 				}
-
-
+			}else{
+				$return['error'] = true;
+				$return['message'] = "Provide Status";				
 			}
+			return json_encode($return);
 		}
 
-				function coc(){
+		function coc(){
 			global $sql_host, $sql_user, $sql_password, $sql_db;
 			$sql_host = 'localhost' ;
 			$sql_user = 'root';
@@ -33,22 +49,28 @@
 				$status = $_GET['status'];
 			}
 
-			$actionButtons = '';
+			$actionButtons = '<div class="btn-group-horizontal">';
 			switch($status){
 				case 'New':
 					$actionButtons .= '<button class="btn btn-sm btn-primary bt-update-status" data-new_status="Confirmed" data-current_status="'.$status.'">Confirm</button>';
+					$actionButtons .= '<button class="btn btn-sm btn-primary bt-update-status" data-new_status="Cancelled" data-current_status="'.$status.'">Cancel</button>';
+					break;
 				case 'Confirmed':
 					$actionButtons .= '<button class="btn btn-sm btn-primary bt-update-status" data-new_status="Cancelled" data-current_status="'.$status.'">Cancel</button>';
 					$actionButtons .= '<button class="btn btn-sm btn-primary bt-update-status" data-new_status="Dispatched" data-current_status="'.$status.'">Dispatch</button>';
+					break;
 				case 'Dispatched':
 					$actionButtons .= '<button class="btn btn-sm btn-primary" data-new_status="Delivered" data-current_status="'.$status.'">Deliver</button>';
+					break;
 				case 'Delivered':
 				case 'Paid':
 					$actionButtons .= '<button class="btn btn-sm btn-primary">Paid</button>';
 				case 'Cancelled':
 			}
+			$actionButtons .= '<button class="btn-sm btn btn-default"><i class="glyphicon glyphicon-print"></i></button></div>';
 
-			$getList = "SELECT 	co.id order_id, co.comment comment, sm.name store_name, co.store_id, co.comment, 
+
+			$getList = "SELECT 	co.cancel_reason, co.id order_id, co.comment comment, sm.name store_name, co.store_id, co.comment, 
 	            delivery_time, delivery_date, status, payment_method,  co.net_amount, co.total_amount,
 	            coa.locality,coa.sublocality,coa.floor,coa.flat,coa.building,coa.email,
 			    date_format(date(co.created_date),'%d-%b-%y') order_date,
@@ -79,6 +101,7 @@
 		foreach($orderListDetailed as $key => $orderDetails){
 			$i = $orderListDetailed [$key]['order_id'];
 			$orderList[$i]['order_id'] = $orderListDetailed [$key]['order_id'];
+			$orderList[$i]['cancel_reason'] = $orderListDetailed [$key]['cancel_reason'];
 			$orderList[$i]['delivery_status'] = $orderListDetailed [$key]['delivery_status'];
 			$orderList[$i]['actual_delivery_time'] = $orderListDetailed [$key]['final_delivery_time'];
 			$orderList[$i]['time_passed'] = $orderListDetailed [$key]['time_passed'];
@@ -124,7 +147,7 @@
 
 			$this->commonView('header_html');
 			$this->commonView('navbar');
-			$this->view(array('orders'=>$orderList,'action'=>$actionButtons));
+			$this->view(array('orders'=>$orderList,'action'=>$actionButtons, 'status'=>$status));
 			$this->commonView('footer_inner');
 			$this->commonView('footer_html');
 		}
