@@ -85,5 +85,6 @@ if(is_array($bill_data) && count($bill_data)>0) {
 
 <script>
 var oTable = null;
-oTable = createDataTable();
+var media_path = "<?php echo JS;?>";
+oTable = createDataTable(media_path);
 </script>
