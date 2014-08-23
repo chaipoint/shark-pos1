@@ -62,7 +62,7 @@
 					$_POST['staff_name'] = $_SESSION['user']['name'];
 					$_POST['location_id'] = $_SESSION['user']['store']['location']['id'];
 					$_POST['location_name'] = $_SESSION['user']['store']['location']['name'];
-					$_POST['bill_status'] = 'open';
+				//	$_POST['bill_status'] = 'open';
 					$_POST['reprint'] = 0;
 					$_POST['is_updated'] = 'N';
 				//	$_POST['channel'] = 'store';
