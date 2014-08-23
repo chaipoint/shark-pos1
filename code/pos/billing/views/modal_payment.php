@@ -6,6 +6,13 @@
 				<h4 class="modal-title" id="payModalLabel">Payment</h4>
 			</div>
 			<form method="post" name="payment-form" id="payment-form">
+				<input type="hidden" name="delivery_chanel" id="delivery_chanel">
+				<input type="hidden" name="booking_channel" id="booking_channel">
+				<input type="hidden" name="is_cod" id="is_cod">
+				<input type="hidden" name="is_prepaid" id="is_prepaid">
+				<input type="hidden" name="is_credit" id="is_credit">
+				<input type="hidden" name="order_status" id="order_status">
+				<input type="hidden" name="cancel_reason" id="cancel_reason">
 			<div class="modal-body">
 				<table class="table table-striped">
 					<tbody>
