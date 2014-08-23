@@ -62,6 +62,18 @@
 					$_POST['counter'] = '1';
 					$_POST['shift'] = '1';
 
+					if( $_POST['order_no'] > 0 ){
+						$orderNO = $this->cDB->getDesign('billing')->getView('bill_by_order')->setParam(array('key'=> '"'.$_POST['order_no'].'"' ))->execute();
+						if(array_key_exists(0, $orderNO['rows'])){
+								$return['error'] = true;
+								$return['message'] = "Order Already Billed";
+								$re = json_encode($return);
+								$this->log->trace("RESPONSE \r\n".$re);
+								return $re;							
+						}
+						//http://127.0.0.1:5984/testing/_design/billing/_view/bill_by_order?key=%2211834%22
+					}
+
 
 					$currentBillNo = $couch->getDesign('billing')->getUpdate('getbillno','generateBill')->setParam(array('month'=>$this->getCMonth()))->execute();
 					if(is_numeric($currentBillNo)){
