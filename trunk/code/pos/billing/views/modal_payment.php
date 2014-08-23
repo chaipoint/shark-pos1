@@ -25,9 +25,18 @@
 							</td>
 							<td width="50%">
 								<span class="inv_cus_con"> 
-									<select class="form-control pcustomer" id="billing_customer">
-										<option value="wic">Walk-in Client</option>
-									</select>
+									<input type="text" id="billing_customer" class="form-control" name="billing_customer" value="Walkin Client"/>	
+								</span>
+							</td>
+						</tr>
+						<tr>
+							<td width="50%">Phone Number <!--<a href="#"
+									class="btn btn-primary btn-xs showCModal"><i
+										class="glyphicon glyphicon-plus-sign"></i> Add Customer </a>-->
+							</td>
+							<td width="50%">
+								<span class="inv_cus_con"> 
+									<input type="text" id="phone_number" class="form-control" name="phone_number"/>	
 								</span>
 							</td>
 						</tr>
@@ -35,12 +44,6 @@
 							<td>Total Payable Amount :</td>
 							<td>
 								<h3 style="margin:0px;"><span id="twt" class="label label-warning"></span></h3> 
-							</td>
-						</tr>
-						<tr>
-							<td>Total Purchased Items :</td>
-							<td>
-								<h3 style="margin:0px;"><span class="label label-warning" id="fcount"></span></h3>
 							</td>
 						</tr>
 						<tr>
