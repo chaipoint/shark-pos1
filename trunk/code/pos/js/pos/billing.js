@@ -134,7 +134,7 @@ $(document).ready(function(){
 			}
 		});
 		$("#payment").click(function(){
-			$("#fcount").text($totalBillQty);
+			//$("#fcount").text($totalBillQty);
 			$("#twt").text(Math.ceil($totalAmountWT.toFixed(2)));
 			if($totalBillQty == 0){
 				bootbox.alert('Please add product to sale first');
@@ -264,7 +264,8 @@ $(document).ready(function(){
 					$('#payModal').modal('hide');
 					bootbox.alert('Bill Successfully Saved');
 					//<a class="label label-primary print-bill-today" href="billprint.php?bill_no='+result.data.bill_no+'" target="_blank">Print</a>
-					resetBill(true);					
+					resetBill(true);	
+					$intDiscount = 0;
 				}
 			});
 		});
@@ -477,7 +478,7 @@ $(document).ready(function(){
 	$("#add_discount").click(function(){
 		var dval=$('#discount_val').val(); 
 		bootbox.dialog({
-			message:"<input type='text' class='form-control input-sm' id='get_ds' onClick='this.select();' value='"+$intDiscount+"'></input>",
+			message:"<input type='text' class='form-control input-sm' id='get_ds' onClick='this.select();' value='"+(($intDiscount == 0) ? '' : $intDiscount)+"'></input>",
 			title:"Discount (%)",
 			buttons:{
 				main:{
@@ -617,6 +618,7 @@ function resetBill(refresh){
 	$totalAmountWT = 0.0;
 	$totalTaxAmount = 0.0;
 	$totalDiscountAmount = 0.0;
+	//$intDiscount = 0;
 	$("#count").text($totalBillQty);		
 	$("#total").text($totalAmountWOT);
 	$("#total-payable").text($totalAmountWT);	
