@@ -259,9 +259,11 @@ $(document).ready(function(){
 								console.log(index+"=>"+JSON.stringify(details));
 								trs += '<tr><td>'+index+'</td>';
 										
-										$.each(details, function(subIndex, subDetails){
-								trs += '<td class="text-center">'+subDetails+'</td>';
-							});
+										$.each(result.data.payment_type, function(subIndex, subDetails){
+											trs += '<td class="text-center">'+(details[subIndex] ?  details[subIndex] : 0)+'</td>';
+										});
+
+
 						    trs += '</tr>';
                             });
 							trh += '<tr><th></th>';
