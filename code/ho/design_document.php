@@ -27,6 +27,9 @@ function init(){
     '_id'=>'_design/billing',
     'language' => 'javascript', 
     'views' => array(
+      "bill_by_order" =>  array(
+               "map"=> "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill' && doc.order_no > 0){ emit(doc.order_no,null); } }"
+           ),
      "bill_no"=>array(
       "map"=>"function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill'){ emit(doc.bill_no,null); } }"
       ),
