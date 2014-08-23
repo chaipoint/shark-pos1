@@ -260,29 +260,33 @@ $(document).ready(function(){
 							var trs = "";
 							var trh = "";
 							var tfs = "";
+							var tfs_total = 0;
 							
 							
 							$.each(result.data.summary,function(index,details){
 								console.log(index+"=>"+JSON.stringify(details));
 								trs += '<tr><td>'+index+'</td>';
+								var total = 0;
 										
 										$.each(result.data.payment_type, function(subIndex, subDetails){
 											trs += '<td class="text-center">'+(details[subIndex] ?  details[subIndex] : 0)+'</td>';
+											total += (details[subIndex] ?  details[subIndex] : 0);
+											
 										});
 
-
-						    trs += '</tr>';
+                            trs += '<td class="text-center">'+total+'</td></tr>';
                             });
 							trh += '<tr><th></th>';
 							$.each(result.data.payment_type,function(index,details){
 								console.log(index+"=>"+JSON.stringify(details));
 								trh += '<th>'+index+'</th>';
 								tfs += '<th class="text-center">'+details+'</th>';
+								tfs_total += parseFloat(details);
 							});
-							trh += '</tr>';
+							trh += '<th class="text-center">Total</th></tr>';
 							$("#today-sale-table thead").html(trh);
 							$("#today-sale-table tbody").html(trs);
-							$("#today-sale-table tfoot").html('<tr class="success"><th>Total</th>'+tfs+'</tr>');
+							$("#today-sale-table tfoot").html('<tr class="success"><th>Total</th>'+tfs+'<th class="text-center">'+tfs_total+'</th></tr>');
 
 	//				}
 				} 
