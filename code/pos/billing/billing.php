@@ -108,7 +108,7 @@
 //				$return['data']  = array_reverse($bills['rows']);
 				//print_r($bills['rows']);
 				$bill_array = array();
-                $payment_type = array('cash'=>0,'ppc'=>0);
+                $payment_type = array('cash'=>0,'ppc'=>0,'c_card'=>0);
 				foreach ($bills['rows'] as $key => $value) {
 					$bill_array[$value['key'][1]][$value['key'][2]]=$value['value'];
 					
