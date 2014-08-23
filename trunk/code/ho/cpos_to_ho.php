@@ -322,6 +322,7 @@ function updateConfig(){
   
   if(array_key_exists('error', $result)){
   	$logger->debug("ERROR:Config Setting Not Updated IN CouchDb");
+  	$logger->debug("data:".json_encode($result));
     $html['error'] = true;
 	$html['update'] = false;
 	$html['msg'] = 'Some Error Please Contact Admin';
