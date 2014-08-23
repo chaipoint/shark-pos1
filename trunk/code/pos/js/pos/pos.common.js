@@ -1,4 +1,4 @@
-$(document).ready(function(){
+$(document).ready(function(){ 
 	$("#pos_sync").click(function(){
 		$("#sync-modal").modal('show');
 		$('.alert',$("#sync-modal")).remove();
@@ -29,3 +29,25 @@ $(document).ready(function(){
 		});
 	});
 });
+
+var createDataTable = function () { 
+    var oTable=null;
+		if(oTable!=null){
+			oTable.destroy();
+		}
+		
+		oTable = $('#fileData').DataTable({
+			"dom": 'T<"H"lfr>t<"F"ip>',
+			"tableTools": {
+					"sSwfPath": "swf/copy_csv_xls_pdf.swf",		
+					"aButtons": ["csv",{
+					"sExtends": "pdf",
+					"sPdfOrientation": "landscape",
+					"sPdfMessage": "Your custom message would go here."
+					},"print"	]
+			},						
+			paging: true,
+			"jQueryUI": true,
+			"bSort": true,
+		});
+}
