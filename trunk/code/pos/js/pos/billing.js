@@ -149,12 +149,20 @@ $(document).ready(function(){
 
 				$("#delivery_channel").val(delivery_channel['Take Away']);
 				$("#delivery_channel_name").val('Take Away');
+				$("#is_cod").val('N');
+				$("#is_prepaid").val('Y');
+				$("#is_credit").val('N');
+				$("#bill_status").val('Paid');
 
 				if(loadedBill){
 					$('.payment-type-bt[data-value="'+loadedBill.payment_method+'"]').trigger('click');
 					$("#paid-amount").val(Math.ceil($totalAmountWT.toFixed(2)));
 					$("#delivery_channel").val(delivery_channel['Home Delivery']);
 					$("#delivery_channel_name").val('Home Delivery');
+					$("#is_cod").val('Y');
+					$("#is_prepaid").val('N');
+					$("#is_credit").val('N');
+					$("#bill_status").val('CoD');
 			}
 
 			}
@@ -184,27 +192,50 @@ $(document).ready(function(){
 
 			}
 			var billDetails = new Object();
-			billDetails.total_qty = $totalBillQty;
-			billDetails.total_amount = $totalAmountWT;
-			billDetails.payment_type = $("#paid_by").val();
-			billDetails.customer = $("#billing_customer").val();
+			billDetails.items = new Object();
+			billDetails.items = $billingItems;
 
+			billDetails.total_qty = $totalBillQty;
 			billDetails.sub_total = $totalAmountWOT.toFixed(2);
 			billDetails.total_tax = ($totalTaxAmount).toFixed(2);
+			billDetails.discount = $intDiscount;
 			billDetails.total_discount = $totalDiscountAmount;
+			billDetails.total_amount = $totalAmountWT;
 			billDetails.round_off = Math.ceil(billDetails.total_amount) - billDetails.total_amount;
 			billDetails.due_amount = billDetails.total_amount + billDetails.round_off;
-			billDetails.discount = $intDiscount;
+			billDetails.paid_amount = $('#paid-amount').val();
+			
+
+			billDetails.payment_type = $("#paid_by").val();
 
 			billDetails.is_cod = $("#is_cod").val();
 			billDetails.is_prepaid = $("#is_prepaid").val();
 			
 			billDetails.is_credit = $("#is_credit").val();
-			billDetails.order_status = $("#order_status").val();
+			billDetails.bill_status = $("#bill_status").val();
 
 			billDetails.booking_channel = $("#booking_channel").val();
 			billDetails.delivery_channel_id = $("#delivery_channel").val();
 			billDetails.delivery_channel_name = $("#delivery_channel_name").val();
+			billDetails.order_no = (loadedBill && loadedBill.order_id) ? loadedBill.order_id : 0;
+
+			billDetails.customer = new Object();
+			billDetails.customer.name = '';
+			billDetails.customer.city = '';
+			billDetails.customer.locality = '';
+			billDetails.customer.sub_locality = '';
+			billDetails.customer.land_mark = '';
+			billDetails.customer.phone_no = '';
+			billDetails.customer.company_name = '';
+
+			billDetails.card = new Object();
+			billDetails.card.no = '';
+			billDetails.card.type = '';
+			billDetails.card.company = '';
+			billDetails.card.redeem_amount = '';
+			billDetails.card.txn_no = '';
+			billDetails.card.balance = '';
+
 
 
 /*			billDetails.location_id = $totalBillQty;
@@ -215,10 +246,7 @@ $(document).ready(function(){
 			billDetails.staff_name = staff_name;
 			/***/
 
-			billDetails.items = new Object();
-			billDetails.items = $billingItems;
 			billDetails.request_type = 'save_bill';
-			billDetails.order_no = (loadedBill && loadedBill.order_id) ? loadedBill.order_id : 0;
 
 
 			$("div.ui-keyboard").hide();
