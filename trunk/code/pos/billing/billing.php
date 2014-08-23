@@ -56,7 +56,7 @@
 					$_POST['bill_status'] = 'open';
 					$_POST['reprint'] = 0;
 					$_POST['is_updated'] = 'N';
-					$_POST['channel'] = 'store';
+				//	$_POST['channel'] = 'store';
 					$_POST['card_no'] = 'XXXXX';
 					$_POST['coupon_code'] = 'XXXXX';
 					$_POST['counter'] = '1';
