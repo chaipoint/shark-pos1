@@ -145,6 +145,7 @@ $(document).ready(function(){
 				$("#paid_by").val('');
 				$(".payment-type-bt").removeClass('btn-success').addClass('btn-primary');
 				$("#paid-amount").prop('autofocus',true);
+				$("#is_cod").val('N');
 				if(loadedBill){
 					$('.payment-type-bt[data-value="'+loadedBill.payment_method+'"]').trigger('click');
 					$("#paid-amount").val(Math.ceil($totalAmountWT.toFixed(2)));
@@ -188,6 +189,17 @@ $(document).ready(function(){
 			billDetails.round_off = Math.ceil(billDetails.total_amount) - billDetails.total_amount;
 			billDetails.due_amount = billDetails.total_amount + billDetails.round_off;
 			billDetails.discount = $intDiscount;
+
+			billDetails.is_cod = $("#is_cod").val();
+			billDetails.is_prepaid = $("#is_prepaid").val();
+			
+			billDetails.is_credit = $("#is_credit").val();
+			billDetails.order_status = $("#order_status").val();
+
+			billDetails.booking_channel = $("#booking_channel").val();
+			billDetails.delivery_channel = $("#delivery_chanel").val();
+
+
 /*			billDetails.location_id = $totalBillQty;
 			billDetails.location_name = $totalBillQty;
 			billDetails.store_id = store_id;
