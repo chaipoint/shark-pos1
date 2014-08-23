@@ -11,10 +11,10 @@
 
 			//Block to get Configs and need to have a generic methode for that
 			$configList = $this->cDB->getDesign('config')->getView('config_list')->setParam(array('include_docs'=>'true',"startkey"=>'["bill_config"]',"endkey"=>'["bill_config",{}]'))->execute();
-			$deliveryChannel = array();
-			foreach($configList['rows'][0]['doc']['category_data']['delivery_channel'] as $key => $value){
+			$deliveryChannel = $configList['rows'][0]['doc']['category_data']['delivery_channel'];
+/*			foreach($configList['rows'][0]['doc']['category_data']['delivery_channel'] as $key => $value){
 				$deliveryChannel[$value] = $key;
-			}
+			}/**/
 
 
 			$resultJSON = $this->cDB->getDesign('store')->getView('store_mysql_id')->setParam(array('include_docs'=>'true',"key"=>'"'.$_SESSION['user']['store']['id'].'"'))->execute();
