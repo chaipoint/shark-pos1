@@ -146,10 +146,16 @@ $(document).ready(function(){
 				$(".payment-type-bt").removeClass('btn-success').addClass('btn-primary');
 				$("#paid-amount").prop('autofocus',true);
 				$("#is_cod").val('N');
+
+				$("#delivery_channel").val(delivery_channel['Take Away']);
+				$("#delivery_channel_name").val('Take Away');
+
 				if(loadedBill){
 					$('.payment-type-bt[data-value="'+loadedBill.payment_method+'"]').trigger('click');
 					$("#paid-amount").val(Math.ceil($totalAmountWT.toFixed(2)));
-				}
+					$("#delivery_channel").val(delivery_channel['Home Delivery']);
+					$("#delivery_channel_name").val('Home Delivery');
+			}
 
 			}
 		});
@@ -197,7 +203,8 @@ $(document).ready(function(){
 			billDetails.order_status = $("#order_status").val();
 
 			billDetails.booking_channel = $("#booking_channel").val();
-			billDetails.delivery_channel = $("#delivery_chanel").val();
+			billDetails.delivery_channel_id = $("#delivery_channel").val();
+			billDetails.delivery_channel_name = $("#delivery_channel_name").val();
 
 
 /*			billDetails.location_id = $totalBillQty;
