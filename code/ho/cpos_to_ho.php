@@ -294,8 +294,8 @@ function updateConfig(){
 	while($row = mysql_fetch_assoc($result)){
        
        if(array_key_exists($row['category_id'],$categoryList)){
-		$updateArray[$j]['_id'] = $categoryList[$row['category_name']]['_id'];
-        $updateArray[$j]['_rev'] = $categoryList[$row['category_name']]['_rev'];
+		$updateArray[$j]['_id'] = $categoryList[$row['category_id']]['_id'];
+        $updateArray[$j]['_rev'] = $categoryList[$row['category_id']]['_rev'];
         $updateCounter++;
 	    }
 
