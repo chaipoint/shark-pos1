@@ -169,8 +169,8 @@
 				$source = $this->cDB->getRemote();
 				$target = $this->cDB->getUrl().$this->cDB->getDB();
 		//	}else{
-				$source = $this->cDB->getUrl().$this->cDB->getDB();
-				$target = $this->cDB->getRemote();
+				//$source = $this->cDB->getUrl().$this->cDB->getDB();
+				//$target = $this->cDB->getRemote();
 		//	}
 			$result = $this->cDB->replicate()->execute(array('source'=>$source, 'target'=>$target, 'filter'=>'doc_replication/design_replication'));
 			if(array_key_exists('ok', $result) && $result['ok']){
