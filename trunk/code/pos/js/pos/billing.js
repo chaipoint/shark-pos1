@@ -147,8 +147,8 @@ $(document).ready(function(){
 				$("#paid-amount").prop('autofocus',true);
 				$("#is_cod").val('N');
 
-				$("#delivery_channel").val(delivery_channel['Take Away']);
-				$("#delivery_channel_name").val('Take Away');
+				$("#delivery_channel").val(7);
+				$("#delivery_channel_name").val(delivery_channel[7]);
 				$("#is_cod").val('N');
 				$("#is_prepaid").val('Y');
 				$("#is_credit").val('N');
@@ -157,8 +157,8 @@ $(document).ready(function(){
 				if(loadedBill){
 					$('.payment-type-bt[data-value="'+loadedBill.payment_method+'"]').trigger('click');
 					$("#paid-amount").val(Math.ceil($totalAmountWT.toFixed(2)));
-					$("#delivery_channel").val(delivery_channel['Home Delivery']);
-					$("#delivery_channel_name").val('Home Delivery');
+					$("#delivery_channel").val(8);
+					$("#delivery_channel_name").val(delivery_channel[8]);
 					$("#is_cod").val('Y');
 					$("#is_prepaid").val('N');
 					$("#is_credit").val('N');
