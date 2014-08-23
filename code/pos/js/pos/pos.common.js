@@ -30,7 +30,8 @@ $(document).ready(function(){
 	});
 });
 
-var createDataTable = function () { 
+var createDataTable = function (path) { 
+    var media_path = path;
     var oTable=null;
 		if(oTable!=null){
 			oTable.destroy();
@@ -39,7 +40,7 @@ var createDataTable = function () {
 		oTable = $('#fileData').DataTable({
 			"dom": 'T<"H"lfr>t<"F"ip>',
 			"tableTools": {
-					"sSwfPath": "swf/copy_csv_xls_pdf.swf",		
+					"sSwfPath": media_path+"/swf/copy_csv_xls_pdf.swf",		
 					"aButtons": ["csv",{
 					"sExtends": "pdf",
 					"sPdfOrientation": "landscape",
