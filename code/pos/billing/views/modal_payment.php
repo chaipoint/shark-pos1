@@ -12,8 +12,8 @@
 				<input type="hidden" name="is_cod" id="is_cod">
 				<input type="hidden" name="is_prepaid" id="is_prepaid">
 				<input type="hidden" name="is_credit" id="is_credit">
-				<input type="hidden" name="order_status" id="order_status">
 				<input type="hidden" name="cancel_reason" id="cancel_reason">
+				<input type="hidden" name="bill_status" id="bill_status">
 
 			<div class="modal-body">
 				<table class="table table-striped">
