@@ -246,20 +246,36 @@ $(document).ready(function(){
 					if(result.error){
 						bootbox.alert(result.message);
 					}else{
-						var totalBills = result.data.length;
-						if(totalBills>0){
-							var trs = "";
-							var totalAmount = 0;
-							$.each(result.data,function(index,details){
-								//console.log(index+"=>"+JSON.stringify(details));
-								trs += '<tr><td>'+details.key[1]+'</td><td>'+
-										details.value+'</td></tr>';
-										totalAmount += details.value;
-							});
-							$("#today-sale-table tbody").html(trs);
-							$("#today-sale-table tfoot").html('<tr class="success"><th>Total</th><th>'+totalAmount+'</th></tr>');
+						var totalBills = result.data.summary.length;
+						//console.log(result.data.summary.length);
 
-					}
+	//					if(totalBills>0){
+							var trs = "";
+							var trh = "";
+							var tfs = "";
+							
+							
+							$.each(result.data.summary,function(index,details){
+								console.log(index+"=>"+JSON.stringify(details));
+								trs += '<tr><td>'+index+'</td>';
+										
+										$.each(details, function(subIndex, subDetails){
+								trs += '<td class="text-center">'+subDetails+'</td>';
+							});
+						    trs += '</tr>';
+                            });
+							trh += '<tr><th></th>';
+							$.each(result.data.payment_type,function(index,details){
+								console.log(index+"=>"+JSON.stringify(details));
+								trh += '<th>'+index+'</th>';
+								tfs += '<th class="text-center">'+details+'</th>';
+							});
+							trh += '</tr>';
+							$("#today-sale-table thead").html(trh);
+							$("#today-sale-table tbody").html(trs);
+							$("#today-sale-table tfoot").html('<tr class="success"><th>Total</th>'+tfs+'</tr>');
+
+	//				}
 				} 
 			});
 		});
