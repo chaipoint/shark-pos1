@@ -7,7 +7,9 @@
 				</div>
 				<div class="modal-body">
 					<table class="table table-striped" style="margin-bottom: 0;" id="today-sale-table">
-						<tbody>
+						<thead>
+						</thead>
+                        <tbody>
 						</tbody>
 						<tfoot>
 						</tfoot>						
