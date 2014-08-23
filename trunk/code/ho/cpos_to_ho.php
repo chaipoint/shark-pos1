@@ -279,7 +279,7 @@ function updateConfig(){
 	    $logger->trace("Array of Existing Config Setting IN CouchDB: ".json_encode($categoryList));
 	}
 	
-    $getConfigDetail = 'SELECT GROUP_CONCAT(cpc.id) as mysql_id, category as category_id, crm.name as category_name,
+    $getConfigDetail = 'SELECT GROUP_CONCAT(cpc.id) as mysql_id, crm.id , category as category_id, crm.name as category_name,
 	                    GROUP_CONCAT(doc_key)AS doc_key, GROUP_CONCAT(doc_value)AS doc_value, crm.code as category_code
 	                    FROM cp_pos_config cpc
 	                    LEFT JOIN cp_reference_master crm ON crm.id = cpc.category AND crm.active = "Y"
@@ -309,7 +309,7 @@ function updateConfig(){
         $updateArray[$j]['cd_doc_type'] = 'config_master';
 		
 		for ($i=0; $i <count($keyexplode) ; $i++) {
-		$updateArray[$j]['category_data'][$keyexplode[$i]] = $valueexplode[$i];
+		$updateArray[$j]['category_data'][$keyexplode[$i]][$idexplode[$i]] = $valueexplode[$i];
         }
 		//$finalreturn[$row['category_name']] = $row;
       $j++;
