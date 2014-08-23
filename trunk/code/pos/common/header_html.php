@@ -22,19 +22,19 @@
 						<thead><tr><th>Download</th><th>Upload</th></tr></thead>
 						<tbody>
 							<tr>
-								<td class="text-center"><a class="btn btn-success sync-bt" id="store_sync_bt">Store</a></td>
-								<td class="text-center"><a class="btn btn-success sync-bt" id="billing_sync_bt">Start Billing</a></td>
+								<td class="text-center"><a class="btn btn-success sync-bt btn-sm col-lg-10" id="store_sync_bt">Store</a></td>
+								<td class="text-center"><a class="btn btn-success sync-bt btn-sm col-lg-10" id="billing_sync_bt">Start Billing</a></td>
 							</tr>
 							<tr>
-								<td class="text-center"><a class="btn btn-success sync-bt" id="staff_sync_bt">Staff</a></td>
-								<td class="text-center"><a class="btn btn-success sync-bt" id="billing_stop_sync_bt">Stop Billing</a></td>
+								<td class="text-center"><a class="btn btn-success sync-bt btn-sm col-lg-10" id="staff_sync_bt">Staff</a></td>
+								<td class="text-center"><a class="btn btn-success sync-bt btn-sm col-lg-10" id="billing_stop_sync_bt">Stop Billing</a></td>
 							</tr>
 							<tr>
-								<td class="text-center"><a class="btn btn-success sync-bt" id="config_sync_bt">Config</a></td>
+								<td class="text-center"><a class="btn btn-success sync-bt btn-sm col-lg-10" id="config_sync_bt">Config</a></td>
 								<td class="text-center">Attendance</td>
 							</tr>
 							<tr>
-								<td class="text-center"><a class="btn btn-success sync-bt" id="design_sync_bt">Design Docs</a></td>
+								<td class="text-center"><a class="btn btn-success sync-bt btn-sm col-lg-10" id="design_sync_bt">Design Docs</a></td>
 								<td class="text-center"></td>
 							</tr>
 						</tbody>
