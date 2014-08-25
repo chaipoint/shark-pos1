@@ -11,7 +11,7 @@
 
 			//Block to get Configs and need to have a generic methode for that
 			$configList = $this->cDB->getDesign('config')->getView('config_list')->setParam(array('include_docs'=>'true',"startkey"=>'["bill_config"]',"endkey"=>'["bill_config",{}]'))->execute();
-			$deliveryChannel = $configList['rows'][0]['doc']['category_data']['delivery_channel'];
+			$deliveryChannel = array_key_exists(0, $configList['rows']) ? $configList['rows'][0]['doc']['category_data']['delivery_channel'] : array();
 /*			foreach($configList['rows'][0]['doc']['category_data']['delivery_channel'] as $key => $value){
 				$deliveryChannel[$value] = $key;
 			}/**/
