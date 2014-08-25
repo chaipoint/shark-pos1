@@ -82,7 +82,7 @@
 			    date_format(CONCAT(delivery_date,' ', delivery_time), '%d-%b-%y %h:%i %p') delivery_time_details,
 			    coa.name name,coa.street, coa.landmark, coa.city, coa.address,
 			    rc.id customer_id, rc.name rc_name, rc.phone,rc.company_name company,
-			    rc.street rc_street, rc.landmark rc_landmark, rc.city rc_city, rc.address rc_address, rc.ppc_no rc_ppc_no, crm.name AS channel_name
+			    rc.street rc_street, rc.landmark rc_landmark, rc.city rc_city, rc.address rc_address, rc.ppc_no rc_ppc_no, crm.name channel_name, crm.id channel_id
 		    FROM cp_orders co
 			   LEFT JOIN cp_retial_customer rc on co.customer_id = rc.id
 			   LEFT JOIN store_master sm on co.store_id = sm.id
@@ -113,6 +113,7 @@
 			$orderList[$i]['net_amount'] = $orderListDetailed [$key]['net_amount'];
 			$orderList[$i]['comment'] = $orderListDetailed [$key]['comment'];
 			$orderList[$i]['channel_name'] = $orderListDetailed [$key]['channel_name'];
+			$orderList[$i]['channel_id'] = $orderListDetailed [$key]['channel_id'];
 			$orderList[$i]['t_amount'] = $orderListDetailed [$key]['total_amount'];
 			$orderList[$i]['store_name'] = $orderListDetailed [$key]['store_name'];
 			$orderList[$i]['store_id'] = $orderListDetailed [$key]['store_id'];
