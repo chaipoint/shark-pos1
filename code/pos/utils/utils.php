@@ -135,7 +135,7 @@
 					if(array_key_exists('only_store', $_GET) && $_GET['only_store']){
 					}else{
 						$resultJSON = $this->cDB->getDesign('store')->getView('store_mysql_id')->setParam(array('include_docs'=>'true',"key"=>'"'.$store.'"'))->execute();
-						$result = $resultJSON['rows'][0]['value'];
+						$result = $resultJSON['rows'][0]['doc'];
 						$resultFromStaff = $this->getStaff($result['location']['id'],true);
 						if($resultFromStaff['error']){
 							$return = array('error'=>true, 'message'=>$resultFromStaff['message']);						
@@ -147,9 +147,9 @@
 			}else{
 			//	$target = $this->cDB->getUrl().$this->cDB->getDB();
 			//	$result = $this->cDB->replicate()->execute(array('source'=>"http://54.249.247.15:5984/rakesh_cpos_ho", 'target'=>$target, 'filter'=>'doc_replication/store_replication', 'query_params'=>array("mysql_id"=>"1")));
-				$result = $this->cDB->executeRemote('_design/store/_view/store_mysql_id?key="1"');
+				$result = $this->cDB->executeRemote('_design/store/_view/store_mysql_id?include_docs=true&key="1"');
 				if(count($result['rows'])>0){
-					$storeData = $result['rows'][0]['value'];
+					$storeData = $result['rows'][0]['doc'];
 					$storeData['address'] = '';
 					$newResult = $this->cDB->saveDocument()->execute($storeData);
 					$location = $storeData['location']['id'];
