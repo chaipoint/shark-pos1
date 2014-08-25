@@ -131,4 +131,16 @@
 			}
 			return json_encode($return);
 		}
+
+		function print_bill(){
+			if(array_key_exists('bill', $_GET) && is_numeric($_GET['bill']) && $_GET['bill'] > 0){
+				$billData = $this->cDB->getDesign('billing')->getView('bill_no')->setParam(array("include_docs"=>"true",'key'=>$_GET['bill']))->execute();
+				if(array_key_exists(0, $billData['rows'])){
+					$this->view(array('bill'=>$billData['rows'][0]['doc']));
+				}
+			}else{
+				return 'Provide Valid Bill NO';
+			}
+		}
+
 	}
