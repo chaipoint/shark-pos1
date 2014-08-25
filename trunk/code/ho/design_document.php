@@ -51,7 +51,11 @@ function init(){
     'updates' => array( 
            'getbillno' =>  "function(doc,req){ if(req.query.month) { if(doc.current_month != req.query.month){doc.current = 0; doc.current_month = req.query.month;} var newCurrent =  doc.current+1; doc.current = newCurrent; return [doc,newCurrent.toString()];}}",
            'insert_mysql_id' => "function(doc,req){ doc.mysql_id = req.query.mysql_id; return [doc,req.query.mysql_id]}",
-       )
+       ),
+    "lists" => array(
+       "get_cash_in_hand" => "function(head, req) { var row; var sum = 0;  while(row=getRow()){ if(row.doc.bill_status=='Paid'){ sum += parseFloat(row.doc.due_amount);}} return(sum.toString());}",
+       "get_cash_in_delivery" => "function(head, req) { var row; var sum = 0;  while(row=getRow()){ if(row.doc.bill_status=='Delivered' && row.doc.is_cod=='Y' ){ sum += parseFloat(row.doc.due_amount);}} return(sum.toString());}"
+    )
    );
    $store = array(
     '_id'=>'_design/store',
