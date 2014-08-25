@@ -9,12 +9,17 @@
 				<input type="hidden" name="delivery_channel" id="delivery_channel">
 				<input type="hidden" name="delivery_channel_name" id="delivery_channel_name">
 				<input type="hidden" name="booking_channel" id="booking_channel">
+				<input type="hidden" name="booking_channel_name" id="booking_channel_name">
 				<input type="hidden" name="is_cod" id="is_cod">
 				<input type="hidden" name="is_prepaid" id="is_prepaid">
 				<input type="hidden" name="is_credit" id="is_credit">
 				<input type="hidden" name="cancel_reason" id="cancel_reason">
 				<input type="hidden" name="bill_status" id="bill_status">
-
+				<input type="hidden" name="billing_customer_city" id="billing_customer_city">
+				<input type="hidden" name="billing_customer_locality" id="billing_customer_locality">
+				<input type="hidden" name="billing_customer_sub_locality" id="billing_customer_sub_locality">
+				<input type="hidden" name="billing_customer_landmark" id="billing_customer_landmark">
+				<input type="hidden" name="billing_customer_company_name" id="billing_customer_company_name">
 			<div class="modal-body">
 				<table class="table table-striped">
 					<tbody>
