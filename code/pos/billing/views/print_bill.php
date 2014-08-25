@@ -6,7 +6,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Sale No. 3965</title>
+<title>Sale No. <?php echo $billdata['bill_no'];?></title>
 <script src="<?php echo JS;?>jquery.min.js"></script>
 <style type="text/css" media="all">
 body { max-width: 300px; margin:0 auto; text-align:center; color:#000; font-family: Arial, Helvetica, sans-serif; font-size:12px; }
@@ -41,7 +41,7 @@ h2, h3, p { margin: 5px 0; }
        BANGLORE<br/>KARNATKA 560100<br/>CASH/BILL
     </p>    	
     <span class="left">Tel: 01234567890</span> 
-	<span class="right">Sale No.: 3965</span><span class="left">Customer: Numpty Shavings</span> 
+	<span class="right">Sale No.: <?php echo $billdata['bill_no'];?></span><span class="left">Customer: Numpty Shavings</span> 
 	<span class="right">Date: 28/07/2014 17:24:31</span>    <div style="clear:both;"></div>
     
 	<table class="table" cellspacing="0"  border="0"> 
