@@ -77,7 +77,7 @@
 					$this->log->trace("DATA \r\n".json_encode($_POST));
 
 					$_POST['cd_doc_type'] = 'store_bill';
-					$_POST['bill_time'] = $this->getCDTime();
+					$_POST['time'] = array('created'=>$this->getCDTime(), 'updated'=>$this->getCDTime());
 
 					$_POST['store_id'] = $_SESSION['user']['store']['mysql_id'];
 					$_POST['store_name'] = $_SESSION['user']['store']['name'];
@@ -131,6 +131,7 @@
 						unset($billDataReturned['data']['_id']);
 						unset($billDataReturned['data']['_rev']);
 						$billDataReturned['data']['bill_status'] = 'Cancelled';
+						$billDataReturned['data']['time']['updated'] = $this->getCDTime();
 						$billDataReturned['data']['cancel_reason'] = $_POST['cancel_reason'];
 						$billSaveResult = $couch->saveDocument()->execute($billDataReturned['data']);
 						if(!array_key_exists('ok', $billSaveResult)){
