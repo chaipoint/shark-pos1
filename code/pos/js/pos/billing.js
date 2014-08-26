@@ -236,7 +236,7 @@ $(document).ready(function(){
 			if($("#paid_by").val() == 'ppc' ){
 			   
 			}
-			return false;
+			
 			var billDetails = new Object();
 			billDetails.items = new Object();
 			billDetails.items = $billingItems;
