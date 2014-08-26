@@ -51,6 +51,11 @@
 								<h3 style="margin:0px;"><span id="twt" class="label label-warning"></span></h3> 
 							</td>
 						</tr>
+						<tr class="pcash">
+							<td>Paid :</td>
+							<td><input type="text" id="paid-amount" class="form-control"/></td>
+						</tr>
+
 						<tr>
 							<td>Paid by:</td>
 							<td>
@@ -59,10 +64,7 @@
 								<input type="hidden" name="paid_by" id="paid_by">
 							</td>
 						</tr>
-						<tr class="pcash">
-							<td>Paid :</td>
-							<td><input type="text" id="paid-amount" class="form-control"/></td>
-						</tr>
+						
 						<tr class="pcash">
 							<td>Return Change :</td>
 							<td>
@@ -73,6 +75,13 @@
 								<td>Card No :</td>
 								<td>
 									<input type="text" id="ppc" class="form-control"/>
+									<span id="loading_image" class="hide"><img class="text-center" src="<?php echo IMG;?>loader.gif"/></span>
+								</td>
+						</tr>
+                        <tr class="ppc_balance" style="display: none;">
+								<td>Your Balance :</td>
+								<td>
+                                  <span id="ac_balance"></span>
 								</td>
 						</tr>
 						<!--<tr class="pcc" style="display: none;">
