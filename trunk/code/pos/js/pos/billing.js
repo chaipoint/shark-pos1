@@ -127,12 +127,57 @@ $(document).ready(function(){
 			$('.payment-type-bt').removeClass('btn-success').addClass('btn-primary');
 			$(this).removeClass('btn-primary').addClass('btn-success');
 
-			if(type == 'ppc'){
-				$(".ppc").show();				
+			if(type == 'ppc'){ 
+				$(".ppc").show();
+				$('#balance').closest('tr').hide();
+				bootbox.alert('Please Swipe The Card', function() { 
+				setTimeout('setFocus()',200);	
+				});
 			}else{
-				$(".ppc").hide();								
+				$('#balance').closest('tr').show();
+				$(".ppc").hide();
+				$('#ac_balance').closest('tr').hide();
+				$('#ppc').val('');
+
 			}
 		});
+		/* START -- Payment Using PPC NO  */
+        
+        $('#ppc').on('keyup', function() {
+           var ppc_no = $(this).val();
+
+          if(ppc_no!='' && ppc_no.length==16) {
+              if(navigator.onLine === true) {
+                $("span#loading_image").removeClass('hide');
+                $.ajax({
+                  type: 'POST',
+                  url:  'index.php?dispatch=billing.getBalanceInq',
+                  data:  {'ppc_no':ppc_no},
+               }).done(function(response){
+               	  console.log(response);
+               	  $("span#loading_image").addClass('hide');
+               	  //alert(response);
+               	  result = $.parseJSON(response.trim());
+               	 if(result.error){
+				 	$('.ppc_balance').hide();
+					bootbox.alert(result.message);
+				}else{
+					$('.ppc_balance').show();
+					$('#ac_balance').text(result.data['balance']);
+				}
+              });
+              }else {
+               bootbox.alert("Sorry,No Internet Available");
+               return false;
+               }
+          }else {
+          	   bootbox.alert("Please Enter Valid Card No");;
+			   return false;
+			} 
+        });
+
+		/* END -- Payment Using PPC NO  */
+
 		$("#payment").click(function(){
 			//$("#fcount").text($totalBillQty);
 			$("#twt").text(Math.ceil($totalAmountWT.toFixed(2)));
@@ -159,20 +204,6 @@ $(document).ready(function(){
 					$("#paid-amount").val(Math.ceil($totalAmountWT.toFixed(2)));
 					$("#delivery_channel").val(8);
 					$("#delivery_channel_name").val(delivery_channel[8]);
-					$("#booking_channel").val(loadedBill.channel_id);
-					$("#booking_channel_name").val(loadedBill.channel_name);
-
-					$("#billing_customer").val(loadedBill.name);
-					$("#phone_number").val(loadedBill.phone);
-					$("#billing_customer_city").val(loadedBill.city);
-					$("#billing_customer_locality").val(loadedBill.locality);
-					$("#billing_customer_sub_locality").val(loadedBill.sublocality);
-					$("#billing_customer_landmark").val(loadedBill.landmark);
-					$("#billing_customer_company_name").val(loadedBill.company);
-
-
-
-					
 					$("#is_cod").val('Y');
 					$("#is_prepaid").val('N');
 					$("#is_credit").val('N');
@@ -187,7 +218,7 @@ $(document).ready(function(){
 		//---END--- Payment Event After Products selection  or Without Product Selection
 
 		//---START--- SUbmit Payment Bill
-		$("#submit-sale").click(function(event){
+		$("#submit-sale").click(function(event){ 
 			event.preventDefault();
 			if(!$('#paid-amount').val()){
 				bootbox.alert("Please Enter Payment Amount");
@@ -203,8 +234,9 @@ $(document).ready(function(){
 				return false;				
 			}
 			if($("#paid_by").val() == 'ppc' ){
-
+			   
 			}
+			return false;
 			var billDetails = new Object();
 			billDetails.items = new Object();
 			billDetails.items = $billingItems;
@@ -228,20 +260,19 @@ $(document).ready(function(){
 			billDetails.is_credit = $("#is_credit").val();
 			billDetails.bill_status = $("#bill_status").val();
 
-			billDetails.booking_channel_id = $("#booking_channel").val();
-			billDetails.booking_channel_name = $("#booking_channel_name").val();
+			billDetails.booking_channel = $("#booking_channel").val();
 			billDetails.delivery_channel_id = $("#delivery_channel").val();
 			billDetails.delivery_channel_name = $("#delivery_channel_name").val();
 			billDetails.order_no = (loadedBill && loadedBill.order_id) ? loadedBill.order_id : 0;
 
 			billDetails.customer = new Object();
-			billDetails.customer.name = $("#billing_customer").val();
-			billDetails.customer.city = $("#billing_customer_city").val();
-			billDetails.customer.locality = $("#billing_customer_locality").val();
-			billDetails.customer.sub_locality = $("#billing_customer_sub_locality").val();
-			billDetails.customer.land_mark = $("#billing_customer_landmark").val();
-			billDetails.customer.phone_no = $("#phone_number").val();
-			billDetails.customer.company_name = $("#billing_customer_company_name").val();
+			billDetails.customer.name = '';
+			billDetails.customer.city = '';
+			billDetails.customer.locality = '';
+			billDetails.customer.sub_locality = '';
+			billDetails.customer.land_mark = '';
+			billDetails.customer.phone_no = '';
+			billDetails.customer.company_name = '';
 
 			billDetails.card = new Object();
 			billDetails.card.no = '';
@@ -640,4 +671,8 @@ function resetBill(refresh){
 	$("#ts_con").text($totalTaxAmount);
 	$("#saletbl tbody").html("");	
 	$("#ds_con").text($totalDiscountAmount);
+}
+
+var setFocus = function() { 
+  $('input[id="ppc"]').focus();
 }
