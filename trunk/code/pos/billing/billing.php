@@ -43,10 +43,10 @@
 			$billData = array();
   			if(array_key_exists('bill_no', $_GET) && ! empty($_GET['bill_no'])){
   				$bill = $_GET['bill_no'];
-  				$billDetails = $this->cDB->getDocs($bill);
-  				if(!array_key_exists('error', $billDetails)){
- 						$billData = $billDetails;
-  				}
+				$billDataReturned = $this->getBillData($bill); 
+				if(!$billDataReturned['error']){
+ 						$billData = $billDataReturned['data'];
+				}
   			}
 
 			$this->commonView('header_html');
@@ -55,6 +55,20 @@
 			$this->commonView('footer_inner');
 			$this->commonView('footer_html');
 		}
+
+		public function getBillData($bill_id){
+				$return = array('error'=>false, 'message'=>'', 'data' => array());
+  				$billDetails = $this->cDB->getDocs($bill_id);
+  				if(array_key_exists('error', $billDetails)){
+  					$return['message'] = ($billDetails['error'] == 'not_found' ? 'Bill Not Found' : 'OOPS! Some Error Please Contact Admin.');
+  					$return['error'] = true;
+  				}else{
+ 						$return['data'] = $billDetails;
+  				}
+  				return $return;
+		}
+
+
 		function save(){
 			global $couch;
 			$return = array('error'=>false,'message'=>'','data'=>array());
@@ -106,6 +120,24 @@
 						$return['error'] = true;
 						$return['message'] = 'OOPS! Some Error Contact Admin.';
 					}
+				}elseif(array_key_exists('request_type', $_POST) && $_POST['request_type'] == 'update_bill'){
+					$billDataReturned = $this->getBillData($_POST['doc']);
+					if($billDataReturned['error']){
+						$return['error'] = true;
+						$return['message'] = $billDataReturned['message'];
+					}else{
+						$billDataReturned['data']['parent']['id'] = $billDataReturned['data']['_id'];
+						$billDataReturned['data']['parent']['rev'] = $billDataReturned['data']['_rev'];
+						unset($billDataReturned['data']['_id']);
+						unset($billDataReturned['data']['_rev']);
+						$billDataReturned['data']['bill_status'] = 'Cancelled';
+						$billDataReturned['data']['cancel_reason'] = $_POST['cancel_reason'];
+						$billSaveResult = $couch->saveDocument()->execute($billDataReturned['data']);
+						if(!array_key_exists('ok', $billSaveResult)){
+							$return['error'] = true;
+							$return['message'] = 'OOPS! Some Error Contact Admin.';
+						}
+					}
 				}else{
 					$return['error'] = true;
 					$return['message'] = 'Request Type not Found';
@@ -118,6 +150,7 @@
 			$this->log->trace("RESPONSE \r\n".$re);
 			return $re;
 		}
+
 
 		public function getSaleBills(){
 			$return = array('error'=>false,'message'=>'','data'=>array());
