@@ -10,7 +10,12 @@ var $totalDiscountAmount = 0.0;
 var order = 0;
 var loadedBill = null;
 $(document).ready(function(){
-
+	/*
+	*	PLEASE Don't Change This code Block Without Prior Permission
+	*/
+	if(Object.keys($billingItems).length > 0){
+		generateSalesTable();
+	}
 
 	var url = $.url(window.location);
 	order = url.param('order');
@@ -619,7 +624,7 @@ function generateSalesTable(productId, qty, productData){
 			'<td style="width:26%" class="text-right"><span class="bill_item_price text-right">'+($billingItems[index].qty * $billingItems[index].taxAbleAmount).toFixed(2)+'</span></td>'+
 			'</tr>';
 
-		$totalBillQty += $billingItems[index].qty;
+		$totalBillQty += parseInt($billingItems[index].qty);
 		$totalAmountWOT += ($billingItems[index].qty * $billingItems[index].taxAbleAmount);
 		$totalAmountWT += $billingItems[index].netAmount;
 
