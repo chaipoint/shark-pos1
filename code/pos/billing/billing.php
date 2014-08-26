@@ -40,9 +40,18 @@
   			$firstCat = $currectCat[0];
 
 
+			$billData = array();
+  			if(array_key_exists('bill_no', $_GET) && ! empty($_GET['bill_no'])){
+  				$bill = $_GET['bill_no'];
+  				$billDetails = $this->cDB->getDocs($bill);
+  				if(!array_key_exists('error', $billDetails)){
+ 						$billData = $billDetails;
+  				}
+  			}
+
 			$this->commonView('header_html');
 			$this->commonView('navbar');
-			$this->view(array('catList'=>$catList,'productList'=>$productList,'firstCat'=>$firstCat, 'delivery_channel'=>$deliveryChannel));
+			$this->view(array('catList'=>$catList,'productList'=>$productList,'firstCat'=>$firstCat, 'delivery_channel'=>$deliveryChannel,'bill'=>$billData));
 			$this->commonView('footer_inner');
 			$this->commonView('footer_html');
 		}

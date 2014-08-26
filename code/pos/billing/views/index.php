@@ -7,6 +7,13 @@
 </style>
 <script type="text/javascript" src="<?php echo JS;?>pos/billing.js"></script>
 <?php
+	$script = '';
+	if(count($bill)>0){
+		foreach($bill['items'] as $key => $value){
+			$script .= '$billingItems['.$value['id'].'] = new Object();'."\n"; 
+			$script .= '$billingItems['.$value['id'].'] = $.parseJSON(\''.json_encode($value)."')\n"; 
+		}
+	}
 	if(count($catList)>0){
 		echo '
 			<script>
@@ -16,6 +23,7 @@
 				var productArray = $.parseJSON(productList);
 				var selectedCat = '.$firstCat.';
 				var delivery_channel = $.parseJSON(\''.json_encode($delivery_channel).'\');
+				'.$script.';
 			</script>
 		';
 	}
