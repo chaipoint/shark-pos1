@@ -9,12 +9,23 @@ var $intDiscount = 0;
 var $totalDiscountAmount = 0.0;
 var order = 0;
 var loadedBill = null;
+var modifyBill = false;
 $(document).ready(function(){
 	/*
 	*	PLEASE Don't Change This code Block Without Prior Permission
 	*/
 	if(Object.keys($billingItems).length > 0){
+		/*Load Bill IF provided with doc_id*/
+		$('#botbuttons').append('<button class="btn btn-primary">Print</button>');
+		$('#payment').prop('disabled',true).addClass('hide');
+
+		modifyBill = true;
 		generateSalesTable();
+		$(".del_row").removeClass('del_row');
+		$('.bill_qty_input').prop('readonly',true).removeClass('bill_qty_input');
+		$('.category-selection').removeClass('category-selection');
+		$('.category-product').removeClass('category-product');
+
 	}
 
 	var url = $.url(window.location);
@@ -123,7 +134,47 @@ $(document).ready(function(){
 		//---END--- Event For Product Selection
 		//onCancel Of Bill
 		$("#cancel").click(function(){
+			bootbox.dialog({
+				message:'<div class="form-group"><textarea placeholder="reason" name="cancel_reason_bill" id="cancel_reason_bill" class="form-control"></textarea></div>',
+				title:"Bill Cancel Reason",
+				buttons:{
+					main:{
+						label:"Cancel Bill",
+						className:"btn-success btn-sm",
+						callback:function(){
+								var textArea = $('#cancel_reason_bill').attr('type','text');
+								var reason = $.trim(textArea.val()); 
+								if( reason == '' ){
+									textArea.closest('.form-group').addClass('has-error');
+									return false;
+								}			
+								if(modifyBill){
+									if(doc){
+										$.ajax({
+											type: 'POST',
+											url: "index.php?dispatch=billing.save",
+									  		data : {request_type:'update_bill', doc:doc, cancel_reason:reason},
+										}).done(function(response) {
+											if(response.error){
+												bootbox.alert(response.message);
+											}else{
+												bootbox.alert('Bill Cancelled Successfully',function(){
+													window.location = "?dispatch=sales_register";													
+												});
+											}
+										});
+									}
+								}
+							}
+						},
+					danger:{
+						label:"Cancel",
+						className:"btn-danger btn-sm"
+					},	
+				}
+			});
 			resetBill(true);
+
 		});
 		//---START--- Payment Event After Products selection  or Without Product Selection
 		$(".payment-type-bt").click(function(){
@@ -286,6 +337,7 @@ $(document).ready(function(){
 			billDetails.card.redeem_amount = '';
 			billDetails.card.txn_no = '';
 			billDetails.card.balance = '';
+			billDetails.reprint = 1;
 
 
 
