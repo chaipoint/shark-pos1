@@ -33,23 +33,23 @@
 if(is_array($bill_data) && count($bill_data)>0) { 
     foreach ($bill_data as $key => $value) { ?>
 	      <tr class="text-center">
-		        <td style="text-align:center"><?php echo $value['doc']['bill_no']; ?></td>
-		        <td style="text-align:center"><?php echo $value['doc']['total_qty']; ?></td>
-		        <td style="text-align:right"><?php echo  number_format($value['doc']['sub_total'],2); ?></td>
-		        <td class="text-right"><?php echo number_format($value['doc']['total_tax'],2); ?></td>
-            <td class="text-right"><?php echo $value['doc']['total_amount']; ?></td>
-            <td style="text-align:center"><?php echo $value['doc']['delivery_channel']; ?></td>
-            <td style="text-align:center"><?php echo $value['doc']['booking_channel']; ?></td>
-            <td style="text-align:center"><?php echo $value['doc']['payment_type']; ?></td>
-            <td style="text-align:center"><?php echo $value['doc']['bill_status']; ?></td>
-            <td style="text-align:center"><?php echo $value['doc']['is_cod']; ?></td>
-            <td style="text-align:center"><?php echo $value['doc']['is_prepaid']; ?></td>
-            <td style="text-align:center"><?php echo $value['doc']['is_credit']; ?></td>
+		        <td style="text-align:center"><?php echo $value['bill_no']; ?></td>
+		        <td style="text-align:center"><?php echo $value['total_qty']; ?></td>
+		        <td style="text-align:right"><?php echo  number_format($value['sub_total'],2); ?></td>
+		        <td class="text-right"><?php echo number_format($value['total_tax'],2); ?></td>
+            <td class="text-right"><?php echo number_format($value['total_amount'],2); ?></td>
+            <td style="text-align:center"><?php echo $value['delivery_channel_name']; ?></td>
+            <td style="text-align:center"><?php echo $value['booking_channel']; ?></td>
+            <td style="text-align:center"><?php echo $value['payment_type']; ?></td>
+            <td style="text-align:center"><?php echo $value['bill_status']; ?></td>
+            <td style="text-align:center"><?php echo $value['is_cod']; ?></td>
+            <td style="text-align:center"><?php echo $value['is_prepaid']; ?></td>
+            <td style="text-align:center"><?php echo $value['is_credit']; ?></td>
 		        <td>
 			         <a href="#"  class="tip btn btn-primary btn-xs" title="View Invoice">
 			             <i class="glyphicon glyphicon-list"></i>
                </a>
-               <a href="#"  class="tip btn btn-warning btn-xs" style="width:25px;" title="Edit Invoice">
+               <a class="tip btn btn-warning btn-xs edit-bill" style="width:25px;" title="Edit Invoice" href="<?php echo URL;?>?dispatch=billing&bill_no=<?php echo $value['_id']; ?>">
 		               <i class="glyphicon glyphicon-edit"></i>
 		           </a>
 		           <a href="#"  class="tip btn btn-danger btn-xs" title="Cancel Sale">
@@ -57,9 +57,9 @@ if(is_array($bill_data) && count($bill_data)>0) {
 		           </a>
 		        </td>
         </tr>
-<?php	  $sub_total += $value['doc']['sub_total'];
-        $total_tax += $value['doc']['total_tax']; 
-        $total_amount += $value['doc']['total_amount'];  
+<?php	  $sub_total += $value['sub_total'];
+        $total_tax += $value['total_tax']; 
+        $total_amount += $value['total_amount'];  
    } 
 }
 ?>		
