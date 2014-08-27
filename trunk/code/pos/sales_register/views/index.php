@@ -57,9 +57,12 @@ if(is_array($bill_data) && count($bill_data)>0) {
 		           </a>
 		        </td>
         </tr>
-<?php	  $sub_total += $value['sub_total'];
-        $total_tax += $value['total_tax']; 
-        $total_amount += $value['total_amount'];  
+<?php	  
+      if($value['bill_status'] != 'Cancelled'){
+          $sub_total += $value['sub_total'];
+          $total_tax += $value['total_tax']; 
+          $total_amount += $value['total_amount'];  
+        }
    } 
 }
 ?>		
