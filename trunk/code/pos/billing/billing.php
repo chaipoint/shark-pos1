@@ -156,17 +156,10 @@
 		public function getSaleBills(){
 			$return = array('error'=>false,'message'=>'','data'=>array());
 			if($_SERVER['REQUEST_METHOD'] == 'POST'){
-				$bills = $this->cDB->getDesign('billing')->getView('sales_summary')->setParam(array("group"=>"true","startkey"=>'["'.$this->getcDate().'"]',"endkey"=>'["'.$this->getcDate().'",{}]'))->execute();
-//				$return['data']  = array_reverse($bills['rows']);
-				//print_r($bills['rows']);
+				$bills = $this->cDB->getDesign('billing')->getList('todays_sale','handle_updated_bills')->setParam(array("descending"=>"true","include_docs"=>"true","endkey"=>'["'.$this->getcDate().'"]'))->execute();
 				$bill_array = array();
                 $payment_type = array('cash'=>0,'ppc'=>0,'c_card'=>0);
-				foreach ($bills['rows'] as $key => $value) {
-					$bill_array[$value['key'][1]][$value['key'][2]]=$value['value'];
-					
-					$payment_type[$value['key'][2]] += $value['value'];
-				}
-				$return['data']['summary'] = $bill_array;
+				$return['data']['summary'] = $bills;
 				$return['data']['payment_type'] = $payment_type;
 			}else{
 				$return['error'] = true;
