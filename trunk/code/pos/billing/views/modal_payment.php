@@ -46,6 +46,42 @@
 							</td>
 						</tr>
 						<tr>
+							<td width="50%">City 
+							</td>
+							<td width="50%">
+								<span class="inv_cus_con" id="city"> 
+										
+								</span>
+							</td>
+						</tr>
+						<tr>
+							<td width="50%">Locality 
+							</td>
+							<td width="50%">
+								<span class="inv_cus_con" id="locality"> 
+										
+								</span>
+							</td>
+						</tr>
+						<tr>
+							<td width="50%">Sublocality 
+							</td>
+							<td width="50%">
+								<span class="inv_cus_con" id="sublocality"> 
+										
+								</span>
+							</td>
+						</tr>
+						<tr>
+							<td width="50%">Company 
+							</td>
+							<td width="50%">
+								<span class="inv_cus_con" id="company"> 
+										
+								</span>
+							</td>
+						</tr>
+						<tr>
 							<td>Total Payable Amount :</td>
 							<td>
 								<h3 style="margin:0px;"><span id="twt" class="label label-warning"></span></h3> 
