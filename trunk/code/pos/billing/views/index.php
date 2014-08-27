@@ -170,4 +170,4 @@
 		</div>
 	</div>
 	<?php require_once 'modal_payment.php';?>
-	<?php require_once 'modal_today_sale.php';?>
+	
