@@ -1,28 +1,33 @@
 <script type="text/javascript" src="<?php echo JS?>pos/coc.js"></script>
-<table class="table table-bordered table-stripped" id="order-holder" style="font-size:10px;">
-	<caption class="text-left">
-		<a class="btn btn-sm <?php echo ($status == 'New' ? 'btn-default' : 'btn-primary');?>" href="<?php echo URL;?>?dispatch=orders.coc&status=New">New</a>
-		<a class="btn btn-sm <?php echo ($status == 'Confirmed' ? 'btn-default' : 'btn-primary');?>" href="<?php echo URL;?>?dispatch=orders.coc&status=Confirmed">Confirmed</a>
-		<a class="btn btn-sm <?php echo ($status == 'Cancelled' ? 'btn-default' : 'btn-primary');?>" href="<?php echo URL;?>?dispatch=orders.coc&status=Cancelled">Cancelled</a>
-		<a class="btn btn-sm <?php echo ($status == 'Dispatched' ? 'btn-default' : 'btn-primary');?>" href="<?php echo URL;?>?dispatch=orders.coc&status=Dispatched">Dispatched</a>
-		<a class="btn btn-sm <?php echo ($status == 'Delivered' ? 'btn-default' : 'btn-primary');?>" href="<?php echo URL;?>?dispatch=orders.coc&status=Delivered">Delivered</a>
-		<a class="btn btn-sm <?php echo ($status == 'Paid' ? 'btn-default' : 'btn-primary');?>" href="<?php echo URL;?>?dispatch=orders.coc&status=Paid">Paid</a>
-	</caption>
-	<thead>
-		<tr class="success">
-			<th>Order No</th>
-			<th>Customer Details</th>
-			<th>Expected Delivery time</th>
-			<th>Products</th>
-			<th><?php echo ($status == 'Cancelled' ? 'Reason' : 'Action');?></th>
-		</tr>
-	</thead>
-	<tbody>
+<div class="panel panel-info" style="margin-left:20px;margin-right:20px;"> 
+  <div class="panel-heading">COC Orders</div>
+	 <div class="panel-body tabbable">
+        <ul class="nav nav-pills" role="tablist">
+		  <li class="<?php echo ($status == 'New' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders.coc&status=New">New (<span id="New"><?php echo $order_count['New']; ?></span>)</a></li>
+		  <li class="<?php echo ($status == 'Confirmed' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders.coc&status=Confirmed">Confirmed (<span id="Confirmed"><?php echo $order_count['Confirmed']; ?></span>)</a></li>
+		  <li class="<?php echo ($status == 'Cancelled' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders.coc&status=Cancelled">Cancelled (<span id="Cancelled"><?php echo $order_count['Cancelled']; ?></span>)</a></li>
+		  <li class="<?php echo ($status == 'Dispatched' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders.coc&status=Dispatched">Dispatched (<span id="Dispatched"><?php echo $order_count['Dispatched']; ?></span>)</a></li>
+		  <li class="<?php echo ($status == 'Delivered' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders.coc&status=Delivered">Delivered (<span id="Delivered"><?php echo $order_count['Delivered']; ?></span>)</a></li>
+		  <li class="<?php echo ($status == 'Paid' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders.coc&status=Paid">Paid (<span id="Paid"><?php echo $order_count['Paid']; ?></span>)</a></li>
+	    </ul>
+
+         <table class="table table-bordered table-stripped" id="order-holder" style="font-size:10px;">
+           <thead>
+		     <tr  style="font-size:12px;background-color:#428bca;color:white;">
+			   <th>Order No</th>
+			   <th style="width:300px;">Customer Details</th>
+			   <th style="width:260px;">Schedule</th>
+			   <th style="width:280px;">Products Detail</th>
+			   <th><?php echo ($status == 'Cancelled' ? 'Reason' : 'Action');?></th>
+		     </tr>
+	       </thead>
+	     <tbody>
 		<?php
 			$display = '';
+			$total = 0;
 			foreach($orders as $key => $data){
 			$display .= '<tr data-order-id="'.$data['order_id'].'" data-order-details=\''.json_encode($data).'\'>
-							<td class="text-right">'.$data['order_id'].'<button class="btn btn-primary btn-sm generate-bill" data-order-id="'.$data['order_id'].'">Bill</button></td>
+							<td class="text-center">'.$data['order_id'].'</td>
 							<td>
 								<table>
 									<tr><td>'.$data['name'].'</td></tr>
@@ -36,8 +41,8 @@
 									<tr><td>'.$data['city'].'</td></tr>
 								</table>
 							</td>
-							<td><span class="label label-primary">Delivery Time</span><br/>'.$data['actual_delivery_time'].'<br/><br/><span class="label label-primary">Booking Time</span><br/>'.$data['order_date'].' '.$data['order_time'].'</td>
-							<td><a class="products_list_toggle" data-target="product_list_'.$data['order_id'].'">'.$data['net_amount'].'</a>
+							<td><span class="label label-primary">Delivery Time</span><b style="font-size:12px;margin-left:22px;">'.$data['actual_delivery_time'].'</b><br/><br/><span class="label label-primary">Booking Time</span><b style="font-size:12px;margin-left:20px;">'.$data['order_date'].' '.$data['order_time'].'</b></td>
+							<td>'.$data['net_amount'].' <a class="products_list_toggle" data-target="product_list_'.$data['order_id'].'" style="float:right;font-size:12px;">Show Detail</a>
 								<table class="hide table toggle-table" id="product_list_'.$data['order_id'].'">
 									<tbody>
 							';
@@ -48,7 +53,7 @@
 					$display .='</tbody><tfoot><tr><td></td><td>'.$data['net_amount'].'</td></tr></tfoot></table>
 								</td>
 								<td>
-									'.($status == 'Cancelled' ? $data['cancel_reason'] : '')." ".$action.'
+									'.($status == 'Delivered' ? "<span style='float:right'>".$data['delivery_boy']."</span>" : '')." ".($status == 'Cancelled' ? $data['cancel_reason'] : '')." ".sprintf($action,$data['order_id']).'
 									
 										<!--<button class="btn btn-sm btn-primary">Confirm</button>
 										<button class="btn btn-sm btn-primary">Cancel</button>
@@ -58,8 +63,20 @@
 									
 								</td>
 							</tr>';
+							$total +=$data['net_amount'];
 			}
 			echo $display;
 		?>
-	</tbody>
-</table>
+	   </tbody>
+	   <?php if($total<>0){ ?>
+	   <tfoot>
+	   	<tr>
+	   		<th class="text-center">Total</th>
+	   		<th colspan="2"></th>
+	   		<th colspan="2"><?php echo $total; ?></th>
+	   	</tr>
+	   </tfoot>
+	   <?php } ?>
+    </table>
+  </div>
+</div>
