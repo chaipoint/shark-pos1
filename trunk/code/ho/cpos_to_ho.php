@@ -276,46 +276,41 @@ function updateConfig(){
 	    $logger->trace("Array of Existing Config Setting IN CouchDB: ".json_encode($categoryList));
 	}
 	
-    $getConfigDetail = 'SELECT GROUP_CONCAT(cpc.id) as mysql_id, crm.id , category as category_id, crm.name as category_name,
-	                    GROUP_CONCAT(doc_key)AS doc_key, GROUP_CONCAT(doc_value)AS doc_value, crm.code as category_code
-	                    FROM cp_pos_config cpc
-	                    LEFT JOIN cp_reference_master crm ON crm.id = cpc.category AND crm.active = "Y"
-	                    WHERE cpc.active = "Y"
-	                    GROUP BY cpc.category';
+    $getConfigDetail = 'SELECT mode, GROUP_CONCAT(id) AS id, GROUP_CONCAT(name) AS name 
+                        FROM `cp_reference_master` 
+                        WHERE is_pos = "Y" 
+                        AND active = "Y"
+                        GROUP BY mode';
+
     $logger->trace("Query To Get All The Config Setting From CPOS Database: ".($getConfigDetail));
 	$result = mysql_query($getConfigDetail);
 	$updateArray = array();
 	$updateCounter = 0;
-	$j = 0;
+	$i = 0;
 	$logger->debug("Creating Array To Update Config Setting In CouchDb");
 	while($row = mysql_fetch_assoc($result)){
        
-       if(array_key_exists($row['category_id'],$categoryList)){
-		$updateArray[$j]['_id'] = $categoryList[$row['category_id']]['_id'];
-        $updateArray[$j]['_rev'] = $categoryList[$row['category_id']]['_rev'];
+       /*if(array_key_exists($row['category_id'],$categoryList)){
+		$updateArray['_id'] = $categoryList[$row['category_id']]['_id'];
+        $updateArray['_rev'] = $categoryList[$row['category_id']]['_rev'];
         $updateCounter++;
-	    }
+	    }*/
 
-		$keyexplode = explode(',', $row['doc_key']);
-        $valueexplode = explode(',', $row['doc_value']);
-        $idexplode = explode(',', $row['mysql_id']);
-
-        $updateArray[$j]['category_id'] = $row['category_id'];
-        $updateArray[$j]['category_name'] = $row['category_name'];
-        $updateArray[$j]['category_code'] = $row['category_code'];
-        $updateArray[$j]['cd_doc_type'] = 'config_master';
-		
-		for ($i=0; $i <count($keyexplode) ; $i++) {
-		$updateArray[$j]['category_data'][$keyexplode[$i]][$idexplode[$i]] = $valueexplode[$i];
+		$updateArray[$i]['cd_doc_type'] = 'config_master';
+		$idexplode = explode(',', $row['id']);
+        $nameexplode = explode(',', $row['name']);
+        $count = count($idexplode);
+        
+        for ($j=0; $j < $count ; $j++) {
+		$updateArray[$i][$row['mode']][$idexplode[$j]] = $nameexplode[$j];
         }
-		//$finalreturn[$row['category_name']] = $row;
-      $j++;
+      
 	}
-	$insertCounter = $j-$updateCounter;
-   $logger->trace("Array To Update Config Setting In CouchDb: ".json_encode($updateArray));
+	$insertCounter = $i-$updateCounter;
+    $logger->trace("Array To Update Config Setting In CouchDb: ".json_encode($updateArray));
    
    if (is_array($updateArray) && count($updateArray)>0){
-   $result=$couch->saveDocument(true)->execute(array("docs"=>$updateArray));
+	$result=$couch->saveDocument(true)->execute(array("docs"=>$updateArray));
   
   if(array_key_exists('error', $result)){
   	$logger->debug("ERROR:Config Setting Not Updated IN CouchDb");
@@ -336,4 +331,6 @@ $result = json_encode($html,true);
 $logger->debug("End OF update Config Function");
 return $result;
 }
+
+
 ?>
