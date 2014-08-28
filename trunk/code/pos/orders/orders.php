@@ -19,7 +19,7 @@
 			return json_encode($result,true);
 		}	
 		function updateOrderStatus(){
-		    $dir =  dirname(__FILE__).'/../lib/msg_api/message_api.php';
+		    $dir =  dirname(__FILE__).'/../lib/msg_api/sms.php';
             require_once $dir; 
 			$return = array('error' => false, 'message' => '', 'data' => array());
 			if(array_key_exists('new_status', $_POST) && array_key_exists('current_status', $_POST)){
