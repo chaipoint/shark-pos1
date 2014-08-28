@@ -62,15 +62,21 @@
 			$return = array('error'=>false, 'message'=>'');
 			if(array_key_exists('store', $_GET) && is_numeric($_GET['store']) && $_GET['store'] > 0){
 				$rtData = $this->repDesign(true);
+
 				if($rtData['error']){
 					$return = array('error'=>true, 'message'=> $rtData['message']);					
 				}else{
-					$return = $this->getStore(true);
-					if($return['error']){
-						$return = array('error'=>true, 'message'=>$return['message']);						
+					$rtConfig = $this->repConfig();
+					if($rtConfig['error']){
+						$return = array('error'=>true, 'message'=>$return['message']);												
 					}else{
-						$data = $this->getInstallationConfig();
-						$this->setIniFile($this->iniConfigFile,$data['data']);						
+						$return = $this->getStore(true);
+						if($return['error']){
+							$return = array('error'=>true, 'message'=>$return['message']);						
+						}else{
+							$data = $this->getInstallationConfig();
+							$this->setIniFile($this->iniConfigFile,$data['data']);						
+						}						
 					}
 				}
 			}else{	
