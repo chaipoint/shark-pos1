@@ -3,12 +3,12 @@
   <div class="panel-heading">COC Orders</div>
 	 <div class="panel-body tabbable">
         <ul class="nav nav-pills" role="tablist">
-		  <li class="<?php echo ($status == 'New' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders.coc&status=New">New (<span id="New"><?php echo $order_count['New']; ?></span>)</a></li>
-		  <li class="<?php echo ($status == 'Confirmed' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders.coc&status=Confirmed">Confirmed (<span id="Confirmed"><?php echo $order_count['Confirmed']; ?></span>)</a></li>
-		  <li class="<?php echo ($status == 'Cancelled' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders.coc&status=Cancelled">Cancelled (<span id="Cancelled"><?php echo $order_count['Cancelled']; ?></span>)</a></li>
-		  <li class="<?php echo ($status == 'Dispatched' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders.coc&status=Dispatched">Dispatched (<span id="Dispatched"><?php echo $order_count['Dispatched']; ?></span>)</a></li>
-		  <li class="<?php echo ($status == 'Delivered' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders.coc&status=Delivered">Delivered (<span id="Delivered"><?php echo $order_count['Delivered']; ?></span>)</a></li>
-		  <li class="<?php echo ($status == 'Paid' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders.coc&status=Paid">Paid (<span id="Paid"><?php echo $order_count['Paid']; ?></span>)</a></li>
+		  <li class="<?php echo ($status == 'New' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders&status=New">New (<span id="New"><?php echo $order_count['New']; ?></span>)</a></li>
+		  <li class="<?php echo ($status == 'Confirmed' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders&status=Confirmed">Confirmed (<span id="Confirmed"><?php echo $order_count['Confirmed']; ?></span>)</a></li>
+		  <li class="<?php echo ($status == 'Cancelled' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders&status=Cancelled">Cancelled (<span id="Cancelled"><?php echo $order_count['Cancelled']; ?></span>)</a></li>
+		  <li class="<?php echo ($status == 'Dispatched' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders&status=Dispatched">Dispatched (<span id="Dispatched"><?php echo $order_count['Dispatched']; ?></span>)</a></li>
+		  <li class="<?php echo ($status == 'Delivered' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders&status=Delivered">Delivered (<span id="Delivered"><?php echo $order_count['Delivered']; ?></span>)</a></li>
+		  <li class="<?php echo ($status == 'Paid' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders&status=Paid">Paid (<span id="Paid"><?php echo $order_count['Paid']; ?></span>)</a></li>
 	    </ul>
 
          <table class="table table-bordered table-stripped" id="order-holder" style="font-size:10px;">
