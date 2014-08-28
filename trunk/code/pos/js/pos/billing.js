@@ -34,6 +34,7 @@ $(document).ready(function(){
 		/*
 		*	PLEASE Don't Change This code Block Without Prior Permission
 		*/
+		loadedBill = new Object();
 		var orderData = $.parseJSON(localStorage.getItem(order));
 		loadedBill = orderData;
 		//console.log(loadedBill);
@@ -253,7 +254,6 @@ $(document).ready(function(){
 				$("#is_prepaid").val('Y');
 				$("#is_credit").val('N');
 				$("#bill_status").val('Paid');
-
 				if(loadedBill){ 
 					$('.payment-type-bt[data-value="'+loadedBill.payment_method+'"]').trigger('click');
 					$("#paid-amount").val(Math.ceil($totalAmountWT.toFixed(2)));
@@ -274,7 +274,7 @@ $(document).ready(function(){
 					$("#billing_customer_company_name").val(loadedBill.company);
 					$("span#company").text(loadedBill.company);
 
-
+					console.log(loadedBill);
 
 					
 					$("#is_cod").val('Y');
