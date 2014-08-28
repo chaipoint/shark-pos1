@@ -4,7 +4,7 @@
 			parent::__construct();
 			$this->log =  Logger::getLogger("CP-POS|ORDERS");
 			global $sql_host, $sql_user, $sql_password, $sql_db;
-			$sql_host = 'localhost' ;
+			$sql_host = '54.249.247.15' ;
 			$sql_user = 'root';
 			$sql_password = 'root';
 			$sql_db = 'cabbeein_cpos';			
@@ -60,7 +60,7 @@
 			return json_encode($return);
 		}
 
-		function coc(){
+		function index(){
 			$db = $this->db;
 			$status = 'New';
 			if(array_key_exists('status', $_GET) && !empty($_GET['status'])){
@@ -115,7 +115,6 @@
 		    where co.status = '".$status."' and date(co.delivery_date) = curdate() and co.customer_id is not null and co.store_id = ".$_SESSION['user']['store']['id']." order by time_passed desc";
 			
 			$orderListDetailed = $db->func_query($getList);
-
 			$orderList = array();
 
 				if(is_array($orderListDetailed) && count($orderListDetailed)>0){
