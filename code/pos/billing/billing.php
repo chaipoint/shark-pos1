@@ -158,9 +158,14 @@
 			if($_SERVER['REQUEST_METHOD'] == 'POST'){
 				$bills = $this->cDB->getDesign('billing')->getList('todays_sale','handle_updated_bills')->setParam(array("descending"=>"true","include_docs"=>"true","endkey"=>'["'.$this->getcDate().'"]'))->execute();
 				$bill_array = array();
-                $payment_type = array('cash'=>0,'ppc'=>0,'c_card'=>0);
-				$return['data']['summary'] = $bills;
-				$return['data']['payment_type'] = $payment_type;
+				if(array_key_exists('error', $bills)){
+					$return['data'] = true;
+					$return['message'] = 'OOPS! Some Problem. Please Contact Admin.';
+				}else{
+	                $payment_type = array('cash'=>0,'ppc'=>0,'c_card'=>0);
+					$return['data']['summary'] = $bills;
+					$return['data']['payment_type'] = $payment_type;
+				}
 			}else{
 				$return['error'] = true;
 				$return['message'] = 'Request Method Not Allowed';
