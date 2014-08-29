@@ -3,12 +3,19 @@ $(document).ready( function(){
 /* DatePicker Class Function */
     $('.datepicker').datepicker({
 		maxDate:0,
-		dateFormat:'dd-mm-yy'
+		dateFormat:'yy-mm-dd'
 	}).datepicker('setDate',new Date());
 
 /* Function To Add Prety Expense */
-	$('#add_expense').click(function(){
+	$('#add_expense').click(function(event){
+		event.preventDefault();
 		$('#addExpenseModal').modal();
+	});
+
+/* Function To View Prety Expense */
+	$('#view_expense').click(function(event){
+		event.preventDefault();
+		$('#viewExpenseModal').modal();
 	});
 		
 	$('.close-model').click(function(){
@@ -19,10 +26,10 @@ $(document).ready( function(){
 /* Function To Save Petty Expense */
 	$('#submit-expense').on('click', function(event){
 		event.preventDefault();
-		if($('#expense_done_by_id').val()=='undefined'){
+		if($('input[name="expense_done_by_id"]').val()==undefined){
 			bootbox.alert('Please Select Done By');
 			return false;
-		}else if($('#expense_approved_by_id').val()=='undefined'){
+		}else if($('input[name="expense_approved_by_id"]').val()==undefined){
             bootbox.alert('Please Select Approved By');
 			return false;
 		}
@@ -39,6 +46,7 @@ $(document).ready( function(){
 					bootbox.alert(result.message);
 				}else{
 					$('#addExpenseModal').modal('hide');
+					//$('form#add-expense-form')[0].reset();
 					bootbox.alert('Expense Successfully Saved');
 				}
 			});
