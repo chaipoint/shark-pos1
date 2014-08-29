@@ -4,9 +4,9 @@
 			parent::__construct();
 			$this->log =  Logger::getLogger("CP-POS|ORDERS");
 			global $sql_host, $sql_user, $sql_password, $sql_db;
-			$sql_host = '54.249.247.15' ;
+			$sql_host = 'localhost' ;
 			$sql_user = 'root';
-			$sql_password = 'root';
+			$sql_password = '';
 			$sql_db = 'cabbeein_cpos';			
 			$this->db = new Database();
 
