@@ -19,28 +19,32 @@
   <table class="table">
       <thead><tr><th>Bill Status</th><th>Count</th><th>Amount</th></tr></thead>
       <tbody>
-          <?php foreach($bill_status['count'] as $key => $value){?>
+          <?php $total = 0; foreach($bill_status['count'] as $key => $value){
+              $total += ($key == 'Cancelled') ? 0 : $bill_status['amount'][$key];;
+            ?>
           <tr>
               <td><?php echo $key;?></td>
-              <td><?php echo $value;?></td>
-              <td><?php echo $bill_status['amount'][$key];?></td>
+              <td class="text-right"><?php echo $value;?></td>
+              <td class="text-right"><?php echo ($key == 'Cancelled') ? 0 : $bill_status['amount'][$key];?></td>
           </tr>
           <?php }?>
       </tbody>
+      <tfoot><tr><td>Total</td><td></td><td class="text-right"><?php echo $total;?></td></tr></tfoot>
   </table>
 </div>
 <div class="col-md-6 col-lg-6">
     <table class="table">
       <thead><tr><th>Payment Type</th><th>Amount</th><th>Count</th></tr></thead>
       <tbody>
-          <?php foreach($payment_type['amount'] as $key => $value){?>
+          <?php $total = 0; foreach($payment_type['amount'] as $key => $value){ $total += $value;?>
           <tr>
               <td><?php echo $key;?></td>
-              <td><?php echo $value;?></td>
-              <td><?php echo $payment_type['count'][$key];?></td>
+              <td class="text-right"><?php echo $value;?></td>
+              <td class="text-right"><?php echo $payment_type['count'][$key];?></td>
           </tr>
           <?php }?>
       </tbody>
+      <tfoot><tr><td>Total</td><td class="text-right"><?php echo $total;?></td><td></td></tr></tfoot>
   </table>
 </div>
 
@@ -85,9 +89,11 @@ if(is_array($data) && count($data)>0) {
 			         <a href="#"  class="tip btn btn-primary btn-xs" title="View Invoice">
 			             <i class="glyphicon glyphicon-list"></i>
                </a>
-               <a class="tip btn btn-warning btn-xs edit-bill" style="width:25px;" title="Edit Invoice" href="<?php echo URL;?>?dispatch=billing&bill_no=<?php echo $value['_id']; ?>">
-		               <i class="glyphicon glyphicon-edit"></i>
-		           </a>
+               <?php if($value['bill_status'] != 'Cancelled') {?>
+                 <a class="tip btn btn-warning btn-xs edit-bill" style="width:25px;" title="Edit Invoice" href="<?php echo URL;?>?dispatch=billing&bill_no=<?php echo $value['_id']; ?>">
+  		               <i class="glyphicon glyphicon-edit"></i>
+  		           </a>
+               <?php }?>
 		           <a href="#"  class="tip btn btn-danger btn-xs" title="Cancel Sale">
 		               <i class="glyphicon glyphicon-trash"></i>
 		           </a>
