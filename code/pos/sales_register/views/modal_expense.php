@@ -11,54 +11,54 @@
 				<table class="table table-striped">
 					<tbody>
 						<tr>
-							<td width="50%">Date 
+							<td>Date 
 							</td>
-							<td width="50%">
+							<td>
 								<span class="inv_cus_con"> 
 									<input type="text" id="expense_date" class="form-control datepicker" data-provide="datepicker-inline" data-date-format="yyyy/mm/dd" name="expense_date"/>	
 								</span>
 							</td>
 						</tr>
 						<tr>
-							<td width="50%">Head 
+							<td>Head 
 							</td>
-							<td width="50%">
+							<td>
 								<span class="inv_cus_con"> 
 									<input type="text" id="expense_head" class="form-control" name="expense_head"/>	
 								</span>
 							</td>
 						</tr>
 						<tr>
-							<td width="50%">Purpose 
+							<td>Purpose 
 							</td>
-							<td width="50%">
+							<td>
 								<span class="inv_cus_con"> 
 									<input type="text" id="expense_purpose" class="form-control" name="expense_purpose" />	
 								</span>
 							</td>
 						</tr>
 						<tr>
-							<td width="50%">Amount 
+							<td>Amount 
 							</td>
-							<td width="50%">
+							<td>
 								<span class="inv_cus_con"> 
 									<input type="text" id="expense_amount" class="form-control" name="expense_amount" />	
 								</span>
 							</td>
 						</tr>
 						<tr>
-							<td width="50%">Done By 
+							<td>Done By 
 							</td>
-							<td width="50%">
+							<td>
 								<span class="inv_cus_con"> 
 									<input type="text" id="expense_done_by" class="form-control autocomplete" strict="true" name="expense_done_by" target="expense_done_by_id"  />	
 								</span>
 							</td>
 						</tr>
 						<tr>
-							<td width="50%">Approved By
+							<td>Approved By
 							</td>
-							<td width="50%">
+							<td>
 								<span class="inv_cus_con"> 
 									<input type="text" id="expense_approved_by" class="form-control autocomplete" name="expense_approved_by" strict="true" target="expense_approved_by_id"/>	
 								</span>
