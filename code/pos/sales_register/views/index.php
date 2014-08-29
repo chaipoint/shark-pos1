@@ -41,17 +41,17 @@
 </div>
 <div class="col-md-6 col-lg-6">
     <table class="table">
-      <thead><tr><th>Payment Type</th><th>Amount</th><th>Count</th></tr></thead>
+      <thead><tr><th>Payment Type</th><th>Count</th><th>Amount</th></tr></thead>
       <tbody>
           <?php $total = 0; foreach($payment_type['amount'] as $key => $value){ $total += $value;?>
           <tr>
               <td><?php echo $key;?></td>
-              <td class="text-right"><?php echo $value;?></td>
               <td class="text-right"><?php echo $payment_type['count'][$key];?></td>
+              <td class="text-right"><?php echo $value;?></td>
           </tr>
           <?php }?>
       </tbody>
-      <tfoot><tr><td>Total</td><td class="text-right"><?php echo $total;?></td><td></td></tr></tfoot>
+      <tfoot><tr><td>Total</td><td></td><td class="text-right"><?php echo $total;?></td></tr></tfoot>
   </table>
 </div>
 
