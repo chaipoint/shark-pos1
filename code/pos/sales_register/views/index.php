@@ -8,9 +8,16 @@
 
 <div class="col-md-12 col-lg-12">
   <h3>Sales on <?php echo date('d-M-Y');?></h3> 
-  <a class="tip btn btn-primary btn-sm external pull-right"  id="add_expense" title="Add Prety Expense">
-    <i class="glyphicon glyphicon-plus"></i>&nbsp;Petty Expense
-  </a>
+  <!-- Single button -->
+<div class="btn-group pull-right">
+  <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
+    Petty Expense <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" role="menu">
+    <li><a href='#' id="add_expense">Add Expense</a></li>
+    <li><a href='#' id="view_expense">View Expense</a></li>
+    </ul>
+</div>
   Cash Sale : <span class="lead" style="color:blue"><?php echo $cash_sale;?></span><br/>
   Cash In Delivery : <span class="lead" style="color:green"><?php echo $cash_indelivery;?></span>
 </div>
