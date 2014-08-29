@@ -15,7 +15,7 @@
 			}else{
 				$this->commonView('header_html');
 				$this->commonView('navbar');
-				$this->view(array("bill_data"=>$resultBillList['data'],"cash_in_hand"=>$resultBillList['cash_inhand'],"cash_in_delivery"=> $resultBillList['cash_indelivery']));
+				$this->view($resultBillList);//array("bill_data"=>$resultBillList['data'],"cash_in_hand"=>$resultBillList['cash_inhand'],"cash_in_delivery"=> $resultBillList['cash_indelivery']));
 				$this->commonView('footer_inner');
 				$this->commonView('footer_html');
 			}
