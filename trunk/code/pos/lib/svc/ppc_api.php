@@ -56,7 +56,7 @@ function balanceINQ($details){
 	$return['balance'] = $svResponse->params['Amount'];
 	return $return;
 }
-function redeem($details){
+function redeem($details){ 
 	$return = array();
 	$return['error'] = false;
 	if(!is_array($details) || count($details) == 0){
@@ -75,14 +75,14 @@ function redeem($details){
 	$pin = '';//$details['ppc_no'];
 	$notes='ChaiPoint Order Transcation On '.Date("d/m/Y H:i:s");
 	$trackData = '';//$details['data'];
-	$invoice = $details['order_id'];
-	$amt = $details['amount'];
-	$billAmount = $details['amount'];
+	$invoice = 58;
+	$amt = 1;
+	$billAmount = 1;
 	$microTime = microtime();
 	$microTimeArr = explode(" ", $microTime);
 	$txnId = substr($microTimeArr[1],5).round($microTimeArr[0] * 1000) ;
 
-	$svRequest = GCWebPos::redeem($configDetails, $cardNo, $pin, $txnId, $invoice, $amt, $trackData,$notes,$billAmount);
+	$svRequest = GCWebPos::redeem($configDetails, $cardNo, $pin, $txnId, $invoice, $amt, $trackData, $notes, $billAmount);
 	$svResponse = $svRequest->execute();
 	if($svResponse->errorCode != 0){
 		$return['error'] = true;
