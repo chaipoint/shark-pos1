@@ -10,9 +10,17 @@
 		function index(){
 		//	http://127.0.0.1:5984/testing/_design/billing/_list/handle_updated_bills/handle_updated_bills?descending=true&include_docs=true
 			$resultBillList = $this->cDB->getDesign('billing')->getList('sales_register','handle_updated_bills')->setParam(array("include_docs"=>"true","descending"=>"true", "endkey" => '["'.$this->getCDate().'"]'))->execute();//, "endkey" => '["'.$this->getCDate().'"]'
-			if(array_key_exists('error', $resultBillList)){
+			$resultExpenseList = $this->cDB->getDesign('petty_expense')->getView('get_expense')->setParam(array("include_docs"=>"true","startkey"=>'"'.$this->getCDate().'"',"endkey"=>'"'.$this->getCDate().'"'))->execute();
+			$this->getDBConnection();
+			$getHeadQuery = 'SELECT id, name FROM cp_reference_master WHERE active ="Y" AND mode = "head"';
+			$result = $this->db->func_query($getHeadQuery);
+			
+			
+			if(array_key_exists('error', $resultBillList) || array_key_exists('error', $resultExpenseList) ){
 				echo 'opps some problem please contact admin';
 			}else{
+				$resultBillList['head_data'] = $result;
+				$resultBillList['expense_data'] = $resultExpenseList;
 				$this->commonView('header_html');
 				$this->commonView('navbar');
 				$this->view($resultBillList);//array("bill_data"=>$resultBillList['data'],"cash_in_hand"=>$resultBillList['cash_inhand'],"cash_in_delivery"=> $resultBillList['cash_indelivery']));
