@@ -122,7 +122,7 @@ function init(){
       "language" => "javascript",
       "views" => array(
          "get_expense" =>  array(
-             "map": "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type=='petty_expense'){  emit(doc.expense_date, null);} }"
+             "map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type=='petty_expense'){  emit(doc.expense_date, null);} }"
           )
       )  
     );
