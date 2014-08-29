@@ -9,7 +9,7 @@
 		}
 		function index(){
 		//	http://127.0.0.1:5984/testing/_design/billing/_list/handle_updated_bills/handle_updated_bills?descending=true&include_docs=true
-			$resultBillList = $this->cDB->getDesign('billing')->getList('sales_register','handle_updated_bills')->setParam(array("include_docs"=>"true","descending"=>"true"))->execute();//, "endkey" => '["'.$this->getCDate().'"]'
+			$resultBillList = $this->cDB->getDesign('billing')->getList('sales_register','handle_updated_bills')->setParam(array("include_docs"=>"true","descending"=>"true", "endkey" => '["'.$this->getCDate().'"]'))->execute();//, "endkey" => '["'.$this->getCDate().'"]'
 			if(array_key_exists('error', $resultBillList)){
 				echo 'opps some problem please contact admin';
 			}else{
