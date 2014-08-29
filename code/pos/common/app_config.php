@@ -1,7 +1,7 @@
 <?php session_start();
 	class App_config{
 		public $log;
-
+ 		public $db;
 		private $module = 'login';
 		private $mode = 'index'; 
 
@@ -170,6 +170,14 @@
 		public function getCMonth(){
 			$this->cMonth =  Date("m");
 			return $this->cMonth;
+		}
+		public function getDBConnection(){
+			global $sql_host, $sql_user, $sql_password, $sql_db; 
+			$sql_host = '54.249.247.15' ;
+			$sql_user = 'root';
+			$sql_password = 'root';
+			$sql_db = 'cabbeein_cpos';			
+			$this->db = new Database();
 		}
 
 	}
