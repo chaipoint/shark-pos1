@@ -27,6 +27,9 @@ function init(){
     '_id'=>'_design/billing',
     'language' => 'javascript', 
     'views' => array(
+      "handle_updated_bills" =>  array(
+               "map"=> "function(doc){ if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill') { var created_time = doc.time.created; var updated_time = doc.time.updated; emit([created_time, doc.bill_no, (doc.parent ? 1 : 0) , updated_time],null);} }"
+           ),
       "bill_by_order" =>  array(
                "map"=> "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill' && doc.order_no > 0){ emit(doc.order_no,null); } }"
            ),
@@ -53,8 +56,8 @@ function init(){
            'insert_mysql_id' => "function(doc,req){ doc.mysql_id = req.query.mysql_id; return [doc,req.query.mysql_id]}",
        ),
     "lists" => array(
-       "get_cash_in_hand" => "function(head, req) { var row; var sum = 0;  while(row=getRow()){ if(row.doc.bill_status=='Paid'){ sum += parseFloat(row.doc.due_amount);}} return(sum.toString());}",
-       "get_cash_in_delivery" => "function(head, req) { var row; var sum = 0;  while(row=getRow()){ if(row.doc.bill_status=='Delivered' && row.doc.is_cod=='Y' ){ sum += parseFloat(row.doc.due_amount);}} return(sum.toString());}"
+       "sales_register" => "function(head,req) { var billList = new Object(); var cashinHand = 0;  var cashinDelivery = 0; billList.data = new Object(); while(row = getRow()) { if(row.doc) { if( !( row.doc.bill_no in billList.data ) ) { billList.data[row.doc.bill_no] = new Object(); billList.data[row.doc.bill_no] = row.doc; if(row.doc.bill_status == 'Paid') { cashinHand += (1* row.doc.due_amount); } if(row.doc.is_cod == 'Y' && row.doc.bill_status != 'Paid') { cashinDelivery += (1* row.doc.due_amount); } } } } billList.cash_inhand = cashinHand; billList.cash_indelivery = cashinDelivery; return JSON.stringify(billList);}",
+       "todays_sale" => "function(head,req) { var billList = new Object(); var billProcessed = new Object();  while(row = getRow()){ if(row.doc) { if( ! (row.key[1] in billProcessed)){ billProcessed[row.key[1]] = '';  if (row.doc.bill_status == 'Paid') { var itemList = row.doc.items; for(var items in itemList){ if((typeof billList[itemList[items].category_name]) != 'object'){ billList[itemList[items].category_name] = new Object();  billList[itemList[items].category_name][row.doc.payment_type] = ( 1 * itemList[items].netAmount); }else{ if(row.doc.payment_type in billList[itemList[items].category_name]){  billList[itemList[items].category_name][row.doc.payment_type] += (1 * itemList[items].netAmount); }else{ billList[itemList[items].category_name][row.doc.payment_type] = (1 * itemList[items].netAmount); } } } } } } } return JSON.stringify(billList);}"
     )
    );
    $store = array(
