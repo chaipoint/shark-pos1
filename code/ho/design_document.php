@@ -121,12 +121,27 @@ function init(){
       "language" => "javascript",
       "views" => array(
          "get_expense" =>  array(
-             "map": "function(doc) {\nif(doc.cd_doc_type && doc.cd_doc_type=='petty_expense'){\n  emit(doc.expense_date, null);\n}\n}"
+             "map": "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type=='petty_expense'){  emit(doc.expense_date, null);} }"
           )
       )  
     );
+    $hoDesignDoc = array(
+      "_id" => "_design/design_ho",
+      "language" => "javascript",
+      "views" => array(
+          "no_mysql_id" => array(
+            "map"=> "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill' && !doc.mysql_id && !doc.parent){ var cDT = (doc.time.created).split(' '); emit([(1 * doc.store_id) ,doc.bill_no, cDT[0]], null); } }"
+          ),
+          "handle_updated_bills" => array(
+            "map" => "function(doc){ if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill' && doc.parent) { var created_time = doc.time.created; var updated_time = doc.time.updated; emit([(1 * doc.store_id), doc.bill_no , updated_time],{bill_status:doc.bill_status, cancel_reason: (doc.cancel_reason ? doc.cancel_reason :''), reprint: doc.reprint, parent: doc.parent.id, mysql: (doc.mysql_id ? doc.mysql_id : 0)});} }"
+          )
+       ),
+        "updates" => array(
+          "insert_mysql_id" => "function(doc,req){ if(doc) { doc.mysql_id = req.query.mysql_id; return [doc,req.query.mysql_id] } }"
+        )
+    );
 
-   $arrayBulk = array("docs"=>array($billCounter, $billing, $store, $staff ,$replication,$logout,$sales, $config, $pettyEXpense));
+   $arrayBulk = array("docs"=>array($billCounter, $billing, $store, $staff ,$replication,$logout,$sales, $config, $pettyEXpense, $hoDesignDoc));
    $result = $couch->saveDocument(true)->execute($arrayBulk);
 
 
