@@ -43,7 +43,7 @@ if(is_array($bill_data) && count($bill_data)>0) {
 		        <td class="text-right"><?php echo number_format($value['total_tax'],2); ?></td>
             <td class="text-right"><?php echo number_format($value['total_amount'],2); ?></td>
             <td style="text-align:center"><?php echo $value['delivery_channel_name']; ?></td>
-            <td style="text-align:center"><?php echo $value['booking_channel']; ?></td>
+            <td style="text-align:center"><?php echo $value['booking_channel_name']; ?></td>
             <td style="text-align:center"><?php echo $value['payment_type']; ?></td>
             <td style="text-align:center"><?php echo $value['bill_status']; ?></td>
             <td style="text-align:center"><?php echo $value['is_cod']; ?></td>
