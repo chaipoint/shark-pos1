@@ -16,6 +16,11 @@
 				$deliveryChannel[$value] = $key;
 			}/**/
 
+			$payment_method = array("5"=>"cash","5"=>"ppc");
+			$delivery_channel = array("5"=>"cash","5"=>"ppc");
+			$booking_channel = array("5"=>"cash","5"=>"ppc");
+			$bill_status = array("5"=>"cash","5"=>"ppc");
+			$order_status = array("5"=>"cash","5"=>"ppc");
 
 			$resultJSON = $this->cDB->getDesign('store')->getView('store_mysql_id')->setParam(array('include_docs'=>'true',"key"=>'"'.$_SESSION['user']['store']['id'].'"'))->execute();
 //			print_r();
