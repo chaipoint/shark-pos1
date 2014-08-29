@@ -6,13 +6,45 @@
 <script type="text/javascript" src="<?php echo (JS.'dataTables.jqueryui.js');?>" ></script>
 <script type="text/javascript" src="<?php echo (JS.'pos/sale_register.js');?>" ></script>
 
-<h3>Sales on <?php echo date('d-M-Y');?></h3> 
- <a class="tip btn btn-primary btn-sm external" style="float:right;margin-right:40px;" id="add_expense" title="Add Prety Expense">
-   <i class="glyphicon glyphicon-plus"></i>&nbsp;Petty Expense
- </a>
-<span><label>Cash In Hand:&nbsp;</label><label style="font-size:18px;color:blue"><?php echo $cash_in_hand;?></label><span></br>
-<span><label>Cash In Delivery:&nbsp;</label><label style="font-size:18px;color:green"><?php echo $cash_in_delivery;?></label><span>    
+<div class="col-md-12 col-lg-12">
+  <h3>Sales on <?php echo date('d-M-Y');?></h3> 
+  <a class="tip btn btn-primary btn-sm external pull-right"  id="add_expense" title="Add Prety Expense">
+    <i class="glyphicon glyphicon-plus"></i>&nbsp;Petty Expense
+  </a>
+  Cash Sale : <span class="lead" style="color:blue"><?php echo $cash_sale;?></span><br/>
+  Cash In Delivery : <span class="lead" style="color:green"><?php echo $cash_indelivery;?></span>
+</div>
 
+<div class="col-md-6 col-lg-6">
+  <table class="table">
+      <thead><tr><th>Bill Status</th><th>Count</th><th>Amount</th></tr></thead>
+      <tbody>
+          <?php foreach($bill_status['count'] as $key => $value){?>
+          <tr>
+              <td><?php echo $key;?></td>
+              <td><?php echo $value;?></td>
+              <td><?php echo $bill_status['amount'][$key];?></td>
+          </tr>
+          <?php }?>
+      </tbody>
+  </table>
+</div>
+<div class="col-md-6 col-lg-6">
+    <table class="table">
+      <thead><tr><th>Payment Type</th><th>Amount</th><th>Count</th></tr></thead>
+      <tbody>
+          <?php foreach($payment_type['amount'] as $key => $value){?>
+          <tr>
+              <td><?php echo $key;?></td>
+              <td><?php echo $value;?></td>
+              <td><?php echo $payment_type['count'][$key];?></td>
+          </tr>
+          <?php }?>
+      </tbody>
+  </table>
+</div>
+
+  
   <table id="fileData" class="table table-striped table-bordered table-condensed table-hover" style="margin-bottom:5px;">
 	  <thead>
         <tr class="active">
@@ -34,8 +66,8 @@
 	<tbody>
 
 <?php $sub_total = $total_amount = $total_tax =0;
-if(is_array($bill_data) && count($bill_data)>0) { 
-    foreach ($bill_data as $key => $value) { ?>
+if(is_array($data) && count($data)>0) { 
+    foreach ($data as $key => $value) { ?>
 	      <tr class="text-center">
 		        <td style="text-align:center"><?php echo $value['bill_no']; ?></td>
 		        <td style="text-align:center"><?php echo $value['total_qty']; ?></td>
