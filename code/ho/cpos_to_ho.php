@@ -276,7 +276,7 @@ function updateConfig(){
 	    $logger->trace("Array of Existing Config Setting IN CouchDB: ".json_encode($categoryList));
 	}
 	
-    $getConfigDetail = 'SELECT mode, GROUP_CONCAT(id) AS id, GROUP_CONCAT(name) AS name 
+    $getConfigDetail = 'SELECT mode, GROUP_CONCAT(id) AS id, GROUP_CONCAT(name) AS name, GROUP_CONCAT(code) AS code 
                         FROM `cp_reference_master` 
                         WHERE is_pos = "Y" 
                         AND active = "Y"
@@ -299,11 +299,16 @@ function updateConfig(){
 		$updateArray[$i]['cd_doc_type'] = 'config_master';
 		$idexplode = explode(',', $row['id']);
         $nameexplode = explode(',', $row['name']);
+        $codeexplode = explode(',', $row['code']);
         $count = count($idexplode);
         
-        for ($j=0; $j < $count ; $j++) {
-		$updateArray[$i][$row['mode']][$idexplode[$j]] = $nameexplode[$j];
+        for ($j=0; $j < $count ; $j++){
+        	if($row['mode']=='ppc_api' || $row['mode']=='sms_api' || $row['mode']=='db_detail'){
+ 			$updateArray[$i][$row['mode']][$codeexplode[$j]] = $nameexplode[$j];
+        	}else{
+		     $updateArray[$i][$row['mode']][$idexplode[$j]] = $nameexplode[$j];
         }
+    }
       
 	}
 	$insertCounter = $i-$updateCounter;
