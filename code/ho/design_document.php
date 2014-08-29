@@ -56,7 +56,7 @@ function init(){
            'insert_mysql_id' => "function(doc,req){ doc.mysql_id = req.query.mysql_id; return [doc,req.query.mysql_id]}",
        ),
     "lists" => array(
-       "sales_register" => "function(head,req) { var billList = new Object(); var cashinHand = 0;  var cashinDelivery = 0; billList.data = new Object(); while(row = getRow()) { if(row.doc) { if( !( row.doc.bill_no in billList.data ) ) { billList.data[row.doc.bill_no] = new Object(); billList.data[row.doc.bill_no] = row.doc; if(row.doc.bill_status == 'Paid') { cashinHand += (1* row.doc.due_amount); } if(row.doc.is_cod == 'Y' && row.doc.bill_status != 'Paid') { cashinDelivery += (1* row.doc.due_amount); } } } } billList.cash_inhand = cashinHand; billList.cash_indelivery = cashinDelivery; return JSON.stringify(billList);}",
+       "sales_register" => "function(head,req) { var billList = new Object(); billList.data = new Object(); var payment_type = new Object(); payment_type.count = new Object(); payment_type.amount = new Object(); var bill_status = new Object(); bill_status.count = new Object(); bill_status.amount = new Object(); var cashSale = 0;  var cashinDelivery = 0; while(row = getRow()) { if(row.doc) { if( !( row.doc.bill_no in billList.data ) ) {  if(row.doc.bill_status != 'Cancelled'){ if(row.doc.payment_type in payment_type.count) { payment_type.amount[row.doc.payment_type] += (1 * row.doc.due_amount); payment_type.count[row.doc.payment_type] += 1; } else { payment_type.amount[row.doc.payment_type] = (1 * row.doc.due_amount); payment_type.count[row.doc.payment_type] = 1; } } if(row.doc.bill_status in bill_status.count) { bill_status.count[row.doc.bill_status] += 1; bill_status.amount[row.doc.bill_status] += (1 * row.doc.due_amount); }else{ bill_status.count[row.doc.bill_status] = 1; bill_status.amount[row.doc.bill_status] = (1 * row.doc.due_amount); } billList.data[row.doc.bill_no] = new Object(); billList.data[row.doc.bill_no] = row.doc; if(row.doc.bill_status == 'Paid' && row.doc.payment_type == 'cash') { cashSale += (1* row.doc.due_amount); } if(row.doc.is_cod == 'Y' && row.doc.bill_status == 'CoD') { cashinDelivery += (1* row.doc.due_amount); } } } } billList.bill_status = bill_status; billList.payment_type = payment_type; billList.cash_sale = cashSale; billList.cash_indelivery = cashinDelivery;  return JSON.stringify(billList);}",
        "todays_sale" => "function(head,req) { var billList = new Object(); var billProcessed = new Object();  while(row = getRow()){ if(row.doc) { if( ! (row.key[1] in billProcessed)){ billProcessed[row.key[1]] = '';  if (row.doc.bill_status == 'Paid') { var itemList = row.doc.items; for(var items in itemList){ if((typeof billList[itemList[items].category_name]) != 'object'){ billList[itemList[items].category_name] = new Object();  billList[itemList[items].category_name][row.doc.payment_type] = ( 1 * itemList[items].netAmount); }else{ if(row.doc.payment_type in billList[itemList[items].category_name]){  billList[itemList[items].category_name][row.doc.payment_type] += (1 * itemList[items].netAmount); }else{ billList[itemList[items].category_name][row.doc.payment_type] = (1 * itemList[items].netAmount); } } } } } } } return JSON.stringify(billList);}"
     )
    );
@@ -116,7 +116,17 @@ function init(){
         )
    );
 
-   $arrayBulk = array("docs"=>array($billCounter, $billing, $store, $staff ,$replication,$logout,$sales, $config));
+    $pettyEXpense = array(
+      "_id" => "_design/petty_expense",
+      "language" => "javascript",
+      "views" => array(
+         "get_expense" =>  array(
+             "map": "function(doc) {\nif(doc.cd_doc_type && doc.cd_doc_type=='petty_expense'){\n  emit(doc.expense_date, null);\n}\n}"
+          )
+      )  
+    );
+
+   $arrayBulk = array("docs"=>array($billCounter, $billing, $store, $staff ,$replication,$logout,$sales, $config, $pettyEXpense));
    $result = $couch->saveDocument(true)->execute($arrayBulk);
 
 
