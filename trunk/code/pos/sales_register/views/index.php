@@ -4,8 +4,12 @@
 <script type="text/javascript" src="<?php echo (JS.'jquery.dataTables.js');?>"></script>
 <script type="text/javascript" src="<?php echo (JS.'dataTables.tableTools.js');?>"></script>
 <script type="text/javascript" src="<?php echo (JS.'dataTables.jqueryui.js');?>" ></script>
+<script type="text/javascript" src="<?php echo (JS.'pos/sale_register.js');?>" ></script>
 
-<h3>Sales on <?php echo date('d-M-Y');?></h3>
+<h3>Sales on <?php echo date('d-M-Y');?></h3> 
+ <a class="tip btn btn-primary btn-sm external" style="float:right;margin-right:40px;" id="add_expense" title="Add Prety Expense">
+   <i class="glyphicon glyphicon-plus"></i>&nbsp;Petty Expense
+ </a>
 <span><label>Cash In Hand:&nbsp;</label><label style="font-size:18px;color:blue"><?php echo $cash_in_hand;?></label><span></br>
 <span><label>Cash In Delivery:&nbsp;</label><label style="font-size:18px;color:green"><?php echo $cash_in_delivery;?></label><span>    
 
@@ -85,7 +89,7 @@ if(is_array($bill_data) && count($bill_data)>0) {
       </tfoot>
    </tbody>
 </table>
-
+<?php require_once 'modal_expense.php';?>
 <script>
 var oTable = null;
 var media_path = "<?php echo JS;?>";
