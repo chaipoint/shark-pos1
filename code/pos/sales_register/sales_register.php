@@ -6,10 +6,9 @@
 			parent::__construct();
 			global $couch;
 			$this->cDB = $couch;
-			
 		}
 		function index(){
-		//	http://127.0.0.1:5984/testing/_design/billing/_list/handle_updated_bills/handle_updated_bills?descending=true&include_docs=true
+			$activeTask = $this->cDB->getActiveTask();
 			$resultBillList = $this->cDB->getDesign('billing')->getList('sales_register','handle_updated_bills')->setParam(array("include_docs"=>"true","descending"=>"true", "endkey" => '["'.$this->getCDate().'"]'))->execute();//, "endkey" => '["'.$this->getCDate().'"]'
 			$resultExpenseList = $this->cDB->getDesign('petty_expense')->getView('get_expense')->setParam(array("include_docs"=>"true","startkey"=>'"'.$this->getCDate().'"',"endkey"=>'"'.$this->getCDate().'"'))->execute();
 			$this->getDBConnection($this->cDB);
@@ -28,6 +27,7 @@
 				$resultBillList['expense_data'] = $resultExpenseList;
 				$this->commonView('header_html');
 				$this->commonView('navbar');
+				$resultBillList['at'] = $activeTask;
 				$this->view($resultBillList);//array("bill_data"=>$resultBillList['data'],"cash_in_hand"=>$resultBillList['cash_inhand'],"cash_in_delivery"=> $resultBillList['cash_indelivery']));
 				$this->commonView('footer_inner');
 				$this->commonView('footer_html');
