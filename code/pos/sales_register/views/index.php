@@ -7,6 +7,7 @@
 <script type="text/javascript" src="<?php echo (JS.'dataTables.jqueryui.js');?>" ></script>
 <script type="text/javascript" src="<?php echo JS; ?>bootstrapValidator.js"></script>
 <script type="text/javascript" src="<?php echo (JS.'pos/sale_register.js');?>" ></script>
+<script>var is_rep_running = <?php echo array_key_exists(0, $at) ? 'true' : 'false';?>;</script>
 
 <div class="container-fluid">
 <ol class="breadcrumb">
