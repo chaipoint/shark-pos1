@@ -1,3 +1,4 @@
+<script>var is_rep_running = <?php echo array_key_exists(0, $at) ? 'true' : 'false';?>;</script>
 <link rel="stylesheet" type="text/css" href="<?php echo (CSS.'common.css'); ?>" />
 <link rel="stylesheet" type="text/css" href="<?php echo (CSS.'ui-lightness/jquery-ui-1.8.20.custom.css'); ?>" />
 <link rel="stylesheet" href="<?php echo (CSS.'jquery.dataTables_themeroller.css');?>">
@@ -7,7 +8,6 @@
 <script type="text/javascript" src="<?php echo (JS.'dataTables.jqueryui.js');?>" ></script>
 <script type="text/javascript" src="<?php echo JS; ?>bootstrapValidator.js"></script>
 <script type="text/javascript" src="<?php echo (JS.'pos/sale_register.js');?>" ></script>
-<script>var is_rep_running = <?php echo array_key_exists(0, $at) ? 'true' : 'false';?>;</script>
 
 <div class="container-fluid">
 <ol class="breadcrumb">
