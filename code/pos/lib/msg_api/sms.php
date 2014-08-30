@@ -1,15 +1,13 @@
 <?php
 
-function call_api($data,$status){
+function call_api($data,$status,$details){
    
-   $couch = new CouchPHP();
-   $configList = $couch->getDesign('config')->getView('config_list')->setParam(array('include_docs'=>'true'))->execute();
-   
-   $username  = reset($configList['rows'][0]['doc']['sms_username']);
-   $password  = reset($configList['rows'][0]['doc']['sms_password']);
-   $projectId = reset($configList['rows'][0]['doc']['sms_project_id']);
-   $url       = reset($configList['rows'][0]['doc']['sms_url']);
-
+  // print_r($details['data']['sms_api']);
+  $url = $details['data']['sms_api']['url'];//"http://secure.boancomm.net/boansms/boansmsinterface.aspx";
+  $username = $details['data']['sms_api']['username'];//"chaipoint";
+  $password = $details['data']['sms_api']['password'];//"chaipoint14sms";
+  $projectId = $details['data']['sms_api']['project_id'];//'392';
+ //echo $url.$username.$password.$projectId;
     /* SMS Gateway Setting */
     $SMSURL = $url;
     $postData = array(
@@ -31,10 +29,10 @@ function call_api($data,$status){
 
             $output = curl_exec($ch);
             curl_close($ch);
-            //echo $output;
+           // echo $output;
 
-    $url = "http://boancomm.net/";
-	$username = "chaipoint";
-	$password = "chaipoint14sms";
-	$project_id = '392';
+  $url = $details['data']['sms_api']['url'];//"http://secure.boancomm.net/boansms/boansmsinterface.aspx";
+	$username = $details['data']['sms_api']['username'];//"chaipoint";
+	$password = $details['data']['sms_api']['password'];//"chaipoint14sms";
+	$project_id = $details['data']['sms_api']['project_id'];//'392';
 }
