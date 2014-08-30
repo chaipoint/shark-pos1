@@ -22,10 +22,10 @@ class CouchPHP{
 
 		$this->port = "5984";
 		$this->url = 'http://127.0.0.1:'.$this->port."/";
-		$this->db = 'vente_ho_db';
+		$this->db = 'vente_pos_db';
 		$this->userName = '';
 		$this->password = '';
-		$this->remote = 'http://127.0.0.1:5984/vente_ho_db';
+		$this->remote = 'http://pos:pos@54.249.247.15:5984/vente_ho_db';
 	}
 	public function getUrl(){
 		return $this->url;
@@ -119,6 +119,9 @@ class CouchPHP{
 	}
 	public function getLastUrl(){
 		return $this->genUrl;
+	}
+	public function getActiveTask(){
+		return $this->curl($this->url."_active_tasks");
 	}
 
 	private function curl($url){
