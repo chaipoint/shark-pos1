@@ -15,6 +15,7 @@
 				<input type="hidden" name="is_credit" id="is_credit">
 				<input type="hidden" name="cancel_reason" id="cancel_reason">
 				<input type="hidden" name="bill_status" id="bill_status">
+				<input type="hidden" name="bill_status_id" id="bill_status_id">
 				<input type="hidden" name="billing_customer_city" id="billing_customer_city">
 				<input type="hidden" name="billing_customer_locality" id="billing_customer_locality">
 				<input type="hidden" name="billing_customer_sub_locality" id="billing_customer_sub_locality">

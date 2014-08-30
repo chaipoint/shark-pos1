@@ -23,7 +23,7 @@
 				var productList = \''.json_encode($productList).'\';
 				var productArray = $.parseJSON(productList);
 				var selectedCat = '.$firstCat.';
-				var delivery_channel = $.parseJSON(\''.json_encode($delivery_channel).'\');
+				var config_data = $.parseJSON(\''.json_encode($config_data).'\');
 				'.$script.';
 			</script>
 		';
