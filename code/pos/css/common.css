@@ -23,3 +23,75 @@ padding: 3px 2px;
 .dataTable td {
 font-size: 13px;
 }
+
+.smallstat {
+  background: white;
+  padding: 10px;
+  position: relative;
+  text-align: right;
+}
+
+.box{
+  border: 1px solid #dbdee0;
+  margin: 0 0 30px 0;
+}
+.smallstat i.green {
+background: #bdea74;
+}
+
+.smallstat i.red {
+background: #FF5454;
+}
+
+.smallstat i.orange {
+background: #FF6600;
+}
+
+.smallstat i.blue {
+background: #0170D0;
+}
+
+.smallstat i.pink {
+background: #EA488A;
+}
+
+.smallstat i {
+text-align: center;
+display: block;
+color: black;
+width: 50px;
+font-size: 22px;
+padding: 14px 0;
+float: left;
+margin-right: 10px;
+}
+
+.green {
+color: #bdea74;
+}
+
+.fa {
+display: inline-block;
+font-family: FontAwesome;
+font-style: normal;
+font-weight: normal;
+line-height: 1;
+background-image: url('../../images/loader.gif'); 
+}
+
+.smallstat .title {
+top: 12px;
+color: #b2b8bd;
+display: block;
+font-size: 12px;
+margin-top: 4px;
+font-weight: bold;
+}
+
+.smallstat .value {
+font-size: 20px;
+}
+
+.fa-dollar:before, .fa-usd:before {
+content: "\f155";
+}
