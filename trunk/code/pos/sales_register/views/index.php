@@ -70,7 +70,7 @@
   <div class="panel panel-success">
     <div class="panel-heading">
       <h4 class="panel-title">
-        <a class="col" data-toggle="collapse" data-parent="#accordion" href="#collapseOne"> Bill Status
+        <a class="col" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Sale Summary
         <i class="glyphicon glyphicon-chevron-up pull-right"></i>
         </a>
       </h4>
@@ -94,23 +94,7 @@
               <tfoot><tr><th class="text-center">Total</th><th></th><th class="text-center"><?php echo $total;?></th></tr></tfoot>
           </table>
         </div>
-      </div>
-     </div>
-  </div>
-</div>
-    
-  <div class="col-sm-6">
-   <div class="panel panel-danger">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a class="col" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Payment Type
-        <i class="glyphicon glyphicon-chevron-up pull-right"></i>
-        </a>
-      </h4>
-    </div>
-     <div id="collapseTwo" class="panel-collapse collapse">
-      <div class="panel-body">
-       <div class="col-md-6 col-lg-6">
+        <div class="col-md-6 col-lg-6">
         <table class="table">
           <thead><tr><th>Payment Type</th><th>Count</th><th>Amount</th></tr></thead>
             <tbody>
@@ -128,13 +112,13 @@
       </div>
      </div>
   </div>
-  </div>
-
-
-
-  <div class="col-sm-12" style="margin-top:10px;">
+</div>
+    
+<div class="col-sm-12" style="margin-top:10px;">
     <div class="panel panel-info"> 
-      <div class="panel-heading">Sale Register</div>
+      <div class="panel-heading col" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Sale Register
+      <i class="glyphicon glyphicon-chevron-up pull-right"></i></div>
+      <div id="collapseTwo" class="panel-collapse collapse">
         <div class="panel-body">
           <table id="fileData" class="table table-striped table-bordered table-condensed table-hover" style="margin-bottom:5px;">
 	         <thead>
@@ -214,6 +198,7 @@ if(is_array($data) && count($data)>0) {
       </tfoot>
    </tbody>
 </table>
+</div>
 </div>
 </div>
 </div>
