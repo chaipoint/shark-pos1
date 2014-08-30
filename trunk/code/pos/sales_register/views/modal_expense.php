@@ -24,12 +24,12 @@
 						<tr>
 							<td>Head 
 							</td>
-							<td>
+							<td> 
 								<span class="inv_cus_con"> 
 									<select name="expense_head" id="expense_head" class="form-control" required data-bv-notempty-message="The last name is required and cannot be empty">
                                      <option value=''>Select Head</option>
                                      <?php foreach ($head_data as $key => $value) { ?>
-                                     <option value="<?php echo $value['id']; ?>"><?php echo $value['name']; ?></option>
+                                     <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
                                      <?php } ?>
 									</select>	
 								</span>
@@ -110,12 +110,15 @@
 				  </thead>
                     <tbody class="text-center">
                     	<?php  
-                    	$i = 1; $total = 0;
+                    	$i = 1; $total = 0; 
                     	if(array_key_exists('rows', $expense_data) && count($expense_data['rows'])>0){
                     		foreach ($expense_data['rows'] as $key => $value) { 
+                    			if(array_key_exists($value['doc']['expense_head'], $head_data)){ 
+                    				$head = $head_data[$value['doc']['expense_head']];
+                    			}
                                	echo '<tr>
                                          <td>'.$i.'</td>
-				  		      			 <td>'.$value['doc']['expense_head'].'</td>
+				  		      			 <td>'.$head.'</td>
 				  		     			 <td>'.$value['doc']['expense_purpose'].'</td>
 				  		     			 <td>'.$value['doc']['expense_done_by'].'</td>
 				  		     			 <td>'.$value['doc']['expense_approved_by'].'</td>
