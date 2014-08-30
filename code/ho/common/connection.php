@@ -14,7 +14,7 @@
 	
 	global $currentDateTime24, $currentDateTime,$currentTime,$currentDate,$currentTime12,$currentTime24;
 	
-	$sql_host = 'localhost' ;
+	$sql_host = '54.249.247.15' ;
 	$sql_user = 'root';
 	$sql_password = 'root';
     //$sql_user = 'root';
