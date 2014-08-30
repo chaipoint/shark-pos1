@@ -23,7 +23,7 @@ class CouchPHP{
 		$this->db = 'sharp_ho_db';
 		$this->userName = '';
 		$this->password = '';
-		$this->remote = 'http://pos:pos@54.249.247.15:5984/rakesh_cpos_ho';
+		//$this->remote = 'http://pos:pos@54.249.247.15:5984/rakesh_cpos_ho';
 	}
 	public function getUrl(){
 		return $this->url;

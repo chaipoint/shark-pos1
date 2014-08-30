@@ -1,5 +1,8 @@
 <?php 
-require_once 'common/couchdb.phpclass.php';
+require_once '../lib/log4php/Logger.php';
+Logger::configure('config.xml');
+require_once 'couchdb_phpclass.php';
+
 error_reporting(-1);
 
 echo init();
@@ -101,7 +104,7 @@ function init(){
        "language" => "javascript",
        "views" => array(
          "config_list" => array(
-           "map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type=='config_master'){ for( var key in doc){ if(key != '_id' && key != '_rev' && key != 'cd_doc_type'){ emit(key, doc[key]); } }}}"
+           "map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type=='config_master'){ for( var key in doc){ if(key != '_id' && key != '_rev' && key != 'cd_doc_type'){ emit(key, doc[key]); } } }}"
           )
         )
    );
