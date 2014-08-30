@@ -209,4 +209,17 @@
 			}
 			return $arr;
 		}
+		public function checkRepStatus($con){
+			$arr = array('error'=>false, 'message'=>'', 'data' => array());
+			$error = false;
+			if(!is_object($con)){
+				$arr['error'] = true;
+				$arr['message'] = 'connection_null';
+				$error = true;				
+			}
+			if(!error){
+				$arr['data'] = $con->getActiveTask();
+			}
+			return $arr;
+		}
 	}
