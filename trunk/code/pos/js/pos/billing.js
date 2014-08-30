@@ -25,6 +25,7 @@ $(document).ready(function(){
 		$('.bill_qty_input').prop('readonly',true).removeClass('bill_qty_input');
 		$('.category-selection').removeClass('category-selection');
 		$('.category-product').removeClass('category-product');
+		$('#add_discount').attr('id','');
 
 	}
 
@@ -114,21 +115,6 @@ $(document).ready(function(){
 			if(newQty != 0){
 				generateSalesTable(pID, newQty);
 			}
-
-/*
-			var itemTr = $(this).closest('tr');
-			var billItem = $billingItems[pID];
-				//Reset Qty + amount + tax Amount
-			$totalBillQty -= billItem.qty;
-			$totalAmountWT -= billItem.netAmount;
-			$totalAmountWOT -= billItem.qty * billItem.taxAbleAmount;
-			$totalTaxAmount -= billItem.qty * billItem.taxAmount;
-			$totalDiscountAmount -= billItem.qty * billItem.discountAmount;
-
-			$billingItems[pID].qty = newQty;
-			$billingItems[pID].netAmount = $billingItems[pID].qty * billItem.totalAmount ;
-/**/
-			
 			event.preventDefault();
 		});
 
@@ -248,17 +234,20 @@ $(document).ready(function(){
 				$("#paid-amount").prop('autofocus',true);
 				$("#is_cod").val('N');
 
-				$("#delivery_channel").val(7);
-				$("#delivery_channel_name").val(delivery_channel[7]);
+				$("#delivery_channel").val(63);
+				$("#delivery_channel_name").val(config_data.delivery_channel[63]);
+				$("#booking_channel").val(53);
+				$("#booking_channel_name").val(config_data.channel[53]);
 				$("#is_cod").val('N');
 				$("#is_prepaid").val('Y');
 				$("#is_credit").val('N');
-				$("#bill_status").val('Paid');
+				$("#bill_status_id").val(68);
+				$("#bill_status").val(config_data.bill_status[68]);
 				if(loadedBill){ 
 					$('.payment-type-bt[data-value="'+loadedBill.payment_method+'"]').trigger('click');
 					$("#paid-amount").val(Math.ceil($totalAmountWT.toFixed(2)));
-					$("#delivery_channel").val(8);
-					$("#delivery_channel_name").val(delivery_channel[8]);
+					$("#delivery_channel").val(62);
+					$("#delivery_channel_name").val(config_data.delivery_channel[62]);
 					$("#booking_channel").val(loadedBill.channel_id);
 					$("#booking_channel_name").val(loadedBill.channel_name);
 
@@ -272,15 +261,12 @@ $(document).ready(function(){
 					$("span#sublocality").text(loadedBill.sublocality);
 					$("#billing_customer_landmark").val(loadedBill.landmark);
 					$("#billing_customer_company_name").val(loadedBill.company);
-					$("span#company").text(loadedBill.company);
-
-					console.log(loadedBill);
-
-					
+					$("span#company").text(loadedBill.company);					
 					$("#is_cod").val('Y');
 					$("#is_prepaid").val('N');
 					$("#is_credit").val('N');
-					$("#bill_status").val('CoD');
+					$("#bill_status").val(config_data.bill_status[68]);
+					$("#bill_status_id").val(68);
 			}
 
 			}
@@ -331,6 +317,7 @@ $(document).ready(function(){
 			
 			billDetails.is_credit = $("#is_credit").val();
 			billDetails.bill_status = $("#bill_status").val();
+			billDetails.bill_status_id = $("#bill_status_id").val();
 
 			billDetails.booking_channel_id = $("#booking_channel").val();
 			billDetails.booking_channel_name = $("#booking_channel_name").val();
@@ -356,15 +343,6 @@ $(document).ready(function(){
 			billDetails.card.balance = '';
 			billDetails.reprint = 1;
 
-
-
-/*			billDetails.location_id = $totalBillQty;
-			billDetails.location_name = $totalBillQty;
-			billDetails.store_id = store_id;
-			billDetails.store_name = store_name;
-			billDetails.staff_id = staff_id;
-			billDetails.staff_name = staff_name;
-			/***/
 
 			billDetails.request_type = 'save_bill';
 
@@ -558,7 +536,8 @@ $(document).ready(function(){
 						if(parseInt($('#get_ds').val())>100){
 
 						}else{
-							$intDiscount = parseInt($('#get_ds').val());
+							var dis = parseInt($('#get_ds').val());
+							$intDiscount = isNaN(dis) ? $intDiscount : dis;
 							generateSalesTable();
 						}
 						$("div.ui-keyboard").hide();
@@ -695,6 +674,7 @@ function resetBill(refresh){
 	$("#ts_con").text($totalTaxAmount);
 	$("#saletbl tbody").html("");	
 	$("#ds_con").text($totalDiscountAmount);
+	$("#paid-amount").val('');
 }
 
 var setFocus = function() { 

@@ -1,6 +1,14 @@
+function toggleRepBT (){
+	if(is_rep_running){
+		$("#billing_sync_bt").addClass('hidden')
+		$("#billing_stop_sync_bt").removeClass('hidden')
+	}else{
+		$("#billing_stop_sync_bt").addClass('hidden')
+		$("#billing_sync_bt").removeClass('hidden')		
+	}
+}
 $(document).ready( function(){
-
-
+	toggleRepBT ();
 /* DatePicker Class Function */
   /*  $('.datepicker').datepicker({
 		maxDate:0,
