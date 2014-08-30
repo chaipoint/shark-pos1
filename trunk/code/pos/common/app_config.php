@@ -171,13 +171,42 @@
 			$this->cMonth =  Date("m");
 			return $this->cMonth;
 		}
-		public function getDBConnection(){
+		public function getDBConnection($connection){
 			global $sql_host, $sql_user, $sql_password, $sql_db; 
-			$sql_host = '54.249.247.15' ;
-			$sql_user = 'root';
-			$sql_password = 'root';
-			$sql_db = 'cabbeein_cpos';			
+			$details = $this->getConfig($connection,'db_detail');
+			$dt = $details['data']['db_detail'];
+			$sql_host = $dt['host'];
+			$sql_user = $dt['username'];
+			$sql_password = $dt['password'];
+			$sql_db = $dt['db'];			
 			$this->db = new Database();
 		}
-
+		public function getConfig($connection, $key){
+			$arr = array('error'=>false, 'message'=>'', 'data' => array());
+			$error = false;
+			if(!is_object($connection)){
+				$arr['error'] = true;
+				$arr['message'] = 'connection_null';
+				$error = true;				
+			}
+			$param = array();
+			if(!is_array($key)){
+				$key = trim($key);
+				if(empty($key)){
+					$arr['error'] = true;
+					$arr['message'] = 'key_null';
+					$error = true;								
+				}
+				$param['key'] = '"'.$key.'"';
+			}else{
+				$param['keys'] = '["'.implode('","',$key).'"]';				
+			}
+			if(!$error){
+				$result = $connection->getDesign('config')->getView('config_list')->setParam($param)->execute();
+				foreach($result['rows'] as $key => $value){
+					$arr['data'][$value['key']] = $value['value'];
+				}
+			}
+			return $arr;
+		}
 	}
