@@ -1,11 +1,11 @@
 $(document).ready( function(){
 
 /* DatePicker Class Function */
-    $('.datepicker').datepicker({
+  /*  $('.datepicker').datepicker({
 		maxDate:0,
 		dateFormat:'yy-mm-dd'
 	}).datepicker('setDate',new Date());
-
+*/
 /* Function To Add Prety Expense */
 	$('#add_expense').click(function(event){
 		event.preventDefault();
@@ -59,4 +59,14 @@ $(document).ready( function(){
     }
     });	
 
+/* Number Validation For Amount */
+	$('.col').click(function(){
+		if($(this).find('i').attr('class')=='glyphicon glyphicon-chevron-up pull-right'){
+			$(this).find('i').removeClass('glyphicon glyphicon-chevron-up pull-right');
+			$(this).find('i').addClass('glyphicon glyphicon-chevron-down pull-right');
+		}else if($(this).find('i').attr('class')=='glyphicon glyphicon-chevron-down pull-right'){
+			$(this).find('i').removeClass('glyphicon glyphicon-chevron-down pull-right');
+			$(this).find('i').addClass('glyphicon glyphicon-chevron-up pull-right');
+		}
+	});
 });
