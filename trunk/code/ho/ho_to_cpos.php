@@ -24,6 +24,8 @@ function uploadBill(){
     $couch = new CouchPHP();
 	$result = $couch->getDesign('billing')->getView('bill_by_no_mid')->setParam(array('include_docs'=>'true'))->execute();
 	
+
+	
 	$docsData = array();
 	$html = array();
 	if(array_key_exists('rows', $result)){
