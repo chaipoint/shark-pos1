@@ -10,17 +10,9 @@
 		function index(){
 
 			//Block to get Configs and need to have a generic methode for that
-			$configList = $this->cDB->getDesign('config')->getView('config_list')->setParam(array('include_docs'=>'true',"startkey"=>'["bill_config"]',"endkey"=>'["bill_config",{}]'))->execute();
-			$deliveryChannel = array_key_exists(0, $configList['rows']) ? $configList['rows'][0]['doc']['category_data']['delivery_channel'] : array();
-/*			foreach($configList['rows'][0]['doc']['category_data']['delivery_channel'] as $key => $value){
-				$deliveryChannel[$value] = $key;
-			}/**/
+			$configResult = $this->getConfig($this->cDB, array('channel','bill_status',"payment_mode", 'delivery_channel'));
+			$configData = (count($configResult['data']) > 0) ? $configResult['data'] : array();
 
-			$payment_method = array("5"=>"cash","5"=>"ppc");
-			$delivery_channel = array("5"=>"cash","5"=>"ppc");
-			$booking_channel = array("5"=>"cash","5"=>"ppc");
-			$bill_status = array("5"=>"cash","5"=>"ppc");
-			$order_status = array("5"=>"cash","5"=>"ppc");
 
 			$resultJSON = $this->cDB->getDesign('store')->getView('store_mysql_id')->setParam(array('include_docs'=>'true',"key"=>'"'.$_SESSION['user']['store']['id'].'"'))->execute();
 //			print_r();
@@ -56,7 +48,7 @@
 
 			$this->commonView('header_html');
 			$this->commonView('navbar');
-			$this->view(array('catList'=>$catList,'productList'=>$productList,'firstCat'=>$firstCat, 'delivery_channel'=>$deliveryChannel,'bill'=>$billData));
+			$this->view(array('catList'=>$catList,'productList'=>$productList,'firstCat'=>$firstCat, 'config_data'=>$configData,'bill'=>$billData));
 			$this->commonView('footer_inner');
 			$this->commonView('footer_html');
 		}
