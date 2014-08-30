@@ -6,75 +6,154 @@
 <script type="text/javascript" src="<?php echo (JS.'dataTables.jqueryui.js');?>" ></script>
 <script type="text/javascript" src="<?php echo (JS.'pos/sale_register.js');?>" ></script>
 
-<div class="col-md-12 col-lg-12">
-  <h3>Sales on <?php echo date('d-M-Y');?></h3> 
-  <!-- Single button -->
-<div class="btn-group pull-right">
-  <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
-    Petty Expense <span class="caret"></span>
-  </button>
-  <ul class="dropdown-menu" role="menu">
-    <li><a href='#' id="add_expense">Add Expense</a></li>
-    <li><a href='#' id="view_expense">View Expense</a></li>
-    </ul>
-</div>
-  Cash Sale : <span class="lead" style="color:blue"><?php echo $cash_sale;?></span><br/>
-  Cash In Delivery : <span class="lead" style="color:green"><?php echo $cash_indelivery;?></span>
+<div class="container-fluid">
+<ol class="breadcrumb">
+<li>Sales ON <?php echo date('d-M-Y');?></li>
+</ol>
+<div class='row'>
+      
+      <div class="col-lg-2 col-sm-4">
+        <div class="smallstat box">
+          <i class="fa fa-usd green"></i>
+          <span class="title">Cash Sale</span>
+          <span class="value"><?php echo $cash_sale;?></span>
+        </div>
+      </div>
+
+      <div class="col-lg-2 col-sm-4">
+        <div class="smallstat box">
+          <i class="glyphicon glyphicon-usd fa pink"></i>
+          <span class="title">Cash In Delivery</span>
+          <span class="value"><?php echo $cash_indelivery;?></span>
+        </div>
+      </div>
+
+      <div class="col-lg-2 col-sm-4">
+        <div class="smallstat box">
+          <i class="glyphicon glyphicon-usd fa blue"></i>
+          <span class="title">PPC Sale</span>
+          <span class="value">2000</span>
+        </div>
+      </div>
+
+      <div class="col-lg-2 col-sm-4">
+        <div class="smallstat box">
+          <i class="glyphicon glyphicon-usd fa red"></i>
+          <span class="title">Petty Expense</span>
+          <span class="value">3000</span>
+        </div>
+      </div>
+
+      <div class="col-lg-2 col-sm-4">
+        <div class="smallstat box">
+          <i class="glyphicon glyphicon-usd fa orange"></i>
+          <span class="title">Total Sale</span>
+          <span class="value">4000</span>
+        </div>
+      </div>
+
+      <div class="btn-group pull-right">
+        <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
+          Petty Expense <span class="caret"></span>
+        </button>
+          <ul class="dropdown-menu" role="menu">
+            <li><a href='#' id="add_expense">Add Expense</a></li>
+            <li><a href='#' id="view_expense">View Expense</a></li>
+          </ul>
+      </div>
 </div>
 
-<div class="col-md-6 col-lg-6">
-  <table class="table">
-      <thead><tr><th>Bill Status</th><th>Count</th><th>Amount</th></tr></thead>
-      <tbody>
-          <?php $total = 0; foreach($bill_status['count'] as $key => $value){
-              $total += ($key == 'Cancelled') ? 0 : $bill_status['amount'][$key];;
-            ?>
-          <tr>
-              <td><?php echo $key;?></td>
-              <td class="text-right"><?php echo $value;?></td>
-              <td class="text-right"><?php echo ($key == 'Cancelled') ? 0 : $bill_status['amount'][$key];?></td>
-          </tr>
+<div class="row">
+  <div class="panel-group" id="accordion">
+    <div class="col-sm-6">
+  <div class="panel panel-success">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a class="col" data-toggle="collapse" data-parent="#accordion" href="#collapseOne"> Bill Status
+        <i class="glyphicon glyphicon-chevron-up pull-right"></i>
+        </a>
+      </h4>
+    </div>
+     <div id="collapseOne" class="panel-collapse collapse">
+      <div class="panel-body">
+       <div class="col-md-6 col-lg-6">
+        <table class="table">
+          <thead><tr><th>Bill Status</th><th>Count</th><th class="text-center">Amount</th></tr></thead>
+            <tbody>
+              <?php $total = 0; foreach($bill_status['count'] as $key => $value){
+                $total += ($key == 'Cancelled') ? 0 : $bill_status['amount'][$key];;
+               ?>
+              <tr>
+                <td class="text-center"><?php echo $key;?></td>
+                <td class="text-center"><?php echo $value;?></td>
+                <td class="text-center"><?php echo ($key == 'Cancelled') ? 0 : $bill_status['amount'][$key];?></td>
+              </tr>
           <?php }?>
-      </tbody>
-      <tfoot><tr><td>Total</td><td></td><td class="text-right"><?php echo $total;?></td></tr></tfoot>
-  </table>
+            </tbody>
+              <tfoot><tr><th class="text-center">Total</th><th></th><th class="text-center"><?php echo $total;?></th></tr></tfoot>
+          </table>
+        </div>
+      </div>
+     </div>
+  </div>
 </div>
-<div class="col-md-6 col-lg-6">
-    <table class="table">
-      <thead><tr><th>Payment Type</th><th>Count</th><th>Amount</th></tr></thead>
-      <tbody>
-          <?php $total = 0; foreach($payment_type['amount'] as $key => $value){ $total += $value;?>
-          <tr>
-              <td><?php echo $key;?></td>
-              <td class="text-right"><?php echo $payment_type['count'][$key];?></td>
-              <td class="text-right"><?php echo $value;?></td>
-          </tr>
-          <?php }?>
-      </tbody>
-      <tfoot><tr><td>Total</td><td></td><td class="text-right"><?php echo $total;?></td></tr></tfoot>
-  </table>
-</div>
+    
+  <div class="col-sm-6">
+   <div class="panel panel-danger">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a class="col" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Payment Type
+        <i class="glyphicon glyphicon-chevron-up pull-right"></i>
+        </a>
+      </h4>
+    </div>
+     <div id="collapseTwo" class="panel-collapse collapse">
+      <div class="panel-body">
+       <div class="col-md-6 col-lg-6">
+        <table class="table">
+          <thead><tr><th>Payment Type</th><th>Count</th><th>Amount</th></tr></thead>
+            <tbody>
+                <?php $total = 0; foreach($payment_type['amount'] as $key => $value){ $total += $value;?>
+              <tr>
+                <td class="text-center"><?php echo $key;?></td>
+                <td class="text-center"><?php echo $payment_type['count'][$key];?></td>
+                <td class="text-center"><?php echo $value;?></td>
+              </tr>
+                   <?php }?>
+            </tbody>
+              <tfoot><tr><th class="text-center">Total</th><th></th><th class="text-center"><?php echo $total;?></th></tr></tfoot>
+        </table>
+       </div>
+      </div>
+     </div>
+  </div>
+  </div>
 
-  
-  <table id="fileData" class="table table-striped table-bordered table-condensed table-hover" style="margin-bottom:5px;">
-	  <thead>
-        <tr class="active">
-            <th>Bill No</th>
-            <th>Item Count</th>
-            <th>Sub Total</th>
-            <th>Tax</th>
-            <th>Total Amount</th>
-            <th>Delivery Channel</th>
-            <th>Booking Channel</th>
-            <th>Paid By</th>
-            <th>Status</th>
-            <th>Is Cod</th>
-            <th>Is PrePaid</th>
-            <th>Is Credit</th>
-            <th style="width:120px; text-align:left;">Actions</th>
-        </tr>
-    </thead>
-	<tbody>
+
+
+  <div class="col-sm-12" style="margin-top:10px;">
+    <div class="panel panel-info"> 
+      <div class="panel-heading">Sale Register</div>
+        <div class="panel-body">
+          <table id="fileData" class="table table-striped table-bordered table-condensed table-hover" style="margin-bottom:5px;">
+	         <thead>
+              <tr class="active">
+                <th>Bill No</th>
+                <th>Item Count</th>
+                <th>Sub Total</th>
+                <th>Tax</th>
+                <th>Total Amount</th>
+                <th>Delivery Channel</th>
+                <th>Booking Channel</th>
+                <th>Paid By</th>
+                <th>Status</th>
+                <th>Is Cod</th>
+                <th>Is PrePaid</th>
+                <th>Is Credit</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+	       <tbody>
 
 <?php $sub_total = $total_amount = $total_tax =0;
 if(is_array($data) && count($data)>0) { 
@@ -134,6 +213,11 @@ if(is_array($data) && count($data)>0) {
       </tfoot>
    </tbody>
 </table>
+</div>
+</div>
+</div>
+</div>
+</div>
 <?php require_once 'modal_expense.php';?>
 <script>
 var oTable = null;
