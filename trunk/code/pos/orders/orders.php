@@ -16,6 +16,8 @@
 		function updateOrderStatus(){
 		    $dir =  dirname(__FILE__).'/../lib/msg_api/sms.php';
             require_once $dir; 
+            global $couch;
+            $details = $this->getConfig($couch,'sms_api');
 			$return = array('error' => false, 'message' => '', 'data' => array());
 			if(array_key_exists('new_status', $_POST) && array_key_exists('current_status', $_POST)){
 				$current = $_POST['current_status'];
@@ -34,7 +36,7 @@
 										   'To'    => $_POST['customer_phone'],
 						                   'Body'  => $msgBody
 				                         );
-				           // call_api($data,'send');
+				           call_api($data,'send',$details);
 
 						}else if ($_POST['current_status']=='Dispatched') {
 							$msgBody = "Dear ".ucfirst($_POST['customer_name']).", Your Chai-On-Call Order #".$order." has been Dispatched From '".$_POST['store_name']."' Store. Your bill amount is Rs '".$_POST['net_amount']."'. Thank you!";
@@ -42,7 +44,7 @@
 										   'To'    => $_POST['customer_phone'],
 						                   'Body'  => $msgBody
 				                         );
-				            //call_api($data,'send');
+				            call_api($data,'send',$details);
 						}
 				}else{
 					$return['error'] = true;
