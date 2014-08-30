@@ -1,5 +1,6 @@
 $(document).ready( function(){
 
+
 /* DatePicker Class Function */
   /*  $('.datepicker').datepicker({
 		maxDate:0,
@@ -24,8 +25,9 @@ $(document).ready( function(){
 
 
 /* Function To Save Petty Expense */
-	$('#submit-expense').on('click', function(event){
+	$('#add-expense-form').on('submit', function(event){
 		event.preventDefault();
+        $('#add-expense-form').bootstrapValidator();
 		if($('input[name="expense_done_by_id"]').val()==undefined){
 			bootbox.alert('Please Select Done By');
 			return false;
@@ -48,8 +50,10 @@ $(document).ready( function(){
 					$('#addExpenseModal').modal('hide');
 					//$('form#add-expense-form')[0].reset();
 					bootbox.alert('Expense Successfully Saved');
+					window.location.reload(true);
 				}
 			});
+
 	});
 
 /* Number Validation For Amount */

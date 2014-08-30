@@ -83,6 +83,18 @@ $(document).ready(function(){
 			});
 		});
 		//---END--- Todays Sale Request
+
+		$(document).ajaxSuccess(function() {
+ 		  $('.btn').attr('disabled', false);
+		});
+
+		$(document).ajaxError(function() {
+ 		  bootbox.alert('Error In Ajax Request!Please Contact Admin');
+		});
+
+		$(document).ajaxSend(function() { 
+ 		  $('.btn').attr('disabled', true);
+		});
 });
 
 var createDataTable = function (path) { 
