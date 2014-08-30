@@ -2,14 +2,9 @@
 	class Orders extends App_config{
 		function __construct(){
 			parent::__construct();
+			global $couch;
 			$this->log =  Logger::getLogger("CP-POS|ORDERS");
-			global $sql_host, $sql_user, $sql_password, $sql_db;
-			$sql_host = 'localhost' ;
-			$sql_user = 'root';
-			$sql_password = '';
-			$sql_db = 'cabbeein_cpos';			
-			$this->db = new Database();
-
+			$this->getDBConnection($couch);
 		}
 		function getStaff(){
 			$db = $this->db;
