@@ -6,12 +6,12 @@
 			parent::__construct();
 			global $couch;
 			$this->cDB = $couch;
+			$this->getDBConnection($this->cDB);
 		}
 		function index(){
 		//	http://127.0.0.1:5984/testing/_design/billing/_list/handle_updated_bills/handle_updated_bills?descending=true&include_docs=true
 			$resultBillList = $this->cDB->getDesign('billing')->getList('sales_register','handle_updated_bills')->setParam(array("include_docs"=>"true","descending"=>"true", "endkey" => '["'.$this->getCDate().'"]'))->execute();//, "endkey" => '["'.$this->getCDate().'"]'
 			$resultExpenseList = $this->cDB->getDesign('petty_expense')->getView('get_expense')->setParam(array("include_docs"=>"true","startkey"=>'"'.$this->getCDate().'"',"endkey"=>'"'.$this->getCDate().'"'))->execute();
-			$this->getDBConnection($this->cDB);
 			$getHeadQuery = 'SELECT id, name FROM cp_reference_master WHERE active ="Y" AND mode = "head"';
 			$result = $this->db->func_query($getHeadQuery);
 			
