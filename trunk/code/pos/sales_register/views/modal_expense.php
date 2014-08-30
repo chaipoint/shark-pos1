@@ -17,7 +17,7 @@
 							</td>
 							<td width="50%">
 								<span class="inv_cus_con"> 
-									<input type="text" id="expense_date" class="form-control datepicker" data-provide="datepicker-inline" data-date-format="yyyy/mm/dd" name="expense_date"/>	
+									<input type="text" id="expense_date" class="form-control datepicker" required data-bv-notempty-message="The last name is required and cannot be empty" data-provide="datepicker-inline" data-date-format="yyyy/mm/dd" name="expense_date"/>	
 								</span>
 							</td>
 						</tr>
@@ -26,7 +26,7 @@
 							</td>
 							<td>
 								<span class="inv_cus_con"> 
-									<select name="expense_head" id="expense_head" class="form-control">
+									<select name="expense_head" id="expense_head" class="form-control" required data-bv-notempty-message="The last name is required and cannot be empty">
                                      <option value=''>Select Head</option>
                                      <?php foreach ($head_data as $key => $value) { ?>
                                      <option value="<?php echo $value['id']; ?>"><?php echo $value['name']; ?></option>
@@ -40,7 +40,7 @@
 							</td>
 							<td>
 								<span class="inv_cus_con"> 
-									<input type="text" id="expense_purpose" class="form-control" name="expense_purpose" />	
+									<input type="text" id="expense_purpose" class="form-control" name="expense_purpose" required data-bv-notempty-message="The last name is required and cannot be empty" />	
 								</span>
 							</td>
 						</tr>
@@ -49,7 +49,7 @@
 							</td>
 							<td>
 								<span class="inv_cus_con"> 
-									<input type="text" id="expense_amount" class="form-control" name="expense_amount" />	
+									<input type="text" id="expense_amount" class="form-control" name="expense_amount" required data-bv-notempty-message="The last name is required and cannot be empty" />	
 								</span>
 							</td>
 						</tr>

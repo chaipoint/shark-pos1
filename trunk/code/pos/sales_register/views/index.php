@@ -1,9 +1,11 @@
 <link rel="stylesheet" type="text/css" href="<?php echo (CSS.'common.css'); ?>" />
 <link rel="stylesheet" type="text/css" href="<?php echo (CSS.'ui-lightness/jquery-ui-1.8.20.custom.css'); ?>" />
 <link rel="stylesheet" href="<?php echo (CSS.'jquery.dataTables_themeroller.css');?>">
+<link rel="stylesheet" href="<?php echo CSS ;?>bootstrapValidator.css"/>
 <script type="text/javascript" src="<?php echo (JS.'jquery.dataTables.js');?>"></script>
 <script type="text/javascript" src="<?php echo (JS.'dataTables.tableTools.js');?>"></script>
 <script type="text/javascript" src="<?php echo (JS.'dataTables.jqueryui.js');?>" ></script>
+<script type="text/javascript" src="<?php echo JS; ?>bootstrapValidator.js"></script>
 <script type="text/javascript" src="<?php echo (JS.'pos/sale_register.js');?>" ></script>
 
 <div class="container-fluid">
@@ -40,7 +42,13 @@
         <div class="smallstat box">
           <i class="glyphicon glyphicon-usd fa red"></i>
           <span class="title">Petty Expense</span>
-          <span class="value">3000</span>
+          <span class="value">3000 &nbsp;<em data-toggle="dropdown" id="pe_tg"class="glyphicon glyphicon-chevron-right"></em> 
+            <ul class="dropdown-menu" role="menu">
+            <li><a href='#' id="add_expense">Add Expense</a></li>
+            <li><a href='#' id="view_expense">View Expense</a></li>
+          </ul>
+
+            </span>
         </div>
       </div>
 
@@ -52,15 +60,7 @@
         </div>
       </div>
 
-      <div class="btn-group pull-right">
-        <button type="button" class="btn btn-primary btn-sm dropdown-toggle" data-toggle="dropdown">
-          Petty Expense <span class="caret"></span>
-        </button>
-          <ul class="dropdown-menu" role="menu">
-            <li><a href='#' id="add_expense">Add Expense</a></li>
-            <li><a href='#' id="view_expense">View Expense</a></li>
-          </ul>
-      </div>
+      
 </div>
 
 <div class="row">
