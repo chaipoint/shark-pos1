@@ -34,7 +34,7 @@
 										   'To'    => $_POST['customer_phone'],
 						                   'Body'  => $msgBody
 				                         );
-				            call_api($data,'send');
+				           // call_api($data,'send');
 
 						}else if ($_POST['current_status']=='Dispatched') {
 							$msgBody = "Dear ".ucfirst($_POST['customer_name']).", Your Chai-On-Call Order #".$order." has been Dispatched From '".$_POST['store_name']."' Store. Your bill amount is Rs '".$_POST['net_amount']."'. Thank you!";
@@ -42,7 +42,7 @@
 										   'To'    => $_POST['customer_phone'],
 						                   'Body'  => $msgBody
 				                         );
-				            call_api($data,'send');
+				            //call_api($data,'send');
 						}
 				}else{
 					$return['error'] = true;
