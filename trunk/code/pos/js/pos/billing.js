@@ -11,6 +11,7 @@ var order = 0;
 var loadedBill = null;
 var modifyBill = false;
 $(document).ready(function(){
+	$(this).attr("title", "Shark |Billing| ChaiPoint POS"); 
 	/*
 	*	PLEASE Don't Change This code Block Without Prior Permission
 	*/
