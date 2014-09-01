@@ -54,7 +54,7 @@
 					</li>
 					
 					<li>
-						<a class="tip" data-placement="left" title="Logout" href="index.php?dispatch=login.out">
+						<a class="tip" data-placement="left" title="Logout" id="logout">
 							<i class="glyphicon glyphicon-log-out"></i> 
 						</a>
 					</li>
