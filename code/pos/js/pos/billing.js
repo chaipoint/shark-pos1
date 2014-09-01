@@ -173,7 +173,7 @@ $(document).ready(function(){
 				$(".ppc").show();
 				$('#balance').closest('tr').hide();
 				bootbox.alert('Please Swipe The Card', function() { 
-				setTimeout('setFocus()',200);	
+				setTimeout('setFocus("ppc")',200);	
 				});
 			}else{
 				$('#balance').closest('tr').show();
@@ -279,6 +279,19 @@ $(document).ready(function(){
 		//---START--- SUbmit Payment Bill
 		$("#submit-sale").click(function(event){
 			event.preventDefault();
+
+			$("#phone_number").on('keypress',function (e){ 
+     			if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+        		return false;
+    		}
+    		});	
+			var phoneno = /^\d{10}$/;
+			if(!$('#phone_number').val().match(phoneno)){
+				bootbox.alert('Please Enter Valid Phone No', function() { 
+				setTimeout('setFocus("phone_number")',100);
+			});
+        		return false;
+			}
 			if(!$('#paid-amount').val()){
 				bootbox.alert("Please Enter Payment Amount");
 				return false;
@@ -293,7 +306,8 @@ $(document).ready(function(){
 				return false;				
 			}
 			if($("#paid_by").val() == 'ppc' ){
-
+             bootbox.alert('Please Select Valid Payment Method');
+             return false;
 			}
 			var billDetails = new Object();
 			billDetails.items = new Object();
@@ -677,6 +691,6 @@ function resetBill(refresh){
 	$("#paid-amount").val('');
 }
 
-var setFocus = function() { 
-  $('input[id="ppc"]').focus();
+var setFocus = function(id) { 
+  $('input[id='+id+']').focus();
 }
