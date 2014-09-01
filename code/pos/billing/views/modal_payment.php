@@ -1,3 +1,4 @@
+
 <div class="modal fade" id="payModal" tabindex="-1" role="dialog" aria-labelledby="payModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -46,7 +47,7 @@
 								</span>
 							</td>
 						</tr>
-						<tr>
+						<tr class='hide' >
 							<td width="50%">City 
 							</td>
 							<td width="50%">
@@ -55,7 +56,7 @@
 								</span>
 							</td>
 						</tr>
-						<tr>
+						<tr class='hide'>
 							<td width="50%">Locality 
 							</td>
 							<td width="50%">
@@ -64,7 +65,7 @@
 								</span>
 							</td>
 						</tr>
-						<tr>
+						<tr class='hide'>
 							<td width="50%">Sublocality 
 							</td>
 							<td width="50%">
@@ -73,11 +74,20 @@
 								</span>
 							</td>
 						</tr>
-						<tr>
+						<tr class='hide'>
 							<td width="50%">Company 
 							</td>
 							<td width="50%">
 								<span class="inv_cus_con" id="company"> 
+										
+								</span>
+							</td>
+						</tr>
+						<tr class='hide'>
+							<td width="50%">Landmark 
+							</td>
+							<td width="50%">
+								<span class="inv_cus_con" id="landmark"> 
 										
 								</span>
 							</td>
