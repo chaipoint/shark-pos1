@@ -29,7 +29,7 @@ $(document).ready(function(){
 		});
 	});
 
-	//---START--- Todays Sale Request
+/* Todays Sale Request */
 		$('#todays_sale').click(function(){
 			$.ajax({
 				type: 'POST',
@@ -82,7 +82,20 @@ $(document).ready(function(){
 				} 
 			});
 		});
-		//---END--- Todays Sale Request
+/*END--- Todays Sale Request */
+
+/* Logout ConfirmBox */
+		$('#logout').on('click', function(event){
+			event.preventDefault();
+			bootbox.confirm("Are you sure to Logout?", function(result) {
+            if(result==true){
+            	window.location='index.php?dispatch=login.out';
+            }
+		});
+
+		});		
+
+
 
 		$(document).ajaxSuccess(function() {
  		  $('.btn').attr('disabled', false);
