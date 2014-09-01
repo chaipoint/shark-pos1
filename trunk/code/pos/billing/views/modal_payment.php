@@ -104,10 +104,13 @@
 						</tr>
 
 						<tr>
+
 							<td>Paid by:</td>
-							<td>
-								<a class="btn btn-sm btn-primary payment-type-bt" data-value="cash">Cash</a>
-								<a class="btn btn-sm btn-primary payment-type-bt" data-value="ppc">PPC</a>
+							<td><?php if(is_array($config_data['payment_mode']) && count($config_data['payment_mode'])>0){
+										foreach ($config_data['payment_mode'] as $key => $value) { ?>
+										
+								<a class="btn btn-sm btn-primary payment-type-bt" data-value="<?php echo strtolower($value); ?>"><?php echo $value; ?></a>
+								<?php }} ?>
 								<input type="hidden" name="paid_by" id="paid_by">
 							</td>
 						</tr>
