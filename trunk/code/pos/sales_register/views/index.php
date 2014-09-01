@@ -116,8 +116,8 @@
     
 <div class="col-sm-12" style="margin-top:10px;">
     <div class="panel panel-info"> 
-      <div class="panel-heading col" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">Sale Register
-      <i class="glyphicon glyphicon-chevron-up pull-right"></i></div>
+      <div class="panel-heading col" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><a>Sale Register
+      <i class="glyphicon glyphicon-chevron-up pull-right"></i></a></div>
       <div id="collapseTwo" class="panel-collapse collapse">
         <div class="panel-body">
           <table id="fileData" class="table table-striped table-bordered table-condensed table-hover" style="margin-bottom:5px;">
