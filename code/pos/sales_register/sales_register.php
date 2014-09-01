@@ -9,7 +9,7 @@
 		}
 		function index(){
 			$activeTask = $this->cDB->getActiveTask();
-			$resultBillList = $this->cDB->getDesign('billing')->getList('sales_register','handle_updated_bills')->setParam(array("include_docs"=>"true","descending"=>"true", "endkey" => '["'.$this->getCDate().'"]'))->execute();//, "endkey" => '["'.$this->getCDate().'"]'
+			$resultBillList = $this->cDB->getDesign('billing')->getList('sales_register','handle_updated_bills')->setParam(array("include_docs"=>"true","descending"=>"true"))->execute();//, "endkey" => '["'.$this->getCDate().'"]'
 			$resultExpenseList = $this->cDB->getDesign('petty_expense')->getView('get_expense')->setParam(array("include_docs"=>"true","startkey"=>'"'.$this->getCDate().'"',"endkey"=>'"'.$this->getCDate().'"'))->execute();
 			$this->getDBConnection($this->cDB);
 			$getHeadQuery = 'SELECT id, name FROM cp_reference_master WHERE active ="Y" AND mode = "head"';
