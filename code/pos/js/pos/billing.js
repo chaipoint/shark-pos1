@@ -251,17 +251,23 @@ $(document).ready(function(){
 					$("#booking_channel").val(loadedBill.channel_id);
 					$("#booking_channel_name").val(loadedBill.channel_name);
 
-					$("#billing_customer").val(loadedBill.name);
-					$("#phone_number").val(loadedBill.phone);
+					$("#billing_customer").val(loadedBill.name).prop('readonly',true);
+					$("#phone_number").val(loadedBill.phone).prop('readonly',true);
 					$("#billing_customer_city").val(loadedBill.city);
+					$("span#city").closest('tr').removeClass('hide');
 					$("span#city").text(loadedBill.city);
 					$("#billing_customer_locality").val(loadedBill.locality);
+					$("span#locality").closest('tr').removeClass('hide');
 					$("span#locality").text(loadedBill.locality);
 					$("#billing_customer_sub_locality").val(loadedBill.sublocality);
-					$("span#sublocality").text(loadedBill.sublocality);
+					$("span#sublocality").closest('tr').removeClass('hide');
+                    $("span#sublocality").text(loadedBill.sublocality);
 					$("#billing_customer_landmark").val(loadedBill.landmark);
 					$("#billing_customer_company_name").val(loadedBill.company);
-					$("span#company").text(loadedBill.company);					
+					$("span#company").closest('tr').removeClass('hide');
+					$("span#company").text(loadedBill.company);
+					$("span#landmark").closest('tr').removeClass('hide');
+					$("span#landmark").text(loadedBill.landmark);					
 					$("#is_cod").val('Y');
 					$("#is_prepaid").val('N');
 					$("#is_credit").val('N');
