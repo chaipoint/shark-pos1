@@ -1,4 +1,5 @@
 $(document).ready(function(){
+	$(this).attr("title", "Shark |COC| ChaiPoint POS");
 	$(".generate-bill").click(function(){
 		var order = $(this).data('order-id');
 		var orderDetails = $('tr[data-order-id="'+order+'"]').data('order-details');
