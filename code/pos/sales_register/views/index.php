@@ -128,6 +128,7 @@
                 <th>Sub Total</th>
                 <th>Tax</th>
                 <th>Total Amount</th>
+                <th>Due Amount</th>
                 <th>Delivery Channel</th>
                 <th>Booking Channel</th>
                 <th>Paid By</th>
@@ -140,7 +141,7 @@
             </thead>
 	       <tbody>
 
-<?php $sub_total = $total_amount = $total_tax =0;
+<?php $sub_total = $total_amount = $total_tax = $due_amount= 0;
 if(is_array($data) && count($data)>0) { 
     foreach ($data as $key => $value) { ?>
 	      <tr class="text-center">
@@ -149,6 +150,8 @@ if(is_array($data) && count($data)>0) {
 		        <td style="text-align:right"><?php echo  number_format($value['sub_total'],2); ?></td>
 		        <td class="text-right"><?php echo number_format($value['total_tax'],2); ?></td>
             <td class="text-right"><?php echo number_format($value['total_amount'],2); ?></td>
+            <td class="text-right"><?php echo number_format($value['due_amount'],2); ?></td>
+
             <td style="text-align:center"><?php echo $value['delivery_channel_name']; ?></td>
             <td style="text-align:center"><?php echo $value['booking_channel_name']; ?></td>
             <td style="text-align:center"><?php echo $value['payment_type']; ?></td>
@@ -174,18 +177,20 @@ if(is_array($data) && count($data)>0) {
       if($value['bill_status'] != 'Cancelled'){
           $sub_total += $value['sub_total'];
           $total_tax += $value['total_tax']; 
-          $total_amount += $value['total_amount'];  
+          $total_amount += $value['total_amount'];
+          $due_amount += $value['due_amount'];  
         }
    } 
 }
 ?>		
       <tfoot>
         <tr class="text-right">
-           <th>Total</td>
+           <th style="font-size:14px;">Total</td>
            <th></th>
-           <th class="text-right"><?php echo number_format($sub_total,2); ?></th>
-           <th class="text-right"><?php echo number_format($total_tax,2); ?></th>
-           <th class="text-right"><?php echo $total_amount?></th>
+           <th class="text-right" style="font-size:14px;"><?php echo number_format($sub_total,2); ?></th>
+           <th class="text-right" style="font-size:14px;"><?php echo number_format($total_tax,2); ?></th>
+           <th class="text-right" style="font-size:14px;"><?php echo number_format($total_amount,2);?></th>
+           <th class="text-right" style="font-size:14px;"><?php echo number_format($due_amount,2);?></th>
            <th></th>
            <th></th>
            <th></th>
