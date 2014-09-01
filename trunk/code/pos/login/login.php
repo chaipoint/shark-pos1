@@ -10,9 +10,7 @@
 
 			global $couch;
 			$this->cDB = $couch;
-			unset($_SESSION);
-			session_destroy();
-
+			
 			$this->configData = $this->getInstallationConfig();
 			if(array_key_exists('data', $this->configData)){
 				if(!$this->configData['data']['store_config']['is_configured']){
@@ -34,18 +32,19 @@
 		}
 		
 		public function index(){
+			unset($_SESSION);
+			session_destroy();
 			$this->commonView('header_html');
 			$this->view();
 			$this->commonView('footer_html');
 
 		}
 		public function out(){
-			session_start();
 			if(!array_key_exists('user', $_SESSION)){
 				header("LOCATION:index.php");
 			}
-			$response = $this->cDB->getDesign('login')->getUpdate('login_history',$_SESSION['user']['login']['id'],'logout_time='.urlencode($this->getCDTime()))->execute(array('logout_time'=>$this->getCDTime()));
-			if($response){
+			$response = $this->cDB->getDesign('login')->getUpdate('login_history',$_SESSION['user']['login']['id'])->setParam(array('logout_time'=>$this->getCDTime()))->execute();
+			if(!empty($response)){
 				unset($_SESSION['user']);
 				session_destroy();
 				header("LOCATION:index.php");
@@ -62,7 +61,6 @@
 
 				$result = $resultJSON;
 				if(!$result['error']){
-					session_start();
 					$userData["_id"] = $result['data']['_id'];
 					$userData["_rev"] = $result['data']['_rev'];
 					$userData["code"] = $result['data']['code'];
