@@ -35,7 +35,7 @@
         <div class="smallstat box">
           <i class="glyphicon glyphicon-usd fa blue"></i>
           <span class="title">PPC Sale</span>
-          <span class="value">2000</span>
+          <span class="value"><?php echo $ppcSale; ?></span>
         </div>
       </div>
 
@@ -43,7 +43,7 @@
         <div class="smallstat box">
           <i class="glyphicon glyphicon-usd fa red"></i>
           <span class="title">Petty Expense</span>
-          <span class="value">3000 &nbsp;<em data-toggle="dropdown" id="pe_tg"class="glyphicon glyphicon-chevron-right"></em> 
+          <span class="value"><?php echo $p_ex;?> &nbsp;<em data-toggle="dropdown" id="pe_tg"class="glyphicon glyphicon-chevron-right"></em> 
             <ul class="dropdown-menu" role="menu">
             <li><a href='#' id="add_expense">Add Expense</a></li>
             <li><a href='#' id="view_expense">View Expense</a></li>

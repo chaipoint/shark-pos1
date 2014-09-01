@@ -11,6 +11,15 @@
 			$activeTask = $this->cDB->getActiveTask();
 			$resultBillList = $this->cDB->getDesign('billing')->getList('sales_register','handle_updated_bills')->setParam(array("include_docs"=>"true","descending"=>"true"))->execute();//, "endkey" => '["'.$this->getCDate().'"]'
 			$resultExpenseList = $this->cDB->getDesign('petty_expense')->getView('get_expense')->setParam(array("include_docs"=>"true","startkey"=>'"'.$this->getCDate().'"',"endkey"=>'"'.$this->getCDate().'"'))->execute();
+			//print_r($resultExpenseList);
+			$pettyExpence = 0;
+			if(count($resultExpenseList['rows'])>0){
+				$rows = $resultExpenseList['rows'];
+				foreach($rows as $pKey => $pValue){
+					$pettyExpence += $pValue['doc']['expense_amount'];
+				}
+			}
+			$resultBillList['p_ex'] = $pettyExpence;
 			$this->getDBConnection($this->cDB);
 			$getHeadQuery = 'SELECT id, name FROM cp_reference_master WHERE active ="Y" AND mode = "head"';
 			$result = $this->db->func_query($getHeadQuery);
