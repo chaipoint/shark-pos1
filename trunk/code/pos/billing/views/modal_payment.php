@@ -23,9 +23,9 @@
 				<input type="hidden" name="billing_customer_landmark" id="billing_customer_landmark">
 				<input type="hidden" name="billing_customer_company_name" id="billing_customer_company_name">
 			<div class="modal-body">
-				<table class="table table-striped">
+				<table class="table table-striped" style="font-size:12px;">
 					<tbody>
-						<tr>
+						<tr class="row">
 							<td width="50%">Customer <!--<a href="#"
 									class="btn btn-primary btn-xs showCModal"><i
 										class="glyphicon glyphicon-plus-sign"></i> Add Customer </a>-->
@@ -34,9 +34,12 @@
 								<span class="inv_cus_con"> 
 									<input type="text" id="billing_customer" class="form-control" name="billing_customer" value="Walkin Client"/>	
 								</span>
+								<span class="inv_cus_con hide" id="customer"> 
+										
+								</span>
 							</td>
 						</tr>
-						<tr>
+						<tr class="row">
 							<td width="50%">Phone Number <!--<a href="#"
 									class="btn btn-primary btn-xs showCModal"><i
 										class="glyphicon glyphicon-plus-sign"></i> Add Customer </a>-->
@@ -45,9 +48,12 @@
 								<span class="inv_cus_con"> 
 									<input type="text" id="phone_number" class="form-control" name="phone_number"/>	
 								</span>
+								<span class="inv_cus_con hide" id="phone"> 
+										
+								</span>
 							</td>
 						</tr>
-						<tr class='hide' >
+						<tr class='row hide' >
 							<td width="50%">City 
 							</td>
 							<td width="50%">
@@ -56,7 +62,7 @@
 								</span>
 							</td>
 						</tr>
-						<tr class='hide'>
+						<tr class='row hide'>
 							<td width="50%">Locality 
 							</td>
 							<td width="50%">
@@ -65,7 +71,7 @@
 								</span>
 							</td>
 						</tr>
-						<tr class='hide'>
+						<tr class='row hide'>
 							<td width="50%">Sublocality 
 							</td>
 							<td width="50%">
@@ -74,7 +80,7 @@
 								</span>
 							</td>
 						</tr>
-						<tr class='hide'>
+						<tr class='row hide'>
 							<td width="50%">Company 
 							</td>
 							<td width="50%">
@@ -83,7 +89,7 @@
 								</span>
 							</td>
 						</tr>
-						<tr class='hide'>
+						<tr class='row hide'>
 							<td width="50%">Landmark 
 							</td>
 							<td width="50%">
@@ -92,18 +98,18 @@
 								</span>
 							</td>
 						</tr>
-						<tr>
+						<tr class="row">
 							<td>Total Payable Amount :</td>
 							<td>
 								<h3 style="margin:0px;"><span id="twt" class="label label-warning"></span></h3> 
 							</td>
 						</tr>
-						<tr class="pcash">
+						<tr class="row pcash">
 							<td>Paid :</td>
 							<td><input type="text" id="paid-amount" class="form-control"/></td>
 						</tr>
 
-						<tr>
+						<tr class="row">
 
 							<td>Paid by:</td>
 							<td><?php if(is_array($config_data['payment_mode']) && count($config_data['payment_mode'])>0){
@@ -115,20 +121,20 @@
 							</td>
 						</tr>
 						
-						<tr class="pcash">
+						<tr class="row pcash">
 							<td>Return Change :</td>
 							<td>
 								<h3 style="margin:0px;"><span class="label label-warning" id="balance">0</span></h3>
 							</td>
 						</tr>
-						<tr class="ppc" style="display: none;">
+						<tr class="ppc row" style="display: none;">
 								<td>Card No :</td>
 								<td>
 									<input type="text" id="ppc" class="form-control"/>
 									<span id="loading_image" class="hide"><img class="text-center" src="<?php echo IMG;?>loader.gif"/></span>
 								</td>
 						</tr>
-                        <tr class="ppc_balance" style="display: none;">
+                        <tr class="ppc_balance row" style="display: none;">
 								<td>Your Balance :</td>
 								<td>
                                   <span id="ac_balance"></span>
