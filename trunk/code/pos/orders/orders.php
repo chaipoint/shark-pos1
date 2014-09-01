@@ -14,6 +14,7 @@
 			return json_encode($result,true);
 		}	
 		function updateOrderStatus(){
+			//print_r($_POST);
 		    $dir =  dirname(__FILE__).'/../lib/msg_api/sms.php';
             require_once $dir; 
             global $couch;
@@ -30,7 +31,7 @@
 							$selectStatus = "SELECT status FROM cp_orders Where id = ".$order;
 							$result = $this->db->func_query_first($selectStatus);
 							$return = array('error' => true, 'message' => 'Status Already Changed to <b>'.$result['status'].'</b>', 'data' => array('status'=>$result['status']));
-						}else if($_POST['current_status']=='Confirmed'){
+						}else if($_POST['new_status']=='Confirmed'){
 							$msgBody = "Dear ".ucfirst($_POST['customer_name']).", Your Chai-On-Call Order #".$order." Is Confirmed. Thank you!";
 							$data = array( 'From'   => '8808891988',
 										   'To'    => $_POST['customer_phone'],
@@ -38,7 +39,7 @@
 				                         );
 				           call_api($data,'send',$details);
 
-						}else if ($_POST['current_status']=='Dispatched') {
+						}else if ($_POST['new_status']=='Dispatched') {
 							$msgBody = "Dear ".ucfirst($_POST['customer_name']).", Your Chai-On-Call Order #".$order." has been Dispatched From '".$_POST['store_name']."' Store. Your bill amount is Rs '".$_POST['net_amount']."'. Thank you!";
                             $data = array( 'From'   => '8808891988',
 										   'To'    => $_POST['customer_phone'],
