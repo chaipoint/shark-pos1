@@ -252,8 +252,10 @@ $(document).ready(function(){
 					$("#booking_channel").val(loadedBill.channel_id);
 					$("#booking_channel_name").val(loadedBill.channel_name);
 
-					$("#billing_customer").val(loadedBill.name).prop('readonly',true);
-					$("#phone_number").val(loadedBill.phone).prop('readonly',true);
+					$("#billing_customer").val(loadedBill.name).css('display','none');
+					$('span#customer').removeClass('hide').text(loadedBill.name);
+					$("#phone_number").val(loadedBill.phone).css('display','none');
+					$('span#phone').removeClass('hide').text(loadedBill.phone);
 					$("#billing_customer_city").val(loadedBill.city);
 					$("span#city").closest('tr').removeClass('hide');
 					$("span#city").text(loadedBill.city);
