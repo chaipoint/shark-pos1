@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>vente | ChaiPoint POS</title>	
+		<title>Shark | ChaiPoint POS</title>	
 		<?php require_once 'header_externals.php';?>
 	</head>
 	<body>
