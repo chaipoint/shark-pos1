@@ -16,7 +16,6 @@ $(document).ready( function(){
 	}).datepicker('setDate',new Date());
 
     $('#ui-datepicker-div').css('display','none');
-    
 /* Function To Add Prety Expense */
 	$('#add_expense').click(function(event){
 		event.preventDefault();
@@ -31,6 +30,25 @@ $(document).ready( function(){
 		
 	$('.close-model').click(function(){
 		$("div.ui-keyboard").hide();
+	});
+
+	$('.panel-body').on('click','.pay_bill',function(){
+		$billno = $(this).data('href');
+		$.ajax({
+					type: 'POST',
+					url: "index.php?dispatch=billing.save",
+			  		data : {request_type:'update_bill', doc:$billno, bill_status_id: 68,bill_status_name:'Paid'},
+				}).done(function(response) {
+					response = $.parseJSON(response);
+					if(response.error){
+						bootbox.alert(response.message);
+					}else{
+						bootbox.alert(response.message,function(){
+							window.location = "?dispatch=sales_register";													
+						});
+					}
+				});
+
 	});
 
 
@@ -85,7 +103,7 @@ $(document).ready( function(){
 	});
 
 /* Todays Sale Function */
-	$('#todays-sale').click(function(event){
+	$('#todays_sale').click(function(event){
 			event.preventDefault();
 			$.ajax({
 				type: 'POST',

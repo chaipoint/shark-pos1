@@ -15,6 +15,22 @@ $(document).ready(function(){
 	/*
 	*	PLEASE Don't Change This code Block Without Prior Permission
 	*/
+	if(Object.keys($billingItems).length > 0){
+
+		/*Load Bill IF provided with doc_id*/
+		var button = '<button class="btn btn-primary">Print</button>' + ((bill_status_id != 68) ? '<button id="paid_button" class="btn btn-primary">Paid</button>' : '');
+		$('#botbuttons').append(button);
+		$('#payment').prop('disabled',true).addClass('hide');
+
+		modifyBill = true;
+		generateSalesTable();
+		$(".del_row").removeClass('del_row');
+		$('.bill_qty_input').prop('readonly',true).removeClass('bill_qty_input');
+		$('.category-selection').removeClass('category-selection');
+		$('.category-product').removeClass('category-product');
+		$('#add_discount').attr('id','');
+
+	}
 
 	var url = $.url(window.location);
 	order = url.param('order');
@@ -27,7 +43,7 @@ $(document).ready(function(){
 		loadedBill = orderData;
 		//console.log(loadedBill);
 		if(orderData){
-			//localStorage.removeItem(order);			
+			localStorage.removeItem(order);			
 			var productNewList = new Object();
 			$.each(productArray, function(index, data){
 				var category = index;
@@ -45,21 +61,6 @@ $(document).ready(function(){
 				generateSalesTable(data['id'], parseInt(data['qty']), productData);
 			});
 		}
-	}
-	if(Object.keys($billingItems).length > 0){
-
-		/*Load Bill IF provided with doc_id*/
-		$('#botbuttons').append('<button class="btn btn-primary">Print</button> <button id="paid_button" class="btn btn-primary">Paid</button>');
-		$('#payment').prop('disabled',true).addClass('hide');
-
-		modifyBill = true;
-		generateSalesTable();
-		$(".del_row").removeClass('del_row');
-		$('.bill_qty_input').prop('readonly',true).removeClass('bill_qty_input');
-		$('.category-selection').removeClass('category-selection');
-		$('.category-product').removeClass('category-product');
-		$('#add_discount').attr('id','');
-
 	}
 
 	//console.log();
@@ -549,10 +550,12 @@ $(document).ready(function(){
 				},
 				beforeClose:function(e,keyboard,el,accepted){
 					if(accepted){
-						var paid=parseFloat($('input',".ui-keyboard").val());
+						setTimeout(function(){
+													var paid=parseFloat($("#paid-amount").val());
 						paid = isNaN(paid) ? 0 : paid;
 						if(paid < Math.ceil($totalAmountWT)){
 							console.log(Math.ceil($totalAmountWT));
+//							console.log(paid);
 							bootbox.alert('Paid amount is less than payable amount');
 							$("#balance").text('')
 							return false;
@@ -560,6 +563,8 @@ $(document).ready(function(){
 							var balance = paid - Math.ceil($totalAmountWT);
 							$("#balance").text( isNaN(balance) ? 0 : balance );
 						}
+
+					},100);
 					}
 				}
 			});
