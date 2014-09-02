@@ -222,7 +222,7 @@ $(document).ready(function(){
 		/* END -- Payment Using PPC NO  */
 
 		$("#payment").click(function(){
-			//$("#fcount").text($totalBillQty);
+			
 			$("#twt").text(Math.ceil($totalAmountWT.toFixed(2)));
 			if($totalBillQty == 0){
 				bootbox.alert('Please add product to sale first');
@@ -234,7 +234,7 @@ $(document).ready(function(){
 				$(".payment-type-bt").removeClass('btn-success').addClass('btn-primary');
 				$("#paid-amount").prop('autofocus',true);
 				$("#is_cod").val('N');
-
+				//setTimeout('setFocus("phone_number")',100);
 				$("#delivery_channel").val(63);
 				$("#delivery_channel_name").val(config_data.delivery_channel[63]);
 				$("#booking_channel").val(53);
