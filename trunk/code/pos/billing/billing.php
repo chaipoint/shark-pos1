@@ -134,14 +134,14 @@
 							$billDataReturned['data']['time']['updated'] = $this->getCDTime();
 							$billDataReturned['data']['cancel_reason'] = array_key_exists('cancel_reason', $_POST) ? $_POST['cancel_reason'] : '';
 							$billSaveResult = $couch->saveDocument()->execute($billDataReturned['data']);
-							$return['message'] = 'Status Changes SuccessFully';
+							$return['message'] = 'Bill Changes To Status <b>'.$_POST['bill_status_name']."</b>";
 							if(!array_key_exists('ok', $billSaveResult)){
 								$return['error'] = true;
 								$return['message'] = 'OOPS! Some Error Contact Admin.';
 							}
 						}else{
 								$return['error'] = true;
-								$return['message'] = 'Bill is Already '.$_POST['bill_status_name'];							
+								$return['message'] = 'Bill is Already <b>'.$_POST['bill_status_name'].'</b>';							
 						}
 					}
 				}else{
