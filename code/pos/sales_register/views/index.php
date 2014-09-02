@@ -17,7 +17,7 @@
       
       <div class="col-lg-2 col-sm-4">
         <div class="smallstat box">
-          <i class="fa fa-usd green"></i>
+          <i class="glyphicon glyphicon-usd fa green"></i>
           <span class="title">Cash Sale</span>
           <span class="value"><?php echo $cash_sale;?></span>
         </div>
