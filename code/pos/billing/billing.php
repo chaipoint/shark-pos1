@@ -1,17 +1,18 @@
 <?php	
 	class Billing extends App_config{
 		private $cDB;
+		private $configData;
 		function __construct(){
 			parent::__construct();
 			global $couch;
 			$this->cDB = $couch;
 			$this->log =  Logger::getLogger("CP-POS|BILLING");
+			$configResult = $this->getConfig($this->cDB, array('channel','bill_status',"payment_mode", 'delivery_channel'));
+			$this->configData = (count($configResult['data']) > 0) ? $configResult['data'] : array();
 		}
 		function index(){
 
 			//Block to get Configs and need to have a generic methode for that
-			$configResult = $this->getConfig($this->cDB, array('channel','bill_status',"payment_mode", 'delivery_channel'));
-			$configData = (count($configResult['data']) > 0) ? $configResult['data'] : array();
 
 
 			$resultJSON = $this->cDB->getDesign('store')->getView('store_mysql_id')->setParam(array('include_docs'=>'true',"key"=>'"'.$_SESSION['user']['store']['id'].'"'))->execute();
@@ -48,7 +49,7 @@
 
 			$this->commonView('header_html');
 			$this->commonView('navbar');
-			$this->view(array('catList'=>$catList,'productList'=>$productList,'firstCat'=>$firstCat, 'config_data'=>$configData,'bill'=>$billData));
+			$this->view(array('catList'=>$catList,'productList'=>$productList,'firstCat'=>$firstCat, 'config_data'=>$this->configData,'bill'=>$billData));
 			$this->commonView('footer_inner');
 			$this->commonView('footer_html');
 		}
@@ -127,9 +128,10 @@
 						$billDataReturned['data']['parent']['rev'] = $billDataReturned['data']['_rev'];
 						unset($billDataReturned['data']['_id']);
 						unset($billDataReturned['data']['_rev']);
-						$billDataReturned['data']['bill_status'] = 'Cancelled';
+						$billDataReturned['data']['bill_status'] = $_POST['bill_status_name'];
+						$billDataReturned['data']['bill_status_id'] = $_POST['bill_status_id'];
 						$billDataReturned['data']['time']['updated'] = $this->getCDTime();
-						$billDataReturned['data']['cancel_reason'] = $_POST['cancel_reason'];
+						$billDataReturned['data']['cancel_reason'] = array_key_exists('cancel_reason', $_POST) ? $_POST['cancel_reason'] : '';
 						$billSaveResult = $couch->saveDocument()->execute($billDataReturned['data']);
 						if(!array_key_exists('ok', $billSaveResult)){
 							$return['error'] = true;
