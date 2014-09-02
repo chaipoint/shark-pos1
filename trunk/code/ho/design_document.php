@@ -29,7 +29,12 @@ function init(){
         'views' => array(
               "handle_updated_bills" => array(
                 "map" => "function(doc){ if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill') { var created_time = doc.time.created; var updated_time = doc.time.updated; emit([created_time, doc.bill_no, (doc.parent ? 1 : 0) , updated_time],null);} }"
+              ),
+              
+              "bill_by_order" => array(
+                "map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill' && doc.order_no > 0){ emit(doc.order_no,null); } }"
               )
+
         ),
         'updates' => array( 
               'getbillno' =>  "function(doc,req){ if(req.query.month) { if(doc.current_month != req.query.month){doc.current = 0; doc.current_month = req.query.month;} var newCurrent =  doc.current+1; doc.current = newCurrent; return [doc,newCurrent.toString()];}}",
