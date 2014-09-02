@@ -125,11 +125,11 @@ $(document).ready(function(){
 		//onCancel Of Bill
 		$("#cancel").click(function(){
 			bootbox.dialog({
-				message:'<div class="form-group"><textarea placeholder="reason" name="cancel_reason_bill" id="cancel_reason_bill" class="form-control"></textarea></div>',
+				message:'<div class="form-group"><textarea placeholder="reason" name="cancel_reason_bill" id="cancel_reason_bill" class="form-control" autofocus ></textarea></div>',
 				title:"Bill Cancel Reason",
 				buttons:{
 					main:{
-						label:"Cancel Bill",
+						label:"Save",
 						className:"btn-success btn-sm",
 						callback:function(){
 								var textArea = $('#cancel_reason_bill').attr('type','text');
@@ -159,7 +159,7 @@ $(document).ready(function(){
 							}
 						},
 					danger:{
-						label:"Cancel",
+						label:"Close",
 						className:"btn-danger btn-sm"
 					},	
 				}
@@ -569,7 +569,7 @@ $(document).ready(function(){
 	$("#add_discount").click(function(){
 		var dval=$('#discount_val').val(); 
 		bootbox.dialog({
-			message:"<input type='text' class='form-control input-sm' id='get_ds' onClick='this.select();' value='"+(($intDiscount == 0) ? '' : $intDiscount)+"'></input>",
+			message:"<input type='text' class='form-control input-sm' autofocus id='get_ds' onClick='this.select();' value='"+(($intDiscount == 0) ? '' : $intDiscount)+"'></input>",
 			title:"Discount (%)",
 			buttons:{
 				main:{
@@ -674,7 +674,12 @@ function generateSalesTable(productId, qty, productData){
 
 	}
 	$('#saletbl tbody').html(tableRows);
-	$('.bill_qty_input').keyboard({
+
+	$('.bill_qty_input').keyboard({ 
+		restrictInput:true,
+		preventPaste:true,
+		autoAccept:true,
+		alwaysOpen:false,
 		layout:'custom',
 		customLayout:{
 					'default':['0 1 2 3 4','5 6 7 8 9','{clear} {bksp} {accept} {cancel}']
@@ -691,6 +696,10 @@ function generateSalesTable(productId, qty, productData){
 			console.log(accepted);/**/
 		}
 	});
+	$(".bill_qty_input").click(function(){ 
+    $(this).select();
+	});
+	//$(input["class='.bill_qty_input'"]).focus();
 
 	$("#count").text($totalBillQty);	
 	$("#total").text($totalAmountWOT.toFixed(2));
