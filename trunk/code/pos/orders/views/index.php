@@ -15,7 +15,7 @@
            <thead>
 		     <tr  style="font-size:12px;background-color:#428bca;color:white;">
 			   <th>Order No</th>
-			   <th style="width:300px;">Customer Details</th>
+			   <th style="width:200px;">Customer Details</th>
 			   <th style="width:260px;">Schedule</th>
 			   <th style="width:280px;">Products Detail</th>
 			   <th><?php echo ($status == 'Cancelled' ? 'Reason' : 'Action');?></th>
