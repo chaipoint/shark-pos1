@@ -124,18 +124,24 @@
 						$return['error'] = true;
 						$return['message'] = $billDataReturned['message'];
 					}else{
-						$billDataReturned['data']['parent']['id'] = $billDataReturned['data']['_id'];
-						$billDataReturned['data']['parent']['rev'] = $billDataReturned['data']['_rev'];
-						unset($billDataReturned['data']['_id']);
-						unset($billDataReturned['data']['_rev']);
-						$billDataReturned['data']['bill_status'] = $_POST['bill_status_name'];
-						$billDataReturned['data']['bill_status_id'] = $_POST['bill_status_id'];
-						$billDataReturned['data']['time']['updated'] = $this->getCDTime();
-						$billDataReturned['data']['cancel_reason'] = array_key_exists('cancel_reason', $_POST) ? $_POST['cancel_reason'] : '';
-						$billSaveResult = $couch->saveDocument()->execute($billDataReturned['data']);
-						if(!array_key_exists('ok', $billSaveResult)){
-							$return['error'] = true;
-							$return['message'] = 'OOPS! Some Error Contact Admin.';
+						if($billDataReturned['data']['bill_status_id'] != $_POST['bill_status_id']){
+							$billDataReturned['data']['parent']['id'] = $billDataReturned['data']['_id'];
+							$billDataReturned['data']['parent']['rev'] = $billDataReturned['data']['_rev'];
+							unset($billDataReturned['data']['_id']);
+							unset($billDataReturned['data']['_rev']);
+							$billDataReturned['data']['bill_status'] = $_POST['bill_status_name'];
+							$billDataReturned['data']['bill_status_id'] = $_POST['bill_status_id'];
+							$billDataReturned['data']['time']['updated'] = $this->getCDTime();
+							$billDataReturned['data']['cancel_reason'] = array_key_exists('cancel_reason', $_POST) ? $_POST['cancel_reason'] : '';
+							$billSaveResult = $couch->saveDocument()->execute($billDataReturned['data']);
+							$return['message'] = 'Status Changes SuccessFully';
+							if(!array_key_exists('ok', $billSaveResult)){
+								$return['error'] = true;
+								$return['message'] = 'OOPS! Some Error Contact Admin.';
+							}
+						}else{
+								$return['error'] = true;
+								$return['message'] = 'Bill is Already '.$_POST['bill_status_name'];							
 						}
 					}
 				}else{
