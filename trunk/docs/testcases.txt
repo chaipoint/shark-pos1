@@ -1,0 +1,40 @@
+=======================================HO
+Delete vente_ho_db
+Create vente_ho_db
+Created Design document in vente_ho_db (http://54.249.247.15/vente/design_document.php)
+Download data from CPOS using Data Sync
+	Store
+	Staff
+	Config
+
+=======================================POS	
+Delete vente_pos_db
+Create vente_pos_db
+
+Change is_configured = false in pos.ini
+Run http://54.249.247.15/vente/pos/index.php. After sometime should be able see login screen. Login with test@789
+
+Delete Store data from vente_pos_db
+Download Store data from CPOS using Data Sync
+
+Delete Staff data from vente_pos_db
+Download Store data from CPOS using Data Sync
+
+Delete Config data from vente_pos_db
+Download Config data from CPOS using Data Sync
+
+Delete Design Document  from vente_pos_db
+Download Design Document from CPOS using Data Sync
+
+Start Data Upload
+Generate Bill
+Generate Petty Expense
+Generate Bill
+Cancel Bill
+Logout
+=======================================HO
+Check on  HO for Bill,Petty Expense,Login/Logout
+
+
+=======================================CPOS
+Check on  CPOS
