@@ -57,7 +57,7 @@
         <div class="smallstat box">
           <i class="glyphicon glyphicon-usd fa orange"></i>
           <span class="title">Total Sale</span>
-          <span class="value">4000</span>
+          <span class="value"><?php echo (($cash_sale + $cash_indelivery + $ppcSale) - $p_ex) ;?></span>
         </div>
       </div>
 
@@ -194,7 +194,7 @@ if(is_array($data) && count($data)>0) {
                <?php  
                 if($value['bill_status'] == "CoD") {
                   ?>
-                 <a class="tip btn btn-warning btn-xs" style="width:25px;" title="Pay Bill" href="<?php echo URL;?>?dispatch=billing&bill_no=<?php echo $value['_id']; ?>">
+                 <a class="tip btn btn-warning btn-xs pay_bill" style="width:25px;" title="Pay Bill" data-href="<?php echo $value['_id']; ?>">
                      <i class="glyphicon glyphicon-edit"></i>
                  </a>
               <?php
