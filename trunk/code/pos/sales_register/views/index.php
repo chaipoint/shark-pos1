@@ -35,7 +35,7 @@
         <div class="smallstat box">
           <i class="glyphicon glyphicon-usd fa blue"></i>
           <span class="title">PPC Sale</span>
-          <span class="value"><?php echo $ppcSale; ?></span>
+          <span class="value">444<?php //echo $ppcSale; ?></span>
         </div>
       </div>
 
@@ -143,7 +143,8 @@
 
 <?php $sub_total = $total_amount = $total_tax = $due_amount= 0;
 if(is_array($data) && count($data)>0) { 
-    foreach ($data as $key => $value) { ?>
+    foreach ($data as $key => $value) { 
+      if($value['bill_status'] != 'Cancelled') { ?>
 	      <tr class="text-center">
 		        <td style="text-align:center"><?php echo $value['bill_no']; ?></td>
 		        <td style="text-align:center"><?php echo $value['total_qty']; ?></td>
@@ -160,21 +161,21 @@ if(is_array($data) && count($data)>0) {
             <td style="text-align:center"><?php echo $value['is_prepaid']; ?></td>
             <td style="text-align:center"><?php echo $value['is_credit']; ?></td>
 		        <td>
-			         <a href="#"  class="tip btn btn-primary btn-xs" title="View Invoice">
+			         <!--<a href="#"  class="tip btn btn-primary btn-xs" title="View Invoice">
 			             <i class="glyphicon glyphicon-list"></i>
-               </a>
-               <?php if($value['bill_status'] != 'Cancelled') {?>
+               </a>-->
+               
                  <a class="tip btn btn-warning btn-xs edit-bill" style="width:25px;" title="Edit Invoice" href="<?php echo URL;?>?dispatch=billing&bill_no=<?php echo $value['_id']; ?>">
   		               <i class="glyphicon glyphicon-edit"></i>
   		           </a>
-               <?php }?>
-		           <a href="#"  class="tip btn btn-danger btn-xs" title="Cancel Sale">
-		               <i class="glyphicon glyphicon-trash"></i>
+               
+		          <!-- <a href="#"  class="tip btn btn-danger btn-xs" title="Cancel Sale">
+		               <i class="glyphicon glyphicon-trash"></i>-->
 		           </a>
 		        </td>
         </tr>
 <?php	  
-      if($value['bill_status'] != 'Cancelled'){
+      
           $sub_total += $value['sub_total'];
           $total_tax += $value['total_tax']; 
           $total_amount += $value['total_amount'];
