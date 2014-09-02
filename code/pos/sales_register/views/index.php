@@ -35,7 +35,7 @@
         <div class="smallstat box">
           <i class="glyphicon glyphicon-usd fa blue"></i>
           <span class="title">PPC Sale</span>
-          <span class="value">444<?php //echo $ppcSale; ?></span>
+          <span class="value"><?php echo $ppcSale; ?></span>
         </div>
       </div>
 
@@ -57,7 +57,7 @@
         <div class="smallstat box">
           <i class="glyphicon glyphicon-usd fa orange"></i>
           <span class="title">Total Sale</span>
-          <span class="value">4000</span>
+          <span class="value"><?php echo ($cash_sale + $cash_indelivery) - $p_ex;?></span>
         </div>
       </div>
 
