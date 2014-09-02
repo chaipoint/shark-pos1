@@ -530,7 +530,8 @@ $(document).ready(function(){
 				},
 				beforeClose:function(e,keyboard,el,accepted){
 					if(accepted){
-						var paid=parseFloat(el.value);
+						var paid=parseFloat($('input',".ui-keyboard").val());
+						paid = isNaN(paid) ? 0 : paid;
 						if(paid < Math.ceil($totalAmountWT)){
 							console.log(Math.ceil($totalAmountWT));
 							bootbox.alert('Paid amount is less than payable amount');
