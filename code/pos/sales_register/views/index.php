@@ -187,11 +187,19 @@ if(is_array($data) && count($data)>0) {
 			         <!--<a href="#"  class="tip btn btn-primary btn-xs" title="View Invoice">
 			             <i class="glyphicon glyphicon-list"></i>
                </a>-->
-               
+                
                  <a class="tip btn btn-warning btn-xs edit-bill" style="width:25px;" title="Edit Invoice" href="<?php echo URL;?>?dispatch=billing&bill_no=<?php echo $value['_id']; ?>">
   		               <i class="glyphicon glyphicon-edit"></i>
   		           </a>
-               
+               <?php  
+                if($value['bill_status'] == "CoD") {
+                  ?>
+                 <a class="tip btn btn-warning btn-xs" style="width:25px;" title="Pay Bill" href="<?php echo URL;?>?dispatch=billing&bill_no=<?php echo $value['_id']; ?>">
+                     <i class="glyphicon glyphicon-edit"></i>
+                 </a>
+              <?php
+                 }
+              ?>
 		          <!-- <a href="#"  class="tip btn btn-danger btn-xs" title="Cancel Sale">
 		               <i class="glyphicon glyphicon-trash"></i>-->
 		           </a>
