@@ -57,7 +57,7 @@
         <div class="smallstat box">
           <i class="glyphicon glyphicon-usd fa orange"></i>
           <span class="title">Total Sale</span>
-          <span class="value"><?php echo ($cash_sale + $cash_indelivery) - $p_ex;?></span>
+          <span class="value">4000</span>
         </div>
       </div>
 
