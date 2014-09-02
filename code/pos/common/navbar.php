@@ -32,14 +32,14 @@
 						<a href="index.php?dispatch=sales_register" class="btn nav-button btn-success btn-sm external <?php echo (MODULE == 'sales_register' ? 'active-btn' : ''); ?>" style="padding: 5px 8px; margin: 10px 0 5px 5px;" data-toggle="modal" data-target="" id="pos_sale_register">Sale Register</a>
 					</li>
 					
-					<li>
+					<!--<li>
 					    <a
 					class="btn nav-button btn-success btn-sm external"
 					style="padding: 5px 8px; margin: 10px 0 5px 5px;"
 					data-toggle="modal" data-target="#saleModal" id="todays_sale"> Today's Sale 
 				        </a>
 
-					</li>
+					</li>-->
                     <?php if(MODULE=='sales_register') {?>
                      <li>
 						<a class="btn nav-button btn-success btn-sm external" style="padding: 5px 8px; margin: 10px 0 5px 5px;" data-toggle="modal" data-target="" id="pos_sync">Data Sync</a>
