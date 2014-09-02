@@ -67,7 +67,7 @@ var createDataTable = function (path) {
 		oTable = $('#fileData').DataTable({
 			"dom": 'T<"H"lfr>t<"F"ip>',
 			"tableTools": {
-					"sSwfPath": media_path+"/swf/copy_csv_xls_pdf.swf",		
+					"sSwfPath": media_path+"swf/copy_csv_xls_pdf.swf",		
 					"aButtons": ["csv",{
 					"sExtends": "pdf",
 					"sPdfOrientation": "landscape",
