@@ -71,7 +71,7 @@ function updateStaff(){
       
       $updateArray[$i]['cd_doc_type'] = 'staff_master';
       //$updateArray[$i]['password'] = md5(base64_decode($row['password']));
-      $updateArray[$i]['password'] = md5(123);
+      $updateArray[$i]['password'] = md5(base64_decode($row['password']));
       
       $updateArray[$i]['phone'][] = $updateArray[$i]['phone_1'];
 	  $updateArray[$i]['phone'][] = $updateArray[$i]['phone_2'];
