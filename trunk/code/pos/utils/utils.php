@@ -244,7 +244,7 @@
 				'language' => 'javascript', 
 				'views' => array(
        				"handle_updated_bills" => array(
-       					"map" => "function(doc){ if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill') { var created_time = doc.time.created; var updated_time = doc.time.updated; emit([created_time, doc.bill_no, (doc.parent ? 1 : 0) , updated_time],null);} }"
+       					"map" => "function(doc){ if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill') { var created_time = (doc.time.created).split(' '); var updated_time = doc.time.updated; emit([created_time[0], doc.bill_no, (doc.parent ? 1 : 0) , updated_time],null);} }"
        				),
 
        				"bill_by_order" => array(
@@ -321,7 +321,7 @@
    				"language" => "javascript",
    				"views" => array(
    						"no_mysql_id" => array(
-   								"map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill' && !doc.mysql_id && !doc.parent){ var cDT = (doc.time.created).split(''); emit([(1 * doc.store_id) ,doc.bill_no, cDT[0]], null); } }"
+   								"map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill' && !doc.mysql_id && !doc.parent){ var cDT = (doc.time.created).split(' '); emit([(1 * doc.store_id) ,doc.bill_no, cDT[0]], null); } }"
    							),
    						"handle_updated_bills" => array(
    								"map" => "function(doc){ if(doc.cd_doc_type && doc.cd_doc_type == 'store_bill' && doc.parent) { var created_time = doc.time.created; var updated_time = doc.time.updated; emit([(1 * doc.store_id), doc.bill_no , updated_time],{bill_status:doc.bill_status, cancel_reason: (doc.cancel_reason ? doc.cancel_reason :''), reprint: doc.reprint, parent: doc.parent.id, mysql: (doc.mysql_id ? doc.mysql_id : 0)});} }"
