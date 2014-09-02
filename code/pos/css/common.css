@@ -72,11 +72,9 @@ color: #bdea74;
 
 .fa {
 display: inline-block;
-font-family: FontAwesome;
 font-style: normal;
 font-weight: normal;
 line-height: 1;
-background-image: url('../../images/loader.gif'); 
 }
 
 .smallstat .title {
