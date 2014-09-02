@@ -4,7 +4,7 @@
 		<div class="modal-content">
 			<div class="modal-header modal-primary">
 				<button type="button" class="close close-model" data-dismiss="modal" aria-hidden="true"><i class="glyphicon glyphicon-remove"></i></button>
-				<h4 class="modal-title" id="payModalLabel">Payment</h4>
+				<h4 class="modal-title" id="payModalLabel">Payment <?php if(!empty($_GET['order'])) echo 'For Order No: '.$_GET['order']; ?></h4>
 			</div>
 			<form method="post" name="payment-form" id="payment-form">
 				<input type="hidden" name="delivery_channel" id="delivery_channel">
@@ -46,7 +46,7 @@
 							</td>
 							<td width="50%">
 								<span class="inv_cus_con"> 
-									<input type="text" id="phone_number" class="form-control" name="phone_number"/>	
+									<input type="text" id="phone_number" class="form-control" name="phone_number" />	
 								</span>
 								<span class="inv_cus_con hide" id="phone"> 
 										
