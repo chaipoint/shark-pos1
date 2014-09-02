@@ -15,20 +15,6 @@ $(document).ready(function(){
 	/*
 	*	PLEASE Don't Change This code Block Without Prior Permission
 	*/
-	if(Object.keys($billingItems).length > 0){
-		/*Load Bill IF provided with doc_id*/
-		$('#botbuttons').append('<button class="btn btn-primary">Print</button>');
-		$('#payment').prop('disabled',true).addClass('hide');
-
-		modifyBill = true;
-		generateSalesTable();
-		$(".del_row").removeClass('del_row');
-		$('.bill_qty_input').prop('readonly',true).removeClass('bill_qty_input');
-		$('.category-selection').removeClass('category-selection');
-		$('.category-product').removeClass('category-product');
-		$('#add_discount').attr('id','');
-
-	}
 
 	var url = $.url(window.location);
 	order = url.param('order');
@@ -41,7 +27,7 @@ $(document).ready(function(){
 		loadedBill = orderData;
 		//console.log(loadedBill);
 		if(orderData){
-			localStorage.removeItem(order);			
+			//localStorage.removeItem(order);			
 			var productNewList = new Object();
 			$.each(productArray, function(index, data){
 				var category = index;
@@ -60,6 +46,22 @@ $(document).ready(function(){
 			});
 		}
 	}
+	if(Object.keys($billingItems).length > 0){
+
+		/*Load Bill IF provided with doc_id*/
+		$('#botbuttons').append('<button class="btn btn-primary">Print</button> <button id="paid_button" class="btn btn-primary">Paid</button>');
+		$('#payment').prop('disabled',true).addClass('hide');
+
+		modifyBill = true;
+		generateSalesTable();
+		$(".del_row").removeClass('del_row');
+		$('.bill_qty_input').prop('readonly',true).removeClass('bill_qty_input');
+		$('.category-selection').removeClass('category-selection');
+		$('.category-product').removeClass('category-product');
+		$('#add_discount').attr('id','');
+
+	}
+
 	//console.log();
 	//---START--- Initial Configurations on Load Of Page
 
@@ -141,7 +143,7 @@ $(document).ready(function(){
 										$.ajax({
 											type: 'POST',
 											url: "index.php?dispatch=billing.save",
-									  		data : {request_type:'update_bill', doc:doc, cancel_reason:reason},
+									  		data : {request_type:'update_bill', doc:doc, cancel_reason:reason, bill_status_id: 67,bill_status_name:config_data.bill_status[67]},
 										}).done(function(response) {
 											if(response.error){
 												bootbox.alert(response.message);
@@ -162,6 +164,21 @@ $(document).ready(function(){
 				}
 			});
 			resetBill(true);
+		});
+		$("#content").on('click','#paid_button',function(){
+			$.ajax({
+					type: 'POST',
+					url: "index.php?dispatch=billing.save",
+			  		data : {request_type:'update_bill', doc:doc, bill_status_id: 68,bill_status_name:config_data.bill_status[68]},
+				}).done(function(response) {
+					if(response.error){
+						bootbox.alert(response.message);
+					}else{
+						bootbox.alert('Bill Paid Successfully',function(){
+							window.location = "?dispatch=sales_register";													
+						});
+					}
+				});
 		});
 		//---START--- Payment Event After Products selection  or Without Product Selection
 		$(".payment-type-bt").click(function(){
