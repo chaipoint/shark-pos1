@@ -145,10 +145,11 @@ $(document).ready(function(){
 											url: "index.php?dispatch=billing.save",
 									  		data : {request_type:'update_bill', doc:doc, cancel_reason:reason, bill_status_id: 67,bill_status_name:config_data.bill_status[67]},
 										}).done(function(response) {
+											response = $.parseJSON(response);
 											if(response.error){
 												bootbox.alert(response.message);
 											}else{
-												bootbox.alert('Bill Cancelled Successfully',function(){
+												bootbox.alert(response.message,function(){
 													window.location = "?dispatch=sales_register";													
 												});
 											}
@@ -171,10 +172,11 @@ $(document).ready(function(){
 					url: "index.php?dispatch=billing.save",
 			  		data : {request_type:'update_bill', doc:doc, bill_status_id: 68,bill_status_name:config_data.bill_status[68]},
 				}).done(function(response) {
+					response = $.parseJSON(response);
 					if(response.error){
 						bootbox.alert(response.message);
 					}else{
-						bootbox.alert('Bill Paid Successfully',function(){
+						bootbox.alert(response.message,function(){
 							window.location = "?dispatch=sales_register";													
 						});
 					}
