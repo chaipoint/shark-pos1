@@ -139,7 +139,7 @@
 
 <div class="col-sm-12" style="margin-top:10px;">
     <div class="panel panel-info"> 
-      <div class="panel-heading col" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><a>Sale Register
+      <div class="panel-heading col" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><a>Bill Details
       <i class="glyphicon glyphicon-chevron-up pull-right"></i></a></div>
       <div id="collapseTwo" class="panel-collapse collapse">
         <div class="panel-body">
