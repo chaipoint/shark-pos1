@@ -7,7 +7,7 @@
 <script type="text/javascript" src="<?php echo (JS.'dataTables.tableTools.js');?>"></script>
 <script type="text/javascript" src="<?php echo (JS.'dataTables.jqueryui.js');?>" ></script>
 <script type="text/javascript" src="<?php echo JS; ?>bootstrapValidator.js"></script>
-<script type="text/javascript" src="<?php echo (JS.'pos/sale_register.js');?>" ></script>
+<script type="text/javascript" src="<?php echo (JS.'pos/sale.register.js');?>" ></script>
 
 <div class="container-fluid">
 <ol class="breadcrumb">
@@ -70,7 +70,7 @@
   <div class="panel panel-success">
     <div class="panel-heading">
       <h4 class="panel-title">
-        <a class="col" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Sale Summary
+        <a class="col" data-value="sale_summary" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Sale Summary
         <i class="glyphicon glyphicon-chevron-up pull-right"></i>
         </a>
       </h4>
@@ -113,7 +113,30 @@
      </div>
   </div>
 </div>
-    
+
+<div class="col-sm-6">
+  <div class="panel panel-success">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+        <a class="col" id="todays-sale" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Today's Sale
+        <i class="glyphicon glyphicon-chevron-up pull-right"></i>
+        </a>
+      </h4>
+    </div>
+    <div id="collapseThree" class="panel-collapse collapse">
+      <div class="panel-body">
+       <div class="col-md-6 col-lg-6">
+        <table class="table" id="today-sale-table">
+          <thead></thead>
+          <tbody></tbody>
+          <tfoot></tfoot>            
+        </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div class="col-sm-12" style="margin-top:10px;">
     <div class="panel panel-info"> 
       <div class="panel-heading col" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><a>Sale Register
