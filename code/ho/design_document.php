@@ -1,15 +1,14 @@
 <?php 
 require_once 'common/couchdb.phpclass.php';
-error_reporting(-1);
 
 echo init();
 function init(){
   $couch = new CouchPHP();
       $designDocs = array();
 
-      $designDocs['billCounter'] = array('_id'=>'generateBill','cd_doc_type' => 'bill_counter', 'current' => 0, 'current_month' => 0);
+      $designDocs[] = array('_id'=>'generateBill','cd_doc_type' => 'bill_counter', 'current' => 0, 'current_month' => 0);
 
-      $designDocs['staff'] = array(
+      $designDocs[] = array(
         '_id'=>'_design/staff',
         'language' => 'javascript', 
         'views' => array(
@@ -24,7 +23,7 @@ function init(){
               'getuser' =>  "function(head, req) { var userfound = false;    var jData = (JSON.parse(req.body));var username = jData.username; var password = jData.password; var obj = new Object(); obj.error = false; obj.message = ''; obj.data = new Object();      while(row = getRow()){ if(row.key == username) { if((row.value.password).toUpperCase() == (password).toUpperCase()){ obj.data = row.value; } else{ obj.error = true; obj.message = 'Password Wrong';} userfound = true; break;} } if( !userfound ) { obj.error = true; obj.message = 'User Unavailable';} return JSON.stringify(obj);}"
           )
       );
-      $designDocs['billing'] = array(
+      $designDocs[] = array(
         '_id'=>'_design/billing',
         'language' => 'javascript', 
         'views' => array(
@@ -40,7 +39,7 @@ function init(){
               'todays_sale' =>  "function(head,req) { var billList = new Object(); var billProcessed = new Object();  while(row = getRow()){ if(row.doc) { if( ! (row.key[1] in billProcessed)){ billProcessed[row.key[1]] = '';  if (row.doc.bill_status == 'Paid') { var itemList = row.doc.items; for(var items in itemList){ if((typeof billList[itemList[items].category_name]) != 'object'){ billList[itemList[items].category_name] = new Object();  billList[itemList[items].category_name][row.doc.payment_type] = ( 1 * itemList[items].due_amount); }else{ if(row.doc.payment_type in billList[itemList[items].category_name]){  billList[itemList[items].category_name][row.doc.payment_type] += (1 * itemList[items].due_amount); }else{ billList[itemList[items].category_name][row.doc.payment_type] = (1 * itemList[items].due_amount); } } } } } } } return JSON.stringify(billList);}"
           )
       );
-      $designDocs['store'] = array(
+      $designDocs[] = array(
         '_id'=>'_design/store',
         'language' => 'javascript', 
         'views' => array(
@@ -49,7 +48,7 @@ function init(){
             )
         )
       );
-      $designDocs['logout'] = array(
+      $designDocs[] = array(
         '_id'=>'_design/login',
         'language' => 'javascript', 
         'views' => array(
@@ -59,7 +58,7 @@ function init(){
         ),
         "updates" => array('login_history'=>"function(doc, req){ doc.logout_time = req.query.logout_time; return [doc,'true'];}"),
       );
-      $designDocs['replication'] = array(
+      $designDocs[] = array(
         '_id'=>'_design/doc_replication',
         'language' => 'javascript', 
         'views' => array(
@@ -76,7 +75,7 @@ function init(){
               )
       );
 
-      $designDocs['config'] = array(
+      $designDocs[] = array(
         "_id" => "_design/config",
           "language" => "javascript",
           "views" => array(
@@ -86,7 +85,7 @@ function init(){
             )
       );
 
-      $designDocs['sales'] = array(
+      $designDocs[] = array(
         "_id" => "_design/sales",
           "language" => "javascript",
           "views" => array(
@@ -97,7 +96,7 @@ function init(){
             )
       );
 
-      $designDocs['ho_design'] = array(
+      $designDocs[] = array(
         "_id" => "_design/design_ho",
           "language" => "javascript",
           "views" => array(
@@ -113,7 +112,7 @@ function init(){
             )
       );
 
-      $designDocs['petty_expense'] = array(
+      $designDocs[] = array(
         "_id" => "_design/petty_expense",
           "language" => "javascript",
           "views" => array(
