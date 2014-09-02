@@ -126,7 +126,7 @@ function init(){
 
 
       $arrayBulk = array("docs"=>$designDocs);
-      $result = $couch->cDB->saveDocument(true)->execute($arrayBulk);
+      $result = $couch->saveDocument(true)->execute($arrayBulk);
 
 
 //   $bulkDocs = $array();
