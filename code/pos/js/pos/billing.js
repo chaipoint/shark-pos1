@@ -274,8 +274,8 @@ $(document).ready(function(){
 					$("#is_cod").val('Y');
 					$("#is_prepaid").val('N');
 					$("#is_credit").val('N');
-					$("#bill_status").val(config_data.bill_status[68]);
-					$("#bill_status_id").val(68);
+					$("#bill_status").val(config_data.bill_status[65]);
+					$("#bill_status_id").val(65);
 			}
 
 			}
