@@ -235,8 +235,8 @@ $(document).ready(function(){
 				$("#paid-amount").prop('autofocus',true);
 				$("#is_cod").val('N');
 				//setTimeout('setFocus("phone_number")',100);
-				$("#delivery_channel").val(63);
-				$("#delivery_channel_name").val(config_data.delivery_channel[63]);
+				$("#delivery_channel").val(62);
+				$("#delivery_channel_name").val(config_data.delivery_channel[62]);
 				$("#booking_channel").val(53);
 				$("#booking_channel_name").val(config_data.channel[53]);
 				$("#is_cod").val('N');
@@ -247,8 +247,8 @@ $(document).ready(function(){
 				if(loadedBill){ 
 					$('.payment-type-bt[data-value="'+loadedBill.payment_method+'"]').trigger('click');
 					$("#paid-amount").val(Math.ceil($totalAmountWT.toFixed(2)));
-					$("#delivery_channel").val(62);
-					$("#delivery_channel_name").val(config_data.delivery_channel[62]);
+					$("#delivery_channel").val(63);
+					$("#delivery_channel_name").val(config_data.delivery_channel[63]);
 					$("#booking_channel").val(loadedBill.channel_id);
 					$("#booking_channel_name").val(loadedBill.channel_name);
 
