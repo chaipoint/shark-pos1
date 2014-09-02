@@ -83,4 +83,59 @@ $(document).ready( function(){
 			$(this).find('i').addClass('glyphicon glyphicon-chevron-up pull-right');
 		}
 	});
+
+/* Todays Sale Function */
+	$('#todays-sale').click(function(event){
+			event.preventDefault();
+			$.ajax({
+				type: 'POST',
+				url: "index.php?dispatch=billing.getSaleBills",
+		  		data : {request_type:'todays_bill'},
+			}).done(function(response) {
+					var result = $.parseJSON(response);
+					if(result.error){
+						bootbox.alert(result.message);
+					}else{
+						var totalBills = result.data.summary.length;
+						//console.log(result.data.summary.length);
+
+	//					if(totalBills>0){
+							var trs = "";
+							var trh = "";
+							var tfs = "";
+							
+							var sumPaymenyTypes = new Object();
+							var sumTotal = 0;
+							$.each(result.data.summary,function(index,details){
+								//console.log(index+"=>"+JSON.stringify(details));
+								trs += '<tr><td>'+index+'</td>';
+								var total = 0;
+										
+								$.each(result.data.payment_type, function(subIndex, subDetails){
+									trs += '<td class="text-right">'+(details[subIndex] ?  details[subIndex] : 0)+'</td>';
+									total += (details[subIndex] ?  details[subIndex] : 0);
+									if(subIndex in sumPaymenyTypes){
+										sumPaymenyTypes[subIndex] += (details[subIndex] ?  details[subIndex] : 0);
+									}else{
+										sumPaymenyTypes[subIndex] = (details[subIndex] ?  details[subIndex] : 0);
+									}
+								});
+                            	trs += '<td class="text-right">'+total+'</td></tr>';
+                            	sumTotal += total;
+                            });
+                            console.log(sumPaymenyTypes);
+							trh += '<tr><th></th>';
+							$.each(result.data.payment_type,function(index,details){
+								trh += '<th>'+index+'</th>';
+								tfs += '<th class="text-right">'+(sumPaymenyTypes[index] ? sumPaymenyTypes[index] : 0)+'</th>';
+							});
+							trh += '<th class="text-right">Total</th></tr>';
+							$("#today-sale-table thead").html(trh);
+							$("#today-sale-table tbody").html(trs);
+							$("#today-sale-table tfoot").html('<tr><th>Total</th>'+tfs+'<th class="text-right">'+sumTotal+'</th></tr>');
+
+	//				}
+				} 
+			});
+		});
 });
