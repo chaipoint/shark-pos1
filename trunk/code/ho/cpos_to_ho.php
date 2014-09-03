@@ -31,7 +31,7 @@ function updateStaff(){
 	$logger->debug("Calling Update Staff Function");
     
 	$couch = new CouchPHP();
-	$result = $couch->getDesign('staff')->getView('staff_mysql_id')->setParam(array("include_docs"=>"true"))->execute();
+	$result = $couch->getDesign('design_ho')->getView('staff_by_mysql_id')->setParam(array("include_docs"=>"true"))->execute();
 	
 	$itemList = array();
     if(array_key_exists('rows', $result)){
@@ -120,7 +120,7 @@ function updateStore(){
 	$logger->debug("Calling Update Store Function");
 
     $couch = new CouchPHP();
-	$result = $couch->getDesign('store')->getView('store_mysql_id')->setParam(array("include_docs"=>"true"))->execute();
+	$result = $couch->getDesign('design_ho')->getView('store_by_mysql_id')->setParam(array("include_docs"=>"true"))->execute();
 	$storeList = array();
 
     if(array_key_exists('rows', $result)){
@@ -267,13 +267,16 @@ function updateConfig(){
 	$result = $couch->getDesign('config')->getView('config_list')->setParam(array('include_docs'=>'true'))->execute();
 	$categoryList = array();
 
+	$updateArray = array();
     if(array_key_exists('rows', $result)){
 		$docs = $result['rows'];
 		$logger->debug("Creating Array of Existing Config Setting In CouchDB");
+		
 		foreach($docs as $dKey => $dValue){
-	    $categoryList[$dValue['doc']['category_id']] = $dValue['doc'];	
+			$updateArray[0]['_id'] = $dValue['doc']['_id'];
+			$updateArray[0]['_rev'] = $dValue['doc']['_rev'];
 	  }
-	    $logger->trace("Array of Existing Config Setting IN CouchDB: ".json_encode($categoryList));
+	    $logger->trace("Array of Existing Config Setting IN CouchDB: ".json_encode($updateArray));
 	}
 	
     $getConfigDetail = 'SELECT mode, GROUP_CONCAT(id) AS id, GROUP_CONCAT(name) AS name, GROUP_CONCAT(code) AS code 
@@ -284,7 +287,6 @@ function updateConfig(){
 
     $logger->trace("Query To Get All The Config Setting From CPOS Database: ".($getConfigDetail));
 	$result = mysql_query($getConfigDetail);
-	$updateArray = array();
 	$updateCounter = 0;
 	$i = 0;
 	$logger->debug("Creating Array To Update Config Setting In CouchDb");
@@ -296,7 +298,7 @@ function updateConfig(){
         $updateCounter++;
 	    }*/
 
-		$updateArray[$i]['cd_doc_type'] = 'config_master';
+		$updateArray['cd_doc_type'] = 'config_master';
 		$idexplode = explode(',', $row['id']);
         $nameexplode = explode(',', $row['name']);
         $codeexplode = explode(',', $row['code']);
@@ -304,9 +306,9 @@ function updateConfig(){
         
         for ($j=0; $j < $count ; $j++){
         	if($row['mode']=='ppc_api' || $row['mode']=='sms_api' || $row['mode']=='db_detail'){
- 			$updateArray[$i][$row['mode']][$codeexplode[$j]] = $nameexplode[$j];
+ 			$updateArray[0][$row['mode']][$codeexplode[$j]] = $nameexplode[$j];
         	}else{
-		     $updateArray[$i][$row['mode']][$idexplode[$j]] = $nameexplode[$j];
+		     $updateArrays[0][$row['mode']][$idexplode[$j]] = $nameexplode[$j];
         }
     }
       
