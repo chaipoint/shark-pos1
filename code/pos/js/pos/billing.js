@@ -125,6 +125,7 @@ $(document).ready(function(){
 		//---END--- Event For Product Selection
 		//onCancel Of Bill
 		$("#cancel").click(function(){
+			if(modifyBill)
 			bootbox.dialog({
 				message:'<div class="form-group"><textarea placeholder="reason" name="cancel_reason_bill" id="cancel_reason_bill" class="form-control" autofocus ></textarea></div>',
 				title:"Bill Cancel Reason",
