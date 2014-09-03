@@ -319,7 +319,7 @@ function updateConfig(){
    if (is_array($updateArray) && count($updateArray)>0){
 	$couch->saveDocument();
 	if(array_key_exists('_rev', $updateArray)){
-		$couch->execute(array('rev'=>$updateArray[_rev]));		
+		$couch->setParam(array('rev'=>$updateArray[_rev]));		
 	}
 	$couch->execute($updateArray);
   
