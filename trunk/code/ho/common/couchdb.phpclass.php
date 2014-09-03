@@ -25,6 +25,7 @@ class CouchPHP{
 		$this->password = '';
 		//$this->remote = 'http://pos:pos@54.249.247.15:5984/rakesh_cpos_ho';
 	}
+	
 	public function getUrl(){
 		return $this->url;
 	}
