@@ -17,7 +17,7 @@
 			$rows = $staffList['rows'];
 			$staffList = array();
 			foreach($rows as $key => $value){
-				$staffList[$value['doc']['name']] = $value['doc']['mysql_id'] ;
+				$staffList[$value['doc']['mysql_id']] = $value['doc']['name'] ;
 			}
 			ksort($staffList);
 			$pettyExpence = 0;
