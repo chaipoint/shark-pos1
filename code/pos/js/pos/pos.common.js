@@ -1,5 +1,21 @@
-$(document).ready(function(){ 
-	$("#pos_sync").click(function(){
+/*
+Please Don't Make any Changes in this File Prior permissson to
+	Rakesh Kaswan
+	rakeshkaswan8356@gmail.com
+	9992749952
+*/
+window.addEventListener("offline", function(e) { window.location.reload(true);})
+window.addEventListener("online", function(e) { window.location.reload(true);})
+$(document).ready(function(){
+	if(! navigator.onLine){
+		$('#pos_sync').addClass('btn-danger').attr('id','');
+
+	}
+	$(document).on('click','#pos_sync',function(){
+		if(! navigator.onLine){
+			alert("No Internet Connection Available");
+			return  false;
+		}
 		$("#sync-modal").modal('show');
 		$('.alert',$("#sync-modal")).remove();
 	});
@@ -109,7 +125,7 @@ function autocomplete(){
 				});				
 			}			
 			xhr = 	$.ajax({
-				url: "index.php?dispatch=orders.getStaff",
+				url: "index.php?dispatch=staff.getStaff",
 				data: data,
 				success: function( data, status ) {
 					if(data){
@@ -156,4 +172,30 @@ function autocomplete(){
 		}
 	});	 
 }
+
+/*Function Block Start For AJAX Related Calls*/
+
+var cAjax = function(reqOptions){
+	var xhr = null;
+	if(reqOptions){
+		xhr =  $.ajax({
+					type : (reqOptions.method) ? reqOptions.method : 'GET',
+					url : reqOptions.url,
+					data : reqOptions.data, 
+					success : reqOptions.success,
+					error : error,
+					complete : function(){
+					}	
+			});
+	}	
+	return xhr;
+
+};
+function error(response, status){
+	consol.log('Response From AJAX Call');
+	consol.log(response);
+	consol.log('Status From AJAX Call');
+	consol.log(status);
+}
+/*Function Block Ends For AJAX Related Calls*/
 
