@@ -4,6 +4,7 @@ Please Don't Make any Changes in this File Prior permissson to
 	rakeshkaswan8356@gmail.com
 	9992749952
 */
+/*Reload as Toggle between Network offline and online*/
 window.addEventListener("offline", function(e) { window.location.reload(true);})
 window.addEventListener("online", function(e) { window.location.reload(true);})
 $(document).ready(function(){
