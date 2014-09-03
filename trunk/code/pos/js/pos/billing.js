@@ -161,7 +161,7 @@ $(document).ready(function(){
 							}
 						},
 					danger:{
-						label:"No, Dont Cancel",
+						label:"No, Don't Cancel",
 						className:"btn-danger btn-sm"
 					},	
 				}
