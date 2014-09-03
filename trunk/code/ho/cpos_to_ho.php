@@ -264,7 +264,7 @@ function updateConfig(){
 	$logger->debug("Calling Update Config Function");
     
     $couch = new CouchPHP();
-	$result = $couch->getDesign('config')->getView('config_list')->setParam(array('include_docs'=>'true'))->execute();
+	$result = $couch->getDesign('design_ho')->getView('config_list')->setParam(array('include_docs'=>'true'))->execute();
 	$categoryList = array();
 
 	$updateArray = array();
