@@ -136,6 +136,7 @@ function uploadUpdatedBill(){
 	 			$billList[$bill_no] = '';
  				if($data['mysql'] == 0){
 	 				$updateBill = "update cp_pos_storeorders set bill_status = '".$data['bill_status']."', cancel_reason = '".$data['cancel_reason']."', reprint = '".$data['reprint']."' where _id = '".$data['parent']."'";
+	 				$logger->trace("Update Query: ".$updateBill);
 	 				$db->db_query($updateBill);	
 	 				if($db->db_affected_rows() > 0){
 	 					$select = "SELECT id from cp_pos_storeorders where _id = '".$data['parent']."'";
