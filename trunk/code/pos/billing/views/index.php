@@ -9,7 +9,7 @@
 <?php
 	$script = "";
 	if(count($bill)>0){
-		$script .= "\n".'var doc = \''.$bill['_id']."';\n";
+		$script .= "\n".'var doc = \''.$bill['_id']."';\nvar bill_status_id = ".$bill['bill_status_id'].";\n";
 		foreach($bill['items'] as $key => $value){
 			$script .= '$billingItems['.$value['id'].'] = new Object();'."\n"; 
 			$script .= '$billingItems['.$value['id'].'] = $.parseJSON(\''.json_encode($value)."')\n"; 
