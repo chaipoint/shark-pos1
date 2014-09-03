@@ -185,14 +185,14 @@
 
 <div class="panel panel-default" style="float:right;width:45%;">
   <!-- Default panel contents -->
-  <div class="panel-heading" >Top 5 Saler</div>
+  <div class="panel-heading" >Top 5 Seller</div>
   
 <!-- Table -->
   <table class="table">
     <thead>
       <tr>
         <th>#</th>
-        <th>Saler Name</th>
+        <th>seller Name</th>
         
         <th>Sale Amount(Rs)</th>
       </tr>
@@ -200,31 +200,31 @@
     <tbody>
       <tr>
         <td>1</td>
-        <td>Saler 1</td>
+        <td>seller 1</td>
         
         <td></td>
       </tr>
       <tr>
         <td>2</td>
-        <td>Saler 2</td>
+        <td>seller 2</td>
         
         <td></td>
       </tr>
       <tr>
         <td>3</td>
-        <td>Saler 3</td>
+        <td>seller 3</td>
         
         <td></td>
       </tr>
       <tr>
         <td>4</td>
-        <td>Saler 4</td>
+        <td>seller 4</td>
         
         <td></td>
       </tr>
       <tr>
         <td>5</td>
-        <td>Saler 5</td>
+        <td>Seller 5</td>
         
         <td></td>
       </tr>
