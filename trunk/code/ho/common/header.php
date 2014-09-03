@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>vente | ChaitPoint POS Dashboard</title>	
+		<title>Shark | ChaiPoint POS Dashboard</title>	
 	    
 	    <link rel="stylesheet" href="css/bootstrap.css">
 		<link rel="stylesheet" href="css/non-responsive.css" type="text/css">
