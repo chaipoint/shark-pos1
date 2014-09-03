@@ -130,7 +130,7 @@ $(document).ready(function(){
 				title:"Bill Cancel Reason",
 				buttons:{
 					main:{
-						label:"Save",
+						label:"Yes, Cancel",
 						className:"btn-success btn-sm",
 						callback:function(){
 								var textArea = $('#cancel_reason_bill').attr('type','text');
@@ -160,7 +160,7 @@ $(document).ready(function(){
 							}
 						},
 					danger:{
-						label:"Close",
+						label:"No, Dont Cancel",
 						className:"btn-danger btn-sm"
 					},	
 				}
@@ -252,7 +252,7 @@ $(document).ready(function(){
 				$('#payModal').modal();
 				$("#paid_by").val('');
 				$(".payment-type-bt").removeClass('btn-success').addClass('btn-primary');
-				$("#paid-amount").prop('autofocus',true);
+				$("#phone_number").prop('autoFocus',true);
 				$("#is_cod").val('N');
 				//setTimeout('setFocus("phone_number")',100);
 				$("#delivery_channel").val(62);
