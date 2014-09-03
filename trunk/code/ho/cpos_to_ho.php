@@ -209,6 +209,7 @@ function updateStore(){
 							$j = 0;
 							while($innerRow = mysql_fetch_assoc($productList)){	
 								$productDetails = $innerRow;
+									if(is_numeric($productDetails['price'])){
 										$updateArray[$i]['menu_items'][$j]['mysql_id'] = $productDetails['id']; 
 										$updateArray[$i]['menu_items'][$j]['code'] = $productDetails['code'];
 										$updateArray[$i]['menu_items'][$j]['name'] = $productDetails['name'];
@@ -228,6 +229,7 @@ function updateStore(){
 										$updateArray[$i]['menu_items'][$j]['is_web'] = $productDetails['is_web'];
 										$updateArray[$i]['menu_items'][$j]['image'] = $productDetails['image'];
 										$j++;
+									}
                                 }
 				
 						$i++;
