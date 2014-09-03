@@ -155,8 +155,9 @@
 					</table>
 				</div>
 				<div class="modal-footer">
+					<button class="btn btn-success" id="submit-sale">Save</button>
 					<button type="button" class="close-model btn btn-primary" data-dismiss="modal">Close</button>
-					<button class="btn btn-success" id="submit-sale">Submit</button>
+					
 				</div>
 				</form>
 			</div>
