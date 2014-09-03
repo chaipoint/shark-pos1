@@ -224,7 +224,7 @@
       </tr>
       <tr>
         <td>5</td>
-        <td>Seller 5</td>
+        <td>seller 5</td>
         
         <td></td>
       </tr>
