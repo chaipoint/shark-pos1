@@ -617,6 +617,13 @@ $('#get_ds').keyboard({
 		}
 	});
 
+			setTimeout(
+				function(){
+					$('#get_ds').select();
+//					$('#get_ds').select();
+				},
+				500
+			);
 
 		return false
 	});
