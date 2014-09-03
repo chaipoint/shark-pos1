@@ -19,7 +19,7 @@ class CouchPHP{
 	function __construct(){
 		$this->port = "5984";
 		//$this->url = 'http://pos:pos@54.249.247.15:'.$this->port."/";
-		$this->url = 'http://pos@pos127.0.0.1:'.$this->port."/";
+		$this->url = 'http://pos:pos@127.0.0.1:'.$this->port."/";
 		$this->db = 'sharkho';
 		$this->userName = '';
 		$this->password = '';
