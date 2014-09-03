@@ -662,7 +662,10 @@ function generateSalesTable(productId, qty, productData){
 
 	var tableRows = '';
 	for(var index in $billingItems){
-//		$billingItems[index].discount = $intDiscount;
+		console.log();
+		if(loadedBill == null){
+			$billingItems[index].discount = $intDiscount;
+		}
 		$billingItems[index].discountAmount = $billingItems[index].priceBT * $billingItems[index].discount/100;
 		$billingItems[index].taxAbleAmount = $billingItems[index].priceBT - $billingItems[index].discountAmount;
 		$billingItems[index].taxAmount = $billingItems[index].taxAbleAmount * $billingItems[index].tax;
@@ -683,6 +686,7 @@ function generateSalesTable(productId, qty, productData){
 		$totalDiscountAmount += ( $billingItems[index].qty * $billingItems[index].discountAmount );
 
 	}
+	loadedBill = null;
 	$('#saletbl tbody').html(tableRows);
 
 	$('.bill_qty_input').keyboard({ 
