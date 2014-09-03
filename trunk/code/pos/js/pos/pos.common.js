@@ -7,7 +7,9 @@ Please Don't Make any Changes in this File Prior permissson to
 /*Reload as Toggle between Network offline and online*/
 window.addEventListener("offline", function(e) { window.location.reload(true);})
 window.addEventListener("online", function(e) { window.location.reload(true);})
+//setTimeout(,2000);
 $(document).ready(function(){
+	console.log(navigator.onLine);
 	if(! navigator.onLine){
 		$('#pos_sync').addClass('btn-danger').attr('id','');
 

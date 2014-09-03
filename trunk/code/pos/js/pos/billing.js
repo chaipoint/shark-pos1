@@ -297,8 +297,12 @@ $(document).ready(function(){
 					$("#bill_status").val(config_data.bill_status[65]);
 					$("#bill_status_id").val(65);
 			}
+			setTimeout(function(){
+				$("#phone_number").focus();
+			},600);
 
 			}
+
 		});
 		$(".close-model").click(function(){
 			$("div.ui-keyboard").hide();
