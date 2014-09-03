@@ -162,7 +162,10 @@ $(document).ready(function(){
 						},
 					danger:{
 						label:"No, Don't Cancel",
-						className:"btn-danger btn-sm"
+						className:"btn-danger btn-sm",
+						callback:function(){
+							window.location = '?dispatch=sales_register'
+						}
 					},	
 				}
 			});
@@ -693,7 +696,7 @@ function generateSalesTable(productId, qty, productData){
 		$totalDiscountAmount += ( $billingItems[index].qty * $billingItems[index].discountAmount );
 
 	}
-	loadedBill = null;
+	//loadedBill = null;
 	$('#saletbl tbody').html(tableRows);
 
 	$('.bill_qty_input').keyboard({ 
