@@ -46,7 +46,7 @@
 							</td>
 							<td width="50%">
 								<span class="inv_cus_con"> 
-									<input type="text" id="phone_number" class="form-control" name="phone_number" />	
+									<input type="text" id="phone_number" class="form-control" name="phone_number" autofocus />	
 								</span>
 								<span class="inv_cus_con hide" id="phone"> 
 										
