@@ -20,7 +20,7 @@ class CouchPHP{
 		$this->port = "5984";
 		$this->url = 'http://pos:pos@54.249.247.15:'.$this->port."/";
 		//$this->url = 'http://127.0.0.1:'.$this->port."/";
-		$this->db = 'new_for_all';
+		$this->db = 'vente_ho_db';
 		$this->userName = '';
 		$this->password = '';
 		//$this->remote = 'http://pos:pos@54.249.247.15:5984/rakesh_cpos_ho';
