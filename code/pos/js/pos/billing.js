@@ -315,7 +315,7 @@ $(document).ready(function(){
     		}
     		});	
 			var phoneno = /^\d{10}$/;
-			if(!$('#phone_number').val().match(phoneno)){
+			if($('#phone_number').val()!='' && !$('#phone_number').val().match(phoneno)){
 				bootbox.alert('Please Enter Valid Phone No', function() { 
 				setTimeout('setFocus("phone_number")',100);
 			});
