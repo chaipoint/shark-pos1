@@ -145,8 +145,26 @@
         <div class="panel-body">
           <table id="fileData" class="table table-striped table-bordered table-condensed table-hover" style="margin-bottom:5px;">
 	         <thead>
+              <tr id="filter_row">
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+              </tr>
               <tr class="active">
                 <th>Bill No</th>
+                <th>Bill Time</th>
                 <th>Item Count</th>
                 <th>Sub Total</th>
                 <th>Tax</th>
@@ -164,12 +182,13 @@
             </thead>
 	       <tbody>
 
-<?php $sub_total = $total_amount = $total_tax = $due_amount= 0;
+<?php $sub_total = $total_amount = $total_tax = $due_amount= 0; //print_r($data);
 if(is_array($data) && count($data)>0) { 
     foreach ($data as $key => $value) { 
       if($value['bill_status'] != 'Cancelled') { ?>
 	      <tr class="text-center">
 		        <td style="text-align:center"><?php echo $value['bill_no']; ?></td>
+            <td style="text-align:center"><?php echo DATE('H:i:s',strtotime($value['time']['created'])); ?></td>
 		        <td style="text-align:center"><?php echo $value['total_qty']; ?></td>
 		        <td style="text-align:right"><?php echo  number_format($value['sub_total'],2); ?></td>
 		        <td class="text-right"><?php echo number_format($value['total_tax'],2); ?></td>
@@ -223,6 +242,7 @@ if(is_array($data) && count($data)>0) {
            <th class="text-right" style="font-size:14px;"><?php echo number_format($total_tax,2); ?></th>
            <th class="text-right" style="font-size:14px;"><?php echo number_format($total_amount,2);?></th>
            <th class="text-right" style="font-size:14px;"><?php echo number_format($due_amount,2);?></th>
+           <th></th>
            <th></th>
            <th></th>
            <th></th>
