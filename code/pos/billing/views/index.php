@@ -112,7 +112,7 @@
 										</div>
 										<div id="botbuttons" style="text-align: center;">
 											<button type="button" class="btn btn-danger" id="cancel"
-												style="width: 90px;">Cancel</button>
+												style="width: 90px;">Reset</button>
 											<!--<button type="button" class="btn btn-info" id="hold"
 												style="width: 90px;">Hold</button>-->
 											<button type="button" class="btn btn-success" id="payment"
