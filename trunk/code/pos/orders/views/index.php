@@ -15,16 +15,16 @@
            <thead>
 		     <tr  style="font-size:12px;background-color:#428bca;color:white;">
 			   <th>Order No</th>
-			   <th style="width:200px;">Customer Details</th>
-			   <th style="width:260px;">Schedule</th>
-			   <th style="width:280px;">Products Detail</th>
+			   <th style="width:150px;">Customer Details</th>
+			   <th style="width:300px;">Schedule</th>
+			   <th style="width:320px;">Products Detail</th>
 			   <th><?php echo ($status == 'Cancelled' ? 'Reason' : 'Action');?></th>
 		     </tr>
 	       </thead>
 	     <tbody>
 		<?php
 			$display = '';
-			$total = 0;
+			$total = $total_qty = 0;
 			foreach($orders as $key => $data){
 			$display .= '<tr data-order-id="'.$data['order_id'].'" data-order-details=\''.json_encode($data).'\'>
 							<td class="text-center">'.$data['order_id'].'</td>
@@ -42,7 +42,7 @@
 								</table>
 							</td>
 							<td><span class="label label-primary">Delivery Time</span><b style="font-size:12px;margin-left:22px;">'.$data['actual_delivery_time'].'</b><br/><br/><span class="label label-primary">Booking Time</span><b style="font-size:12px;margin-left:20px;">'.$data['order_date'].' '.$data['order_time'].'</b></td>
-							<td>'.$data['net_amount'].' <a class="products_list_toggle" data-target="product_list_'.$data['order_id'].'" style="float:right;font-size:12px;">Show Detail</a>
+							<td><span class="label label-primary">Quantity</span>&nbsp;<b>'.count($data['products']).'</b> &nbsp;&nbsp;&nbsp;<span class="label label-primary">Amount</span>&nbsp;<b>'.$data['net_amount'].'</b><a class="products_list_toggle" data-target="product_list_'.$data['order_id'].'" style="float:right;font-size:12px;">Show Detail</a>
 								<table class="hide table toggle-table" id="product_list_'.$data['order_id'].'">
 									<tbody>
 							';
@@ -64,6 +64,7 @@
 								</td>
 							</tr>';
 							$total +=$data['net_amount'];
+							$total_qty +=count($data['products']);
 			}
 			echo $display;
 		?>
@@ -73,7 +74,7 @@
 	   	<tr>
 	   		<th class="text-center">Total</th>
 	   		<th colspan="2"></th>
-	   		<th colspan="2"><?php echo $total; ?></th>
+	   		<th colspan="2"><span class="label label-primary">Total Quantity</span>&nbsp;<b><?php echo $total_qty; ?></b> &nbsp;&nbsp;&nbsp;<span class="label label-primary">Total Amount</span>&nbsp;<b><?php echo $total; ?></b></th>
 	   	</tr>
 	   </tfoot>
 	   <?php } ?>
