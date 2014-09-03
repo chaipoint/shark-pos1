@@ -192,7 +192,7 @@
     <thead>
       <tr>
         <th>#</th>
-        <th>seller Name</th>
+        <th>Seller Name</th>
         
         <th>Sale Amount(Rs)</th>
       </tr>
@@ -200,31 +200,31 @@
     <tbody>
       <tr>
         <td>1</td>
-        <td>seller 1</td>
+        <td>Seller 1</td>
         
         <td></td>
       </tr>
       <tr>
         <td>2</td>
-        <td>seller 2</td>
+        <td>Seller 2</td>
         
         <td></td>
       </tr>
       <tr>
         <td>3</td>
-        <td>seller 3</td>
+        <td>Seller 3</td>
         
         <td></td>
       </tr>
       <tr>
         <td>4</td>
-        <td>seller 4</td>
+        <td>Seller 4</td>
         
         <td></td>
       </tr>
       <tr>
         <td>5</td>
-        <td>seller 5</td>
+        <td>Seller 5</td>
         
         <td></td>
       </tr>
