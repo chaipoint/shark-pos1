@@ -21,11 +21,11 @@ class CouchPHP{
 		$this->log =  Logger::getLogger("CP-POS|COUCHDB");
 
 		$this->port = "5984";
-		$this->url = 'http://127.0.0.1:'.$this->port."/";
-		$this->db = 'vente_pos_db';
+		$this->url = 'http://pos:pos@127.0.0.1:'.$this->port."/";
+		$this->db = 'sharkpos';
 		$this->userName = '';
 		$this->password = '';
-		$this->remote = 'http://pos:pos@54.249.247.15:5984/vente_ho_db';
+		$this->remote = 'http://pos:pos@54.249.247.15:5984/sharkho';
 	}
 	public function getUrl(){
 		return $this->url;
@@ -70,7 +70,8 @@ class CouchPHP{
 		if(!empty($doc_id)){
 			return $this->curl($this->url.$db."/".$doc_id);
 		}
-		return $this->curl($this->url.$db."/_all_docs");		
+		$this->genUrl = $this->url.$db."/_all_docs";
+		return $this;		
 	}
 
 	public function getDesign($design){
