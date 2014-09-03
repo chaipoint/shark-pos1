@@ -17,7 +17,7 @@
 							</td>
 							<td width="50%">
 								<span class="inv_cus_con"> 
-									<input type="text" id="expense_date" class="form-control datepicker" required data-bv-notempty-message="The last name is required and cannot be empty" data-provide="datepicker-inline" data-date-format="yyyy/mm/dd" name="expense_date"/>	
+									<input type="text" id="expense_date" class="form-control datepicker" required data-bv-notempty-message="The last name is required and cannot be empty" data-provide="datepicker-inline" data-date-format="yyyy-mm-dd" name="expense_date"/>	
 								</span>
 							</td>
 						</tr>
@@ -58,7 +58,12 @@
 							</td>
 							<td>
 								<span class="inv_cus_con"> 
-									<input type="text" id="expense_done_by" class="form-control autocomplete" strict="true" name="expense_done_by" target="expense_done_by_id"  />	
+									<select name="expense_done_by_id" id="expense_done_by_id" class="form-control" required data-bv-notempty-message="The last name is required and cannot be empty">
+	                                     <option value=''>Select Payer</option>
+	                                     <?php foreach ($staff_list as $key => $value) { ?>
+	                                     <option value="<?php echo $value; ?>"><?php echo $key; ?></option>
+	                                     <?php } ?>
+									</select>	
 								</span>
 							</td>
 						</tr>
@@ -67,7 +72,12 @@
 							</td>
 							<td>
 								<span class="inv_cus_con"> 
-									<input type="text" id="expense_approved_by" class="form-control autocomplete" name="expense_approved_by" strict="true" target="expense_approved_by_id"/>	
+									<select name="expense_approved_by_id" id="expense_approved_by_id" class="form-control" required data-bv-notempty-message="The last name is required and cannot be empty">
+	                                     <option value=''>Select Payer</option>
+	                                     <?php foreach ($staff_list as $key => $value) { ?>
+	                                     <option value="<?php echo $value; ?>"><?php echo $key; ?></option>
+	                                     <?php } ?>
+									</select>	
 								</span>
 							</td>
 						</tr>
