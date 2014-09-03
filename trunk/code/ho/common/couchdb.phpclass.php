@@ -18,15 +18,15 @@ class CouchPHP{
 	private $remote;
 	function __construct(){
 		$this->port = "5984";
-		$this->url = 'http://pos:pos@54.249.247.15:'.$this->port."/";
-		//$this->url = 'http://127.0.0.1:'.$this->port."/";
-		$this->db = 'vente_ho_db';
+		//$this->url = 'http://pos:pos@54.249.247.15:'.$this->port."/";
+		$this->url = 'http://pos@pos127.0.0.1:'.$this->port."/";
+		$this->db = 'sharkho';
 		$this->userName = '';
 		$this->password = '';
 		//$this->remote = 'http://pos:pos@54.249.247.15:5984/rakesh_cpos_ho';
 	}
 
-	 
+
 	public function getUrl(){
 		return $this->url;
 	}
@@ -34,7 +34,8 @@ class CouchPHP{
 		return $this->remote;
 	}
 	public function getDB(){
-		return $this->db;
+		return $this->db;    echo "<pre>";
+
 	}
 	public function version(){
 		return $this->curl($this->url);
