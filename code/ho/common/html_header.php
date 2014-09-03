@@ -2,7 +2,7 @@
   <div class="navbar navbar-default navbar-fixed-top"  role="navigation">
         <div class="container" >
         <div class="navbar-header" >
-           <a class="navbar-brand" style="color:#ffffff;margin-right:40px;font-size:22px;font-weight:bold" href="#">Vente</a>
+           <a class="navbar-brand" style="color:#ffffff;margin-right:40px;font-size:22px;font-weight:bold" href="#">Shark</a>
         </div>
         <div class="navbar-collapse collapse" >
             <ul class="nav navbar-nav" >
