@@ -7,7 +7,7 @@
 						<span class="icon-bar"></span> <span class="icon-bar"></span> <span
 							class="icon-bar"></span>
 					</button>
-					<a class="navbar-brand"> Chai Point POS </a>
+					<a class="navbar-brand">Shark Chai Point POS </a>
 				</div>
 				<ul class="nav navbar-nav">
 					<li class="dropdown"><a class="dropdown-toggle tip"
