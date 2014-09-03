@@ -61,7 +61,7 @@
 									<select name="expense_done_by_id" id="expense_done_by_id" class="form-control" required data-bv-notempty-message="The last name is required and cannot be empty">
 	                                     <option value=''>Select Payer</option>
 	                                     <?php foreach ($staff_list as $key => $value) { ?>
-	                                     <option value="<?php echo $value; ?>"><?php echo $key; ?></option>
+	                                     <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
 	                                     <?php } ?>
 									</select>	
 								</span>
@@ -75,7 +75,7 @@
 									<select name="expense_approved_by_id" id="expense_approved_by_id" class="form-control" required data-bv-notempty-message="The last name is required and cannot be empty">
 	                                     <option value=''>Select Payer</option>
 	                                     <?php foreach ($staff_list as $key => $value) { ?>
-	                                     <option value="<?php echo $value; ?>"><?php echo $key; ?></option>
+	                                     <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
 	                                     <?php } ?>
 									</select>	
 								</span>
@@ -126,12 +126,16 @@
                     			if(array_key_exists($value['doc']['expense_head'], $head_data)){ 
                     				$head = $head_data[$value['doc']['expense_head']];
                     			}
+                    			if(array_key_exists($value['doc']['expense_done_by_id'], $staff_list)){ 
+                    				$done_by = $staff_list[$value['doc']['expense_done_by_id']];
+                    				$approved_by = $staff_list[$value['doc']['expense_approved_by_id']];
+                    			}
                                	echo '<tr>
                                          <td>'.$i.'</td>
 				  		      			 <td>'.$head.'</td>
 				  		     			 <td>'.$value['doc']['expense_purpose'].'</td>
-				  		     			 <td>'.$value['doc']['expense_done_by'].'</td>
-				  		     			 <td>'.$value['doc']['expense_approved_by'].'</td>
+				  		     			 <td>'.$done_by.'</td>
+				  		     			 <td>'.$approved_by.'</td>
 				  		      			 <td class="text-right">'.$value['doc']['expense_amount'].'</td>
 				  		      		  </tr>';		
                     	$i++; $total += $value['doc']['expense_amount'];
