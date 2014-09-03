@@ -188,14 +188,14 @@ if(is_array($data) && count($data)>0) {
 			             <i class="glyphicon glyphicon-list"></i>
                </a>-->
                 
-                 <a class="tip btn btn-warning btn-xs edit-bill" style="width:25px;" title="Edit Invoice" href="<?php echo URL;?>?dispatch=billing&bill_no=<?php echo $value['_id']; ?>">
-  		               <i class="glyphicon glyphicon-edit"></i>
+                 <a class="tip btn btn-warning btn-xs edit-bill text-center" style="width:25px;" title="Cancel Bill" href="<?php echo URL;?>?dispatch=billing&bill_no=<?php echo $value['_id']; ?>">
+  		              C
   		           </a>
                <?php  
                 if($value['bill_status'] == "CoD") {
                   ?>
-                 <a class="tip btn btn-warning btn-xs pay_bill" style="width:25px;" title="Pay Bill" data-href="<?php echo $value['_id']; ?>">
-                     <i class="glyphicon glyphicon-edit"></i>
+                 <a class="tip btn btn-warning btn-xs pay_bill text-center" style="width:25px;" title="Pay Bill" data-href="<?php echo $value['_id']; ?>">
+                     P
                  </a>
               <?php
                  }
