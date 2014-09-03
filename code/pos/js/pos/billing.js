@@ -451,7 +451,7 @@ $(document).ready(function(){
 								'<td>'+(parseFloat(data.taxAmount) * data.qty).toFixed(2)+'</td>'+
 								'<td>'+(parseFloat(data.netAmount)).toFixed(2)+'</td>'+
 							'</tr>';
-							qty += data.qty;
+							qty += parseInt(data.qty);
 							netAmount += data.netAmount;
 							taxAmount += (data.taxAmount  * data.qty);
 							discountAmount += (data.discountAmount * data.qty);
