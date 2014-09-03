@@ -67,8 +67,8 @@ $(document).ready(function(){
 			var ajax = false;
 
 			bootbox.dialog({
-			message:'<div class="form-group"><input type="text"  placeholder="Satff Name" name="staff_name" id="staff_name" class="autocomplete form-control" strict="true" target="staff_id"/></div>',
-			title:"Dispatch Order",
+			message:'<div class="form-group"><input type="text"  placeholder="Staff Name" name="staff_name" id="staff_name" class="autocomplete form-control" strict="true" target="staff_id"/></div>',
+			title:"Delivery Boy",
 			buttons:{
 				main:{
 					label:"Save",
