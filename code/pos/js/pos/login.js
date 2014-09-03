@@ -1,6 +1,6 @@
 
-window.addEventListener("offline", function(e) {alert("offline");})
-window.addEventListener("online", function(e) {alert("online");})
+//window.addEventListener("offline", function(e) {alert("offline");})
+//window.addEventListener("online", function(e) {alert("online");})
 //navigator.onLine
 
 $(document).ready(function(){
