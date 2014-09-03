@@ -273,8 +273,8 @@ function updateConfig(){
 		$logger->debug("Creating Array of Existing Config Setting In CouchDB");
 		
 		foreach($docs as $dKey => $dValue){
-			$updateArray[0]['_id'] = $dValue['doc']['_id'];
-			$updateArray[0]['_rev'] = $dValue['doc']['_rev'];
+			$updateArray['_id'] = $dValue['doc']['_id'];
+			$updateArray['_rev'] = $dValue['doc']['_rev'];
 	  }
 	    $logger->trace("Array of Existing Config Setting IN CouchDB: ".json_encode($updateArray));
 	}
@@ -306,9 +306,9 @@ function updateConfig(){
         
         for ($j=0; $j < $count ; $j++){
         	if($row['mode']=='ppc_api' || $row['mode']=='sms_api' || $row['mode']=='db_detail'){
- 			$updateArray[0][$row['mode']][$codeexplode[$j]] = $nameexplode[$j];
+ 			$updateArray[$row['mode']][$codeexplode[$j]] = $nameexplode[$j];
         	}else{
-		     $updateArrays[0][$row['mode']][$idexplode[$j]] = $nameexplode[$j];
+		     $updateArrays[$row['mode']][$idexplode[$j]] = $nameexplode[$j];
         }
     }
       
@@ -317,7 +317,11 @@ function updateConfig(){
     $logger->trace("Array To Update Config Setting In CouchDb: ".json_encode($updateArray));
    
    if (is_array($updateArray) && count($updateArray)>0){
-	$result=$couch->saveDocument(true)->execute(array("docs"=>$updateArray));
+	$couch->saveDocument();
+	if(array_key_exists('_rev', $updateArray)){
+		$couch->execute(array('rev'=>$updateArray[_rev]));		
+	}
+	$couch->execute($updateArray);
   
   if(array_key_exists('error', $result)){
   	$logger->debug("ERROR:Config Setting Not Updated IN CouchDb");
