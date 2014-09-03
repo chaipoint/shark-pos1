@@ -264,9 +264,9 @@ function updateConfig(){
 	$logger->debug("Calling Update Config Function");
     
     $couch = new CouchPHP();
-	$result = $couch->getDesign('design_ho')->getView('config_list')->setParam(array('include_docs'=>'true'))->execute();
+	$result = $couch->getDesign('design_ho')->getView('config_list')->setParam(array('include_docs'=>'true','limit'=>1))->execute();
+	//echo $couch->getLastUrl();
 	$categoryList = array();
-
 	$updateArray = array();
     if(array_key_exists('rows', $result)){
 		$docs = $result['rows'];
@@ -306,22 +306,22 @@ function updateConfig(){
         
         for ($j=0; $j < $count ; $j++){
         	if($row['mode']=='ppc_api' || $row['mode']=='sms_api' || $row['mode']=='db_detail'){
- 			$updateArray[$row['mode']][$codeexplode[$j]] = $nameexplode[$j];
+ 				$updateArray[$row['mode']][$codeexplode[$j]] = $nameexplode[$j];
         	}else{
-		     $updateArrays[$row['mode']][$idexplode[$j]] = $nameexplode[$j];
+		     $updateArray[$row['mode']][$idexplode[$j]] = $nameexplode[$j];
         }
     }
       
 	}
 	$insertCounter = $i-$updateCounter;
     $logger->trace("Array To Update Config Setting In CouchDb: ".json_encode($updateArray));
-   
+  
    if (is_array($updateArray) && count($updateArray)>0){
 	$couch->saveDocument();
 	if(array_key_exists('_rev', $updateArray)){
-		$couch->setParam(array('rev'=>$updateArray[_rev]));		
+		$couch->setParam(array('rev'=>$updateArray['_rev']));		
 	}
-	$couch->execute($updateArray);
+	$result =	$couch->execute($updateArray);
   
   if(array_key_exists('error', $result)){
   	$logger->debug("ERROR:Config Setting Not Updated IN CouchDb");
