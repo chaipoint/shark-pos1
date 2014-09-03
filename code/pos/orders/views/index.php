@@ -15,9 +15,16 @@
            <thead>
 		     <tr  style="font-size:12px;background-color:#428bca;color:white;">
 			   <th>Order No</th>
-			   <th style="width:150px;">Customer Details</th>
-			   <th style="width:300px;">Schedule</th>
-			   <th style="width:320px;">Products Detail</th>
+			   <th style="width:120px;">Customer Details</th>
+			   <th style="width:150px;">Address</th>
+			   <th style="width:100px;">Delivery Time</th>
+			   <th style="width:100px;">Booking Time</th>
+			   <th style="width:100px;">Channel</th>
+			   <th style="width:80px;">Amount</th>
+			   <th style="width:220px;">Details</th>
+			   <th style="width:150px;">Comment</th>
+			   <!--<th style="width:300px;">Schedule</th>
+			   <th style="width:320px;">Products Detail</th>-->
 			   <th><?php echo ($status == 'Cancelled' ? 'Reason' : 'Action');?></th>
 		     </tr>
 	       </thead>
@@ -32,28 +39,34 @@
 								<table>
 									<tr><td>'.$data['name'].'</td></tr>
 			                        <tr><td>'.$data['phone'].'</td></tr>
-									<tr><td>'.$data['building'].'</td></tr>
-									<tr><td>'.$data['floor'].'</td></tr>
-									<tr><td>'.$data['flat'].'</td></tr>
-									<tr><td>'.$data['landmark'].'</td></tr>
-									<tr><td>'.$data['locality'].'</td></tr>
-									<tr><td>'.$data['sublocality'].'</td></tr>
-									<tr><td>'.$data['city'].'</td></tr>
 								</table>
 							</td>
-							<td><span class="label label-primary">Delivery Time</span><b style="font-size:12px;margin-left:22px;">'.$data['actual_delivery_time'].'</b><br/><br/><span class="label label-primary">Booking Time</span><b style="font-size:12px;margin-left:20px;">'.$data['order_date'].' '.$data['order_time'].'</b></td>
-							<td><span class="label label-primary">Quantity</span>&nbsp;<b>'.count($data['products']).'</b> &nbsp;&nbsp;&nbsp;<span class="label label-primary">Amount</span>&nbsp;<b>'.$data['net_amount'].'</b><a class="products_list_toggle" data-target="product_list_'.$data['order_id'].'" style="float:right;font-size:12px;">Show Detail</a>
-								<table class="hide table toggle-table" id="product_list_'.$data['order_id'].'">
-									<tbody>
-							';
+							<td>
+								<table>
+									<tr><td>'.$data['company'].'</td></tr>
+									<tr><td>'.$data['building'].'</td></tr>
+									<tr><td>'.$data['floor'].",".$data['flat'].'</td></tr>
+									<tr><td>'.$data['locality'].",".$data['sublocality'].'</td></tr>
+									<tr><td>'.$data['landmark'].'</td></tr>
+								</table>
+							</td>
+							<td class="text-center"><b style="font-size:12px;">'.date('h:i A',strtotime($data['actual_delivery_time'])).'</b></td>
+							<td class="text-center"><b style="font-size:12px;">'.date('h:i A',strtotime($data['order_time'])).'</b></td>
+							<td class="text-center">'.$data['channel_name'].'</td>
+							<td class="text-right"><b>'.$data['net_amount'].'</b></td>
+							<td><a class="products_list_toggle" data-target="product_list_'.$data['order_id'].'" style="float:right;font-size:12px;">Hide Detail</a>
+									<table class="table toggle-table" id="product_list_'.$data['order_id'].'">
+										<tbody>';
 								$product =  $data['products'];
 								foreach($product as $pKey => $pValues){
 									$display .='<tr><td>'.$pValues['name'].'</td><td>'.$pValues['qty'].'</td></tr>';
 								}
-					$display .='</tbody><tfoot><tr><td></td><td>'.$data['net_amount'].'</td></tr></tfoot></table>
+					$display .='</tbody></table>
 								</td>
-								<td>
-									'.($status == 'Delivered' ? "<span style='float:right'>".$data['delivery_boy']."</span>" : '')." ".($status == 'Cancelled' ? $data['cancel_reason'] : '')." ".sprintf($action,$data['order_id']).'
+								
+								<td>'.$data['comment'].'</td>
+								
+								<td>'.($status == 'Delivered' ? "<span style='float:right'>".$data['delivery_boy']."</span>" : '')." ".($status == 'Cancelled' ? $data['cancel_reason'] : '')." ".sprintf($action,$data['order_id']).'
 									
 										<!--<button class="btn btn-sm btn-primary">Confirm</button>
 										<button class="btn btn-sm btn-primary">Cancel</button>
@@ -73,8 +86,9 @@
 	   <tfoot>
 	   	<tr>
 	   		<th class="text-center">Total</th>
-	   		<th colspan="2"></th>
-	   		<th colspan="2"><span class="label label-primary">Total Quantity</span>&nbsp;<b><?php echo $total_qty; ?></b> &nbsp;&nbsp;&nbsp;<span class="label label-primary">Total Amount</span>&nbsp;<b><?php echo $total; ?></b></th>
+	   		<th colspan="5"></th>
+	   		<th class="text-right"><?php echo number_format($total,2); ?></th>
+	   		<th colspan="3"></th>
 	   	</tr>
 	   </tfoot>
 	   <?php } ?>
