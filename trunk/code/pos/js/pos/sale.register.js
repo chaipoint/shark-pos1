@@ -56,13 +56,7 @@ $(document).ready( function(){
 	$('#add-expense-form').on('submit', function(event){
 		event.preventDefault();
         $('#add-expense-form').bootstrapValidator();
-		if($('input[name="expense_done_by_id"]').val()==undefined){
-			bootbox.alert('Please Select Done By');
-			return false;
-		}else if($('input[name="expense_approved_by_id"]').val()==undefined){
-            bootbox.alert('Please Select Approved By');
-			return false;
-		}
+		
 	    var data = $('form#add-expense-form').serializeArray();
 		console.log(data);
 		$.ajax({
