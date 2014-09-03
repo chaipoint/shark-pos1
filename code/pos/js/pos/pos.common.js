@@ -78,13 +78,14 @@ $(document).ready(function(){
 
 var createDataTable = function (path) { 
     var media_path = path;
+    var iDisplay = 25;
     var oTable=null;
 		if(oTable!=null){
 			oTable.destroy();
 		}
 		
 		oTable = $('#fileData').DataTable({
-			"dom": 'T<"H"lfr>t<"F"ip>',
+			/*"dom": 'T<"H"lfr>t<"F"ip>',
 			"tableTools": {
 					"sSwfPath": media_path+"swf/copy_csv_xls_pdf.swf",		
 					"aButtons": ["csv",{
@@ -92,11 +93,28 @@ var createDataTable = function (path) {
 					"sPdfOrientation": "landscape",
 					"sPdfMessage": "Your custom message would go here."
 					},"print"	]
-			},						
+			},*/						
 			paging: true,
 			"jQueryUI": true,
+			"iDisplayLength" : iDisplay,
 			"bSort": true,
 		});
+		$("#filter_row th").each( function ( i ) {				
+					if(i==6 || i==7 || i==8 || i==9 || i==10 || i==11 || i==12)
+					{
+					var select = $('<select style="width:90%;"><option value=""></option></select>')
+						.appendTo( $(this).empty() )
+						.on( 'change', function () {
+							oTable.column( i )
+								.search($(this).val())
+								.draw();
+						} );
+			
+					oTable.column( i ).data().unique().sort().each( function ( d, j ) {
+						select.append( '<option value="'+d+'">'+d+'</option>' )
+					} );
+					}
+				});
 }
 
 $(document).on('keydown.autocomplete', ".autocomplete", autocomplete);
