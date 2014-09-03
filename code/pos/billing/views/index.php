@@ -112,7 +112,7 @@
 										</div>
 										<div id="botbuttons" style="text-align: center;">
 											<button type="button" class="btn btn-danger" id="cancel"
-												style="width: 90px;">Reset</button>
+												style="width: 90px;"><?php if(!empty($_GET['bill_no'])){ echo 'Cancel';}else {echo 'Reset';}?></button>
 											<!--<button type="button" class="btn btn-info" id="hold"
 												style="width: 90px;">Hold</button>-->
 											<button type="button" class="btn btn-success" id="payment"
