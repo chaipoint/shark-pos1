@@ -118,7 +118,7 @@
   <div class="panel panel-success">
     <div class="panel-heading">
       <h4 class="panel-title">
-        <a class="col" id="todays-sale" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Today's Sale
+        <a class="col" id="todays_sale" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Today's Sale
         <i class="glyphicon glyphicon-chevron-up pull-right"></i>
         </a>
       </h4>
