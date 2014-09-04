@@ -131,7 +131,8 @@ function updateStore(){
 	  }
 	    $logger->trace("Array of Existing Store IN CouchDB: ".json_encode($storeList));
 	}
-   
+  // print_r($storeList);
+  // die();
 	$getStoreNameQuery = "select sm.id mysql_id, sm.name, sm.code,
 	                      sm.type, sm.address, sm.phone_1, sm.phone_2, photo,
 	                      weekly_off, lm.id location_id, lm.name location_name,
@@ -151,7 +152,7 @@ function updateStore(){
                             $storeDetails = $row;
                             $updateArray[$i] = $storeDetails;
                             
-                            if(array_key_exists($row['mysql_id'],$storeList)){
+                            if(array_key_exists($storeDetails['mysql_id'],$storeList)){
 							$updateArray[$i]['_id'] = $storeList[$storeDetails['mysql_id']]['_id'];
                             $updateArray[$i]['_rev'] = $storeList[$storeDetails['mysql_id']]['_rev'];
                             $updateCounter++;
