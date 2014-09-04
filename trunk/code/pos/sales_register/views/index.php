@@ -207,7 +207,7 @@ if(is_array($data) && count($data)>0) {
 			             <i class="glyphicon glyphicon-list"></i>
                </a>-->
                 
-                 <a class="tip btn btn-warning btn-xs edit-bill text-center" style="width:25px;" title="Cancel Bill" href="<?php echo URL;?>?dispatch=billing&bill_no=<?php echo $value['_id']; ?>">
+                 <a class="tip btn btn-warning btn-xs edit-bill text-center" style="width:25px;" title="Cancel Bill" href="<?php echo URL;?>?dispatch=billing&bill_no=<?php echo $value['_id']; ?>&bill=<?php echo $value['bill_no']; ?>">
   		              C
   		           </a>
                <?php  
