@@ -720,10 +720,10 @@ function generateSalesTable(productId, qty, productData){
 			console.log(accepted);/**/
 		}
 	});
-	$(".bill_qty_input").click(function(){ 
-    	$(this).select();
-	});
-	//$(input["class='.bill_qty_input'"]).focus();
+	/*$(".bill_qty_input").focus( setTimeout(function(){
+				$(this).select();
+			},6000));
+	//$(input["class='.bill_qty_input'"]).focus();*/
 
 	$("#count").text($totalBillQty);	
 	$("#total").text($totalAmountWOT.toFixed(2));
