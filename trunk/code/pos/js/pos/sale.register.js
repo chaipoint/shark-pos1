@@ -32,6 +32,7 @@ $(document).ready( function(){
 		$("div.ui-keyboard").hide();
 	});
 
+/* Function To Paid Bill */
 	$('.panel-body').on('click','.pay_bill',function(){
         $billno = $(this).data('href');
 		bootbox.confirm("Do You Want To Paid This Bill?", function(result) {
@@ -88,7 +89,7 @@ $(document).ready( function(){
     }
     });	
 
-/* Number Validation For Amount */
+/* Function For glyphicon Icon Up And Down*/
 	$('.col').click(function(){
 		if($(this).find('i').attr('class')=='glyphicon glyphicon-chevron-up pull-right'){
 			$(this).find('i').removeClass('glyphicon glyphicon-chevron-up pull-right');
@@ -108,13 +109,11 @@ $(document).ready( function(){
 		  		data : {request_type:'todays_bill'},
 			}).done(function(response) {
 					var result = $.parseJSON(response);
+					//alert(JSON.stringify(result));
 					if(result.error){
 						bootbox.alert(result.message);
 					}else{
 						var totalBills = result.data.summary.length;
-						//console.log(result.data.summary.length);
-
-	//					if(totalBills>0){
 							var trs = "";
 							var trh = "";
 							var tfs = "";
@@ -148,8 +147,6 @@ $(document).ready( function(){
 							$("#today-sale-table thead").html(trh);
 							$("#today-sale-table tbody").html(trs);
 							$("#today-sale-table tfoot").html('<tr><th>Total</th>'+tfs+'<th class="text-right">'+sumTotal+'</th></tr>');
-
-	//				}
 				} 
 			});
 		});
