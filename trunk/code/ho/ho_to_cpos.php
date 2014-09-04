@@ -157,7 +157,7 @@ if($successful==1){
   		
   		$html['error'] = false;
 		$html['update'] = true;
-		$html['msg'] = "$counter Bill Updated Successfully";
+		$html['msg'] = "Bill Updated Successfully";
     } else if($unsuccessful==1){
 
     	$logger->debug("ERROR: Some Error! Please Contact Admin");
