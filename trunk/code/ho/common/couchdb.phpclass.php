@@ -71,7 +71,8 @@ class CouchPHP{
 		if(!empty($doc_id)){
 			return $this->curl($this->url.$db."/".$doc_id);
 		}
-		return $this->curl($this->url.$db."/_all_docs");		
+		$this->genUrl = $this->url.$db."/_all_docs";
+		return $this;		
 	}
 
 	public function getDesign($design){
