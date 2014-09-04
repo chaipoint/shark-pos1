@@ -9,7 +9,7 @@ Download data from CPOS using Data Sync
 
 =======================================POS	
 Delete vente_pos_db
-Create vente_pos_db
+Create sharkpos
 
 Change is_configured = false in pos.ini
 Run http://54.249.247.15/vente/pos/index.php. After sometime should be able see login screen. Login with test@789
