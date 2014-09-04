@@ -33,22 +33,25 @@ $(document).ready( function(){
 	});
 
 	$('.panel-body').on('click','.pay_bill',function(){
-		$billno = $(this).data('href');
-		$.ajax({
-					type: 'POST',
-					url: "index.php?dispatch=billing.save",
-			  		data : {request_type:'update_bill', doc:$billno, bill_status_id: 68,bill_status_name:'Paid'},
-				}).done(function(response) {
-					response = $.parseJSON(response);
-					if(response.error){
+        $billno = $(this).data('href');
+		bootbox.confirm("Do You Want To Paid This Bill?", function(result) {
+		if(result==true){
+			$.ajax({
+						type: 'POST',
+						url: "index.php?dispatch=billing.save",
+			  			data : {request_type:'update_bill', doc:$billno, bill_status_id: 68,bill_status_name:'Paid'},
+					}).done(function(response) {
+						response = $.parseJSON(response);
+						if(response.error){
 						bootbox.alert(response.message);
-					}else{
+						}else{
 						bootbox.alert(response.message,function(){
 							window.location = "?dispatch=sales_register";													
 						});
 					}
 				});
-
+            }
+        });
 	});
 
 
