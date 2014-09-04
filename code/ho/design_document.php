@@ -3,9 +3,9 @@ require_once 'common/couchdb.phpclass.php';
 
 echo init();
 function init(){
-  $couch = new CouchPHP();
+      $couch = new CouchPHP();
       $designDocs = array();
-      $designList = $this->cDB->getDocs()->setParam(array('startkey'=>'"_design/"','endkey'=>'"_design0"'))->execute();
+      $designList = $couch->getDocs()->setParam(array('startkey'=>'"_design/"','endkey'=>'"_design0"'))->execute();
       $designs = array();
       if(array_key_exists('rows', $designList) && count($designList['rows']) >0){
         $rows = $designList['rows'];
