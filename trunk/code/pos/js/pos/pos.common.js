@@ -220,3 +220,81 @@ function error(response, status){
 }
 /*Function Block Ends For AJAX Related Calls*/
 
+$.fn.cKeyboard = function(){
+	var element = ($(this).selector).split(',');
+	var returnEle = {};
+	$.each(element, function(index,value){
+		value = $.trim(value);
+		var options = new Object();
+
+			options.restrictInput = true;
+			options.preventPaste = true;
+			options.autoAccept = false;
+			options.lockInput = true;
+
+			switch(value){
+				case '#username':
+					options.layout = 'costom';
+					options.customLayout = {
+							'default':['M T F 0 1 2 3 4 5 6 7 8 9 {Bksp}','{accept} {cancel}']
+						};
+					break;
+				case '#discount_input_box':
+					options.layout = 'costom';
+					options.customLayout = {
+							'default':['0 1 2 3 4','5 6 7 8 9','{clear} {bksp} {accept} {cancel}']
+						};
+					break;
+				case '#paid-amount':
+					options.layout = 'costom';
+					options.customLayout = {
+							'default':['1 2 3 {clear}','4 5 6 .','7 8 9 0','{accept} {cancel}']
+						};	
+					options.beforeClose = function(e,keyboard,el,accepted){
+						if(accepted){
+							var paid = keyboard.$preview[0].value;
+							paid = isNaN(paid) ? 0 : paid;
+							if(paid < Math.ceil($totalAmountWT)){
+								bootbox.alert('Paid amount is less than payable amount',function(){
+									popupKeyboard['#paid-amount'].reveal();
+								});
+								$("#balance").text('')
+								return false;
+							}else{
+								var balance = paid - Math.ceil($totalAmountWT);
+								$("#balance").text( isNaN(balance) ? 0 : balance );
+							}
+						}
+					};			
+					break;
+				case '#phone_number':
+					options.layout = 'costom';
+					options.customLayout = {
+							'default':['0 1 2 3 4','5 6 7 8 9','{clear} {bksp} {accept} {cancel}']
+						};	
+					break;
+				case '.bill_qty_input':
+					options.layout = 'costom';
+					options.customLayout = {
+							'default':['0 1 2 3 4','5 6 7 8 9','{clear} {bksp} {accept} {cancel}']
+						};					
+					break;
+				case '#ppc' :
+					options.layout = 'costom';
+					options.customLayout = {
+							'default':['0 1 2 3 4','5 6 7 8 9','{clear} {bksp} {accept} {cancel}']
+						};					
+					break;
+				case '#expense_amount' :
+					options.layout = 'costom';
+					options.customLayout = {
+							'default':['0 1 2 3 4','5 6 7 8 9','{clear} {bksp} {accept} {cancel}']
+						};					
+					break;
+
+			}
+		$(value).keyboard(options);
+		returnEle[value] = $(value).getkeyboard();
+	});
+	return returnEle;
+}
