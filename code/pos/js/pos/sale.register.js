@@ -20,6 +20,12 @@ $(document).ready( function(){
 	$('#add_expense').click(function(event){
 		event.preventDefault();
 		$('#addExpenseModal').modal();
+		$('#expense_purpose, #expense_amount').val('');
+		$('#expense_purpose, #expense_amount').cKeyboard();
+		setTimeout(function(){
+			$('#expense_purpose').focus();				
+		},500);
+
 	});
 
 /* Function To View Prety Expense */

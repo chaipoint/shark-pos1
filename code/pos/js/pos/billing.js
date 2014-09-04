@@ -10,6 +10,7 @@ var $totalDiscountAmount = 0.0;
 var order = 0;
 var loadedBill = null;
 var modifyBill = false;
+var popupKeyboard = null;
 $(document).ready(function(){
 	$(this).attr("title", "Shark |ChaiPoint POS| Billing"); 
 	/*
@@ -125,50 +126,52 @@ $(document).ready(function(){
 		//---END--- Event For Product Selection
 		//onCancel Of Bill
 		$("#cancel").click(function(){
-			if(modifyBill)
-			bootbox.dialog({
-				message:'<div class="form-group"><textarea placeholder="reason" name="cancel_reason_bill" id="cancel_reason_bill" class="form-control" autofocus ></textarea></div>',
-				title:"Bill Cancel Reason",
-				buttons:{
-					main:{
-						label:"Yes, Cancel",
-						className:"btn-success btn-sm",
-						callback:function(){
-								var textArea = $('#cancel_reason_bill').attr('type','text');
-								var reason = $.trim(textArea.val()); 
-								if( reason == '' ){
-									textArea.closest('.form-group').addClass('has-error');
-									return false;
-								}			
-								if(modifyBill){
-									if(doc){
-										$.ajax({
-											type: 'POST',
-											url: "index.php?dispatch=billing.save",
-									  		data : {request_type:'update_bill', doc:doc, cancel_reason:reason, bill_status_id: 67,bill_status_name:config_data.bill_status[67]},
-										}).done(function(response) {
-											response = $.parseJSON(response);
-											if(response.error){
-												bootbox.alert(response.message);
-											}else{
-												bootbox.alert(response.message,function(){
-													window.location = "?dispatch=sales_register";													
-												});
-											}
-										});
+			if(modifyBill){
+				bootbox.dialog({
+					message:'<div class="form-group"><textarea placeholder="reason" name="cancel_reason_bill" id="cancel_reason_bill" class="form-control" autofocus ></textarea></div>',
+					title:"Bill Cancel Reason",
+					buttons:{
+						main:{
+							label:"Yes, Cancel",
+							className:"btn-success btn-sm",
+							callback:function(){
+									var textArea = $('#cancel_reason_bill').attr('type','text');
+									var reason = $.trim(textArea.val()); 
+									if( reason == '' ){
+										textArea.closest('.form-group').addClass('has-error');
+										return false;
+									}			
+									if(modifyBill){
+										if(doc){
+											$.ajax({
+												type: 'POST',
+												url: "index.php?dispatch=billing.save",
+										  		data : {request_type:'update_bill', doc:doc, cancel_reason:reason, bill_status_id: 67,bill_status_name:config_data.bill_status[67]},
+											}).done(function(response) {
+												response = $.parseJSON(response);
+												if(response.error){
+													bootbox.alert(response.message);
+												}else{
+													bootbox.alert(response.message,function(){
+														window.location = "?dispatch=sales_register";													
+													});
+												}
+											});
+										}
 									}
 								}
+							},
+						danger:{
+							label:"No, Don't Cancel",
+							className:"btn-danger btn-sm",
+							callback:function(){
+								window.location = '?dispatch=sales_register'
 							}
-						},
-					danger:{
-						label:"No, Don't Cancel",
-						className:"btn-danger btn-sm",
-						callback:function(){
-							window.location = '?dispatch=sales_register'
-						}
-					},	
-				}
-			});
+						},	
+					}
+				});
+				$('#cancel_reason_bill').cKeyboard();
+			}
 			resetBill(true);
 		});
 		$("#content").on('click','#paid_button',function(){
@@ -197,8 +200,12 @@ $(document).ready(function(){
 			if(type == 'ppc'){ 
 				$(".ppc").show();
 				$('#balance').closest('tr').hide();
+					$("#ppc").cKeyboard();
 				bootbox.alert('Please Swipe The Card', function() { 
-				setTimeout('setFocus("ppc")',200);	
+					setTimeout(function(){
+						$("#ppc").cKeyboard();
+						$("#ppc").focus();
+					},600);	
 				});
 			}else{
 				$('#balance').closest('tr').show();
@@ -246,17 +253,17 @@ $(document).ready(function(){
 		/* END -- Payment Using PPC NO  */
 
 		$("#payment").click(function(){
-			
+
+
 			$("#twt").text(Math.ceil($totalAmountWT.toFixed(2)));
 			if($totalBillQty == 0){
 				bootbox.alert('Please add product to sale first');
 			}else{
-				//$("div.ui-keyboard").remove();
 				$("#balance").text(0);
 				$('#payModal').modal();
 				$("#paid_by").val('');
 				$(".payment-type-bt").removeClass('btn-success').addClass('btn-primary');
-				$("#phone_number").prop('autoFocus',true);
+				$("#phone_number").val('');
 				$("#is_cod").val('N');
 				//setTimeout('setFocus("phone_number")',100);
 				$("#delivery_channel").val(62);
@@ -301,15 +308,14 @@ $(document).ready(function(){
 					$("#bill_status").val(config_data.bill_status[65]);
 					$("#bill_status_id").val(65);
 			}
+			popupKeyboard = $('#paid-amount, #phone_number, #billing_customer').cKeyboard();
+
 			setTimeout(function(){
 				$("#phone_number").focus();
 			},600);
 
 			}
 
-		});
-		$(".close-model").click(function(){
-			$("div.ui-keyboard").hide();
 		});
 		//---END--- Payment Event After Products selection  or Without Product Selection
 
@@ -346,6 +352,7 @@ $(document).ready(function(){
              bootbox.alert('Please Select Valid Payment Method');
              return false;
 			}
+
 			var billDetails = new Object();
 			billDetails.items = new Object();
 			billDetails.items = $billingItems;
@@ -398,7 +405,7 @@ $(document).ready(function(){
 			billDetails.request_type = 'save_bill';
 
 
-			$("div.ui-keyboard").hide();
+			
 
 			$.ajax({
 				type: 'POST',
@@ -474,159 +481,34 @@ $(document).ready(function(){
 
 			});
 		});
-/*			$("#add_tax").click(function(){
-				var tval=$('#tax_val').val(); 
-				bootbox.dialog({
-					message:"<input type='text' class='form-control input-sm' id='get_ts' onClick='this.select();' value='"+tval+"'></input>",
-					title:"Tax Rate (5 or 5%)",
-					buttons:{
-						main:{
-							label:"Update",
-							className:"btn-primary btn-sm",
-							callback:function(){
-								var ts=$('#get_ts').val();
-								if(ts.length!=0){
-									$('#tax_val').val(ts);
-									if(ts.indexOf("%")!==-1){
-										var pts=ts.split("%");
-										if(!isNaN(pts[0])){
-											var tax=(total*parseFloat(pts[0]))/100;
-											var g_total=(total+tax)-parseFloat($('#ds_con').text());
-											grand_total=parseFloat(g_total).toFixed(2);
-											$("#ts_con").text(tax.toFixed(2));
-											$("#total-payable").text(grand_total)
-										}else{
-											$('#get_ts').val('0');
-											$('#tax_val').val('0');
-											var g_total=(total)-parseFloat($('#ds_con').text());
-											grand_total=parseFloat(g_total).toFixed(2);
-											$("#ts_con").text('0');
-											$("#total-payable").text(grand_total)
-										}
-									}else{
-										if(!isNaN(ts)&&ts!=0){
-											var g_total=(total+parseFloat(ts))-parseFloat($('#ds_con').text());
-											grand_total=parseFloat(g_total).toFixed(2);
-											$("#ts_con").text(parseFloat(ts).toFixed(2));
-											$("#total-payable").text(grand_total)
-										}else{
-											$('#get_ts').val('0');
-											$('#tax_val').val('0');
-											var g_total=(total)-parseFloat($('#ds_con').text());
-											grand_total=parseFloat(g_total).toFixed(2);
-											$("#ts_con").text('0');
-											$("#total-payable").text(grand_total)
-										}
-									}
-								}
-							}
-						}
-					}
-				});
-				return false
-			});/**/
-		//---END TAX POPUP--//
-
 	//---END--- Functions Work After Page Load via Events
-
-	//KEYBORD TO ENTER PAYMENT
-			$('#paid-amount').keyboard({
-				restrictInput:true,
-				preventPaste:true,
-				autoAccept:false,
-				alwaysOpen:false,
-				openOn:'click',
-				layout:'costom',
-				display:{
-					'a':'\u2714:Accept (Shift-Enter)',
-					'accept':'Accept:Accept (Shift-Enter)',
-					'b':'\u2190:Backspace',
-					'bksp':'Bksp:Backspace',
-					'c':'\u2716:Cancel (Esc)',
-					'cancel':'Cancel:Cancel (Esc)',
-					'clear':'C:Clear'
-				},
-				position:{
-					of:null,
-					my:'center top',
-					at:'center top',
-					at2:'center bottom'
-				},
-				usePreview:true,
-				customLayout:{
-					'default':['1 2 3 {clear}','4 5 6 .','7 8 9 0','{accept} {cancel}']
-				},
-				beforeClose:function(e,keyboard,el,accepted){
-					if(accepted){
-						setTimeout(function(){
-													var paid=parseFloat($("#paid-amount").val());
-						paid = isNaN(paid) ? 0 : paid;
-						if(paid < Math.ceil($totalAmountWT)){
-							console.log(Math.ceil($totalAmountWT));
-//							console.log(paid);
-							bootbox.alert('Paid amount is less than payable amount');
-							$("#balance").text('')
-							return false;
-						}else{
-							var balance = paid - Math.ceil($totalAmountWT);
-							$("#balance").text( isNaN(balance) ? 0 : balance );
-						}
-
-					},100);
-					}
-				}
-			});
-
-
-
+	
 	$("#add_discount").click(function(){
 		var dval=$('#discount_val').val(); 
 		bootbox.dialog({
-			message:"<input type='text' class='form-control input-sm' autofocus id='get_ds' onClick='this.select();' value='"+(($intDiscount == 0) ? '' : $intDiscount)+"'></input>",
+			message:"<input type='text' class='form-control input-sm ui-keyboard-input-current' autofocus id='discount_input_box' onClick='this.select();' value='"+(($intDiscount == 0) ? '' : $intDiscount)+"'></input>",
 			title:"Discount (%)",
 			buttons:{
 				main:{
 					label:"Update",
 					className:"btn-primary btn-sm",
 					callback:function(){
-						if(parseInt($('#get_ds').val())>100){
+						popupKeyboard['#discount_input_box'].destroy();
+						popupKeyboard = {};
+						if(parseInt($('#discount_input_box').val())>100){
 
 						}else{
-							var dis = parseInt($('#get_ds').val());
+							var dis = parseInt($('#discount_input_box').val());
 							$intDiscount = isNaN(dis) ? $intDiscount : dis;
 							generateSalesTable();
 						}
-						$("div.ui-keyboard").hide();
 					}
 				}
 			}
 		});
 
-$('#get_ds').keyboard({
-		layout:'custom',
-		customLayout:{
-					'default':['0 1 2 3 4','5 6 7 8 9','{clear} {bksp} {accept} {cancel}']
-				},
-		beforeClose:function(e,keyboard,el,accepted){
-			if(accepted){
-
-			//	console.log($('input',".ui-keyboard").val());
-			//	console.log(keyboard.$el[0].value)				
-			}
-/*			console.log(e);
-			console.log(keyboard);
-			console.log(el);
-			console.log(accepted);/**/
-		}
-	});
-
-			setTimeout(
-				function(){
-					$('#get_ds').select();
-//					$('#get_ds').select();
-				},
-				500
-			);
+		popupKeyboard = $('#discount_input_box').cKeyboard();
+		popupKeyboard['#discount_input_box'].reveal();
 
 		return false
 	});
@@ -654,9 +536,11 @@ function generateSalesTable(productId, qty, productData){
 			$billingItems[productID].category_name = catArray[selectedCat];
 			$billingItems[productID].id = productID;
 			$billingItems[productID].qty = newqty;
-			$billingItems[productID].price = productData.price;
+			$billingItems[productID].price = isNaN(productData.price * 1) ? 0 : productData.price;
+			console.log($billingItems[productID].price);
+			console.log(productData.price * 1);
 			$billingItems[productID].tax = productData.tax.rate;
-			$billingItems[productID].priceBT = (productData.tax.rate) ? (productData.price / ( 1 + parseFloat(productData.tax.rate) )) : productData.price;
+			$billingItems[productID].priceBT = (productData.tax.rate) ? (productData.price / ( 1 + parseFloat(productData.tax.rate) )) : $billingItems[productID].price;
 			$billingItems[productID].discount = $intDiscount;
 			$billingItems[productID].discountAmount = $billingItems[productID].priceBT * $billingItems[productID].discount/100;
 			$billingItems[productID].taxAbleAmount = $billingItems[productID].priceBT - $billingItems[productID].discountAmount;
@@ -672,7 +556,6 @@ function generateSalesTable(productId, qty, productData){
 
 	var tableRows = '';
 	for(var index in $billingItems){
-		console.log();
 		if(loadedBill == null){
 			$billingItems[index].discount = $intDiscount;
 		}
@@ -691,39 +574,13 @@ function generateSalesTable(productId, qty, productData){
 		$totalBillQty += parseInt($billingItems[index].qty);
 		$totalAmountWOT += ($billingItems[index].qty * $billingItems[index].taxAbleAmount);
 		$totalAmountWT += $billingItems[index].netAmount;
-		console.log($totalAmountWT);
 		$totalTaxAmount += ( $billingItems[index].qty * $billingItems[index].taxAmount );
 		$totalDiscountAmount += ( $billingItems[index].qty * $billingItems[index].discountAmount );
 
 	}
-	//loadedBill = null;
 	$('#saletbl tbody').html(tableRows);
 
-	$('.bill_qty_input').keyboard({ 
-		restrictInput:true,
-		preventPaste:true,
-		autoAccept:true,
-		alwaysOpen:false,
-		layout:'custom',
-		customLayout:{
-					'default':['0 1 2 3 4','5 6 7 8 9','{clear} {bksp} {accept} {cancel}']
-				},
-		beforeClose:function(e,keyboard,el,accepted){
-			if(accepted){
-
-			//	console.log($('input',".ui-keyboard").val());
-			//	console.log(keyboard.$el[0].value)				
-			}
-/*			console.log(e);
-			console.log(keyboard);
-			console.log(el);
-			console.log(accepted);/**/
-		}
-	});
-	/*$(".bill_qty_input").focus( setTimeout(function(){
-				$(this).select();
-			},6000));
-	//$(input["class='.bill_qty_input'"]).focus();*/
+	$('.bill_qty_input').cKeyboard();
 
 	$("#count").text($totalBillQty);	
 	$("#total").text($totalAmountWOT.toFixed(2));
