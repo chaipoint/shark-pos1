@@ -221,7 +221,15 @@
 		}
 		function init(){
 			$designDocs = array();
-
+			$designList = $this->cDB->getDocs()->setParam(array('startkey'=>'"_design/"','endkey'=>'"_design0"'))->execute();
+			$designs = array();
+			if(array_key_exists('rows', $designList) && count($designList['rows']) >0){
+				$rows = $designList['rows'];
+				foreach($rows as $k => $v){
+					$designs[$v['key']] = $v['value']['rev']; 
+				}
+			}
+			
 			$designDocs[] = array('_id'=>'generateBill','cd_doc_type' => 'bill_counter', 'current' => 0, 'current_month' => 0);
 
 			$designDocs[] = array(
@@ -350,9 +358,13 @@
    					)
 			);
 
-
-
-
+			if(count($designDocs) > 0){
+				foreach($designDocs as $key => $value){
+					if(array_key_exists($value['_id'], $designs)){
+						$designDocs[$key]['_rev'] = $designs[$value['_id']];
+					}
+				}
+			}
 			$arrayBulk = array("docs"=>$designDocs);
 			$result = $this->cDB->saveDocument(true)->execute($arrayBulk);
 
