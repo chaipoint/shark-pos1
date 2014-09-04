@@ -29,7 +29,9 @@
 		';
 	}
 ?>
-	<div class="container">
+	<div class="container"> 
+		<?php if(!empty($_GET['bill'])){ echo '<button class="btn btn-sm btn-primary" type="button"><b>Bill No</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge">'.$_GET['bill'].'</span></button>';}?>
+		
 			<div id="wrapper">
 				<div id="content">
 					<div class="c1">
