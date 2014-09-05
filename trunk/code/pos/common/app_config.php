@@ -173,13 +173,18 @@
 		}
 		public function getDBConnection($connection){
 			global $sql_host, $sql_user, $sql_password, $sql_db; 
+			
 			$details = $this->getConfig($connection,'db_detail');
-			$dt = $details['data']['db_detail'];
-			$sql_host = $dt['host'];
-			$sql_user = $dt['username'];
-			$sql_password = $dt['password'];
-			$sql_db = $dt['db'];			
-			$this->db = new Database();
+			if(array_key_exists('message', $details) && !empty($details['message'])){
+				$this->db = $details;
+			}else{
+				$dt = $details['data']['db_detail'];
+				$sql_host = $dt['host'];
+				$sql_user = $dt['username'];
+				$sql_password = $dt['password'];
+				$sql_db = $dt['db'];			
+				$this->db = new Database();
+			}
 		}
 		public function getConfig($connection, $key){
 			$arr = array('error'=>false, 'message'=>'', 'data' => array());
@@ -203,8 +208,13 @@
 			}
 			if(!$error){
 				$result = $connection->getDesign('config')->getView('config_list')->setParam($param)->execute();
-				foreach($result['rows'] as $key => $value){
-					$arr['data'][$value['key']] = $value['value'];
+				if(array_key_exists('cMessage', $result)){
+					$arr['error'] = true;
+					$arr['message'] = 'server_down';
+				}else{
+					foreach($result['rows'] as $key => $value){
+						$arr['data'][$value['key']] = $value['value'];
+					}
 				}
 			}
 			return $arr;
