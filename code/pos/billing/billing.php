@@ -11,45 +11,50 @@
 			$this->configData = (count($configResult['data']) > 0) ? $configResult['data'] : array();
 		}
 		function index(){
-
 			//Block to get Configs and need to have a generic methode for that
-
-
+			$data = array('error' => false,'catList'=>array(),'productList'=>array(),'firstCat'=>0, 'config_data'=>array(),'bill'=>array());
 			$resultJSON = $this->cDB->getDesign('store')->getView('store_mysql_id')->setParam(array('include_docs'=>'true',"key"=>'"'.$_SESSION['user']['store']['id'].'"'))->execute();
-//			print_r();
-			$result = $resultJSON['rows'][0]['doc'];
-			if(!array_key_exists('mysql_id', $_SESSION['user']['store'])){
-				unset($resultJSON['rows'][0]['doc']['menu_items']);
-				foreach($resultJSON['rows'][0]['doc'] as $key => $data){
-					$_SESSION['user']['store'][$key] = $data;
+			if(array_key_exists('cMessage', $resultJSON)){
+				$data['error'] = true;
+			}else{
+				$result = $resultJSON['rows'][0]['doc'];
+				if(!array_key_exists('mysql_id', $_SESSION['user']['store'])){
+					unset($resultJSON['rows'][0]['doc']['menu_items']);
+					foreach($resultJSON['rows'][0]['doc'] as $key => $data){
+						$_SESSION['user']['store'][$key] = $data;
+					}
 				}
-			}
-			
-			$catList = array();
-			$productList = array();
-			foreach($result['menu_items'] as $key => $Items){
-				if(!empty($Items['category']['id'])){
-					$catList[$Items['category']['id']] = $Items['category']['name']; 
-					$productList[$Items['category']['id']][] = $Items;
-				}
-	 		}
-	 		ksort($catList);
-	 		$currectCat = array_keys($catList);
-  			$firstCat = $currectCat[0];
+				
+				$catList = array();
+				$productList = array();
+				foreach($result['menu_items'] as $key => $Items){
+					if(!empty($Items['category']['id'])){
+						$catList[$Items['category']['id']] = $Items['category']['name']; 
+						$productList[$Items['category']['id']][] = $Items;
+					}
+		 		}
+		 		ksort($catList);
+		 		$currectCat = array_keys($catList);
+	  			$firstCat = $currectCat[0];
 
 
-			$billData = array();
-  			if(array_key_exists('bill_no', $_GET) && ! empty($_GET['bill_no'])){
-  				$bill = $_GET['bill_no'];
-				$billDataReturned = $this->getBillData($bill); 
-				if(!$billDataReturned['error']){
- 						$billData = $billDataReturned['data'];
-				}
-  			}
+				$billData = array();
+	  			if(array_key_exists('bill_no', $_GET) && ! empty($_GET['bill_no'])){
+	  				$bill = $_GET['bill_no'];
+					$billDataReturned = $this->getBillData($bill); 
+					if(!$billDataReturned['error']){
+	 						$billData = $billDataReturned['data'];
+					}
+	  			}
+	  			$data = array('error' => false,'catList'=>$catList,'productList'=>$productList,'firstCat'=>$firstCat, 'config_data'=>$this->configData,'bill'=>$billData);
 
-			$this->commonView('header_html');
+	  		}
+
+			$this->commonView('header_html',array('error'=>$data['error']));
 			$this->commonView('navbar');
-			$this->view(array('catList'=>$catList,'productList'=>$productList,'firstCat'=>$firstCat, 'config_data'=>$this->configData,'bill'=>$billData));
+			if(!$data['error']){
+				$this->view($data);//array('catList'=>$catList,'productList'=>$productList,'firstCat'=>$firstCat, 'config_data'=>$this->configData,'bill'=>$billData));
+			}
 			$this->commonView('footer_inner');
 			$this->commonView('footer_html');
 		}

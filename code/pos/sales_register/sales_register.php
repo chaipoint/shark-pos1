@@ -8,50 +8,57 @@
 			$this->cDB = $couch;
 		}
 		function index(){
+			$error = false;
 			$activeTask = $this->cDB->getActiveTask();
-			$resultBillList = $this->cDB->getDesign('billing')->getList('sales_register','handle_updated_bills')->setParam(array("include_docs"=>"true","descending"=>"true","endkey" => '["'.$this->getCDate().'"]'))->execute();//, "endkey" => '["'.$this->getCDate().'"]'
-			$resultExpenseList = $this->cDB->getDesign('petty_expense')->getView('get_expense')->setParam(array("include_docs"=>"true","startkey"=>'"'.$this->getCDate().'"',"endkey"=>'"'.$this->getCDate().'"'))->execute();
-
-
-			$staffList = $this->cDB->getDesign('staff')->getView('staff_username')->setParam(array("include_docs"=>"true"))->execute();
-			$rows = $staffList['rows'];
-			$staffList = array();
-			foreach($rows as $key => $value){
-				$staffList[$value['doc']['mysql_id']] = $value['doc']['name'] ;
-			}
-			ksort($staffList);
-			$pettyExpence = 0;
-			if(count($resultExpenseList['rows'])>0){
-				$rows = $resultExpenseList['rows'];
-				foreach($rows as $pKey => $pValue){
-					$pettyExpence += $pValue['doc']['expense_amount'];
-				}
-			}
-			$resultBillList['p_ex'] = $pettyExpence;
-
-			$configHead = $this->getConfig($this->cDB, 'head');
-			/*$this->getDBConnection($this->cDB);
-			$getHeadQuery = 'SELECT id, name FROM cp_reference_master WHERE active ="Y" AND mode = "head"';
-			$result = $this->db->func_query($getHeadQuery);/**/
-			if(!empty($result)){
-	            $headArray = array();
-	            foreach ($result as $key => $value) {
-					$headArray[$value['id']] = $value['name'];
-				}
-			} 
-			if(array_key_exists('error', $resultBillList) || array_key_exists('error', $resultExpenseList) ){
-				echo 'opps some problem please contact admin';
+			if(array_key_exists('cMessage', $activeTask)){
+				$error = true;
 			}else{
-				$resultBillList['head_data'] = $configHead['data']['head'];
-				$resultBillList['staff_list'] = $staffList;
-				$resultBillList['expense_data'] = $resultExpenseList;
-				$this->commonView('header_html');
-				$this->commonView('navbar');
-				$resultBillList['at'] = $activeTask;
-				$this->view($resultBillList);//array("bill_data"=>$resultBillList['data'],"cash_in_hand"=>$resultBillList['cash_inhand'],"cash_in_delivery"=> $resultBillList['cash_indelivery']));
-				$this->commonView('footer_inner');
-				$this->commonView('footer_html');
+				$resultBillList = $this->cDB->getDesign('billing')->getList('sales_register','handle_updated_bills')->setParam(array("include_docs"=>"true","descending"=>"true","endkey" => '["'.$this->getCDate().'"]'))->execute();//, "endkey" => '["'.$this->getCDate().'"]'
+
+				$resultExpenseList = $this->cDB->getDesign('petty_expense')->getView('get_expense')->setParam(array("include_docs"=>"true","startkey"=>'"'.$this->getCDate().'"',"endkey"=>'"'.$this->getCDate().'"'))->execute();
+				$staffList = $this->cDB->getDesign('staff')->getView('staff_username')->setParam(array("include_docs"=>"true"))->execute();
+				$rows = $staffList['rows'];
+				$staffList = array();
+				foreach($rows as $key => $value){
+					$staffList[$value['doc']['mysql_id']] = $value['doc']['name'] ;
+				}
+				ksort($staffList);
+				$pettyExpence = 0;
+				if(count($resultExpenseList['rows'])>0){
+					$rows = $resultExpenseList['rows'];
+					foreach($rows as $pKey => $pValue){
+						$pettyExpence += $pValue['doc']['expense_amount'];
+					}
+				}
+				$resultBillList['p_ex'] = $pettyExpence;
+
+				$configHead = $this->getConfig($this->cDB, 'head');
+				/*$this->getDBConnection($this->cDB);
+				$getHeadQuery = 'SELECT id, name FROM cp_reference_master WHERE active ="Y" AND mode = "head"';
+				$result = $this->db->func_query($getHeadQuery);/**/
+				if(!empty($result)){
+		            $headArray = array();
+		            foreach ($result as $key => $value) {
+						$headArray[$value['id']] = $value['name'];
+					}
+				} 
 			}
+			$this->commonView('header_html',array('error'=>$error));
+			$this->commonView('navbar');
+			if(!$error){
+				if(array_key_exists('error', $resultBillList) || array_key_exists('error', $resultExpenseList) ){
+					echo 'opps some problem please contact admin';
+				}else{
+					$resultBillList['head_data'] = $configHead['data']['head'];
+					$resultBillList['staff_list'] = $staffList;
+					$resultBillList['expense_data'] = $resultExpenseList;
+					$resultBillList['at'] = $activeTask;
+					$this->view($resultBillList);//array("bill_data"=>$resultBillList['data'],"cash_in_hand"=>$resultBillList['cash_inhand'],"cash_in_delivery"=> $resultBillList['cash_indelivery']));
+				}
+			}
+			$this->commonView('footer_inner');
+			$this->commonView('footer_html');
+
 		}
 
 		function save(){
