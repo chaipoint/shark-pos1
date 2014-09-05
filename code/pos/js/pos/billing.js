@@ -506,9 +506,19 @@ $(document).ready(function(){
 				}
 			}
 		});
-
-		popupKeyboard = $('#discount_input_box').cKeyboard();
-		popupKeyboard['#discount_input_box'].reveal();
+		popupKeyboard = $('#discount_input_box').cKeyboard();			
+		if(popupKeyboard && '#discount_input_box' in popupKeyboard){
+			setTimeout(function(){
+				popupKeyboard['#discount_input_box'].focusOn();
+				console.log(popupKeyboard['#discount_input_box']);
+				popupKeyboard['#discount_input_box'].$preview[0].select();
+				popupKeyboard['#discount_input_box'].lastCaret.start = 0;
+				popupKeyboard['#discount_input_box'].lastCaret.end = 9;
+			}
+			,600);
+		}else{
+		}
+		
 
 		return false
 	});
@@ -537,8 +547,8 @@ function generateSalesTable(productId, qty, productData){
 			$billingItems[productID].id = productID;
 			$billingItems[productID].qty = newqty;
 			$billingItems[productID].price = isNaN(productData.price * 1) ? 0 : productData.price;
-			console.log($billingItems[productID].price);
-			console.log(productData.price * 1);
+	//		console.log($billingItems[productID].price);
+	//		console.log(productData.price * 1);
 			$billingItems[productID].tax = productData.tax.rate;
 			$billingItems[productID].priceBT = (productData.tax.rate) ? (productData.price / ( 1 + parseFloat(productData.tax.rate) )) : $billingItems[productID].price;
 			$billingItems[productID].discount = $intDiscount;
