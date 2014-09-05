@@ -231,22 +231,28 @@ $.fn.cKeyboard = function(){
 			options.preventPaste = true;
 			options.autoAccept = false;
 			options.lockInput = true;
+			options.visible = function(event, keyboard, input){
+					keyboard.$preview[0].select();
+					keyboard.lastCaret.start = 0;
+					keyboard.lastCaret.end = (keyboard.$preview[0].value).length;
+					//console.log((keyboard.$preview[0].value).length);
+			}
 
 			switch(value){
 				case '#username':
-					options.layout = 'costom';
+					options.layout = 'caustom';
 					options.customLayout = {
 							'default':['M T F 0 1 2 3 4 5 6 7 8 9 {Bksp}','{accept} {cancel}']
 						};
 					break;
 				case '#discount_input_box':
-					options.layout = 'costom';
+					options.layout = 'caustom';
 					options.customLayout = {
 							'default':['0 1 2 3 4','5 6 7 8 9','{clear} {bksp} {accept} {cancel}']
 						};
 					break;
 				case '#paid-amount':
-					options.layout = 'costom';
+					options.layout = 'caustom';
 					options.customLayout = {
 							'default':['1 2 3 {clear}','4 5 6 .','7 8 9 0','{accept} {cancel}']
 						};	
@@ -268,25 +274,25 @@ $.fn.cKeyboard = function(){
 					};			
 					break;
 				case '#phone_number':
-					options.layout = 'costom';
+					options.layout = 'caustom';
 					options.customLayout = {
 							'default':['0 1 2 3 4','5 6 7 8 9','{clear} {bksp} {accept} {cancel}']
 						};	
 					break;
 				case '.bill_qty_input':
-					options.layout = 'costom';
+					options.layout = 'caustom';
 					options.customLayout = {
 							'default':['0 1 2 3 4','5 6 7 8 9','{clear} {bksp} {accept} {cancel}']
 						};					
 					break;
 				case '#ppc' :
-					options.layout = 'costom';
+					options.layout = 'caustom';
 					options.customLayout = {
 							'default':['0 1 2 3 4','5 6 7 8 9','{clear} {bksp} {accept} {cancel}']
 						};					
 					break;
 				case '#expense_amount' :
-					options.layout = 'costom';
+					options.layout = 'caustom';
 					options.customLayout = {
 							'default':['0 1 2 3 4','5 6 7 8 9','{clear} {bksp} {accept} {cancel}']
 						};					
@@ -297,4 +303,7 @@ $.fn.cKeyboard = function(){
 		returnEle[value] = $(value).getkeyboard();
 	});
 	return returnEle;
+}
+function db_error(){
+	bootbox.dialog({message:'<div class="text-center text-danger">DataBase Sever is Down, Please Start it.</div>'});
 }
