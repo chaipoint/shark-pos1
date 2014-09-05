@@ -5,7 +5,10 @@
 		<?php require_once 'header_externals.php';?>
 	</head>
 	<body>
-
+<?php	if(@$error){
+		echo '<script>$(document).ready(function(){ db_error();});</script>';
+	}
+?>
 	<div class="modal fade" id="sync-modal" tabindex="-1" role="dialog" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
