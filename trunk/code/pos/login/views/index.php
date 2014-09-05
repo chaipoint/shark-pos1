@@ -50,7 +50,7 @@
 											<span class="input-group-addon"> <i
 												class="glyphicon glyphicon-user"></i>
 											</span> <input type="text" name="identity" value=""
-												id="username" class="form-control" placeholder="Employee Code" autocomplete="off"/>
+												id="username" class="form-control" placeholder="Employee Code" autocomplete="off" autofocus="true"/>
 										</div>
 										<div class="input-group">
 											<span class="input-group-addon"><i
