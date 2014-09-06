@@ -10,9 +10,22 @@
 <script type="text/javascript" src="<?php echo (JS.'pos/sale.register.js');?>" ></script>
 
 <div class="container-fluid">
+<form class="form-inline" id="search_form" action="?dispatch=sales_register"> 
+  <input type="hidden" name="dispatch" value="sales_register"/>
 <ol class="breadcrumb">
-<li>Sales ON <?php echo date('d-M-Y');?></li>
+<li>
+<div class="form-group">
+  <label  class="control-label" for="sales_reg_search">Sales ON</label>&nbsp;&nbsp;&nbsp;&nbsp;
+<div class="input-group">
+      <input type="text" name = "sales_reg_search" id="sales_reg_search" class="form-control datepicker" required data-provide="datepicker-inline" data-date-format="dd-MM-yyyy"  data-date-autoclose = "true" data-date-end-date="+0d" name="expense_date" readonly/>      
+      <span class="input-group-btn">
+        <button class="btn btn-primary" type="button" style="padding-top:4px; padding-bottom:5px;" id="search_button"><i class="glyphicon glyphicon-search"></i></button>
+      </span>
+</div>
+</div>
+</li>
 </ol>
+</form>
 <div class='row'>
       
       <div class="col-lg-2 col-sm-4">
