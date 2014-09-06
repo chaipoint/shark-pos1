@@ -16,6 +16,7 @@ class CouchPHP{
 	private $postData = array();
 	private $allowContentType = false;
 	private $remote;
+	private $isDelete = false;
 	function __construct(){
 		$this->port = "5984";
 		//$this->url = 'http://pos:pos@54.249.247.15:'.$this->port."/";
@@ -34,7 +35,7 @@ class CouchPHP{
 		return $this->remote;
 	}
 	public function getDB(){
-		return $this->db;    echo "<pre>";
+		return $this->db;   
 
 	}
 	public function version(){
@@ -122,6 +123,11 @@ class CouchPHP{
 	public function getLastUrl(){
 		return $this->genUrl;
 	}
+	public function deleteDoc($docId){
+		$this->isDelete = true;
+		$this->genUrl = $this->url.$this->db.'/'.$docId;
+		return $this;
+	}
 	private function curl($url){
 		$ch = curl_init();
        	curl_setopt($ch, CURLOPT_URL,$url);
@@ -135,6 +141,10 @@ class CouchPHP{
        	if($this->allowContentType){
 	       	$this->allowContentType = false;
 	       	curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type:application/json"));
+	     }
+	     if($this->isDelete){
+	     	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+	     	$this->isDelete = false;
 	     }
         curl_setopt($ch, CURLOPT_NOBODY, FALSE); 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); 
