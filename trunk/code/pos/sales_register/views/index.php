@@ -238,6 +238,7 @@ if(is_array($data) && count($data)>0) {
         <tr class="text-right">
            <th style="font-size:14px;">Total</td>
            <th></th>
+		   <th></th>
            <th class="text-right" style="font-size:14px;"><?php echo number_format($sub_total,2); ?></th>
            <th class="text-right" style="font-size:14px;"><?php echo number_format($total_tax,2); ?></th>
            <th class="text-right" style="font-size:14px;"><?php echo number_format($total_amount,2);?></th>
