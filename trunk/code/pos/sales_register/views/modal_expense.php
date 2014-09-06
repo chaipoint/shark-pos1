@@ -17,7 +17,7 @@
 							</td>
 							<td width="50%">
 								<span class="inv_cus_con"> 
-									<input type="text" id="expense_date" class="form-control datepicker" required data-bv-notempty-message="The last name is required and cannot be empty" data-provide="datepicker-inline" data-date-format="yyyy-mm-dd" name="expense_date"/>	
+									<input type="text" id="expense_date" class="form-control datepicker" required data-bv-notempty-message="The last name is required and cannot be empty" data-provide="datepicker-inline" data-date-format="yyyy-mm-dd" name="expense_date" readonly/>	
 								</span>
 							</td>
 						</tr>
