@@ -34,11 +34,13 @@ function updateStaff(){
 	$result = $couch->getDesign('design_ho')->getView('staff_by_mysql_id')->setParam(array("include_docs"=>"true"))->execute();
 	
 	$itemList = array();
+	$_idList = array();
     if(array_key_exists('rows', $result)){
     	$logger->debug("Creating Array of Existing Staff In CouchDB");
 		$docs = $result['rows'];
 		foreach($docs as $dKey => $dValue){
-	    $itemList[$dValue['doc']['mysql_id']] = $dValue['doc'];
+	    	$itemList[$dValue['doc']['mysql_id']] = $dValue['doc'];
+	    	$_idList[$dValue['doc']['_id']] = $dValue['doc']['_rev'];
        }
        $logger->trace("Array of Existing Staff IN CouchDB: ".json_encode($itemList));
 	}
@@ -64,9 +66,10 @@ function updateStaff(){
 	while($row = mysql_fetch_assoc($result)){
 	  $updateArray[$i] = $row;
 	  if(array_key_exists($row['mysql_id'],$itemList)){
-      $updateArray[$i]['_id'] = $itemList[$row['mysql_id']]['_id'];
-      $updateArray[$i]['_rev'] = $itemList[$row['mysql_id']]['_rev'];
-      $updateCounter++;
+      	$updateArray[$i]['_id'] = $itemList[$row['mysql_id']]['_id'];
+      	$updateArray[$i]['_rev'] = $itemList[$row['mysql_id']]['_rev'];
+      	unset($_idList[$itemList[$row['mysql_id']]['_id']]);
+      	$updateCounter++;
       }
       
       $updateArray[$i]['cd_doc_type'] = 'staff_master';
@@ -88,12 +91,18 @@ function updateStaff(){
 	  $i++;
 	  
 	}
+	if(count($_idList)>0){
+		foreach ($_idList as $key => $value) {
+			$res = $couch->deleteDoc($key)->setParam(array('rev'=>$value))->execute();
+			$i++;
+		}
+	}
 $insertCounter = $i-$updateCounter;	
 $logger->trace("Array To Update Staff In CouchDb: ".json_encode($updateArray));
 
 if (is_array($updateArray) && count($updateArray)>0){
-$result=$couch->saveDocument(true)->execute(array("docs"=>$updateArray));
-
+	$result=$couch->saveDocument(true)->execute(array("docs"=>$updateArray));
+	print_r($result);
   if(array_key_exists('error', $result)){
   	$logger->debug("ERROR:Staff Not Updated IN CouchDb");
   	$html['error'] = true;
@@ -127,7 +136,8 @@ function updateStore(){
 		$docs = $result['rows'];
 		$logger->debug("Creating Array of Existing Store In CouchDB"); 
 		foreach($docs as $dKey => $dValue){
-	    $storeList[$dValue['doc']['mysql_id']] = $dValue['doc'];	
+	    $storeList[$dValue['doc']['mysql_id']] = $dValue['doc'];
+	    $_idList[$dValue['doc']['_id']] = $dValue['doc']['_rev'];	
 	  }
 	    $logger->trace("Array of Existing Store IN CouchDB: ".json_encode($storeList));
 	}
@@ -155,6 +165,7 @@ function updateStore(){
                             if(array_key_exists($storeDetails['mysql_id'],$storeList)){
 							$updateArray[$i]['_id'] = $storeList[$storeDetails['mysql_id']]['_id'];
                             $updateArray[$i]['_rev'] = $storeList[$storeDetails['mysql_id']]['_rev'];
+                            unset($_idList[$storeList[$storeDetails['mysql_id']]['_id']]);
                             $updateCounter++;
 						    }
 
@@ -235,8 +246,15 @@ function updateStore(){
 				
 						$i++;
 					}
-$insertCounter = $i-$updateCounter;
-$logger->trace("Array To Update Store In CouchDb: ".json_encode($updateArray));   
+$logger->trace("Array To Update Store In CouchDb: ".json_encode($updateArray));  
+if(count($_idList)>0){
+		foreach ($_idList as $key => $value) {
+			$res = $couch->deleteDoc($key)->setParam(array('rev'=>$value))->execute();
+			$i++;
+		}
+	} 
+	$insertCounter = $i-$updateCounter;
+
 if (is_array($updateArray) && count($updateArray)>0){
 
 $result=$couch->saveDocument(true)->execute(array("docs"=>$updateArray));
