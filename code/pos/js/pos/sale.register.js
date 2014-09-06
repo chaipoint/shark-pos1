@@ -16,6 +16,22 @@ $(document).ready( function(){
 	}).datepicker('setDate',new Date());
 
     $('#ui-datepicker-div').css('display','none');
+    var url = $.url();
+    var dateParam = (url.param('sales_reg_search'));
+	var date = new Date();
+	if(dateParam){
+		var parmArray = dateParam.split('-');
+		date = new Date(parmArray[2],getMonth(parmArray[1]),parmArray[0]);
+	}
+$('.datepicker').datepicker('update', new Date(date.getFullYear(), date.getMonth(), date.getDate()))
+    .on('changeDate', function(e){
+    	console.log(e);
+    	$("#search_button").trigger('click');
+    });
+$("#search_button").click(function(){
+	$("#search_form").submit();
+	console.log('hello');
+});
 /* Function To Add Prety Expense */
 	$('#add_expense').click(function(event){
 		event.preventDefault();
@@ -157,3 +173,45 @@ $(document).ready( function(){
 			});
 		});
 });
+function getMonth(monthName){
+	var monthNumber = 0;
+	switch(monthName){
+		case 'January':
+			monthNumber = 0;
+			break;
+		case 'February':
+			monthNumber = 1;
+			break;
+		case 'March':
+			monthNumber = 2;
+			break;
+		case 'April':
+			monthNumber = 3;
+			break;
+		case 'May':
+			monthNumber = 4;
+			break;
+		case 'June':
+			monthNumber = 5;
+			break;
+		case 'July':
+			monthNumber = 6;
+			break;
+		case 'August':
+			monthNumber = 7;
+			break;
+		case 'September':
+			monthNumber = 8;
+			break;
+		case 'October':
+			monthNumber = 9;
+			break;
+		case 'November':
+			monthNumber = 10;
+			break;
+		case 'December':
+			monthNumber = 11;
+			break;
+	}
+	return monthNumber;
+}
