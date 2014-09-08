@@ -219,7 +219,7 @@ if(is_array($data) && count($data)>0) {
 			         <!--<a href="#"  class="tip btn btn-primary btn-xs" title="View Invoice">
 			             <i class="glyphicon glyphicon-list"></i>
                </a>-->
-                
+                <?php if(0) { ?>
                  <a class="tip btn btn-warning btn-xs edit-bill text-center" style="width:25px;" title="Cancel Bill" href="<?php echo URL;?>?dispatch=billing&bill_no=<?php echo $value['_id']; ?>&bill=<?php echo $value['bill_no']; ?>">
   		              C
   		           </a>
@@ -231,6 +231,7 @@ if(is_array($data) && count($data)>0) {
                  </a>
               <?php
                  }
+               }
               ?>
 		          <!-- <a href="#"  class="tip btn btn-danger btn-xs" title="Cancel Sale">
 		               <i class="glyphicon glyphicon-trash"></i>-->
@@ -264,7 +265,7 @@ if(is_array($data) && count($data)>0) {
            <th></th>
            <th></th>
            <th></th>
-           <th></th>
+           
         </tr> 
       </tfoot>
    </tbody>
