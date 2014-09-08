@@ -16,6 +16,8 @@ class CouchPHP{
 	private $postData = array();
 	private $allowContentType = false;
 	private $remote;
+	private $isDelete = false;
+
 	function __construct(){
 
 		$this->log =  Logger::getLogger("CP-POS|COUCHDB");
@@ -124,6 +126,11 @@ class CouchPHP{
 	public function getActiveTask(){
 		return $this->curl($this->url."_active_tasks");
 	}
+	public function deleteDoc($docId){
+		$this->isDelete = true;
+		$this->genUrl = $this->url.$this->db.'/'.$docId;
+		return $this;
+	}
 
 	private function curl($url){
 		$ch = curl_init();
@@ -142,11 +149,20 @@ class CouchPHP{
 	       	curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type:application/json"));
        		$this->log->trace('Content-Type'."\t application/json");
 	     }
+	    if($this->isDelete){
+	     	curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "DELETE");
+	     	$this->isDelete = false;
+	    }
         curl_setopt($ch, CURLOPT_NOBODY, FALSE); 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); 
        	$result = curl_exec($ch); 
        	curl_close($ch);
    		$this->log->trace('RESPONSE'."\r\n".$result);
-       	return json_decode($result,true);
+   		$resArray = json_decode($result,true);
+   		if(is_null($resArray)){
+   			$resArray['error'] = true;
+   			$resArray['cMessage'] = 'server_error';
+   		}
+       	return $resArray;
 	}
 }
