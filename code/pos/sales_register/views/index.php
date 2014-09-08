@@ -28,7 +28,7 @@
 </form>
 <div class='row'>
       
-      <div class="col-lg-2 col-sm-4">
+      <div class="col-lg-2 col-sm-4" style="width:170px;">
         <div class="smallstat box">
           <i class="glyphicon glyphicon-usd fa green"></i>
           <span class="title">Cash Sale</span>
@@ -39,7 +39,7 @@
       <div class="col-lg-2 col-sm-4">
         <div class="smallstat box">
           <i class="glyphicon glyphicon-usd fa pink"></i>
-          <span class="title">Cash On Delivery</span>
+          <span class="title">CoC Pending Cash</span>
           <span class="value"><?php echo $cash_indelivery;?></span>
         </div>
       </div>
@@ -47,12 +47,19 @@
       <div class="col-lg-2 col-sm-4">
         <div class="smallstat box">
           <i class="glyphicon glyphicon-usd fa blue"></i>
-          <span class="title">PPC Sale</span>
+          <span class="title">PPC Redemption</span>
+          <span class="value"><?php echo $ppcSale; ?></span>
+        </div>
+      </div>
+      <div class="col-lg-2 col-sm-4" style="width:180px;">
+        <div class="smallstat box">
+          <i class="glyphicon glyphicon-usd fa gray"></i>
+          <span class="title">Credit Sale</span>
           <span class="value"><?php echo $ppcSale; ?></span>
         </div>
       </div>
 
-      <div class="col-lg-2 col-sm-4">
+      <div class="col-lg-2 col-sm-4" style="width:195px;">
         <div class="smallstat box">
           <i class="glyphicon glyphicon-usd fa red"></i>
           <span class="title">Petty Expense</span>
@@ -68,14 +75,21 @@
         </div>
       </div>
 
-      <div class="col-lg-2 col-sm-4">
+      <div class="col-lg-2 col-sm-4" style="width:170px;">
         <div class="smallstat box">
           <i class="glyphicon glyphicon-usd fa orange"></i>
           <span class="title">Total Sale</span>
-          <span class="value"><?php echo (($cash_sale + $cash_indelivery + $ppcSale) - $p_ex) ;?></span>
+          <span class="value"><?php echo ($cash_sale + $cash_indelivery + $ppcSale) ;?></span>
         </div>
       </div>
 
+       <div class="col-lg-2 col-sm-4" style="width:170px;">
+        <div class="smallstat box">
+          <i class="glyphicon glyphicon-usd fa yel"></i>
+          <span class="title">Cash In Hand</span>
+          <span class="value"><?php echo ($cash_sale - ($p_ex)) ;?></span>
+        </div>
+      </div>
       
 </div>
 
@@ -185,7 +199,7 @@
                 <th>Tax</th>
                 <th>Total Amount</th>
                 <th>Due Amount</th>
-                <th>Delivery Channel</th>
+                <th>Sales Channel</th>
                 <th>Booking Channel</th>
                 <th>Paid By</th>
                 <th>Status</th>
@@ -197,7 +211,7 @@
             </thead>
 	       <tbody>
 
-<?php $sub_total = $total_amount = $total_tax = $due_amount= 0; //print_r($data);
+<?php $sub_total = $total_amount = $total_tax = $due_amount = $counter = 0; //print_r($data);
 if(is_array($data) && count($data)>0) { 
     foreach ($data as $key => $value) { 
       if($value['bill_status'] != 'Cancelled') { ?>
@@ -245,7 +259,8 @@ if(is_array($data) && count($data)>0) {
           $sub_total += $value['sub_total'];
           $total_tax += $value['total_tax']; 
           $total_amount += $value['total_amount'];
-          $due_amount += $value['due_amount'];  
+          $due_amount += $value['due_amount']; 
+          $counter++; 
         }
    } 
 }
@@ -259,7 +274,7 @@ if(is_array($data) && count($data)>0) {
            <th class="text-right" style="font-size:14px;"><?php echo number_format($total_tax,2); ?></th>
            <th class="text-right" style="font-size:14px;"><?php echo number_format($total_amount,2);?></th>
            <th class="text-right" style="font-size:14px;"><?php echo number_format($due_amount,2);?></th>
-           <th></th>
+           <th class="text-right" style="font-size:14px;"><?php echo number_format($due_amount/$counter,2);?></th>
            <th></th>
            <th></th>
            <th></th>
@@ -272,6 +287,7 @@ if(is_array($data) && count($data)>0) {
       </tfoot>
    </tbody>
 </table>
+<?php// echo '010010';?>
 </div>
 </div>
 </div>
