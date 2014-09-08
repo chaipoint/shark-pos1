@@ -9,6 +9,30 @@
   <!--Body Header Start -->
   
   <?php require_once 'common/html_header.php';?>
+  <?php
+  $cashSale = 0;
+  $ppcSale = 0;
+  $cashInDelivery = 0;
+        $date = date('Y-m-d');
+        if(array_key_exists('sales_reg_search', $_GET)){
+          $date = date('Y-m-d',strtotime($_GET['sales_reg_search']));
+        }
+
+    $result = $couch->getDesign('design_ho')->getList('sales_register','handle_all_bills')->setParam(array('include_docs'=>"true","descending"=>"true", "endkey"=>'["'.$date.'"]', "startkey"=>'["'.$date.'",{},{},{},{},{}]'))->execute();
+    if(array_key_exists('cMessage', $result)){
+      echo '<script>bootbox.dialog({message:"Local Server id Down. Please Contact Admin"})</script>';
+    }else{
+
+        $expense = $couch->getDesign('design_ho')->getList('petty_expense','get_expense')->setParam(array("include_docs"=>"true","key"=>'"'.$date.'"'))->execute();
+        $cashSale = $result['cash_sale'];
+        $ppcSale = $result['ppcSale'];
+        $cashInDelivery = $result['cash_indelivery'];
+        $petty_expense = $expense;
+    }
+   
+
+
+  ?>
 
   <!--Body Header End -->
 
@@ -26,9 +50,23 @@
     <!--Progress Bar Div End -->
 
       <!-- Main component for a primary marketing message or call to action -->
-      <ol class="breadcrumb" style="margin-top:60px;">
-        <li>Sales ON <?php echo date('d-M-Y');?></li>
-      </ol>
+
+      <form class="form-inline" id="search_form"> 
+<ol class="breadcrumb" style="margin-top:60px;">
+<li>
+<div class="form-group">
+  <label  class="control-label" for="sales_reg_search">Sales ON</label>&nbsp;&nbsp;&nbsp;&nbsp;
+<div class="input-group">
+      <input type="text" name = "sales_reg_search" id="sales_reg_search" class="form-control datepicker" required data-provide="datepicker-inline" data-date-format="dd-MM-yyyy"  data-date-autoclose = "true" data-date-end-date="+0d" name="expense_date" readonly/>
+      <span class="input-group-btn">
+        <button class="btn btn-primary" type="button" style="padding-top:4px; padding-bottom:5px;" id="search_button"><i class="glyphicon glyphicon-search"></i></button>
+      </span>
+</div>
+</div>
+</li>
+</ol>
+</form>
+
     
       <!--<h2>Dashboard</h2>-->
       <div class='row' style="margin-top:20px;">
@@ -37,7 +75,7 @@
         <div class="smallstat box">
           <i class="glyphicon glyphicon-usd fa green"></i>
           <span class="title">Cash Sale</span>
-          <span class="value">1000<?php //echo $cash_sale;?></span>
+          <span class="value"><?php echo $cashSale;?></span>
         </div>
       </div>
 
@@ -45,7 +83,7 @@
         <div class="smallstat box">
           <i class="glyphicon glyphicon-usd fa pink"></i>
           <span class="title">Cash In Delivery</span>
-          <span class="value">2000<?php //echo $cash_indelivery;?></span>
+          <span class="value"><?php echo $cashInDelivery;?></span>
         </div>
       </div>
 
@@ -53,7 +91,7 @@
         <div class="smallstat box">
           <i class="glyphicon glyphicon-usd fa blue"></i>
           <span class="title">PPC Sale</span>
-          <span class="value">3000<?php //echo $ppcSale; ?></span>
+          <span class="value"><?php echo $ppcSale; ?></span>
         </div>
       </div>
 
@@ -61,7 +99,7 @@
         <div class="smallstat box">
           <i class="glyphicon glyphicon-usd fa red"></i>
           <span class="title">Petty Expense</span>
-          <span class="value">4000<?php //echo $p_ex;?></span>
+          <span class="value"><?php echo $petty_expense;?></span>
         </div>
       </div>
 
@@ -69,7 +107,7 @@
         <div class="smallstat box">
           <i class="glyphicon glyphicon-usd fa orange"></i>
           <span class="title">Total Sale</span>
-          <span class="value">10000<?php //echo (($cash_sale + $cash_indelivery + $ppcSale) - $p_ex) ;?></span>
+          <span class="value"><?php echo (($cashSale + $cashInDelivery + $ppcSale) - $petty_expense) ;?></span>
         </div>
       </div>
 
