@@ -39,7 +39,7 @@
       <div class="col-lg-2 col-sm-4">
         <div class="smallstat box">
           <i class="glyphicon glyphicon-usd fa pink"></i>
-          <span class="title">Cash In Delivery</span>
+          <span class="title">Cash On Delivery</span>
           <span class="value"><?php echo $cash_indelivery;?></span>
         </div>
       </div>
@@ -56,12 +56,14 @@
         <div class="smallstat box">
           <i class="glyphicon glyphicon-usd fa red"></i>
           <span class="title">Petty Expense</span>
-          <span class="value"><?php echo $p_ex;?> &nbsp;<em data-toggle="dropdown" id="pe_tg"class="glyphicon glyphicon-chevron-right"></em> 
+          <span class="value"><?php echo $p_ex;?> &nbsp;
+          <?php if(empty($_GET['sales_reg_search']) || (!empty($_GET['sales_reg_search']) && $_GET['sales_reg_search']==date('d-F-Y'))) { ?>
+            <em data-toggle="dropdown" id="pe_tg"class="glyphicon glyphicon-chevron-right"></em> 
             <ul class="dropdown-menu" role="menu">
             <li><a href='#' id="add_expense">Add Expense</a></li>
             <li><a href='#' id="view_expense">View Expense</a></li>
           </ul>
-
+           <?php } ?>
             </span>
         </div>
       </div>
@@ -187,7 +189,7 @@
                 <th>Booking Channel</th>
                 <th>Paid By</th>
                 <th>Status</th>
-                <th>Is Cod</th>
+                <th>Is CoD</th>
                 <th>Is PrePaid</th>
                 <th>Is Credit</th>
                 <th>Actions</th>
@@ -219,7 +221,7 @@ if(is_array($data) && count($data)>0) {
 			         <!--<a href="#"  class="tip btn btn-primary btn-xs" title="View Invoice">
 			             <i class="glyphicon glyphicon-list"></i>
                </a>-->
-                <?php if(0) { ?>
+                <?php if(empty($_GET['sales_reg_search']) || (!empty($_GET['sales_reg_search']) && $_GET['sales_reg_search']==date('d-F-Y'))) { ?>
                  <a class="tip btn btn-warning btn-xs edit-bill text-center" style="width:25px;" title="Cancel Bill" href="<?php echo URL;?>?dispatch=billing&bill_no=<?php echo $value['_id']; ?>&bill=<?php echo $value['bill_no']; ?>">
   		              C
   		           </a>
