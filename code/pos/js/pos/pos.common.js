@@ -100,7 +100,7 @@ var createDataTable = function (path) {
 			"bSort": true,
 		});
 		$("#filter_row th").each( function ( i ) {				
-					if(i==6 || i==7 || i==8 || i==9 || i==10 || i==11 || i==12)
+					if(i==7 || i==8 || i==9 || i==10 || i==11 || i==12 || i==13)
 					{
 					var select = $('<select style="width:90%;"><option value=""></option></select>')
 						.appendTo( $(this).empty() )
