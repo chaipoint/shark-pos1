@@ -3,6 +3,7 @@
 		function __construct(){
 			parent::__construct();
 			global $couch;
+            $this->cDB = $couch;
 			if(MODE != 'getStaff'){
 				$this->log =  Logger::getLogger("CP-POS|ORDERS");
 				$this->getDBConnection($couch);
@@ -20,6 +21,17 @@
 				$new = $_POST['new_status'];
 				if(array_key_exists('order', $_POST) && is_numeric($_POST['order'])){
 					$order = $_POST['order'];
+					if($_POST['new_status']=='Dispatched'){
+						$orderNO = $this->cDB->getDesign('billing')->getView('bill_by_order')->setParam(array('key'=> '"'.$_POST['order'].'"' ))->execute();
+						if(!array_key_exists(0, $orderNO['rows'])){
+								$return['error'] = true;
+								$return['message'] = "Please Made Bill First";
+								$re = json_encode($return);
+								$this->log->trace("RESPONSE \r\n".$re);
+								return $re;							
+						}
+					} 
+
 						$updateStatus = "UPDATE cp_orders SET ".(array_key_exists('staff_id', $_POST) ? " delivery_boy = '".mysql_real_escape_string($_POST['staff_id'])."', " : '')." ".(array_key_exists('reason', $_POST) ? " cancel_reason = '".mysql_real_escape_string($_POST['reason'])."', " : '')." status = '".$new."', updated_by = ".$_SESSION['user']['mysql_id'].", updated_date = '".$this->getCDTime()."' where id = ".$order." and status = '".$current."'";
 						$this->db->db_query($updateStatus);
 						if( ! $this->db->db_affected_rows()){
