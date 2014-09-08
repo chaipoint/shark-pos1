@@ -276,7 +276,7 @@ if(is_array($data) && count($data)>0) {
            <th></th>
            <th></th>
            <th></th>
-           <th class="text-right" style="font-size:12px;"></th>
+           <th class="text-right" style="font-size:14px;"></th>
            <th></th>
            <th></th>
            <th></th>
