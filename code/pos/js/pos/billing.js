@@ -261,8 +261,8 @@ $(document).ready(function(){
 			}else{
 				$("#balance").text(0);
 				$('#payModal').modal();
-				$("#paid_by").val('');
-				$(".payment-type-bt").removeClass('btn-success').addClass('btn-primary');
+				//$("#paid_by").val('');
+				//$(".payment-type-bt").removeClass('btn-success').addClass('btn-primary');
 				$("#phone_number").val('');
 				$("#is_cod").val('N');
 				//setTimeout('setFocus("phone_number")',100);
@@ -418,7 +418,8 @@ $(document).ready(function(){
 					bootbox.alert(result.message);
 				}else{
 					$('#payModal').modal('hide');
-					bootbox.alert('Bill Successfully Saved');
+					window.location.reload(true);
+					//bootbox.alert('Bill Successfully Saved');
 					//<a class="label label-primary print-bill-today" href="billprint.php?bill_no='+result.data.bill_no+'" target="_blank">Print</a>
 					resetBill(true);	
 					$intDiscount = 0;
