@@ -14,6 +14,9 @@
 		    $dir =  dirname(__FILE__).'/../lib/msg_api/sms.php';
             require_once $dir; 
             global $couch;
+            if(getType($this->db->getInstance()) != 'resource'){
+				return json_endcode(array('error' => true, 'message' => 'Server Down! Please Contact Admin', 'data' => array()));					
+			}
             $details = $this->getConfig($couch,'sms_api');
 			$return = array('error' => false, 'message' => '', 'data' => array());
 			if(array_key_exists('new_status', $_POST) && array_key_exists('current_status', $_POST)){
@@ -25,7 +28,7 @@
 						$orderNO = $this->cDB->getDesign('billing')->getView('bill_by_order')->setParam(array('key'=> '"'.$_POST['order'].'"' ))->execute();
 						if(!array_key_exists(0, $orderNO['rows'])){
 								$return['error'] = true;
-								$return['message'] = "Please Made Bill First";
+								$return['message'] = "No Bill Exists, Please Make Bill.";
 								$re = json_encode($return);
 								$this->log->trace("RESPONSE \r\n".$re);
 								return $re;							
