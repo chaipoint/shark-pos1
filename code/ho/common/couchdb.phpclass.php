@@ -21,7 +21,7 @@ class CouchPHP{
 		$this->port = "5984";
 		//$this->url = 'http://pos:pos@54.249.247.15:'.$this->port."/";
 		$this->url = 'http://pos:pos@127.0.0.1:'.$this->port."/";
-		$this->db = 'sharkho';
+		$this->db = 'sharkpos';
 		$this->userName = '';
 		$this->password = '';
 		//$this->remote = 'http://pos:pos@54.249.247.15:5984/rakesh_cpos_ho';
@@ -150,6 +150,11 @@ class CouchPHP{
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); 
        	$result = curl_exec($ch); 
        	curl_close($ch);
-       	return json_decode($result,true);
-	}
+		$resArray = json_decode($result,true);
+   		if(is_null($resArray)){
+   			$resArray['error'] = true;
+   			$resArray['cMessage'] = 'server_error';
+   		}
+       	return $resArray;	
+    }
 }
