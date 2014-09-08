@@ -117,9 +117,9 @@ $(document).ready(function(){
 			newQty = isNaN(newQty) ? 0 : newQty;
 			var pID = $(this).closest('tr').attr('billing-product');
 
-			if(newQty != 0){
+			//if(newQty != 0){
 				generateSalesTable(pID, newQty);
-			}
+			//}
 			event.preventDefault();
 		});
 
