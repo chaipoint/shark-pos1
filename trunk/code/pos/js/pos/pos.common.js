@@ -362,5 +362,5 @@ $.fn.cKeyboard = function(){
 	return returnEle;
 }
 function db_error(){
-	bootbox.dialog({message:'<div class="text-center text-danger">DataBase Sever is Down, Please Start it.</div>'});
+	bootbox.dialog({message:'<div class="text-center text-danger">OOPS! Some Problem Please Contact Admin.</div>'});
 }
