@@ -483,15 +483,14 @@ $(document).ready(function(){
 			});
 		});
 	//---END--- Functions Work After Page Load via Events
+	popupKeyboard = $('#discount_input_box').cKeyboard();
 	$("#discount-close").click(function(){
-		$("#discount-popover").toggle();
+//		$("#discount-popover").toggle();
+		$intDiscount = 0;
+		$("#discount_input_box").val('');
+		generateSalesTable();
 	});
-	$("#add_discount").click(function(){
-		$("#discount_input_box").val($intDiscount == 0 ? '' : $intDiscount);
-		$("#discount-popover").toggle();
-		popupKeyboard = $('#discount_input_box').cKeyboard();
-		$("#discount_input_box").focus();
-	});
+
 			//---START--- Event For Product Selection
 		$("#proajax").on("click",".category-product",function(){
 			$(this).addClass('active-btn');

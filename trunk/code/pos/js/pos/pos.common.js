@@ -296,15 +296,15 @@ $.fn.cKeyboard = function(){
 							var dis = parseInt(keyboard.$preview[0].value);
 							if(!isNaN(dis) && dis<=100){
 								$intDiscount =  dis;
-								$("#discount-popover").toggle();
 								generateSalesTable();
 							}else{
 								setTimeout(function(){
+									$("#discount_input_box").val('');
 									popupKeyboard['#discount_input_box'].focusOn();
 								},500);
 							}
 						}else{
-								$("#discount-popover").toggle();							
+							$("#discount-close").trigger('click');
 						}
 					};
 					break;
