@@ -311,7 +311,7 @@ $(document).ready(function(){
 			popupKeyboard = $('#paid-amount, #phone_number, #billing_customer').cKeyboard();
 
 			setTimeout(function(){
-				$("#phone_number").focus();
+				$("#paid-amount").focus();
 			},600);
 
 			}
