@@ -16,6 +16,8 @@
 			$resultJSON = $this->cDB->getDesign('store')->getView('store_mysql_id')->setParam(array('include_docs'=>'true',"key"=>'"'.$_SESSION['user']['store']['id'].'"'))->execute();
 			if(array_key_exists('cMessage', $resultJSON)){
 				$data['error'] = true;
+				header("Location:index.php?error=true");
+				die;
 			}else{
 				$result = $resultJSON['rows'][0]['doc'];
 				if(!array_key_exists('mysql_id', $_SESSION['user']['store'])){
@@ -99,7 +101,14 @@
 
 					if( $_POST['order_no'] > 0 ){
 						$orderNO = $this->cDB->getDesign('billing')->getView('bill_by_order')->setParam(array('key'=> '"'.$_POST['order_no'].'"' ))->execute();
-						if(array_key_exists(0, $orderNO['rows'])){
+						if(array_key_exists('cMessage', $orderNO)){
+								$return['error'] = true;
+								$return['message'] = "OOPS! Some Problem Please Contact Admin.";
+								$re = json_encode($return);
+								$this->log->trace("RESPONSE \r\n".$re);
+								return $re;							
+						}elseif(array_key_exists(0, $orderNO['rows'])){
+								$this->log->debug("Retry For of Bill For Order No \r\n".$_POST['order_no']);
 								$return['error'] = true;
 								$return['message'] = "Order Already Billed";
 								$re = json_encode($return);
