@@ -22,7 +22,10 @@ $(document).ready(function(){
 		var button = '<button class="btn btn-primary">Print</button>&nbsp;' + ((bill_status_id != 68) ? '<button id="paid_button" class="btn btn-primary">Paid</button>' : '');
 		$('#botbuttons').append(button);
 		$('#payment').prop('disabled',true).addClass('hide');
-
+		for (var keys in $billingItems) {//$.each($billingItems, function(index,keys){
+			$intDiscount = $billingItems[keys].discount;
+			break;
+		};
 		modifyBill = true;
 		generateSalesTable();
 		$(".del_row").removeClass('del_row');
@@ -30,6 +33,9 @@ $(document).ready(function(){
 		$('.category-selection').removeClass('category-selection');
 		$('.category-product').removeClass('category-product');
 		$('#add_discount').attr('id','');
+		$("#discount_input_box").val($intDiscount).prop('disabled',true);
+		$("#discount-close").attr('id','');
+
 
 	}
 
@@ -54,7 +60,6 @@ $(document).ready(function(){
 					productNewList[pData.mysql_id].seq = pIndex;
 				});
 			});
-
 
 			$.each(orderData.products, function (index, data){
 				var productData = productArray[productNewList[data['id']].cat] [productNewList[data['id']].seq];
@@ -535,9 +540,7 @@ function generateSalesTable(productId, qty, productData){
 
 	var tableRows = '';
 	for(var index in $billingItems){
-		if(loadedBill == null){
-			$billingItems[index].discount = $intDiscount;
-		}
+		$billingItems[index].discount = $intDiscount;
 		$billingItems[index].discountAmount = $billingItems[index].priceBT * $billingItems[index].discount/100;
 		$billingItems[index].taxAbleAmount = $billingItems[index].priceBT - $billingItems[index].discountAmount;
 		$billingItems[index].taxAmount = $billingItems[index].taxAbleAmount * $billingItems[index].tax;
