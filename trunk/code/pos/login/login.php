@@ -34,7 +34,15 @@
 		public function index(){
 			unset($_SESSION);
 			session_destroy();
-			$this->commonView('header_html');
+			$edata = array('error'=>false);	
+			if(array_key_exists('error', $_GET) && $_GET['error'] === "true"){
+				$result = $this->cDB->version();
+				$edata = array('error'=>true);				
+				if(!array_key_exists('cMessage', $result)){
+					$edata = array('error'=>false);				
+				}
+			}
+			$this->commonView('header_html',$edata);
 			$this->view();
 			$this->commonView('footer_html');
 
@@ -47,7 +55,7 @@
 			if(!empty($response)){
 				unset($_SESSION['user']);
 				session_destroy();
-				header("LOCATION:index.php");
+				header("LOCATION:index.php".(array_key_exists('cMessage', $response) ? '?error=true' : ''));
 			}
 		}
 		public function validate(){
@@ -109,7 +117,7 @@
 					}
 				}else{
 						$returnData['error'] = true;
-						$returnData['message'] = 'Please Start DataBase Sever it is Down.';						
+						$returnData['message'] = 'OOPS! Some Problem Please Contact Admin.';						
 				}
 			}else{
 				$returnData['error'] = true;
