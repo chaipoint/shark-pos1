@@ -37,7 +37,7 @@
 					<div class="c1">
 						<div class="pos">
 							<div id="pos">
-								<form action="" method="post" accept-charset="utf-8">
+								<form action="" method="post" accept-charset="utf-8" class="form-inline">
 									<div class="well well-sm" id="leftdiv">
 										<div id="printhead">
 											<h2>
@@ -92,8 +92,16 @@
 														</tr>
 														<tr class="success">
 															<td width="25%"><a href="#" id="add_discount"
-																style="color: #FFF;">Discount <i
-																	class="glyphicon glyphicon-pencil"></i> </a>
+																style="color: #FFF;">Discount<i
+																	class="glyphicon glyphicon-pencil"></i></a>
+																	<div class="popover" style="top:300px;color:black;" id="discount-popover">
+																		<div class="arrow"></div>
+																		<h3 class="popover-title">Discount</h3>
+																		<div class="popover-content">
+																			<input type="text" class="form-control input-sm" id="discount_input_box" name="discount_input_box"/>
+																			<i class="btn btn-danger btn-sm glyphicon glyphicon-remove" id="discount-close"></i>
+																		</div>
+																	</div>
 															</td>
 															<td><span id="ds_con">0</span></td>
 															<td width="25%"> <a href="#" id="add_tax"
