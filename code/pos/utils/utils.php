@@ -11,20 +11,17 @@
 				switch($_GET['mode']){
 					case 'staff_sync_bt':
 						$location = $_SESSION['user']['location']['id'];
-						$return = $this->getStaff($location,true);
+						$result = $this->getStaff($location,true);
 						break;
 					case 'store_sync_bt':
 						//$store_data = $this->getInstallationConfig();
 						$store = $_SESSION['user']['store']['id'];//= $store_data['data']['store_config']['store_id'];
 						$_GET['store'] = $store;
 						$_GET['only_store'] = true;
-						$return = $this->getStore(true);
+						$result = $this->getStore(true);
 						break;
 					case 'billing_sync_bt':
 							$result = $this->billing();
-							if($result['error']){
-								$return['message'] = $result['message'];								
-							}
 						break;
 					case 'config_sync_bt':
 							$result = $this->repConfig();
@@ -37,7 +34,7 @@
 							//print_r($rep);
 							if(array_key_exists(0, $rep)){
 								foreach($rep as $key => $value){
-									$this->cDB->replicate()->execute(array('replication_id'=>$value['replication_id'], 'cancel'=>true));
+									$result = $this->cDB->replicate()->execute(array('replication_id'=>$value['replication_id'], 'cancel'=>true));
 								}
 							}
 					break;
@@ -45,6 +42,11 @@
 			}else{
 				$return['error'] = true;
 				$return['message'] = "Not allowed to follow this action";
+			}
+			//print_r($result);
+			if($result['error']){
+				$return['error'] = true;
+				$return['message'] = 'OOPS! Some Problem Please Cotact Admin.';								
 			}
 			return  json_encode($return);
 		}
@@ -93,7 +95,7 @@
 			if(array_key_exists('ok', is_null($result) ? array() : $result)){
 				//echo "Billing Replication Started SuccessFully";
 			}else{
-				$return = array('error'=>false,'message'=>'OOPS! Some Problem Contact Admin');
+				$return = array('error'=>true,'message'=>'OOPS! Some Problem Contact Admin');
 //				echo "Opps! Some Problem Try Later";				
 			}
 			return $return; 
