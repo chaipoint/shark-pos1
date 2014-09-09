@@ -94,7 +94,7 @@
 															<td width="25%"><a href="#" id="add_discount"
 																style="color: #FFF;">Discount<i
 																	class="glyphicon glyphicon-pencil"></i></a>
-																	<div class="popover" style="top:300px;color:black;" id="discount-popover">
+																	<div class="popover" style="top:250px;color:black;" id="discount-popover">
 																		<div class="arrow"></div>
 																		<h3 class="popover-title">Discount</h3>
 																		<div class="popover-content">
