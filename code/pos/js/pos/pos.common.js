@@ -76,7 +76,7 @@ $(document).ready(function(){
 		});
 });
 
-var createDataTable = function (path) { 
+var createDataTable = function (path,table,footerRow) {  
     var media_path = path;
     var iDisplay = 25;
     var oTable=null;
@@ -84,7 +84,7 @@ var createDataTable = function (path) {
 			oTable.destroy();
 		}
 		
-		oTable = $('#fileData').DataTable({
+		oTable = $('#'+table).DataTable({
 			/*"dom": 'T<"H"lfr>t<"F"ip>',
 			"tableTools": {
 					"sSwfPath": media_path+"swf/copy_csv_xls_pdf.swf",		
@@ -94,38 +94,47 @@ var createDataTable = function (path) {
 					"sPdfMessage": "Your custom message would go here."
 					},"print"	]
 			},*/
-			   "footerCallback": function ( row, data, start, end, display ) {
-            var api = this.api(), data;
- 
-            // Remove the formatting to get integer data for summation
-            var intVal = function ( i ) {
-                return typeof i === 'string' ?
+
+			   "footerCallback": function ( row, data, start, end, display ) { 
+			   	if(footerRow!=undefined){
+			   		var footerArray = [];
+			   		footerArray = footerRow;
+			   		var counter = footerArray.length;
+           			var api = this.api(), data;
+ 					
+ 				// Remove the formatting to get integer data for summation
+            		var intVal = function ( i ) {
+                	return typeof i === 'string' ?
                     i.replace(/[\$,]/g, '')*1 :
                     typeof i === 'number' ?
                         i : 0;
-            };
+            	};
  
-            // Total over all pages
-            data = api.column( 6 ).data();
-            total = data.length ?
-                data.reduce( function (a, b) {
-                        return intVal(a) + intVal(b);
-                } ) :
-                0;
+		            // Total over all pages
+		            for (var i = 0; i < counter; i++) { 
+		            data = api.column( footerArray[i] ).data();
+            		total = data.length ?
+                	data.reduce( function (a, b) {
+                        return (intVal(a) + intVal(b)).toFixed(2);
+                	}) : 0;
+                	
  
-            // Total over this page
-            data = api.column( 6, { page: 'current'} ).data();
-            pageTotal = data.length ?
-                data.reduce( function (a, b) {
-                        return intVal(a) + intVal(b);
-                } ) :
-                0;
+		            // Total over this page
+		            
+        		    data = api.column( footerArray[i], { page: 'current'} ).data();
+            		pageTotal = data.length ?
+                	data.reduce( function (a, b) {
+                        return (intVal(a) + intVal(b)).toFixed(2);
+                	}) : 0;
+                	
  
-            // Update footer
-            $( api.column( 6 ).footer() ).html(
-                ''+pageTotal +' ('+ total +' total)'
-            );
-        },						
+		            // Update footer
+		            
+        		    $( api.column( footerArray[i] ).footer() ).html(
+                	''+pageTotal +' ('+ total +' Total)'
+            	);
+        		};
+        }},						
 			paging: true,
 			"jQueryUI": true,
 			"iDisplayLength" : iDisplay,
