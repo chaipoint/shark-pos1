@@ -270,21 +270,21 @@ if(is_array($data) && count($data)>0) {
    </tbody>
    <tfoot>
         <tr class="text-right">
-           <th style="font-size:14px;">Total</td>
+           <th style="font-size:12px;">Total</td>
+           <th></th>
+           <th></th>
+           <th class="text-right" style="font-size:12px;"></th>
+           <th class="text-right" style="font-size:12px;"></th>
+           <th class="text-right" style="font-size:12px;"></th>
+           <th class="text-right" style="font-size:12px;"></th>
            <th></th>
            <th></th>
            <th></th>
            <th></th>
            <th></th>
-           <th class="text-right" style="font-size:14px;"></th>
            <th></th>
-           <th></th>
-           <th></th>
-           <th></th>
-           <th></th>
-           <th></th>
-           <th style="font-size:14px;">Avg Bill Value</th>
-           <th class="text-right" style="font-size:14px;"><?php echo number_format($due_amount/$counter,2);?></th>
+           <th style="font-size:12px;">Avg Bill Value</th>
+           <th class="text-right" style="font-size:12px;"><?php echo number_format($due_amount/$counter,2);?></th>
            
         </tr> 
       </tfoot>
@@ -299,6 +299,7 @@ if(is_array($data) && count($data)>0) {
 <?php require_once 'modal_expense.php';?>
 <script>
 var oTable = null;
+var footerRow = [3,4,5,6];
 var media_path = "<?php echo JS;?>";
-oTable = createDataTable(media_path);
+oTable = createDataTable(media_path,'fileData',footerRow);
 </script>
