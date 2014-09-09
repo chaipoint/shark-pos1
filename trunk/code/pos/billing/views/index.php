@@ -93,7 +93,7 @@
 														<tr class="success">
 															<td width="25%">
 																<div class="input-group">
-																			<input type="text" class="form-control input-sm" id="discount_input_box" name="discount_input_box"/>
+																			<input type="text" class="form-control input-sm" id="discount_input_box" placeholder="%" name="discount_input_box"/>
 																			<span class="input-group-addon">
 																			<i class="glyphicon glyphicon-remove" id="discount-close"></i>
 																		</span>
