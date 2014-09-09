@@ -12,6 +12,8 @@
 			$activeTask = $this->cDB->getActiveTask();
 			if(array_key_exists('cMessage', $activeTask)){
 				$error = true;
+				header("Location:index.php?error=true");
+				die;
 			}else{
 				$date = $this->getCDate();
 				if(array_key_exists('sales_reg_search', $_GET)){
