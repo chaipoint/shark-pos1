@@ -221,7 +221,7 @@
 
 			/*curl -X POST http://127.0.0.1:5984/_replicate -H "Content-Type:application/json" -d '{"source":"http://127.0.0.1:5984/cpos_pos","target":"http://54.249.247.15:5984/rakesh_cpos_ho", "filter":"doc_replication/design_replication"}'*/
 		}
-		function init(){
+/*		function init(){
 			$designDocs = array();
 			$designList = $this->cDB->getDocs()->setParam(array('startkey'=>'"_design/"','endkey'=>'"_design0"'))->execute();
 			$designs = array();
@@ -387,5 +387,5 @@
 			print_r($result);			
 			echo "</pre>";
 
-		}
+		}/**/
 	}
