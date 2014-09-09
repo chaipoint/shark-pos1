@@ -282,6 +282,22 @@ $.fn.cKeyboard = function(){
 					options.customLayout = {
 							'default':['0 1 2 3 4','5 6 7 8 9','{clear} {bksp} {accept} {cancel}']
 						};
+					options.beforeClose = function(e,keyboard,el,accepted){
+						if(accepted){
+							var dis = parseInt(keyboard.$preview[0].value);
+							if(!isNaN(dis) && dis<=100){
+								$intDiscount =  dis;
+								$("#discount-popover").toggle();
+								generateSalesTable();
+							}else{
+								setTimeout(function(){
+									popupKeyboard['#discount_input_box'].focusOn();
+								},500);
+							}
+						}else{
+								$("#discount-popover").toggle();							
+						}
+					};
 					break;
 				case '#paid-amount':
 					options.layout = 'caustom';

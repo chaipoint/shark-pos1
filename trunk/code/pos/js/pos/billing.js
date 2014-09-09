@@ -483,45 +483,14 @@ $(document).ready(function(){
 			});
 		});
 	//---END--- Functions Work After Page Load via Events
-	
+	$("#discount-close").click(function(){
+		$("#discount-popover").toggle();
+	});
 	$("#add_discount").click(function(){
-		var dval=$('#discount_val').val(); 
-		bootbox.dialog({
-			message:"<input type='text' class='form-control input-sm ui-keyboard-input-current' autofocus id='discount_input_box' onClick='this.select();' value='"+(($intDiscount == 0) ? '' : $intDiscount)+"'></input>",
-			title:"Discount (%)",
-			buttons:{
-				main:{
-					label:"Update",
-					className:"btn-primary btn-sm",
-					callback:function(){
-						popupKeyboard['#discount_input_box'].destroy();
-						popupKeyboard = {};
-						if(parseInt($('#discount_input_box').val())>100){
-
-						}else{
-							var dis = parseInt($('#discount_input_box').val());
-							$intDiscount = isNaN(dis) ? $intDiscount : dis;
-							generateSalesTable();
-						}
-					}
-				}
-			}
-		});
-		popupKeyboard = $('#discount_input_box').cKeyboard();			
-		if(popupKeyboard && '#discount_input_box' in popupKeyboard){
-			setTimeout(function(){
-				popupKeyboard['#discount_input_box'].focusOn();
-				console.log(popupKeyboard['#discount_input_box']);
-				popupKeyboard['#discount_input_box'].$preview[0].select();
-				popupKeyboard['#discount_input_box'].lastCaret.start = 0;
-				popupKeyboard['#discount_input_box'].lastCaret.end = 9;
-			}
-			,600);
-		}else{
-		}
-		
-
-		return false
+		$("#discount_input_box").val($intDiscount == 0 ? '' : $intDiscount);
+		$("#discount-popover").toggle();
+		popupKeyboard = $('#discount_input_box').cKeyboard();
+		$("#discount_input_box").focus();
 	});
 			//---START--- Event For Product Selection
 		$("#proajax").on("click",".category-product",function(){
