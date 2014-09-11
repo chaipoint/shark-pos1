@@ -183,11 +183,10 @@
 					}
 		   
 			        $getOrderCount = "SELECT count(id) AS count, status FROM `cp_orders` 
-		                          WHERE DATE(created_date) = CURDATE() 
-		                          AND store_id = ".$_SESSION['user']['store']['id']."
-		                          GROUP BY status";
-
-			        $result = $db->func_query($getOrderCount);
+		                          	  WHERE DATE(created_date) = CURDATE() 
+		                              AND store_id = ".$_SESSION['user']['store']['id']."
+		                              GROUP BY status";
+					$result = $db->func_query($getOrderCount);
 		    	    $status_type_count = array('New'=>0,'Confirmed'=>0,'Cancelled'=>0,'Dispatched'=>0,'Delivered'=>0,'Paid'=>0,);
 		        	if(is_array($result) && count($result)>0){
 		        		foreach ($result as $key => $value) {
@@ -196,11 +195,20 @@
 		        	}
 		        }
 	    	}
-
+	    	$billArray = array();
+	    	if($status=='Confirmed'){
+	    		$resultGetBill = $this->cDB->getDesign('billing')->getView('handle_updated_bills')->setParam(array("include_docs"=>"true","descending"=>"true","endkey" => '["'.$this->getCDate().'"]',"startkey" => '["'.$this->getCDate().'",{},{},{}]'))->execute();
+	    		if(array_key_exists('rows', $resultGetBill) && count($resultGetBill['rows'])>0){
+	    			$docs = $resultGetBill['rows'];
+	    			foreach ($docs as $key => $value) {
+	    			 $billArray[$value['doc']['order_no']] = $value['doc']['bill_no']; 	
+	    			 } 
+	    		} //print_r($billArray);
+	    	}
 			$this->commonView('header_html',array('error'=>$error));
 			$this->commonView('navbar');
 			if(!$error){
-				$this->view(array('orders'=>$orderList,'action'=>$actionButtons, 'status'=>$status, 'order_count'=>$status_type_count));
+				$this->view(array('orders'=>$orderList,'billArray'=>$billArray,'action'=>$actionButtons, 'status'=>$status, 'order_count'=>$status_type_count));
 			}
 			$this->commonView('footer_inner');
 			$this->commonView('footer_html');
