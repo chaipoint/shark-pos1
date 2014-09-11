@@ -168,7 +168,7 @@
 
 <div class="col-sm-12" style="margin-top:10px;">
     <div class="panel panel-info"> 
-      <div class="panel-heading col" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><a>Active Bill Details
+      <div class="panel-heading col" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><a>Paid Bill Details
       <i class="glyphicon glyphicon-chevron-up pull-right"></i></a></div>
       <div id="collapseTwo" class="panel-collapse collapse">
         <div class="panel-body">
@@ -229,7 +229,7 @@ if(is_array($data) && count($data)>0) {
             <td style="text-align:center"><?php echo $value['booking_channel_name']; ?></td>
             <td style="text-align:center"><?php echo $value['payment_type']; ?></td>
             <td style="text-align:center"><?php echo $value['bill_status']; ?></td>
-            <td style="text-align:center"><?php echo $value['is_cod']; ?></td>
+            <td style="text-align:center"><?php echo $value['is_cod']; echo '</br><b>'.($value['is_cod']=='Y' ? $value['order_no'] : '').'</b>'; ?></td>
             <td style="text-align:center"><?php echo $value['is_prepaid']; ?></td>
             <td style="text-align:center"><?php echo $value['is_credit']; ?></td>
 		        <td>
