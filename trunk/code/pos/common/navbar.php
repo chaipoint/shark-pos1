@@ -1,3 +1,50 @@
+	<style>
+@-webkit-keyframes blink {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@-moz-keyframes blink {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+@-o-keyframes blink {
+    0% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+.con {
+    -webkit-animation: blink 1s;
+    -webkit-animation-iteration-count: infinite;
+    -moz-animation: blink 1s;
+    -moz-animation-iteration-count: infinite;
+    -o-animation: blink 1s;
+    -o-animation-iteration-count: infinite;
+    height: 40px;
+    width: 40px;
+    margin-left: 30px;
+    margin-top: 5px;
+}
+</style>
 	<div id="wrap">
 		<div class="navbar navbar-static-top navbar-inverse">
 			<div class="container">
@@ -45,7 +92,8 @@
 						<a class="btn nav-button btn-success btn-sm external" style="padding: 5px 8px; margin: 10px 0 5px 5px;" data-toggle="modal" data-target="" id="pos_sync">Data Sync</a>
 					</li>
 					<?php } ?>
-				</ul>
+                    
+					</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li>
 						<a>
@@ -57,6 +105,18 @@
 						<a class="tip" data-placement="left" title="Logout" id="logout">
 							<i class="glyphicon glyphicon-log-out"></i> 
 						</a>
+					</li>
+					<li>
+						<?php 
+						$connected = @fsockopen("www.google.com", 80);
+						if($connected) { 
+							echo '<img src="'.IMG.'ok.png" class="con">';
+							fclose($connected);
+						}else {
+							echo '<img src="'.IMG.'not_ok.png" class="con" >';
+						} 
+						?>
+						
 					</li>
 				</ul>
 			</div>
