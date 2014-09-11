@@ -70,41 +70,45 @@
 				$result = $resultJSON;
 				if(!array_key_exists('cMessage', $result)){
 					if(!$result['error']){
-						$userData["_id"] = $result['data']['_id'];
-						$userData["_rev"] = $result['data']['_rev'];
-						$userData["code"] = $result['data']['code'];
-						$userData["mysql_id"] = $result['data']['mysql_id'];
-						$userData["name"] = $result['data']['name'];
-						$userData["username"] = $result['data']['username'];
-						$userData["email"] = $result['data']['email'];
-						$userData["phone"] = $result['data']['phone'];
-						$userData["address"] = $result['data']['address'];
-						$userData["location"]['id'] = $result['data']['location_id'];
-						$userData["location"]['name'] = $result['data']['location_name'];
-						$userData["title"]['id'] = $result['data']['title']['id'];
-						$userData["title"]['name'] = $result['data']['title']['name'];
-						$userData["store"]['id'] = $this->store;
+						if($_POST['validateFor'] == 'shift'){
 
-						$loginHistory['cd_doc_type'] = 'login_history';
-						$loginHistory['id'] = $userData["mysql_id"];
-						$loginHistory['store'] = $this->store;
-						$loginHistory['login_time'] = $this->getCDTime();
-						$loginHistory['logout_time'] = '';
+						}else{
+							$userData["_id"] = $result['data']['_id'];
+							$userData["_rev"] = $result['data']['_rev'];
+							$userData["code"] = $result['data']['code'];
+							$userData["mysql_id"] = $result['data']['mysql_id'];
+							$userData["name"] = $result['data']['name'];
+							$userData["username"] = $result['data']['username'];
+							$userData["email"] = $result['data']['email'];
+							$userData["phone"] = $result['data']['phone'];
+							$userData["address"] = $result['data']['address'];
+							$userData["location"]['id'] = $result['data']['location_id'];
+							$userData["location"]['name'] = $result['data']['location_name'];
+							$userData["title"]['id'] = $result['data']['title']['id'];
+							$userData["title"]['name'] = $result['data']['title']['name'];
+							$userData["store"]['id'] = $this->store;
 
-						$result = $this->cDB->saveDocument()->execute($loginHistory);
-						if(array_key_exists('ok', $result)){
-								$userData['login']['id'] = $result['id'];
+							$loginHistory['cd_doc_type'] = 'login_history';
+							$loginHistory['id'] = $userData["mysql_id"];
+							$loginHistory['store'] = $this->store;
+							$loginHistory['login_time'] = $this->getCDTime();
+							$loginHistory['logout_time'] = '';
+
+							$result = $this->cDB->saveDocument()->execute($loginHistory);
+							if(array_key_exists('ok', $result)){
+									$userData['login']['id'] = $result['id'];
+							}
+							if(array_key_exists('user', $_SESSION)){
+								unset($_SESSION['user']);
+							}
+							$_SESSION['user'] = $userData;
+
+							$this->log->trace('LOGIN HISTORY '."\r\n".json_encode($loginHistory));
+							$this->log->trace('SESSION DATA '."\r\n".json_encode($userData));
+
+
+							$returnData['data']['redirect'] = 'index.php?dispatch=billing.index'; 
 						}
-						if(array_key_exists('user', $_SESSION)){
-							unset($_SESSION['user']);
-						}
-						$_SESSION['user'] = $userData;
-
-						$this->log->trace('LOGIN HISTORY '."\r\n".json_encode($loginHistory));
-						$this->log->trace('SESSION DATA '."\r\n".json_encode($userData));
-
-
-						$returnData['data']['redirect'] = 'index.php?dispatch=billing.index'; 
 						//$returnData['data']['redirect'] = 'index.php?dispatch=billing.index'; 
 
 					}else{
