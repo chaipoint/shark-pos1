@@ -33,9 +33,8 @@
 			$display = '';
 			$total = $total_qty = 0; $bill_no ='';
 			foreach($orders as $key => $data){
-				if($status=='Confirmed'){
-					$bill_no = (array_key_exists($data['order_id'], $billArray) ? $billArray[$data['order_id']] : '');
-				}
+				$bill_no = (array_key_exists($data['order_id'], $billArray) ? $billArray[$data['order_id']] : '');
+				
 			$display .= '<tr data-order-id="'.$data['order_id'].'" data-order-details=\''.json_encode($data).'\'>
 							<td class="text-center"><strong>'.$data['order_id'].' / '.$bill_no.'</strong></td>
 							<td>

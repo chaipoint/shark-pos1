@@ -196,7 +196,7 @@
 		        }
 	    	}
 	    	$billArray = array();
-	    	if($status=='Confirmed'){
+	    	//if($status=='Confirmed'){
 	    		$resultGetBill = $this->cDB->getDesign('billing')->getView('handle_updated_bills')->setParam(array("include_docs"=>"true","descending"=>"true","endkey" => '["'.$this->getCDate().'"]',"startkey" => '["'.$this->getCDate().'",{},{},{}]'))->execute();
 	    		if(array_key_exists('rows', $resultGetBill) && count($resultGetBill['rows'])>0){
 	    			$docs = $resultGetBill['rows'];
@@ -204,7 +204,7 @@
 	    			 $billArray[$value['doc']['order_no']] = $value['doc']['bill_no']; 	
 	    			 } 
 	    		} //print_r($billArray);
-	    	}
+	    	//}
 			$this->commonView('header_html',array('error'=>$error));
 			$this->commonView('navbar');
 			if(!$error){
