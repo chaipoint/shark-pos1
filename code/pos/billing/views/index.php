@@ -33,12 +33,16 @@
 		
 		<?php 
 		if(!empty($_GET['bill'])){ 
-			echo '<button class="btn btn-sm btn-primary" type="button"><b>Bill No</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge">'.$_GET['bill'].'</span></button>';
+			echo '<button class="btn btn-sm btn-success" type="button"><b>Bill No</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="badge">'.$_GET['bill'].'</span></button>';
+		}
+
+		if(!empty($_GET['order'])){ 
+			echo '<button class="btn btn-sm btn-primary" type="button"><b>Order No</b>&nbsp;<span class="badge">'.$_GET['order'].'</span></button>';
 		}
 
 		if(!empty($lastBillNo) && !empty($lastBillTime)){
 			//echo $lastBillNo." ".$lastBillTime;
-			echo '&nbsp;&nbsp;<button class="btn btn-sm btn-primary" type="button"><b>Last Bill No:</b>&nbsp;<strong>'.$lastBillNo.'</strong>&nbsp;&nbsp;&nbsp;&nbsp;<b>Time:</b>&nbsp;<strong>'.date('H:i:s',strtotime($lastBillTime)).'</strong></button>';
+			echo '&nbsp;&nbsp;<button class="btn btn-sm btn-info" type="button"><b>Last Bill No:</b>&nbsp;<strong>'.$lastBillNo.'</strong>&nbsp;&nbsp;&nbsp;&nbsp;<b>Time:</b>&nbsp;<strong>'.date('H:i:s',strtotime($lastBillTime)).'</strong></button>';
 		}
 		?>
 		
