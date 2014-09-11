@@ -303,7 +303,7 @@ if(is_array($data) && count($data)>0) {
         <div class="panel-body">
           <table id="cancel_bill_table" class="table table-striped table-bordered table-condensed table-hover" style="margin-bottom:5px;">
            <thead>
-              <tr id="filter_row">
+              <tr id="filter_row11">
                 <th></th>
                 <th></th>
                 <th></th>
@@ -318,7 +318,6 @@ if(is_array($data) && count($data)>0) {
                 <th></th>
                 <th></th>
                 <th></th>
-                
               </tr>
               <tr class="active">
                 <th>Bill No</th>
@@ -335,7 +334,6 @@ if(is_array($data) && count($data)>0) {
                 <th>Is CoD</th>
                 <th>Is PrePaid</th>
                 <th>Is Credit</th>
-                
               </tr>
             </thead>
             
