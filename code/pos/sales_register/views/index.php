@@ -168,11 +168,11 @@
 
 <div class="col-sm-12" style="margin-top:10px;">
     <div class="panel panel-info"> 
-      <div class="panel-heading col" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><a>Bill Details
+      <div class="panel-heading col" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><a>Active Bill Details
       <i class="glyphicon glyphicon-chevron-up pull-right"></i></a></div>
       <div id="collapseTwo" class="panel-collapse collapse">
         <div class="panel-body">
-          <table id="fileData" class="table table-striped table-bordered table-condensed table-hover" style="margin-bottom:5px;">
+          <table id="active_bill_table" class="table table-striped table-bordered table-condensed table-hover" style="margin-bottom:5px;">
 	         <thead>
               <tr id="filter_row">
                 <th></th>
@@ -294,6 +294,115 @@ if(is_array($data) && count($data)>0) {
 </div>
 </div>
 </div>
+
+<div class="col-sm-12" style="margin-top:10px;">
+    <div class="panel panel-info"> 
+      <div class="panel-heading col" data-toggle="collapse" data-parent="#accordion" href="#collapseCancel"><a>Cancelled Bill Details
+      <i class="glyphicon glyphicon-chevron-up pull-right"></i></a></div>
+      <div id="collapseCancel" class="panel-collapse collapse">
+        <div class="panel-body">
+          <table id="cancel_bill_table" class="table table-striped table-bordered table-condensed table-hover" style="margin-bottom:5px;">
+           <thead>
+              <tr id="filter_row">
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                
+              </tr>
+              <tr class="active">
+                <th>Bill No</th>
+                <th>Bill Time</th>
+                <th>Item Count</th>
+                <th>Sub Total</th>
+                <th>Tax</th>
+                <th>Total Amount</th>
+                <th>Due Amount</th>
+                <th>Sales Channel</th>
+                <th>Booking Channel</th>
+                <th>Paid By</th>
+                <th>Status</th>
+                <th>Is CoD</th>
+                <th>Is PrePaid</th>
+                <th>Is Credit</th>
+                
+              </tr>
+            </thead>
+            
+         <tbody>
+
+<?php $sub_total = $total_amount = $total_tax = $due_amount = $counter = 0; //print_r($data);
+if(is_array($data) && count($data)>0) { 
+    foreach ($data as $key => $value) { 
+      if($value['bill_status'] == 'Cancelled') { ?>
+        <tr class="text-center">
+            <td style="text-align:center"><?php echo $value['bill_no']; ?></td>
+            <td style="text-align:center"><?php echo DATE('H:i:s',strtotime($value['time']['created'])); ?></td>
+            <td style="text-align:center"><?php echo $value['total_qty']; ?></td>
+            <td style="text-align:right"><?php echo  number_format($value['sub_total'],2); ?></td>
+            <td class="text-right"><?php echo number_format($value['total_tax'],2); ?></td>
+            <td class="text-right"><?php echo number_format($value['total_amount'],2); ?></td>
+            <td class="text-right"><?php echo number_format($value['due_amount'],2); ?></td>
+
+            <td style="text-align:center"><?php echo $value['delivery_channel_name']; ?></td>
+            <td style="text-align:center"><?php echo $value['booking_channel_name']; ?></td>
+            <td style="text-align:center"><?php echo $value['payment_type']; ?></td>
+            <td style="text-align:center"><?php echo $value['bill_status']; ?></td>
+            <td style="text-align:center"><?php echo $value['is_cod']; ?></td>
+            <td style="text-align:center"><?php echo $value['is_prepaid']; ?></td>
+            <td style="text-align:center"><?php echo $value['is_credit']; ?></td>
+          
+        </tr>
+<?php   
+      
+          $sub_total += $value['sub_total'];
+          $total_tax += $value['total_tax']; 
+          $total_amount += $value['total_amount'];
+          $due_amount += $value['due_amount']; 
+          $counter++; 
+        }
+   } 
+}
+?>    
+      
+   </tbody>
+   <tfoot>
+        <tr class="text-right">
+           <th style="font-size:12px;">Total</td>
+           <th></th>
+           <th></th>
+           <th class="text-right" style="font-size:12px;"></th>
+           <th class="text-right" style="font-size:12px;"></th>
+           <th class="text-right" style="font-size:12px;"></th>
+           <th class="text-right" style="font-size:12px;"></th>
+           <th></th>
+           <th></th>
+           <th></th>
+           <th></th>
+           <th></th>
+           
+           <th style="font-size:12px;">Avg Bill Value</th>
+           <th class="text-right" style="font-size:12px;"><?php echo number_format($due_amount/$counter,2);?></th>
+           
+        </tr> 
+      </tfoot>
+</table>
+<?php// echo '010010';?>
+</div>
+</div>
+</div>
+</div>
+
 </div>
 </div>
 <?php require_once 'modal_expense.php';?>
@@ -301,5 +410,6 @@ if(is_array($data) && count($data)>0) {
 var oTable = null;
 var footerRow = [3,4,5,6];
 var media_path = "<?php echo JS;?>";
-oTable = createDataTable(media_path,'fileData',footerRow);
+oTable = createDataTable(media_path,'active_bill_table',footerRow);
+oTable = createDataTable(media_path,'cancel_bill_table',footerRow);
 </script>
