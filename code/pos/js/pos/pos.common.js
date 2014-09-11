@@ -246,7 +246,16 @@ var cAjax = function(reqOptions){
 					data : reqOptions.data, 
 					success : reqOptions.success,
 					error : error,
-					complete : function(){
+					complete : function(response){
+						if($.isFunction(reqOptions.callback)){
+							var result = $.parseJSON(response.responseText);
+							if(result.error){
+								bootbox.alert(result.message);
+							}else{
+								reqOptions.callback(result);
+							}
+
+						}
 					}	
 			});
 	}	
@@ -254,10 +263,10 @@ var cAjax = function(reqOptions){
 
 };
 function error(response, status){
-	consol.log('Response From AJAX Call');
-	consol.log(response);
-	consol.log('Status From AJAX Call');
-	consol.log(status);
+	console.log('Response From AJAX Call');
+	console.log(response);
+	console.log('Status From AJAX Call');
+	console.log(status);
 }
 /*Function Block Ends For AJAX Related Calls*/
 
@@ -331,23 +340,9 @@ $.fn.cKeyboard = function(){
 					};			
 					break;
 				case '#phone_number':
-					options.layout = 'caustom';
-					options.customLayout = {
-							'default':['0 1 2 3 4','5 6 7 8 9','{clear} {bksp} {accept} {cancel}']
-						};	
-					break;
+				case '#petty_cash':
 				case '.bill_qty_input':
-					options.layout = 'caustom';
-					options.customLayout = {
-							'default':['0 1 2 3 4','5 6 7 8 9','{clear} {bksp} {accept} {cancel}']
-						};					
-					break;
 				case '#ppc' :
-					options.layout = 'caustom';
-					options.customLayout = {
-							'default':['0 1 2 3 4','5 6 7 8 9','{clear} {bksp} {accept} {cancel}']
-						};					
-					break;
 				case '#expense_amount' :
 					options.layout = 'caustom';
 					options.customLayout = {
