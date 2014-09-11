@@ -39,7 +39,7 @@ $(document).ready(function(){
 			var ajax = false;
 
 			bootbox.dialog({
-			message:'<div class="form-group"><textarea placeholder="reason" name="cancel_reason" id="cancel_reason" class="form-control"></textarea></div>',
+			message:'<div class="form-group"><textarea  name="cancel_reason" id="cancel_reason" class="form-control"></textarea></div>',
 			title:"Order Cancel Reason",
 			buttons:{
 				main:{
@@ -67,7 +67,7 @@ $(document).ready(function(){
 			var ajax = false;
 
 			bootbox.dialog({
-			message:'<div class="form-group"><input type="text"  placeholder="Staff Name" name="staff_name" id="staff_name" class="autocomplete form-control" strict="true" target="staff_id"/></div>',
+			message:'<div class="form-group"><input type="text" name="staff_name" id="staff_name" class="autocomplete form-control" strict="true" target="staff_id"/></div>',
 			title:"Delivery Boy",
 			buttons:{
 				main:{
