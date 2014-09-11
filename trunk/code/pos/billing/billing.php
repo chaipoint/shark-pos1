@@ -12,8 +12,17 @@
 		}
 		function index(){
 			//Block to get Configs and need to have a generic methode for that
-			$data = array('error' => false,'catList'=>array(),'productList'=>array(),'firstCat'=>0, 'config_data'=>array(),'bill'=>array());
+			$data = array('error' => false,'catList'=>array(),'productList'=>array(),'firstCat'=>0, 'config_data'=>array(),'bill'=>array(),'lastBillNo'=>'','lastBillTime'=>'');
 			$resultJSON = $this->cDB->getDesign('store')->getView('store_mysql_id')->setParam(array('include_docs'=>'true',"key"=>'"'.$_SESSION['user']['store']['id'].'"'))->execute();
+			$resultLastBill = $this->cDB->getDesign('billing')->getView('handle_updated_bills')->setParam(array("descending"=>"true","endkey" => '["'.$this->getCDate().'"]',"startkey" => '["'.$this->getCDate().'",{},{},{}]',"limit"=>"1"))->execute();
+			
+			$lastBillNo = '';
+			$lastBillTime = '';
+			if(array_key_exists('rows', $resultLastBill) && count($resultLastBill['rows'])>0){
+				$lastBillNo = $resultLastBill['rows'][0]['key'][1] ;
+				$lastBillTime = $resultLastBill['rows'][0]['key'][3] ;	
+			}
+			
 			if(array_key_exists('cMessage', $resultJSON)){
 				$data['error'] = true;
 				header("Location:index.php?error=true");
@@ -48,7 +57,7 @@
 	 						$billData = $billDataReturned['data'];
 					}
 	  			}
-	  			$data = array('error' => false,'catList'=>$catList,'productList'=>$productList,'firstCat'=>$firstCat, 'config_data'=>$this->configData,'bill'=>$billData);
+	  			$data = array('error' => false,'catList'=>$catList,'productList'=>$productList,'firstCat'=>$firstCat, 'config_data'=>$this->configData,'bill'=>$billData,'lastBillNo'=>$lastBillNo,'lastBillTime'=>$lastBillTime);
 
 	  		}
 
