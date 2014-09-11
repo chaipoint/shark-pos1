@@ -14,15 +14,15 @@
          <table class="table table-bordered table-stripped" id="order-holder" style="font-size:10px;">
            <thead>
 		     <tr  style="font-size:12px;background-color:#428bca;color:white;">
-			   <th>Order No</th>
+			   <th style="width:120px;">Order No / Bill No</th>
 			   <th style="width:120px;">Customer Details</th>
 			   <th style="width:150px;">Address</th>
 			   <th style="width:100px;">Delivery Time</th>
 			   <th style="width:100px;">Booking Time</th>
 			   <th style="width:100px;">Channel</th>
-			   <th style="width:80px;">Amount</th>
+			   <th style="width:60px;">Amount</th>
 			   <th style="width:220px;">Details</th>
-			   <th style="width:150px;">Comment</th>
+			   <th style="width:120px;">Comment</th>
 			   <!--<th style="width:300px;">Schedule</th>
 			   <th style="width:320px;">Products Detail</th>-->
 			   <th><?php echo ($status == 'Cancelled' ? 'Reason' : 'Action');?></th>
@@ -31,10 +31,13 @@
 	     <tbody>
 		<?php
 			$display = '';
-			$total = $total_qty = 0;
+			$total = $total_qty = 0; $bill_no ='';
 			foreach($orders as $key => $data){
+				if($status=='Confirmed'){
+					$bill_no = (array_key_exists($data['order_id'], $billArray) ? $billArray[$data['order_id']] : '');
+				}
 			$display .= '<tr data-order-id="'.$data['order_id'].'" data-order-details=\''.json_encode($data).'\'>
-							<td class="text-center">'.$data['order_id'].'</td>
+							<td class="text-center"><strong>'.$data['order_id'].' / '.$bill_no.'</strong></td>
 							<td>
 								<table>
 									<tr><td>'.$data['name'].'</td></tr>
