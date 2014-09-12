@@ -19,8 +19,8 @@ $(document).ready(function(){
 			alert("No Internet Connection Available");
 			return  false;
 		}
-		$("#sync-modal").modal('show');
-		$('.alert',$("#sync-modal")).remove();
+		$("#login_holder").modal('show');
+		//sales register have handleResponse
 	});
 	$(".sync-bt").click(function(){
 		var msgHolder = $(this).closest('.modal-body');

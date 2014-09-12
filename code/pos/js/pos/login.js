@@ -11,8 +11,8 @@ $(document).ready(function(){
 				var param = url.param('dispatch') ? url.param('dispatch').split('.') : '.';
 
 				
-				var username = $(this).find("#username").val();
-				var password = $(this).find("#password").val();
+				var username = $("#username",form).val();
+				var password = $("#password",form).val();
 				var msg = "";
 				if(username.trim() == ""){msg += "<li>Provide Username</li>";}
 				if(password.trim() == ""){msg += "<li>Provide Password</li>"}
@@ -26,11 +26,18 @@ $(document).ready(function(){
 					var dataObj = new Object();
 					dataObj.username = username;
 					dataObj.password = password;
-					dataObj.validateFor = (param[0] == 'staff') ? 'shift' : 'user';
-					if(param[0] == 'staff'){
-						dataObj.petty_cash = $(this).find("#petty_cash").val();	
-						dataObj.mode = $('#shift_nav li.active a').attr('id');						
-					}
+					switch(param[0]){
+						case 'staff':
+							dataObj.validateFor = 'shift';
+							dataObj.petty_cash = $(this).find("#petty_cash").val();	
+							dataObj.mode = $('#shift_nav li.active a').attr('id');
+							break;
+						case 'sales_register':
+							dataObj.validateFor = 'sales_register';
+							break;
+						default:
+						dataObj.validateFor = 'user';
+					}					
 					$.ajax({
 				  		type: 'POST',
 				  		url: "index.php?dispatch=login.validate",
@@ -43,15 +50,13 @@ $(document).ready(function(){
 							msg = $res.message; 
 							$("#error_message").show();$("#error_message ul").html(msg);
 						}else{
-							if(param[0] == 'staff'){
-								handleResponse($res);
-								//form.hide();
-								//var sForm = $('form:last',form.parent());
-								//$('form:last',form.parent()).removeClass('hide').end().find('input[type="text"]').focus();
-								//sForm.show();
+							if(dataObj.validateFor == 'user'){
+								window.location = $res.data.redirect; //Transfer to Next Page After setting session and login
 							}else{
-								window.location = $res.data.redirect; //Transfer to Next Page After setting session and login																
+								handleResponse($res);								
 							}
+							$("#username",form).val('');
+							$("#password",form).val('');
 						}
 					});
 				}
