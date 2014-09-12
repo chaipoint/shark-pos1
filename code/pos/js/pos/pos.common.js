@@ -56,6 +56,8 @@ $(document).ready(function(){
 			bootbox.confirm("Are you sure to Logout?", function(result) {
             if(result==true){
             	window.location='index.php?dispatch=login.out';
+            }else{
+            	window.location.reload(true);            	
             }
 		});
 
@@ -344,6 +346,10 @@ $.fn.cKeyboard = function(){
 				case '.bill_qty_input':
 				case '#ppc' :
 				case '#expense_amount' :
+				case '#counter_no':
+				case '#petty_cash_end':
+				case '#box_cash':
+				case '#box_cash_end':
 					options.layout = 'caustom';
 					options.customLayout = {
 							'default':['0 1 2 3 4','5 6 7 8 9','{clear} {bksp} {accept} {cancel}']
