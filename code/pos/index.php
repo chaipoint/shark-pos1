@@ -25,6 +25,7 @@
 	define(	'MODULE',	$appConfig->getModule()	);
 	define(	'MODE',		$appConfig->getMode()	);
 	define(	'IMG',		$appConfig->getImg()	);
+	define('DIR', dirname(__FILE__));
 	
 	$logger->trace('Dispatch '.MODULE.".".MODE);
 	
