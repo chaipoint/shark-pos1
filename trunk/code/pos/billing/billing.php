@@ -1,4 +1,7 @@
 <?php	
+	if(!array_key_exists('shift', $_SESSION['user'])){
+		header("LOCATION:index.php");
+	}
 	class Billing extends App_config{
 		private $cDB;
 		private $configData;
@@ -105,8 +108,8 @@
 				//	$_POST['channel'] = 'store';
 					$_POST['card_no'] = 'XXXXX';
 					$_POST['coupon_code'] = 'XXXXX';
-					$_POST['counter'] = '1';
-					$_POST['shift'] = '1';
+					$_POST['counter'] = $_SESSION['user']['counter'];
+					$_POST['shift'] = $_SESSION['user']['shift'];
 
 					if( $_POST['order_no'] > 0 ){
 						$orderNO = $this->cDB->getDesign('billing')->getView('bill_by_order')->setParam(array('key'=> '"'.$_POST['order_no'].'"' ))->execute();
