@@ -18,9 +18,8 @@
 				$date = $this->getCDate();
 				if(array_key_exists('sales_reg_search', $_GET)){
 					$date = date('Y-m-d',strtotime($_GET['sales_reg_search']));
-				}
-				
-				$resultBillList = $this->cDB->getDesign('billing')->getList('sales_register','handle_updated_bills')->setParam(array("include_docs"=>"true","descending"=>"true","endkey" => '["'.$date.'"]',"startkey" => '["'.$date.'",{},{},{}]'))->execute();//endkey=["2014-09-04"]&startkey=["2014-09-04",{},{},{}]
+				}	
+				$resultBillList = $this->getBills($date);
 				$resultExpenseList = $this->cDB->getDesign('petty_expense')->getView('get_expense')->setParam(array("include_docs"=>"true","startkey"=>'"'.$date.'"',"endkey"=>'"'.$date.'"'))->execute();
 				$staffList = $this->cDB->getDesign('staff')->getView('staff_username')->setParam(array("include_docs"=>"true"))->execute();
 				$rows = $staffList['rows'];
@@ -66,7 +65,10 @@
 			$this->commonView('footer_html');
 
 		}
-
+		function getBills($date){
+				$resultBillList = $this->cDB->getDesign('billing')->getList('sales_register','handle_updated_bills')->setParam(array("include_docs"=>"true","descending"=>"true","endkey" => '["'.$date.'"]',"startkey" => '["'.$date.'",{},{},{}]'))->execute();//endkey=["2014-09-04"]&startkey=["2014-09-04",{},{},{}]
+				return 	$resultBillList;
+		}
 		function save(){
 			global $couch;
 			$return = array('error'=>false,'message'=>'','data'=>array());
