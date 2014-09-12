@@ -50,13 +50,13 @@
 											<span class="input-group-addon"> <i
 												class="glyphicon glyphicon-user"></i>
 											</span> <input type="text" name="identity" value=""
-												id="username" class="form-control" placeholder="Employee Code" autocomplete="off" autofocus="true"/>
+												id="username" class="form-control" autocomplete="off" autofocus="true"/>
 										</div>
 										<div class="input-group">
 											<span class="input-group-addon"><i
 												class="glyphicon glyphicon-lock"></i> </span> <input
 												type="password" name="password" value="" id="password"
-												class="form-control" placeholder="Password" autocomplete="off"/>
+												class="form-control" autocomplete="off"/>
 										</div>
 										<div class="row">
 
