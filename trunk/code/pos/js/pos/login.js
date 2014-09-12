@@ -27,7 +27,10 @@ $(document).ready(function(){
 					dataObj.username = username;
 					dataObj.password = password;
 					dataObj.validateFor = (param[0] == 'staff') ? 'shift' : 'user';
-
+					if(param[0] == 'staff'){
+						dataObj.petty_cash = $(this).find("#petty_cash").val();	
+						dataObj.mode = $('#shift_nav li.active a').attr('id');						
+					}
 					$.ajax({
 				  		type: 'POST',
 				  		url: "index.php?dispatch=login.validate",
@@ -41,10 +44,11 @@ $(document).ready(function(){
 							$("#error_message").show();$("#error_message ul").html(msg);
 						}else{
 							if(param[0] == 'staff'){
-								form.hide();
-								var sForm = $('form:last',form.parent());
-								$('form:last',form.parent()).removeClass('hide').end().find('input[type="text"]').focus();
-								sForm.show();
+								handleResponse($res);
+								//form.hide();
+								//var sForm = $('form:last',form.parent());
+								//$('form:last',form.parent()).removeClass('hide').end().find('input[type="text"]').focus();
+								//sForm.show();
 							}else{
 								window.location = $res.data.redirect; //Transfer to Next Page After setting session and login																
 							}
