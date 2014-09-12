@@ -7,25 +7,26 @@
       <h4 class="panel-title">Dashboard</h4>
   	</div>
     <div class="panel-body">
-    	<div class="col-lg-12">
-    		<div class="alert alert-warning" id="store_shift_message">Store is Closed.</div>
-    		<span class="hidden" id="shift_count"><?php echo $total_shift;?></span>
-		</div>
-		<div class="col-lg-12">
-	    	<div class="col-lg-3">
-				<ul class="nav nav-pills nav-stacked" role="tablist" id="shift_nav">
+    		<div class="col-lg-12">
+				<ul class="nav nav-pills " role="tablist" id="shift_nav">
 				  <li><a class="" id="day_start">Day Start</a></li>
 				  <li><a class="" id="shift_start">Shift Start</a></li>
 				  <li><a class="" id="shift_end">Shift End</a></li>
 				  <li><a class="" id="day_end">Day End</a></li>
 			    </ul>
 			</div>
-			<div class="col-lg-8 col-md-8">
+		<div class="col-lg-12 padded">
+
 				<div class="col-lg-12">
 					<ol class="breadcrumb">
 						<li id="shift_breadcrumb">Day Start</li>
 					</ol>
 				</div>
+		    	<div class="col-lg-12">
+    				<div class="alert alert-warning" id="store_shift_message">Store is Closed.</div>
+    				<span class="hidden" id="shift_count"><?php echo $total_shift;?></span>
+				</div>
+
 				<div class="col-lg-6 col-lg-offset-1">
 					<div class="alert alert-danger" id="error_message"><ul></ul></div>
 					<form id="loginform" action="" method="post" accept-charset="utf-8" class="separate-sections form-horizontal" autocomplete="off">
@@ -128,7 +129,7 @@
 					</form>
 				-->
 				</div>
-			</div>
+
 		</div>
     </div>
 </div>
