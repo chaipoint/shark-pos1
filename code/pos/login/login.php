@@ -71,6 +71,12 @@
 				if(!array_key_exists('cMessage', $result)){
 					if(!$result['error']){
 						if($_POST['validateFor'] == 'shift'){
+							require_once DIR.'/staff/staff.php';
+							$staff = new Staff();
+							$_GET['cash'] = $_POST['petty_cash'];
+							$_GET['mode'] = $_POST['mode'];
+							$returnData = json_decode($staff->save_petty(),true);
+
 
 						}else{
 							$userData["_id"] = $result['data']['_id'];
@@ -87,6 +93,11 @@
 							$userData["title"]['id'] = $result['data']['title']['id'];
 							$userData["title"]['name'] = $result['data']['title']['name'];
 							$userData["store"]['id'] = $this->store;
+
+							$resultJSON = $this->cDB->getDesign('store')->getView('store_mysql_id')->setParam(array("key"=>'"'.$this->store.'"'))->execute();
+							$userData["store"]['name'] = $resultJSON['rows'][0]['value'];
+
+
 
 							$loginHistory['cd_doc_type'] = 'login_history';
 							$loginHistory['id'] = $userData["mysql_id"];
@@ -107,7 +118,7 @@
 							$this->log->trace('SESSION DATA '."\r\n".json_encode($userData));
 
 
-							$returnData['data']['redirect'] = 'index.php?dispatch=billing.index'; 
+							$returnData['data']['redirect'] = 'index.php?dispatch=staff'; 
 						}
 						//$returnData['data']['redirect'] = 'index.php?dispatch=billing.index'; 
 
