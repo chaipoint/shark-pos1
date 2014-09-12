@@ -215,3 +215,8 @@ function getMonth(monthName){
 	}
 	return monthNumber;
 }
+function handleResponse($res){
+		$("#login_holder").modal('hide');
+		$("#sync-modal").modal('show');
+		$('.alert',$("#sync-modal")).remove();
+}

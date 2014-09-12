@@ -25,14 +25,15 @@ $(document).ready(function(){
 		if(is_store_open && (index == 3 || index == 1) && !is_shift_running){
 			change = true;
 		}
-		if(index == 3){
-			$('#store_shift_logic form').hide();
-			$('#day_end_form').show();
-		}else if(index == 1){
-			$('#store_shift_logic form').hide();
-			$('#counter_no_form').show();
-		}
 		if(change){
+			if(index == 3){
+				$('#store_shift_logic form').hide();
+				$('#day_end_form').show();
+			}else if(index == 1){
+				$('#store_shift_logic form').hide();
+				$('#counter_no_form').show();
+			}
+
 			$('#shift_breadcrumb').text($(this).text());
 			$('li',$(this).closest('ul')).removeClass('active');
 			$(this).addClass('active');
