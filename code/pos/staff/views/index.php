@@ -133,3 +133,4 @@
 		</div>
     </div>
 </div>
+<?php require_once DIR.'/sales_register/views/paid_bills_table.php';?>
