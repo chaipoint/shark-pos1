@@ -9,6 +9,9 @@
 		public function index(){
 			$result = $this->cDB->getDesign('store')->getView('store_shift')->setParam(array('key'=>'"'.$this->getCDate().'"','include_docs'=>'true'))->execute();
 			$data = array();
+			require_once DIR.'/sales_register/sales_register.php';
+			$sr = new sales_register();
+			$data = $sr->getBills($this->getCDate());
 			$data['is_store_open'] = 'false';
 			$data['is_shift_running'] = 'false';
 			$totalShifts = 0;
@@ -22,7 +25,7 @@
 						$_SESSION['user']['counter'] = $result['rows'][0]['doc']['shift'][$totalShifts-1]['counter'];
 					}
 				}
-			}		
+			}
 			$data['total_shift'] = $totalShifts;
 			$this->commonView('header_html');
 			$this->commonView('navbar');
