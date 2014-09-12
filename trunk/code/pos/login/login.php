@@ -78,6 +78,8 @@
 							$returnData = json_decode($staff->save_petty(),true);
 
 
+						}elseif($_POST['validateFor'] == 'sales_register'){
+
 						}else{
 							$userData["_id"] = $result['data']['_id'];
 							$userData["_rev"] = $result['data']['_rev'];
