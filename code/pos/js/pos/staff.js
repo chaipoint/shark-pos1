@@ -57,11 +57,11 @@ $(document).ready(function(){
 
 		//box_cash_end
 		var petty_cash = $('#petty_cash').val();
-		cAjax({url:'?dispatch=staff.save_petty', data: data, callback:handleResponse});
+		cAjax({url:'?dispatch=staff.save_petty', data: data, callback:staffHandleResponse});
 	});
 
 });
-function handleResponse(response){
+function staffHandleResponse(response){
 	$('#store_shift_message').html(response.message);
 	active = '';
 	$('#store_shift_logic form').hide();
