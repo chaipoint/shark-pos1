@@ -14,14 +14,18 @@
 				  <li><a class="" id="shift_end">Shift End</a></li>
 				  <li><a class="" id="day_end">Day End</a></li>
 			    </ul>
+			    <ul class="pull-right nav nav-pills " role="tablist">
+			    	<li class="active">
+			    		<a class="" id="pe_tg" data-toggle="dropdown">Petty Expence</a>
+
+            			<ul class="dropdown-menu" role="menu">
+            				<li><a href='#' id="add_expense">Add Expense</a></li>
+            				<li><a href='#' id="view_expense">View Expense</a></li>
+          				</ul>
+			    	</li>
+			    </ul>
 			</div>
 		<div class="col-lg-12 padded">
-
-				<div class="col-lg-12">
-					<ol class="breadcrumb">
-						<li id="shift_breadcrumb">Day Start</li>
-					</ol>
-				</div>
 		    	<div class="col-lg-12">
     				<div class="alert alert-warning" id="store_shift_message">Store is Closed.</div>
     				<span class="hidden" id="shift_count"><?php echo $total_shift;?></span>
