@@ -33,24 +33,24 @@
 
 				<div class="col-lg-6 col-lg-offset-1">
 					<div class="alert alert-danger" id="error_message"><ul></ul></div>
-					<form id="loginform" action="" method="post" accept-charset="utf-8" class="separate-sections form-horizontal" autocomplete="off">
-						<div class="input-group padded">
-							<span class="input-group-addon">
-								<i class="glyphicon glyphicon-usd"></i> 
-							</span> 
-							<input type="text" name="petty_cash" value="" id="petty_cash" class="form-control" placeholder="Petty Cash" autocomplete="off"/>
-						</div>
+					<form id="store_day_start_form"  class="store_shift" action="" method="post" accept-charset="utf-8" class="separate-sections form-horizontal" autocomplete="off">
 						<div class="input-group padded">
 							<span class="input-group-addon"> 
 								<i class="glyphicon glyphicon-user"></i>
 							</span> 
-							<input type="text" value="MTF0081" name="identity" value="" id="username" class="form-control" placeholder="Employee Code" autocomplete="off" autofocus="true"/>
+							<input type="text" value="MTF0081" name="identity" value="" class="form-control" placeholder="Employee Code" autocomplete="off" autofocus="true"/>
 						</div>
 						<div class="input-group padded">
 							<span class="input-group-addon">
 								<i class="glyphicon glyphicon-lock"></i> 
 							</span> 
-							<input type="password" value="test@789" name="password" value="" id="password" class="form-control" placeholder="Password" autocomplete="off"/>
+							<input type="password" value="test@789" name="password" value="" class="form-control" placeholder="Password" autocomplete="off"/>
+						</div>
+						<div class="input-group padded">
+							<span class="input-group-addon">
+								<i class="glyphicon glyphicon-usd"></i> 
+							</span> 
+							<input type="text" name="petty_cash" value="" id="petty_cash" class="form-control" placeholder="Petty Cash" autocomplete="off"/>
 						</div>
 						<div class="row padded">
 							<div class="col-md-12">
@@ -61,13 +61,26 @@
 						</div>
 					</form>
 
-					<form id="counter_no_form" action="" method="post" accept-charset="utf-8" class="separate-sections form-horizontal" autocomplete="off">
+					<form id="store_shift_start_form"  class="store_shift" action="" method="post" accept-charset="utf-8" class="separate-sections form-horizontal" autocomplete="off">
+						<div class="input-group padded">
+							<span class="input-group-addon"> 
+								<i class="glyphicon glyphicon-user"></i>
+							</span> 
+							<input type="text" value="MTF0081" name="identity" value=""  class="form-control" placeholder="Employee Code" autocomplete="off" autofocus="true"/>
+						</div>
+						<div class="input-group padded">
+							<span class="input-group-addon">
+								<i class="glyphicon glyphicon-lock"></i> 
+							</span> 
+							<input type="password" value="test@789" name="password" value="" class="form-control" placeholder="Password" autocomplete="off"/>
+						</div>
 						<div class="input-group padded">
 							<span class="input-group-addon">
 								<i class="glyphicon glyphicon-lock"></i> 
 							</span> 
 							<input type="text" name="counter_no" value="" id="counter_no" class="form-control" placeholder="Counter Number" autocomplete="off"/>
 						</div>
+
 						<div class="row padded">
 							<div class="col-md-12">
 								<button type="submit" class="btn btn-success btn-block btn-lg">Start Shift 
@@ -77,7 +90,19 @@
 						</div>
 					</form>
 
-					<form id="shift_end_form" action="" method="post" accept-charset="utf-8" class="separate-sections form-horizontal" autocomplete="off">
+					<form id="store_shift_end_form"  class="store_shift" action="" method="post" accept-charset="utf-8" class="separate-sections form-horizontal" autocomplete="off">
+						<div class="input-group padded">
+							<span class="input-group-addon"> 
+								<i class="glyphicon glyphicon-user"></i>
+							</span> 
+							<input type="text" value="MTF0081" name="identity" value="" class="form-control" placeholder="Employee Code" autocomplete="off" autofocus="true"/>
+						</div>
+						<div class="input-group padded">
+							<span class="input-group-addon">
+								<i class="glyphicon glyphicon-lock"></i> 
+							</span> 
+							<input type="password" value="test@789" name="password" value="" class="form-control" placeholder="Password" autocomplete="off"/>
+						</div>
 						<div class="input-group padded">
 							<span class="input-group-addon">
 								<i class="glyphicon glyphicon-lock"></i> 
@@ -90,6 +115,7 @@
 							</span> 
 							<input type="text" name="box_cash" value="" id="box_cash" class="form-control" placeholder="Box Cash" autocomplete="off"/>
 						</div>
+
 						<div class="row padded">
 							<div class="col-md-12">
 								<button type="submit" class="btn btn-success btn-block btn-lg">End Shift 
@@ -99,7 +125,19 @@
 						</div>
 					</form>
 
-					<form id="day_end_form" action="" method="post" accept-charset="utf-8" class="separate-sections form-horizontal" autocomplete="off">
+					<form id="store_day_end_form"  class="store_shift" action="" method="post" accept-charset="utf-8" class="separate-sections form-horizontal" autocomplete="off">
+						<div class="input-group padded">
+							<span class="input-group-addon"> 
+								<i class="glyphicon glyphicon-user"></i>
+							</span> 
+							<input type="text" value="MTF0081" name="identity" value="" class="form-control" placeholder="Employee Code" autocomplete="off" autofocus="true"/>
+						</div>
+						<div class="input-group padded">
+							<span class="input-group-addon">
+								<i class="glyphicon glyphicon-lock"></i> 
+							</span> 
+							<input type="password" value="test@789" name="password" value="" class="form-control" placeholder="Password" autocomplete="off"/>
+						</div>
 						<div class="input-group padded">
 							<span class="input-group-addon">
 								<i class="glyphicon glyphicon-lock"></i> 
