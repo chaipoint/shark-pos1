@@ -282,7 +282,7 @@ $.fn.cKeyboard = function(){
 			options.restrictInput = true;
 			options.preventPaste = true;
 			options.autoAccept = false;
-			options.lockInput = true;
+			//options.lockInput = true;
 			options.visible = function(event, keyboard, input){
 					keyboard.$preview[0].select();
 					keyboard.lastCaret.start = 0;

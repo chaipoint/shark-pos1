@@ -12,6 +12,7 @@ var loadedBill = null;
 var modifyBill = false;
 var popupKeyboard = null;
 $(document).ready(function(){
+	var url = $.url();
 	$(this).attr("title", "Shark |ChaiPoint POS| Billing"); 
 	/*
 	*	PLEASE Don't Change This code Block Without Prior Permission
@@ -170,7 +171,7 @@ $(document).ready(function(){
 							label:"No, Don't Cancel",
 							className:"btn-danger btn-sm",
 							callback:function(){
-								window.location = '?dispatch=sales_register'
+								window.location = '?dispatch='+url.param('referer');
 							}
 						},	
 					}
