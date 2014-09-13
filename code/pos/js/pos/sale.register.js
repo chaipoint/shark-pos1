@@ -8,7 +8,10 @@ function toggleRepBT (){
 	}
 }
 $(document).ready( function(){
-	toggleRepBT ();
+    var url = $.url();
+    if((url.param('dispatch').split('.'))[0] == 'sales_register'){
+		toggleRepBT ();
+	}
 /* DatePicker Class Function */
     $('.datepicker').datepicker({
 		maxDate:0,
@@ -16,7 +19,6 @@ $(document).ready( function(){
 	}).datepicker('setDate',new Date());
 
     $('#ui-datepicker-div').css('display','none');
-    var url = $.url();
     var dateParam = (url.param('sales_reg_search'));
 	var date = new Date();
 	if(dateParam){
