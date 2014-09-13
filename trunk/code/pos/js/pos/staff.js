@@ -6,7 +6,7 @@ $(document).ready(function(){
 		$('#store_shift_message').text('Store is Opened.');
 		$('#store_day_start_form').hide();
 		if(is_shift_running){
-			$('#store_shift_message').html('Store Shift <b>'+$('#shift_count').text()+' </b>is in Process. <a href="index.php?dispatch=billing" class="btn btn-sm btn-primary">Start Billing</a>');
+			$('#store_shift_message').html('Store Shift <b>'+$('#shift_count').text()+' </b>is in Process. Started by <span class="label label-warning">'+$('#shift_starter').text()+' </span><a href="index.php?dispatch=billing" class="btn btn-sm btn-primary">Start Billing</a>');
 			$('#shift_breadcrumb').text($('#shift_nav li:nth-child(3)').addClass('active').text());
 			$('#store_shift_start_form').hide();
 		}else{
