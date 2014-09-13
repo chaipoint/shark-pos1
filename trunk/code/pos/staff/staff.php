@@ -70,7 +70,7 @@
 							}
 						}else{
 							if($_POST['mode'] == 'day_end'){
-								$data = array('type'=>'day_end','cash'=>$_POST['box_cash_end'], 'time'=>$this->getCDTime());
+								$data = array('type'=>'day_end','cash'=>$_POST['box_cash'], 'time'=>$this->getCDTime());
 								$return['message'] = 'Store Day Ended';
 							}
 						}
