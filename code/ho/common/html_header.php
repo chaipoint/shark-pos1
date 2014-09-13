@@ -31,6 +31,7 @@
                 <!--<li class="dropdown-header">Nav header</li>-->
                 <li><a href="javascript:void(0);" id="bill_synk">Upload Bill</a></li>
                 <li><a href="javascript:void(0);" id="updated_bill_synk">Upload Updated Bill</a></li>
+                <li><a href="javascript:void(0);" id="petty_expense_synk">Upload Petty Expense</a></li>
                 <li><a href="#">Upload Attendance</a></li>
               </ul>
             </li>
