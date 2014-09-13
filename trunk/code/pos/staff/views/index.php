@@ -29,9 +29,10 @@
 		    	<div class="col-lg-12">
     				<div class="alert alert-warning" id="store_shift_message">Store is Closed.</div>
     				<span class="hidden" id="shift_count"><?php echo $total_shift;?></span>
+    				<span class="hidden" id="shift_starter"><?php echo $shift_starter;?></span>
 				</div>
 
-				<div class="col-lg-6 col-lg-offset-1">
+				<div class="col-lg-6 col-lg-push-3">
 					<div class="alert alert-danger" id="error_message"><ul></ul></div>
 					<form id="store_day_start_form"  class="store_shift" action="" method="post" accept-charset="utf-8" class="separate-sections form-horizontal" autocomplete="off">
 						<div class="input-group padded">

@@ -23,6 +23,7 @@
 						$data['is_shift_running'] = 'true';
 						$_SESSION['user']['shift'] = $totalShifts;
 						$_SESSION['user']['counter'] = $result['rows'][0]['doc']['shift'][$totalShifts-1]['counter'];
+						$data['shift_starter'] = $result['rows'][0]['doc']['shift'][$totalShifts-1]['staff_name'];
 					}
 				}
 			}
@@ -53,7 +54,7 @@
 					$return['error'] = true;
 					$return['message'] = "Can't Start Store Day Again." ;
 				}else{
-					$data = array('type'=>'shift_start','counter_no'=>array_key_exists('counter_no', $_POST) ? $_POST['counter_no'] : '', 'time'=>$this->getCDTime(),'staff' =>$_SESSION['user']['mysql_id']);
+					$data = array('type'=>'shift_start','counter_no'=>array_key_exists('counter_no', $_POST) ? $_POST['counter_no'] : '', 'time'=>$this->getCDTime(),'staff' =>$_SESSION['user']['mysql_id'],'staff_name' =>$_SESSION['user']['name']);
 					$return['message'] = 'Welcome, Shift has been started, Please Start Sales. <a href="index.php?dispatch=billing" class="btn btn-sm btn-primary">Start Billing</a>';
 
 					if(count($result['rows']) == 1){
@@ -63,7 +64,7 @@
 							$return['message'] = 'Store Shift Ended';
 							if($result['rows'][0]['doc']['shift'][$totalShifts-1]['staff'] != $_SESSION['user']['mysql_id']){
 								$return['error'] = true;
-								$return['message'] = 'You are not allowed to end Shift.';
+								$return['message'] = 'You are not allowed to end Shift. As it is started by '.$result['rows'][0]['doc']['shift'][$totalShifts-1]['staff_name'];
 							}else{
 								unset($_SESSION['user']['shift']);
 								unset($_SESSION['user']['counter']);
