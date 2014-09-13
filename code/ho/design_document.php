@@ -63,7 +63,7 @@ function init(){
             ),
         ),
         'updates' => array(
-          "store_shift"=>"function(doc,req){ if(doc) { var data = new Object(); if(req.query.type == 'day_end') { doc.time.end = req.query.time; doc.time.end_cash = req.query.cash; } else if(req.query.type == 'shift_start') { doc.shift.push({start:req.query.time, end:'', staff:req.query.staff, counter:req.query.counter_no }); data.shift_no = doc.shift.length;}else if(req.query.type == 'shift_end') { req.query.shift_no = doc.shift.length-1; doc.shift[req.query.shift_no].end = req.query.time; doc.shift[req.query.shift_no].end_petty_cash = req.query.end_petty_cash; doc.shift[req.query.shift_no].box_cash = req.query.box_cash; }  return [doc,JSON.stringify(data)];}}"
+          "store_shift"=>"function(doc,req){ if(doc) { var data = new Object(); if(req.query.type == 'day_end') { doc.time.end = req.query.time; doc.time.end_cash = req.query.cash; } else if(req.query.type == 'shift_start') { doc.shift.push({start:req.query.time, end:'', staff:req.query.staff, counter:req.query.counter_no, staff_name:req.query.staff_name  }); data.shift_no = doc.shift.length;}else if(req.query.type == 'shift_end') { req.query.shift_no = doc.shift.length-1; doc.shift[req.query.shift_no].end = req.query.time; doc.shift[req.query.shift_no].end_petty_cash = req.query.end_petty_cash; doc.shift[req.query.shift_no].box_cash = req.query.box_cash; }  return [doc,JSON.stringify(data)];}}"
         )
       );
 
