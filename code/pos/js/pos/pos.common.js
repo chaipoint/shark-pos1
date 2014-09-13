@@ -19,7 +19,7 @@ $(document).ready(function(){
 			alert("No Internet Connection Available");
 			return  false;
 		}
-		$("#login_holder").modal('show');
+		$("#login_holder").modal({keyboard:false,'show':true});
 		//sales register have handleResponse
 	});
 	$(".sync-bt").click(function(){
