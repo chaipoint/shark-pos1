@@ -21,6 +21,10 @@
 		case "uploadPettyExpense":
 		echo uploadPettyExpense();
 		break;
+
+		case "uploadLoginHistory":
+		echo uploadLoginHistory();
+		break;
 }
 
 /* Function To Upload Bill On CPOS*/
@@ -30,10 +34,8 @@ function uploadBill(){
 	$logger->debug("Calling Upload Bill Function");
 	$couch = new CouchPHP();
 	$html = array();
-
 	$no_bill = $unsuccessful = $successful = $counter = 0;
-	
- 	$billData = $couch->getDesign('design_ho')->getView('no_mysql_id')->setParam(array('include_docs'=>'true'))->execute();
+	$billData = $couch->getDesign('design_ho')->getView('no_mysql_id')->setParam(array('include_docs'=>'true'))->execute();
  	if(array_key_exists('rows', $billData)){
  		foreach($billData['rows'] as $key => $value){
  			$doc = $value['doc'];
@@ -252,6 +254,67 @@ function uploadPettyExpense(){
 		$html['msg'] = "$counter Petty Expense Uplaoded Successfully";
 		$result = json_encode($html,true);
 		$logger->debug("End OF Petty Expense Function");
+		return $result;
+	}
+}
+
+
+/* Function To Upload Login History On CPOS*/
+function uploadLoginHistory(){
+	global $logger, $db;
+	$logger->debug("Calling Upload Login History Function");
+	$couch = new CouchPHP();
+	$html = array();
+	$loginData = $couch->getDesign('login')->getView('login_no_mysql_id')->setParam(array('include_docs'=>'true'))->execute();
+	//print_r($expenseData);
+	$success = $counter = 0;
+	if(array_key_exists('rows', $loginData) && count($loginData['rows'])>0){
+ 		foreach($loginData['rows'] as $key => $value){
+ 			$doc = $value['doc'];
+ 			$docKey = $value['key'];
+ 			$dValue['doc'] = $doc;
+			$docsData = array(	"_id"  => $doc['_id'],
+								"_rev" => $doc['_rev'],
+								"staff_id" => $doc['id'],
+								"store_id" => $doc['store'],
+								"login_time" => $doc['login_time'],
+								"logout_time" => $doc['logout_time'],
+								"created_date" => date('Y-m-d H:i:s'),
+								"created_by" => '' 
+							);
+			$db->func_array2insert("cp_pos_login_history", $docsData);
+			$insertId = $db->db_insert_id();
+			if($insertId > 0){
+				$returnResult = $couch->getDesign('design_ho')->getUpdate('insert_mysql_id', $docsData['_id'])->setParam(array('mysql_id'=>$insertId))->execute();
+				$counter++;
+				$success = 1;
+			}else{
+				$logger->debug("ERROR: SOME ERROR");
+  				$html['error'] = true;
+				$html['update'] = false;
+				$html['msg'] = 'Sorry! Some Error Please Contact Admin';
+				$result = json_encode($html,true);
+				$logger->debug("End OF Login History Function");
+				return $result;
+			}
+		}
+	}else{
+		$logger->debug("ERROR: NO Login History To Be Upload");
+  		$html['error'] = true;
+		$html['update'] = false;
+		$html['msg'] = 'Sorry! No Login History To Be Upload';
+		$result = json_encode($html,true);
+		$logger->debug("End OF Login History Function");
+		return $result;
+	}
+	//echo $success;
+	if($success==1){
+		$logger->debug("Success: Login History Uploaded Successfully");
+  		$html['error'] = false;
+		$html['update'] = true;
+		$html['msg'] = "$counter Login History Uplaoded Successfully";
+		$result = json_encode($html,true);
+		$logger->debug("End OF Login History Function");
 		return $result;
 	}
 }
