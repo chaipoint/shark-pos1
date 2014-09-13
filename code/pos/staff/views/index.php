@@ -138,3 +138,4 @@
     </div>
 </div>
 <?php require_once DIR.'/sales_register/views/paid_bills_table.php';?>
+<?php require_once DIR.'/sales_register/views/modal_expense.php';?>
