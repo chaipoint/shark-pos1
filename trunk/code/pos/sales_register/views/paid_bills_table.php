@@ -19,10 +19,12 @@
                 <th></th>
                 <th></th>
                 <th></th>
+                <?php if(MODULE == 'sales_register'){?>
                 <th></th>
                 <th></th>
                 <th></th>
                 <th></th>
+                <?php }?>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -36,10 +38,13 @@
                 <th>Bill No</th>
                 <th>Bill Time</th>
                 <th>Item Count</th>
+                <?php if(MODULE == 'sales_register'){?>
                 <th>Sub Total</th>
                 <th>Tax</th>
                 <th>Total Amount</th>
                 <th>Due Amount</th>
+                <?php }?>
+                
                 <th>Sales Channel</th>
                 <th>Booking Channel</th>
                 <th>Paid By</th>
@@ -61,11 +66,12 @@ if(is_array($data) && count($data)>0) {
 		        <td style="text-align:center"><?php echo $value['bill_no']; ?></td>
             <td style="text-align:center"><?php echo DATE('H:i:s',strtotime($value['time']['created'])); ?></td>
 		        <td style="text-align:center"><?php echo $value['total_qty']; ?></td>
+            <?php if(MODULE == 'sales_register'){?>
 		        <td style="text-align:right"><?php echo  number_format($value['sub_total'],2); ?></td>
 		        <td class="text-right"><?php echo number_format($value['total_tax'],2); ?></td>
             <td class="text-right"><?php echo number_format($value['total_amount'],2); ?></td>
             <td class="text-right"><?php echo number_format($value['due_amount'],2); ?></td>
-
+            <?php }?>
             <td style="text-align:center"><?php echo $value['delivery_channel_name']; ?></td>
             <td style="text-align:center"><?php echo $value['booking_channel_name']; ?></td>
             <td style="text-align:center"><?php echo $value['payment_type']; ?></td>
@@ -78,7 +84,7 @@ if(is_array($data) && count($data)>0) {
 			             <i class="glyphicon glyphicon-list"></i>
                </a>-->
                 <?php if(empty($_GET['sales_reg_search']) || (!empty($_GET['sales_reg_search']) && $_GET['sales_reg_search']==date('d-F-Y'))) { ?>
-                 <a class="tip btn btn-warning btn-xs edit-bill text-center" style="width:25px;" title="Cancel Bill" href="<?php echo URL;?>?dispatch=billing&bill_no=<?php echo $value['_id']; ?>&bill=<?php echo $value['bill_no']; ?>">
+                 <a class="tip btn btn-warning btn-xs edit-bill text-center" style="width:25px;" title="Cancel Bill" href="<?php echo URL;?>?dispatch=billing&bill_no=<?php echo $value['_id']; ?>&bill=<?php echo $value['bill_no']; ?>&referer=<?php echo MODULE;?>">
   		              C
   		           </a>
                <?php  
@@ -111,13 +117,15 @@ if(is_array($data) && count($data)>0) {
    </tbody>
    <tfoot>
         <tr class="text-right">
-           <th style="font-size:12px;">Total</td>
-           <th></th>
-           <th></th>
-           <th class="text-right" style="font-size:12px;"></th>
-           <th class="text-right" style="font-size:12px;"></th>
-           <th class="text-right" style="font-size:12px;"></th>
-           <th class="text-right" style="font-size:12px;"></th>
+            <th style="font-size:12px;">Total</td>
+            <th></th>
+            <th></th>
+            <?php if(MODULE == 'sales_register'){?>
+             <th class="text-right" style="font-size:12px;"></th>
+             <th class="text-right" style="font-size:12px;"></th>
+             <th class="text-right" style="font-size:12px;"></th>
+             <th class="text-right" style="font-size:12px;"></th>
+             <?php }?>
            <th></th>
            <th></th>
            <th></th>
