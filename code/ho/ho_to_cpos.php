@@ -17,6 +17,10 @@
 		case "uploadUpdatedBill":
 		echo uploadUpdatedBill();
 		break;
+
+		case "uploadPettyExpense":
+		echo uploadPettyExpense();
+		break;
 }
 
 /* Function To Upload Bill On CPOS*/
@@ -188,4 +192,66 @@ $result = json_encode($html,true);
 $logger->debug("End OF Uplaod Bill Function");
 return $result;
 
+}
+
+/* Function To Upload Petty Expense On CPOS*/
+function uploadPettyExpense(){
+	global $logger, $db;
+	$logger->debug("Calling Upload Petty Expense Function");
+	$couch = new CouchPHP();
+	$html = array();
+	$expenseData = $couch->getDesign('petty_expense')->getView('expense_no_mysql_id')->setParam(array('include_docs'=>'true'))->execute();
+	//print_r($expenseData);
+	$success = $counter = 0;
+	if(array_key_exists('rows', $expenseData) && count($expenseData['rows'])>0){
+ 		foreach($expenseData['rows'] as $key => $value){
+ 			$doc = $value['doc'];
+ 			$docKey = $value['key'];
+ 			$dValue['doc'] = $doc;
+			$docsData = array(	"_id"  => $doc['_id'],
+								"_rev" => $doc['_rev'],
+								"expense_date" => $doc['expense_date'].' '.$doc['expense_time'],
+								"expense_head" => $doc['expense_head'],
+								"expense_purpose" => $doc['expense_purpose'],
+								"expense_amount" => $doc['expense_amount'],
+								"expense_done_by" => $doc['expense_done_by_id'],
+								"expense_approved_by" => $doc['expense_approved_by_id'],
+								"created_date" => date('Y-m-d H:i:s'),
+								"created_by" => '' 
+							);
+			$db->func_array2insert("cp_pos_petty_expense", $docsData);
+			$insertId = $db->db_insert_id();
+			if($insertId > 0){
+				$returnResult = $couch->getDesign('design_ho')->getUpdate('insert_mysql_id', $docsData['_id'])->setParam(array('mysql_id'=>$insertId))->execute();
+				$counter++;
+				$success = 1;
+			}else{
+				$logger->debug("ERROR: SOME ERROR");
+  				$html['error'] = true;
+				$html['update'] = false;
+				$html['msg'] = 'Sorry! Some Error Please Contact Admin';
+				$result = json_encode($html,true);
+				$logger->debug("End OF Petty Expense Function");
+				return $result;
+			}
+		}
+	}else{
+		$logger->debug("ERROR: NO Expense To Be Upload");
+  		$html['error'] = true;
+		$html['update'] = false;
+		$html['msg'] = 'Sorry! No Expense To Be Upload';
+		$result = json_encode($html,true);
+		$logger->debug("End OF Petty Expense Function");
+		return $result;
+	}
+	//echo $success;
+	if($success==1){
+		$logger->debug("Success: Petty Expense Uploaded Successfully");
+  		$html['error'] = false;
+		$html['update'] = true;
+		$html['msg'] = "$counter Petty Expense Uplaoded Successfully";
+		$result = json_encode($html,true);
+		$logger->debug("End OF Petty Expense Function");
+		return $result;
+	}
 }
