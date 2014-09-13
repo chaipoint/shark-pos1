@@ -5,14 +5,15 @@ $(document).ready(function(){
 			$('#username,#password').cKeyboard();
 			$("#error_message").hide(); //Hide Error Message Block on Load of Content
 			//console.log($("#username","#loginform"));
-			$("#loginform").submit(function(event){
+			$("#loginform, .store_shift").submit(function(event){
 				var form = $(this);
 				var url = $.url();
 				var param = url.param('dispatch') ? url.param('dispatch').split('.') : '.';
 
-				
-				var username = $("#username",form).val();
-				var password = $("#password",form).val();
+				var username = $('input[name="identity"]',form).val();
+				var password = $('input[name="password"]',form).val();
+
+
 				var msg = "";
 				if(username.trim() == ""){msg += "<li>Provide Username</li>";}
 				if(password.trim() == ""){msg += "<li>Provide Password</li>"}
@@ -29,7 +30,6 @@ $(document).ready(function(){
 					switch(param[0]){
 						case 'staff':
 							dataObj.validateFor = 'shift';
-							dataObj.petty_cash = $(this).find("#petty_cash").val();	
 							dataObj.mode = $('#shift_nav li.active a').attr('id');
 							break;
 						case 'sales_register':
@@ -37,6 +37,21 @@ $(document).ready(function(){
 							break;
 						default:
 						dataObj.validateFor = 'user';
+					}
+					switch($(this).attr('id')){
+						case 'store_day_start_form':
+							dataObj.petty_cash = $(this).find("#petty_cash").val();	
+							break;
+						case 'store_shift_start_form':
+							dataObj.counter_no = $('input#counter_no',this).val();
+							break;						
+						case 'store_shift_end_form':
+							dataObj.petty_cash = $('input#petty_cash_end',this).val();
+							dataObj.box_cash = $('input#box_cash',this).val();
+							break;						
+						case 'store_day_end_form':
+							dataObj.box_cash = $('input#box_cash_end',this).val();
+							break;
 					}					
 					$.ajax({
 				  		type: 'POST',
@@ -52,11 +67,13 @@ $(document).ready(function(){
 						}else{
 							if(dataObj.validateFor == 'user'){
 								window.location = $res.data.redirect; //Transfer to Next Page After setting session and login
+							}else if (dataObj.validateFor == 'shift') {
+								staffHandleResponse($res)
 							}else{
 								handleResponse($res);								
 							}
-							$("#username",form).val('');
-							$("#password",form).val('');
+							$('input[name="identity"]',form).val('');
+							$('input[name="password"]',form).val('');
 						}
 					});
 				}
