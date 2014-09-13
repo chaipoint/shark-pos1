@@ -20,14 +20,8 @@
 					$date = date('Y-m-d',strtotime($_GET['sales_reg_search']));
 				}	
 				$resultBillList = $this->getBills($date);
-				$resultExpenseList = $this->cDB->getDesign('petty_expense')->getView('get_expense')->setParam(array("include_docs"=>"true","startkey"=>'"'.$date.'"',"endkey"=>'"'.$date.'"'))->execute();
-				$staffList = $this->cDB->getDesign('staff')->getView('staff_username')->setParam(array("include_docs"=>"true"))->execute();
-				$rows = $staffList['rows'];
-				$staffList = array();
-				foreach($rows as $key => $value){
-					$staffList[$value['doc']['mysql_id']] = $value['doc']['name'] ;
-				}
-				ksort($staffList);
+				$resultExpenseList = $this->getExpenseData($date);
+				
 				$pettyExpence = 0;
 				if(count($resultExpenseList['rows'])>0){
 					$rows = $resultExpenseList['rows'];
@@ -55,7 +49,7 @@
 					echo 'opps some problem please contact admin';
 				}else{
 					$resultBillList['head_data'] = $configHead['data']['head'];
-					$resultBillList['staff_list'] = $staffList;
+					$resultBillList['staff_list'] = $this->getStaffList();
 					$resultBillList['expense_data'] = $resultExpenseList;
 					$resultBillList['at'] = $activeTask;
 					$this->view($resultBillList);//array("bill_data"=>$resultBillList['data'],"cash_in_hand"=>$resultBillList['cash_inhand'],"cash_in_delivery"=> $resultBillList['cash_indelivery']));
@@ -64,6 +58,22 @@
 			$this->commonView('footer_inner');
 			$this->commonView('footer_html');
 
+		}
+		function getExpenseData($date){
+				$resultExpenseList = $this->cDB->getDesign('petty_expense')->getView('get_expense')->setParam(array("include_docs"=>"true","startkey"=>'"'.$date.'"',"endkey"=>'"'.$date.'"'))->execute();
+				return $resultExpenseList;
+		}
+		function getStaffList(){
+				require_once DIR.'/staff/staff.php';
+				$staff = new staff();
+				$staffList = $staff->getStaff();
+				$rows = $staffList['rows'];
+				$staffList = array();
+				foreach($rows as $key => $value){
+					$staffList[$value['doc']['mysql_id']] = $value['doc']['name'] ;
+				}
+				ksort($staffList);
+				return $staffList;
 		}
 		function getBills($date){
 				$resultBillList = $this->cDB->getDesign('billing')->getList('sales_register','handle_updated_bills')->setParam(array("include_docs"=>"true","descending"=>"true","endkey" => '["'.$date.'"]',"startkey" => '["'.$date.'",{},{},{}]'))->execute();//endkey=["2014-09-04"]&startkey=["2014-09-04",{},{},{}]

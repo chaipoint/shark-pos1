@@ -26,7 +26,12 @@
 					}
 				}
 			}
+			$data['staff_list'] = $sr->getStaffList();
 			$data['total_shift'] = $totalShifts;
+			$configHead = $this->getConfig($this->cDB, 'head');
+			$data['head_data'] = $configHead['data']['head'];
+			$data['expense_data'] = $sr->getExpenseData($this->getCDate());
+
 			$this->commonView('header_html');
 			$this->commonView('navbar');
 			$this->view($data);			
@@ -34,11 +39,8 @@
 			$this->commonView('footer_html');
 		} 
 		function getStaff(){
-			$name = $_REQUEST['token'];
-			//$cDB
-			/*			$query = "SELECT name label, id FROM staff_master WHERE active='Y' AND name LIKE '$name%' ORDER BY name ASC";
-			$result = $db->func_query($query);/**/
-			return json_encode($result,true);
+			$staffList = $this->cDB->getDesign('staff')->getView('staff_username')->setParam(array("include_docs"=>"true"))->execute();
+			return $staffList;
 		}	
 		function save_petty(){
 			
