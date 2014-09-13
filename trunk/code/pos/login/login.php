@@ -70,15 +70,7 @@
 				$result = $resultJSON;
 				if(!array_key_exists('cMessage', $result)){
 					if(!$result['error']){
-						if($_POST['validateFor'] == 'shift'){
-							require_once DIR.'/staff/staff.php';
-							$staff = new Staff();
-							$_GET['cash'] = $_POST['petty_cash'];
-							$_GET['mode'] = $_POST['mode'];
-							$returnData = json_decode($staff->save_petty(),true);
-
-
-						}elseif($_POST['validateFor'] == 'sales_register'){
+						if($_POST['validateFor'] == 'sales_register'){
 
 						}else{
 							$userData["_id"] = $result['data']['_id'];
@@ -119,8 +111,13 @@
 							$this->log->trace('LOGIN HISTORY '."\r\n".json_encode($loginHistory));
 							$this->log->trace('SESSION DATA '."\r\n".json_encode($userData));
 
-
-							$returnData['data']['redirect'] = 'index.php?dispatch=staff'; 
+							if($_POST['validateFor'] == 'shift'){
+								require_once DIR.'/staff/staff.php';
+								$staff = new Staff();
+								$returnData = json_decode($staff->save_petty(),true);
+							}else{
+								$returnData['data']['redirect'] = 'index.php?dispatch=staff'; 								
+							}
 						}
 						//$returnData['data']['redirect'] = 'index.php?dispatch=billing.index'; 
 
