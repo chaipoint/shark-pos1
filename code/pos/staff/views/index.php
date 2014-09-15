@@ -31,8 +31,24 @@
     				<span class="hidden" id="shift_count"><?php echo $total_shift;?></span>
     				<span class="hidden" id="shift_starter"><?php echo $shift_starter;?></span>
 				</div>
-
-				<div class="col-lg-6 col-lg-push-3">
+				<div class="col-lg-6">
+					<ul class="list-unstyled">
+						<?php if(array_key_exists('rows', $shift_data) && count($shift_data) > 0) {?>
+						<li><span class="glyphicon glyphicon-ok"></span> &nbsp;POS Login by <?php echo $shift_data['rows'][0]['doc']['login_staff_name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($shift_data['rows'][0]['doc']['login_time']));?></li>
+						<li><span class="glyphicon glyphicon-ok"></span> &nbsp;Day Started by <?php echo $shift_data['rows'][0]['doc']['day']['start_staff_name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($shift_data['rows'][0]['doc']['day']['start_time']));?></li>
+						<?php foreach($shift_data['rows'][0]['doc']['shift'] as $key => $value) {?>
+						<li><span class="glyphicon glyphicon-ok"></span> &nbsp;Shift <?php echo $value['shift_no']; ?> Started by <?php echo $value['start_staff_name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($value['start_time']));?> </li>
+						<?php if(!empty($value['end_time'])) {?>
+						<li><span class="glyphicon glyphicon-ok"></span> &nbsp;Shift <?php echo $value['shift_no']; ?> Closed by <?php echo $value['end_staff_name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($value['end_time']));?> </li>
+						<?php }?>
+						<?php }?>
+						<li><span class="glyphicon glyphicon-ok"></span> &nbsp;Day Closed by <?php echo $shift_data['rows'][0]['doc']['day']['end_staff_name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($shift_data['rows'][0]['doc']['day']['end_time']));?></li>
+						<?php }else{ ?>
+						<li><span class="glyphicon glyphicon-ok"></span> &nbsp;POS Login by <?php echo $_SESSION['user']['name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($_SESSION['user']['login']['time']));?></li>
+						<?php }?>
+					</ul>
+				</div>
+				<div class="col-lg-6">
 					<div class="alert alert-danger" id="error_message"><ul></ul></div>
 					<form id="store_day_start_form"  class="store_shift" action="" method="post" accept-charset="utf-8" class="separate-sections form-horizontal" autocomplete="off">
 						<div class="input-group padded">

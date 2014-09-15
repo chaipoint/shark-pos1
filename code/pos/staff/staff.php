@@ -17,16 +17,17 @@
 			$totalShifts = 0;
 			if(count($result['rows']) == 1){
 				$totalShifts = count($result['rows'][0]['doc']['shift']);
-				if(empty($result['rows'][0]['doc']['time']['end'])){
+				if(empty($result['rows'][0]['doc']['day']['end_time'])){
 					$data['is_store_open'] = 'true';
-					if($totalShifts != 0 && empty($result['rows'][0]['doc']['shift'][$totalShifts-1]['end'])){
+					if($totalShifts != 0 && empty($result['rows'][0]['doc']['shift'][$totalShifts-1]['end_time'])){
 						$data['is_shift_running'] = 'true';
-						$_SESSION['user']['shift'] = $totalShifts;
-						$_SESSION['user']['counter'] = $result['rows'][0]['doc']['shift'][$totalShifts-1]['counter'];
-						$data['shift_starter'] = $result['rows'][0]['doc']['shift'][$totalShifts-1]['staff_name'];
+						$_SESSION['user']['shift'] = $result['rows'][0]['doc']['shift'][$totalShifts-1]['shift_no'];
+						$_SESSION['user']['counter'] = $result['rows'][0]['doc']['shift'][$totalShifts-1]['counter_no'];
+						$data['shift_starter'] = $result['rows'][0]['doc']['shift'][$totalShifts-1]['start_staff_name'];
 					}
 				}
 			}
+			$data['shift_data'] = $result;
 			$data['staff_list'] = $sr->getStaffList();
 			$data['total_shift'] = $totalShifts;
 			$configHead = $this->getConfig($this->cDB, 'head');
@@ -54,24 +55,24 @@
 					$return['error'] = true;
 					$return['message'] = "Can't Start Store Day Again." ;
 				}else{
-					$data = array('type'=>'shift_start','counter_no'=>array_key_exists('counter_no', $_POST) ? $_POST['counter_no'] : '', 'time'=>$this->getCDTime(),'staff' =>$_SESSION['user']['mysql_id'],'staff_name' =>$_SESSION['user']['name']);
+					$data = array('type'=>'shift_start','counter_no'=>array_key_exists('counter_no', $_POST) ? $_POST['counter_no'] : '', 'time'=>$this->getCDTime(),'login' =>$_SESSION['user']['mysql_id'],'name' =>$_SESSION['user']['name']);
 					$return['message'] = 'Welcome, Shift has been started, Please Start Sales. <a href="index.php?dispatch=billing" class="btn btn-sm btn-primary">Start Billing</a>';
 
 					if(count($result['rows']) == 1){
 						$totalShifts = count($result['rows'][0]['doc']['shift']);
-						if($totalShifts != 0 && empty($result['rows'][0]['doc']['shift'][$totalShifts-1]['end'])){
-							$data = array('type'=>'shift_end','end_petty_cash'=>$_POST['petty_cash'], 'box_cash'=>$_POST['box_cash'], 'time'=>$this->getCDTime(), 'staff' =>$_SESSION['user']['mysql_id']);
+						if($totalShifts != 0 && empty($result['rows'][0]['doc']['shift'][$totalShifts-1]['end_time'])){
+							$data = array('type'=>'shift_end','end_petty_cash'=>$_POST['petty_cash'], 'box_cash'=>$_POST['box_cash'], 'time'=>$this->getCDTime(), 'login' =>$_SESSION['user']['mysql_id'], 'name' =>$_SESSION['user']['name']);
 							$return['message'] = 'Store Shift Ended';
-							if($result['rows'][0]['doc']['shift'][$totalShifts-1]['staff'] != $_SESSION['user']['mysql_id']){
+							if($result['rows'][0]['doc']['shift'][$totalShifts-1]['start_login_id'] != $_SESSION['user']['mysql_id']){
 								$return['error'] = true;
-								$return['message'] = 'You are not allowed to end Shift. As it is started by '.$result['rows'][0]['doc']['shift'][$totalShifts-1]['staff_name'];
+								$return['message'] = 'You are not allowed to end Shift. As it is started by '.$result['rows'][0]['doc']['shift'][$totalShifts-1]['start_staff_name'];
 							}else{
 								unset($_SESSION['user']['shift']);
 								unset($_SESSION['user']['counter']);
 							}
 						}else{
 							if($_POST['mode'] == 'day_end'){
-								$data = array('type'=>'day_end','cash'=>$_POST['box_cash'], 'time'=>$this->getCDTime());
+								$data = array('type'=>'day_end','cash'=>$_POST['box_cash'], 'time'=>$this->getCDTime(), 'login' =>$_SESSION['user']['mysql_id'], 'name' =>$_SESSION['user']['name'] );
 								$return['message'] = 'Store Day Ended';
 							}
 						}
@@ -85,17 +86,21 @@
 					}
 				}			
 			}else{
-				$cash = $_POST['petty_cash'];	
 				$data['cd_doc_type'] = 'store_shift';
-				$data['date'] = $this->getCDate();
-				$data['store'] = $_SESSION['user']['store']['id'];
-				$data['start_staff'] = $_SESSION['user']['mysql_id'];
-				$data['end_staff'] = '';
-				$data['time']['start'] = $this->getCDTime();
-				$data['time']['end'] = '';
-				$data['time']['petty_cash'] = $cash;
-				$data['time']['end_cash'] = '';
-				$data['time']['staff'] = $_SESSION['user']['mysql_id'];
+				$data['login_id'] = $_POST['login_id'];
+				$data['store_id'] = $_SESSION['user']['store']['id'];
+				$data['login_staff_name'] = $_POST['login_name'];
+				$data['login_time'] = $_POST['login_time'];
+
+				$data['day']['start_time'] = $this->getCDTime();
+				$data['day']['start_login_id'] = $_SESSION['user']['mysql_id'];
+				$data['day']['start_staff_name'] = $_SESSION['user']['name'];
+				$data['day']['start_cash'] = $_POST['petty_cash'];
+				$data['day']['end_time'] = '';
+				$data['day']['end_login_id'] = '';
+				$data['day']['end_staff_name'] = '';
+				$data['day']['end_fullcash'] = '';
+
 				$data['shift'] = array();
 				$result = $this->cDB->saveDocument()->execute($data);
 
