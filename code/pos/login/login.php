@@ -102,8 +102,12 @@
 							$result = $this->cDB->saveDocument()->execute($loginHistory);
 							if(array_key_exists('ok', $result)){
 									$userData['login']['id'] = $result['id'];
+									$userData['login']['time'] = $this->getCDTime();
 							}
 							if(array_key_exists('user', $_SESSION)){
+								$_POST['login_id'] = $_SESSION['user']['mysql_id'];
+								$_POST['login_name'] = $_SESSION['user']['name'];
+								$_POST['login_time'] = $_SESSION['user']['login']['time'];
 								unset($_SESSION['user']);
 							}
 							$_SESSION['user'] = $userData;
