@@ -81,6 +81,9 @@ function init(){
         'views' => array(
           "logout"=>array(
             "map"=>"function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'login_history'){ emit(doc._id, doc); } }"
+            ),
+          "login_no_mysql_id"=>array(
+            "map"=>"function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'login_history' && !doc.mysql_id && doc.logout_time!=''){ emit(doc._id,null); } }"
             )
         ),
         "updates" => array('login_history'=>"function(doc, req){ doc.logout_time = req.query.logout_time; return [doc,'true'];}"),
@@ -164,6 +167,9 @@ function init(){
           "views" => array(
               "get_expense" => array(
                   "map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type=='petty_expense'){ emit(doc.expense_date, null); } }"
+                ),
+              "expense_no_mysql_id" => array(
+                "map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'petty_expense' && !doc.mysql_id){ emit(doc.expense_date,null); } }"
                 )
             )
       );
