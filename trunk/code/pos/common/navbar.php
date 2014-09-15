@@ -69,6 +69,7 @@
 									class="language-img"> &nbsp;&nbsp; English </a></li>
 						</ul>
 					</li>
+					<li><a href="index.php?dispatch=staff.index" class="btn nav-button btn-success btn-sm external <?php echo (MODULE == 'billing' ? 'active-btn' : ''); ?>" style="padding: 5px 8px; margin: 10px 0 5px 5px;" data-placement="right" title="Home">Home</a></li>
 				<?php if(array_key_exists('shift', $_SESSION['user'])){?>
 					<li><a href="index.php?dispatch=billing.index" class="btn nav-button btn-success btn-sm external <?php echo (MODULE == 'billing' ? 'active-btn' : ''); ?>" style="padding: 5px 8px; margin: 10px 0 5px 5px;" data-placement="right" title="Sales">Billing<!--<i
 							class="glyphicon glyphicon-list"></i>--> </a></li>
