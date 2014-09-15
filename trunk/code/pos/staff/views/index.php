@@ -50,26 +50,26 @@
 						<?php }?>
 					</ul>
 				</div>
-				<div class="col-lg-6">
+				<div class="col-lg-3">
 					<div class="alert alert-danger" id="error_message"><ul></ul></div>
 					<form id="store_day_start_form"  class="store_shift" action="" method="post" accept-charset="utf-8" class="separate-sections form-horizontal" autocomplete="off">
 						<div class="input-group padded">
 							<span class="input-group-addon"> 
 								<i class="glyphicon glyphicon-user"></i>
 							</span> 
-							<input type="text" value="MTF0081" name="identity" value="" class="form-control" placeholder="Employee Code" autocomplete="off" autofocus="true"/>
+							<input type="text" name="identity" value="" class="input-sm form-control" placeholder="Employee Code" autocomplete="off" autofocus="true"/>
 						</div>
 						<div class="input-group padded">
 							<span class="input-group-addon">
 								<i class="glyphicon glyphicon-lock"></i> 
 							</span> 
-							<input type="password" value="test@789" name="password" value="" class="form-control" placeholder="Password" autocomplete="off"/>
+							<input type="password" name="password" value="" class="input-sm form-control" placeholder="Password" autocomplete="off"/>
 						</div>
 						<div class="input-group padded">
 							<span class="input-group-addon">
 								<i class="glyphicon glyphicon-usd"></i> 
 							</span> 
-							<input type="text" name="petty_cash" value="" id="petty_cash" class="form-control" placeholder="Petty Cash" autocomplete="off"/>
+							<input type="text" name="petty_cash" value="" id="petty_cash" class="input-sm form-control" placeholder="Petty Cash" autocomplete="off"/>
 						</div>
 						<div class="row padded">
 							<div class="col-md-12">
@@ -85,19 +85,19 @@
 							<span class="input-group-addon"> 
 								<i class="glyphicon glyphicon-user"></i>
 							</span> 
-							<input type="text" value="MTF0081" name="identity" value=""  class="form-control" placeholder="Employee Code" autocomplete="off" autofocus="true"/>
+							<input type="text" name="identity" value=""  class="input-sm form-control" placeholder="Employee Code" autocomplete="off" autofocus="true"/>
 						</div>
 						<div class="input-group padded">
 							<span class="input-group-addon">
 								<i class="glyphicon glyphicon-lock"></i> 
 							</span> 
-							<input type="password" value="test@789" name="password" value="" class="form-control" placeholder="Password" autocomplete="off"/>
+							<input type="password" name="password" value="" class="input-sm form-control" placeholder="Password" autocomplete="off"/>
 						</div>
 						<div class="input-group padded">
 							<span class="input-group-addon">
 								<i class="glyphicon glyphicon-lock"></i> 
 							</span> 
-							<input type="text" name="counter_no" value="" id="counter_no" class="form-control" placeholder="Counter Number" autocomplete="off"/>
+							<input type="text" name="counter_no" value="" id="counter_no" class="input-sm form-control" placeholder="Counter Number" autocomplete="off"/>
 						</div>
 
 						<div class="row padded">
@@ -114,30 +114,30 @@
 							<span class="input-group-addon"> 
 								<i class="glyphicon glyphicon-user"></i>
 							</span> 
-							<input type="text" value="MTF0081" name="identity" value="" class="form-control" placeholder="Employee Code" autocomplete="off" autofocus="true"/>
+							<input type="text" name="identity" value="" class="input-sm form-control" placeholder="Employee Code" autocomplete="off" autofocus="true"/>
 						</div>
 						<div class="input-group padded">
 							<span class="input-group-addon">
 								<i class="glyphicon glyphicon-lock"></i> 
 							</span> 
-							<input type="password" value="test@789" name="password" value="" class="form-control" placeholder="Password" autocomplete="off"/>
+							<input type="password" name="password" value="" class="input-sm form-control" placeholder="Password" autocomplete="off"/>
 						</div>
 						<div class="input-group padded">
 							<span class="input-group-addon">
 								<i class="glyphicon glyphicon-lock"></i> 
 							</span> 
-							<input type="text" name="petty_cash_end" value="" id="petty_cash_end" class="form-control" placeholder="Petty Cash" autocomplete="off"/>
+							<input type="text" name="petty_cash_end" value="" id="petty_cash_end" class="input-sm form-control" placeholder="Petty Cash" autocomplete="off"/>
 						</div>
 						<div class="input-group padded">
 							<span class="input-group-addon">
 								<i class="glyphicon glyphicon-lock"></i> 
 							</span> 
-							<input type="text" name="box_cash" value="" id="box_cash" class="form-control" placeholder="Box Cash" autocomplete="off"/>
+							<input type="text" name="box_cash" value="" id="box_cash" class="input-sm form-control" placeholder="Box Cash" autocomplete="off"/>
 						</div>
 
 						<div class="row padded">
 							<div class="col-md-12">
-								<button type="submit" class="btn btn-success btn-block btn-lg">End Shift 
+								<button type="submit" class="btn btn-success btn-sm btn-block btn-lg">End Shift 
 									<i class="glyphicon glyphicon-log-in"></i>
 								</button>
 							</div>
@@ -149,19 +149,19 @@
 							<span class="input-group-addon"> 
 								<i class="glyphicon glyphicon-user"></i>
 							</span> 
-							<input type="text" value="MTF0081" name="identity" value="" class="form-control" placeholder="Employee Code" autocomplete="off" autofocus="true"/>
+							<input type="text" name="identity" value="" class="input-sm form-control" placeholder="Employee Code" autocomplete="off" autofocus="true"/>
 						</div>
 						<div class="input-group padded">
 							<span class="input-group-addon">
 								<i class="glyphicon glyphicon-lock"></i> 
 							</span> 
-							<input type="password" value="test@789" name="password" value="" class="form-control" placeholder="Password" autocomplete="off"/>
+							<input type="password" name="password" value="" class="input-sm form-control" placeholder="Password" autocomplete="off"/>
 						</div>
 						<div class="input-group padded">
 							<span class="input-group-addon">
 								<i class="glyphicon glyphicon-lock"></i> 
 							</span> 
-							<input type="text" name="box_cash_end" value="" id="box_cash_end" class="form-control" placeholder="Box Cash" autocomplete="off"/>
+							<input type="text" name="box_cash_end" value="" id="box_cash_end" class="input-sm form-control" placeholder="Box Cash" autocomplete="off"/>
 						</div>
 						<div class="row padded">
 							<div class="col-md-12">
