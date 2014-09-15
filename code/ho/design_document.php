@@ -59,7 +59,7 @@ function init(){
             "map"=>"function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'store_master'){ emit(doc.mysql_id,doc.name); } }"
             ),
           "store_shift"=>array(
-            "map"=>"function(doc) { if(doc.cd_doc_type == 'store_shift'){ emit(doc.date, null); } }"
+            "map"=>"function(doc) { if(doc.cd_doc_type == 'store_shift'){ var date = doc.login_time.split(' '); emit(date[0], null); } }"
             ),
         ),
         'updates' => array(
