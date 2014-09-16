@@ -133,7 +133,7 @@ if(is_array($data) && count($data)>0) {
            <th></th>
            <th></th>
            <th style="font-size:12px;">Avg Bill Value</th>
-           <th class="text-right" style="font-size:12px;"><?php echo number_format($due_amount/$counter,2);?></th>
+           <th class="text-right" style="font-size:12px;"><?php echo ($counter!=0 ? number_format($due_amount/$counter,2) : 0);?></th>
            
         </tr> 
       </tfoot>
