@@ -28,7 +28,7 @@ font-size: 13px;
   background: white;
   padding: 10px;
   position: relative;
-  text-align: right;
+  text-align: left;
 }
 
 .box{
@@ -65,11 +65,11 @@ background: #FF1493;
 text-align: center;
 display: block;
 color: black;
-width: 50px;
+width: 28px;
 font-size: 22px;
 padding: 14px 0;
 float: left;
-margin-right: 0px;
+margin-left: 0px;
 }
 
 .green {
