@@ -1,4 +1,20 @@
-
+<style>
+.modal-header {
+	padding: 5px;
+}
+.modal-body {
+	padding: 5px;
+}
+.modal-footer {
+	padding: 3px;
+}
+.table {
+	margin-bottom: -2px;
+}
+.table > tbody > tr > td {
+	padding: 4px;
+}
+</style>
 <div class="modal fade" id="payModal" tabindex="-1" role="dialog" aria-labelledby="payModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -34,11 +50,10 @@
 								<span class="inv_cus_con"> 
 									<input type="text" id="billing_customer" class="form-control" name="billing_customer" value="Walkin Client"/>	
 								</span>
-								<span class="inv_cus_con hide" id="customer"> 
-										
-								</span>
+								<span class="inv_cus_con hide" id="customer"> </span>
 							</td>
 						</tr>
+
 						<tr class="row">
 							<td width="50%">Phone Number <!--<a href="#"
 									class="btn btn-primary btn-xs showCModal"><i
@@ -48,62 +63,40 @@
 								<span class="inv_cus_con"> 
 									<input type="text" id="phone_number" class="form-control" name="phone_number" autofocus />	
 								</span>
-								<span class="inv_cus_con hide" id="phone"> 
-										
-								</span>
+								<span class="inv_cus_con hide" id="phone"> </span>
 							</td>
 						</tr>
-						<tr class='row hide' >
-							<td width="50%">City 
-							</td>
+
+						<tr class='row hide' > 
+							<td width="50%">City </td>
 							<td width="50%">
-								<span class="inv_cus_con" id="city"> 
-										
-								</span>
+								<span class="inv_cus_con" id="city"> </span>
 							</td>
 						</tr>
+
 						<tr class='row hide'>
-							<td width="50%">Locality 
-							</td>
+							<td width="50%">Locality / Sublocality </td>
 							<td width="50%">
-								<span class="inv_cus_con" id="locality"> 
-										
-								</span>
+								<span class="inv_cus_con" id="locality"> </span> /
+								<span class="inv_cus_con" id="sublocality"> </span>
 							</td>
 						</tr>
+						
 						<tr class='row hide'>
-							<td width="50%">Sublocality 
-							</td>
+							<td width="50%">Company / Landmark </td>
 							<td width="50%">
-								<span class="inv_cus_con" id="sublocality"> 
-										
-								</span>
+								<span class="inv_cus_con" id="company"> </span> / 
+								<span class="inv_cus_con" id="landmark"> </span>
 							</td>
 						</tr>
-						<tr class='row hide'>
-							<td width="50%">Company 
-							</td>
-							<td width="50%">
-								<span class="inv_cus_con" id="company"> 
-										
-								</span>
-							</td>
-						</tr>
-						<tr class='row hide'>
-							<td width="50%">Landmark 
-							</td>
-							<td width="50%">
-								<span class="inv_cus_con" id="landmark"> 
-										
-								</span>
-							</td>
-						</tr>
+
 						<tr class="row">
 							<td>Total Payable Amount :</td>
 							<td>
 								<h3 style="margin:0px;"><span id="twt" class="label label-warning"></span></h3> 
 							</td>
 						</tr>
+
 						<tr class="row pcash">
 							<td>Paid :</td>
 							<td><input type="text" id="paid-amount" class="form-control"/></td>
@@ -127,14 +120,14 @@
 								<h3 style="margin:0px;"><span class="label label-warning" id="balance">0</span></h3>
 							</td>
 						</tr>
-						<tr class="ppc row" style="display: none;">
+						<tr class="ppc row" style="display:none;">
 								<td>Card No :</td>
 								<td>
 									<input type="text" id="ppc" class="form-control"/>
 									<span id="loading_image" class="hide"><img class="text-center" src="<?php echo IMG;?>loader.gif"/></span>
 								</td>
 						</tr>
-                        <tr class="ppc_balance row" style="display: none;">
+                        <tr class="ppc_balance row" style="display:none;">
 								<td>Your Balance :</td>
 								<td>
                                   <span id="ac_balance"></span>
