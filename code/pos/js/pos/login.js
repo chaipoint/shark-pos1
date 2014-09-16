@@ -17,13 +17,6 @@ $(document).ready(function(){
 				var msg = "";
 				if(username.trim() == ""){msg += "<li>Provide Username</li>";}
 				if(password.trim() == ""){msg += "<li>Provide Password</li>"}
-				if(msg){
-					$("#error_message").show();
-					$("#error_message ul").html(msg);
-				}else{
-					$("#error_message").hide();
-					$("#error_message ul").html("");
-
 					var dataObj = new Object();
 					dataObj.username = username;
 					dataObj.password = password;
@@ -41,18 +34,30 @@ $(document).ready(function(){
 					switch($(this).attr('id')){
 						case 'store_day_start_form':
 							dataObj.petty_cash = $(this).find("#petty_cash").val();	
+							if((dataObj.petty_cash).trim() == ""){msg += "<li>Provide Petty Cash</li>";}
 							break;
 						case 'store_shift_start_form':
 							dataObj.counter_no = $('input#counter_no',this).val();
+							if((dataObj.counter_no).trim() == ""){msg += "<li>Provide Counter No</li>";}
 							break;						
 						case 'store_shift_end_form':
 							dataObj.petty_cash = $('input#petty_cash_end',this).val();
 							dataObj.box_cash = $('input#box_cash',this).val();
+							if((dataObj.petty_cash).trim() == ""){msg += "<li>Provide Petty Cash</li>";}
+							if((dataObj.box_cash).trim() == ""){msg += "<li>Provide Box Cash</li>";}
 							break;						
 						case 'store_day_end_form':
 							dataObj.box_cash = $('input#box_cash_end',this).val();
+							if((box_cash.counter_no).trim() == ""){msg += "<li>Provide Box Cash</li>";}
 							break;
 					}					
+
+				if(msg){
+					$("#error_message").show();
+					$("#error_message ul").html(msg);
+				}else{
+					$("#error_message").hide();
+					$("#error_message ul").html("");
 					$.ajax({
 				  		type: 'POST',
 				  		url: "index.php?dispatch=login.validate",
