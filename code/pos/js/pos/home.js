@@ -1,11 +1,9 @@
 var keyboard = new Array();
 $(document).ready(function(){	
-	$('#store_day_end_form').hide();
 	
 	if(is_store_open){
 		$('#shift_breadcrumb').text($('#shift_nav li:nth-child(2)').text());
 		$('#store_shift_message').text('Store is Opened.');
-		$('#store_day_start_form').hide();
 		if(is_shift_running){
 			$('#store_shift_message').html('Store Shift <b>'+$('#shift_count').text()+' </b>is in Process. Started by <span class="label label-warning">'+$('#shift_starter').text()+' </span><a href="index.php?dispatch=billing" class="btn btn-sm btn-primary">Start Billing</a>');
 			$('#shift_breadcrumb').text($('#shift_nav li:nth-child(3) a').addClass('btn-primary').text());
@@ -18,18 +16,18 @@ $(document).ready(function(){
 				$('#shift_nav li.active').trigger('click');
 			});
 			$('#store_shift_end_form').hide();
-			$('#shift_nav li:nth-child(2)').addClass('active');
+			$('#shift_nav li:nth-child(2) a').addClass('btn-primary');
+			$('#shift_nav li:nth-child(4) a').addClass('btn-primary');
 		}
 		$('#shift_nav li:nth-child(1) a').addClass('bg-success');
 
 	}else{
-		$('#store_shift_start_form').hide();
-		$('#store_shift_end_form').hide();
-		$('#shift_nav li:first').addClass('active');
+		$('#shift_nav li:first a').addClass('btn-primary');
 	}
 	$('#shift_nav a:not(.btn-primary)').attr("disabled","disabled");
 	$('#shift_nav a[disabled="disabled"]').css('color','black');
 	$('#shift_nav li a.btn-primary').click(function(){
+		$('#store_shift_logic form').addClass('hide');
 		$('#store_'+$(this).attr('id')+"_form").removeClass('hide');	
 		console.log('#store_'+$('a',this).attr('id')+"_form");
 	});
