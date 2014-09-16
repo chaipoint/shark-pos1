@@ -466,7 +466,7 @@ $(document).ready(function(){
 			$viewData = '<table class="table table-striped table-condensed table-hover protable small" width="100%" border="0" cellspacing="0" cellpadding="0">'+
 							'<thead>'+
 								'<tr class="active">'+
-									'<th>Product Name</th><th>Menu Price</th><th>Price Before Tax</th><th>Taxable Amount</th><th>Qty</th><th>SubTotal</th><th>Discount</th><th>Price After Discount</th><th>Tax %</th><th>Tax</th><th>Net Amount</th>'+
+									'<th>Product Name</th><th>Menu Price</th><th>Price Before Tax</th><th>Qty</th><th>SubTotal</th><th>Discount</th><th>Price After Discount</th><th>Tax %</th><th>Tax</th><th>Net Amount</th>'+
 								'</tr>'+
 							'</thead>'+
 						'<tbody>';
@@ -480,7 +480,6 @@ $(document).ready(function(){
 				$viewData += '<tr class="text-right">'+
 								'<td class="text-left">'+data.name+'</td>'+
 								'<td>'+(parseFloat(data.price)).toFixed(2)+'</td>'+
-								'<td>'+(parseFloat(data.priceBT)).toFixed(2)+'</td>'+
 								'<td>'+(parseFloat(data.priceBT)).toFixed(2)+'</td>'+
 								'<td>'+data.qty+'</td>'+
 								'<td>'+((parseFloat(data.priceBT)) * data.qty).toFixed(2)+'</td>'+
@@ -498,7 +497,7 @@ $(document).ready(function(){
 							priceAfterDiscount += (parseFloat(data.taxAbleAmount) * data.qty);
 			});
 			$viewData += '</tbody>'+
-						'<tfoot><tr class="active"><th>Total</th><th></th><th></th><th></th><th class="text-right">'+qty+'</th><th class="text-right">'+subTotalSum.toFixed(2)+'</th><th class="text-right">'+(discountAmount).toFixed(2)+'</th><th class="text-right">'+(priceAfterDiscount).toFixed(2)+'</th><th></th><th class="text-right">'+(taxAmount).toFixed(2)+'</th><th class="text-right">'+(netAmount).toFixed(2)+'</th></tr></tfoot>'
+						'<tfoot><tr class="active"><th>Total</th><th></th><th></th><th class="text-right">'+qty+'</th><th class="text-right">'+subTotalSum.toFixed(2)+'</th><th class="text-right">'+(discountAmount).toFixed(2)+'</th><th class="text-right">'+(priceAfterDiscount).toFixed(2)+'</th><th></th><th class="text-right">'+(taxAmount).toFixed(2)+'</th><th class="text-right">'+(netAmount).toFixed(2)+'</th></tr></tfoot>'
 						+'</table>';
 
 			bootbox.dialog({
