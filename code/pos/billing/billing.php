@@ -194,6 +194,9 @@
 				$return['message'] = 'Request Method Not Allowed';
 			}
 			$re = json_encode($return);
+			$this->printBill($_POST);
+			//file_put_contents('D:\printbill\bill.txt',json_encode($_POST),true);
+			//exec("D:\printbill\JSON PRINT.exe");
 			$this->log->trace("RESPONSE \r\n".$re);
 			return $re;
 		}
@@ -250,8 +253,8 @@
         function printBill($data){
         	$return = array('error'=>false,'message'=>'','data'=>array());
 				if(!empty($data)){
-        		file_put_contents('D:\printBill\bill.txt', json_encode($data));
-        		exec('D:\printBill\JSON PRINT.exe');
+        		file_put_contents('D:\printbill\bill.txt', json_encode($data));
+        		exec('D:\printbill\JSON PRINT.exe');
         		$return['error'] = false;
         		$return['message'] = 'Print Successfully';
 			}else{
