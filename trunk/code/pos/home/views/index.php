@@ -14,6 +14,7 @@
 				  <li><a class="" id="shift_end">Shift End</a></li>
 				  <li><a class="" id="day_end">Day End</a></li>
 			    </ul>
+			    <!--
 			    <ul class="pull-right nav nav-pills " role="tablist">
 			    	<li class="active">
 			    		<a class="" id="pe_tg" data-toggle="dropdown">Petty Expence</a>
@@ -23,15 +24,15 @@
             				<li><a href='#' id="view_expense">View Expense</a></li>
           				</ul>
 			    	</li>
-			    </ul>
+			    </ul>-->
 			</div>
 		<div class="col-lg-12 padded">
-		    	<div class="col-lg-12">
+		    	<!--<div class="col-lg-12">
     				<div class="alert alert-warning" id="store_shift_message">Store is Closed.</div>
     				<span class="hidden" id="shift_count"><?php echo $total_shift;?></span>
     				<span class="hidden" id="shift_starter"><?php echo $shift_starter;?></span>
-				</div>
-				<div class="col-lg-6">
+				</div>-->
+				<div class="col-lg-6 col-md-5 col-sm-6">
 					<ul class="list-unstyled">
 						<?php if(array_key_exists('rows', $shift_data) && count($shift_data['rows']) > 0) {?>
 						<li><span class="glyphicon glyphicon-ok"></span> &nbsp;POS Login by <?php echo $shift_data['rows'][0]['doc']['login_staff_name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($shift_data['rows'][0]['doc']['login_time']));?></li>
@@ -50,7 +51,7 @@
 						<?php }?>
 					</ul>
 				</div>
-				<div class="col-lg-3">
+				<div class="col-lg-3 col-md-5 col-sm-5">
 					<div class="alert alert-danger" id="error_message"><ul></ul></div>
 					<form id="store_day_start_form"  class="store_shift hide" action="" method="post" accept-charset="utf-8" class="separate-sections form-horizontal" autocomplete="off">
 						<div class="input-group padded">
@@ -175,5 +176,6 @@
 		</div>
     </div>
 </div>
-<?php require_once DIR.'/sales_register/views/paid_bills_table.php';?>
-<?php require_once DIR.'/sales_register/views/modal_expense.php';?>
+
+<?php //require_once DIR.'/sales_register/views/paid_bills_table.php';?>
+<?php //require_once DIR.'/sales_register/views/modal_expense.php';?>
