@@ -149,7 +149,7 @@ background-color:#FFF !important;
 .bootbox .modal-footer { background: none; text-align:center; }
 
 
-.pos { width: 100%; margin: 10px auto;  }
+.pos { width: 100%; margin: -9px auto;  }
 #pos {
 	position:relative;
 }
@@ -185,7 +185,7 @@ td.tborder {border-top: 1px solid #666; font-weight:bold;}
 #pos #leftdiv {
 	width: 390px;
 	float:left;
-	height:566px;
+	height:534px;
 	margin: 10px 0;
 	border: 1px solid #DCE0E1;
 }
