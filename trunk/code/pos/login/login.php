@@ -120,7 +120,7 @@
 								$staff = new Staff();
 								$returnData = json_decode($staff->save_petty(),true);
 							}else{
-								$returnData['data']['redirect'] = 'index.php?dispatch=staff'; 								
+								$returnData['data']['redirect'] = 'index.php?dispatch=home'; 								
 							}
 						}
 						//$returnData['data']['redirect'] = 'index.php?dispatch=billing.index'; 
