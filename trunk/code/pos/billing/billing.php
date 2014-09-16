@@ -73,6 +73,21 @@
 			$this->commonView('footer_html');
 		}
 
+		public function rePrint(){
+				$return = array('error'=>false, 'message'=>'', 'data' => array());
+				$bill = $_POST['doc'];
+				$billDataReturned = $this->getBillData($bill); 
+				if(!$billDataReturned['error']){
+	 				$billData = $billDataReturned['data'];
+	 				$re = $this->printBill($billData);
+	 				return json_encode($re);
+
+				}else{
+					$return['error'] = true;
+					$return['message'] = 'Some Error! Please Contact Admin';
+					return json_encode($return);
+				}
+		}
 		public function getBillData($bill_id){
 				$return = array('error'=>false, 'message'=>'', 'data' => array());
   				$billDetails = $this->cDB->getDocs($bill_id);
@@ -231,6 +246,20 @@
 			}
 
 		}
+        
+        function printBill($data){
+        	$return = array('error'=>false,'message'=>'','data'=>array());
+				if(!empty($data)){
+        		file_put_contents('D:\printBill\bill.txt', json_encode($data));
+        		exec('D:\printBill\JSON PRINT.exe');
+        		$return['error'] = false;
+        		$return['message'] = 'Print Successfully';
+			}else{
+				$return['error'] = True;
+        		$return['message'] = 'Please Provide Data';
+			}
+			return $return;
+        }
 
 		function print_bill(){
 			if(array_key_exists('bill', $_GET) && is_numeric($_GET['bill']) && $_GET['bill'] > 0){
