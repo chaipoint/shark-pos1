@@ -8,11 +8,11 @@
   	</div>
     <div class="panel-body">
     		<div class="col-lg-12">
-				<ul class="nav nav-pills " role="tablist" id="shift_nav">
-				  <li><a class="" id="day_start">Day Start</a></li>
-				  <li><a class="" id="shift_start">Shift Start</a></li>
-				  <li><a class="" id="shift_end">Shift End</a></li>
-				  <li><a class="" id="day_end">Day End</a></li>
+				<ul class="list-unstyled list-inline" role="tablist" id="shift_nav">
+				  <li><a class="btn btn-success btn-lg btn3d" id="day_start">Day Start</a></li>
+				  <li><a class="btn btn-success btn-lg btn3d" id="shift_start">Shift Start</a></li>
+				  <li><a class="btn btn-success btn-lg btn3d" id="shift_end">Shift End</a></li>
+				  <li><a class="btn btn-success btn-lg btn3d" id="day_end">Day End</a></li>
 			    </ul>
 			    <!--
 			    <ul class="pull-right nav nav-pills " role="tablist">
