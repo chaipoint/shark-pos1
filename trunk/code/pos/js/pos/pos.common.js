@@ -292,6 +292,7 @@ $.fn.cKeyboard = function(){
 
 			switch(value){
 				case '#username':
+				case 'input[name="identity"]':
 					options.layout = 'caustom';
 					options.customLayout = {
 							'default':['M T F 0 1 2 3 4 5 6 7 8 9 {Bksp}','{accept} {cancel}']
