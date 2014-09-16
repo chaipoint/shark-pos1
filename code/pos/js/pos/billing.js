@@ -20,7 +20,7 @@ $(document).ready(function(){
 	if(Object.keys($billingItems).length > 0){
 
 		/*Load Bill IF provided with doc_id*/
-		var button = '<button class="btn btn-primary">Print</button>&nbsp;' + ((bill_status_id != 68) ? '<button id="paid_button" class="btn btn-primary">Paid</button>' : '');
+		var button = '<button class="btn btn-primary" id="print-can">Print</button>&nbsp;' + ((bill_status_id != 68) ? '<button id="paid_button" class="btn btn-primary">Paid</button>' : '');
 		$('#botbuttons').append(button);
 		$('#payment').prop('disabled',true).addClass('hide');
 		for (var keys in $billingItems) {//$.each($billingItems, function(index,keys){
@@ -130,6 +130,29 @@ $(document).ready(function(){
 		});
 
 		//---END--- Event For Product Selection
+		$('#print-can').on('click', function(event){
+			event.preventDefault();
+			if(modifyBill){
+				if(doc){
+					$.ajax({
+						type: 'POST',
+						url: "index.php?dispatch=billing.rePrint",
+						data : {request_type:'print_bill', doc:doc},
+						}).done(function(response) {
+							//alert(response);return false;
+						response = $.parseJSON(response);
+						if(response.error){
+							bootbox.alert(response.message);
+						}else{
+							bootbox.alert(response.message,function(){
+							window.location = "?dispatch=sales_register";													
+						});
+						}
+						});
+				}
+			}
+
+		});
 		//onCancel Of Bill
 		$("#cancel").click(function(){
 			if(modifyBill){
