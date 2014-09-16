@@ -18,39 +18,39 @@
 </form>
 <div class='row'>
       
-      <div class="col-lg-2 col-sm-4" style="width:170px;">
-        <div class="smallstat box">
+     
+        <div class="smallstat box col-lg-2 col-sm-4" style="width:110px;margin-left:14px;">
           <i class="glyphicon glyphicon-usd fa green"></i>
           <span class="title">Cash Sale</span>
           <span class="value"><?php echo $cash_sale;?></span>
         </div>
-      </div>
+     
 
-      <div class="col-lg-2 col-sm-4">
-        <div class="smallstat box">
+     
+        <div class="smallstat box col-lg-2 col-sm-4" style="width:130px;margin-left:8px;" >
           <i class="glyphicon glyphicon-usd fa pink"></i>
-          <span class="title">CoC Pending Cash</span>
+          <span class="title">Pending Cash</span>
           <span class="value"><?php echo $cash_indelivery;?></span>
         </div>
-      </div>
+     
 
-      <div class="col-lg-2 col-sm-4">
-        <div class="smallstat box">
+      
+        <div class="smallstat box col-lg-2 col-sm-4" style="width:125px;margin-left:8px;">
           <i class="glyphicon glyphicon-usd fa blue"></i>
-          <span class="title">PPC Redemption</span>
+          <span class="title">PPC Rdmptn</span>
           <span class="value"><?php echo $ppcSale; ?></span>
         </div>
-      </div>
-      <div class="col-lg-2 col-sm-4" style="width:180px;">
-        <div class="smallstat box">
+     
+      
+        <div class="smallstat box col-lg-2 col-sm-4" style="width:115px;margin-left:8px;" >
           <i class="glyphicon glyphicon-usd fa gray"></i>
           <span class="title">Credit Sale</span>
           <span class="value"><?php echo $ppcSale; ?></span>
         </div>
-      </div>
+      
 
-      <div class="col-lg-2 col-sm-4" style="width:195px;">
-        <div class="smallstat box">
+      
+        <div class="smallstat box col-lg-2 col-sm-4" style="width:135px;margin-left:8px;">
           <i class="glyphicon glyphicon-usd fa red"></i>
           <span class="title">Petty Expense</span>
           <span class="value"><?php echo $p_ex;?> &nbsp;
@@ -63,23 +63,25 @@
            <?php } ?>
             </span>
         </div>
-      </div>
-
-      <div class="col-lg-2 col-sm-4" style="width:170px;">
-        <div class="smallstat box">
-          <i class="glyphicon glyphicon-usd fa orange"></i>
-          <span class="title">Total Sale</span>
-          <span class="value"><?php echo ($cash_sale + $cash_indelivery + $ppcSale) ;?></span>
-        </div>
-      </div>
-
-       <div class="col-lg-2 col-sm-4" style="width:170px;">
-        <div class="smallstat box">
+      
+	  
+	 
+        <div class="smallstat box col-lg-2 col-sm-4" style="width:130px;margin-left:8px;">
           <i class="glyphicon glyphicon-usd fa yel"></i>
           <span class="title">Cash In Hand</span>
           <span class="value"><?php echo ($cash_sale - ($p_ex)) ;?></span>
         </div>
-      </div>
+      
+
+      
+        <div class="smallstat box col-lg-2 col-sm-4" style="width:110px;margin-left:8px;">
+          <i class="glyphicon glyphicon-usd fa orange"></i>
+          <span class="title">Total Sale</span>
+          <span class="value"><?php echo ($cash_sale + $cash_indelivery + $ppcSale) ;?></span>
+        </div>
+      
+
+       
       
 </div>
 
@@ -255,7 +257,7 @@ if(is_array($data) && count($data)>0) {
            <th></th>
            
            <th style="font-size:12px;">Avg Bill Value</th>
-           <th class="text-right" style="font-size:12px;"><?php echo number_format($due_amount/$counter,2);?></th>
+           <th class="text-right" style="font-size:12px;"><?php echo ($counter!=0 ? number_format($due_amount/$counter,2) : 0);?></th>
            
         </tr> 
       </tfoot>
