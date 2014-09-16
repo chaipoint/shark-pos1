@@ -21,7 +21,7 @@ $(document).ready(function(){
 					dataObj.username = username;
 					dataObj.password = password;
 					switch(param[0]){
-						case 'staff':
+						case 'home':
 							dataObj.validateFor = 'shift';
 							dataObj.mode = $('#shift_nav li.active a').attr('id');
 							break;
