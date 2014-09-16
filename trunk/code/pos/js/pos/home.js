@@ -29,8 +29,8 @@ $(document).ready(function(){
 	}
 	$('#shift_nav a:not(.btn-primary)').attr("disabled","disabled");
 	$('#shift_nav a[disabled="disabled"]').css('color','black');
-	$('#shift_nav li.active').click(function(){
-		$('#store_'+$('a',this).attr('id')+"_form").removeClass('hide');	
+	$('#shift_nav li a.btn-primary').click(function(){
+		$('#store_'+$(this).attr('id')+"_form").removeClass('hide');	
 		console.log('#store_'+$('a',this).attr('id')+"_form");
 	});
 	keyboard.push($('input[name="identity"],input[name="password"],#petty_cash, #counter_no, #petty_cash_end, #box_cash, #box_cash_end').cKeyboard());
