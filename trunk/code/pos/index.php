@@ -36,7 +36,6 @@
 		echo "Unable To Process Request, Call To Undifiend Module";
 		die();
 	}
-
 	$accessedClass = ucfirst(MODULE);
 	$class = new $accessedClass();
 	if(method_exists($class, MODE)){
