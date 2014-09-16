@@ -2,8 +2,11 @@
 	.btn-product {
 		background: #EEE;
 		border: 1px solid #EEE;
-		border-bottom: 0;
+		border-bottom: 0;}
+	.navbar {
+		margin-bottom: 1px;
 	}
+	
 </style>
 <script type="text/javascript" src="<?php echo JS;?>pos/billing.js"></script>
 <?php
@@ -157,7 +160,7 @@
 									<div style="clear: both;"></div>
 									<div id="ajaxproducts">
 										<div class="btn-product clearfix">
-											<div id="proajax" style="overflow:scroll;height:500px;">
+											<div id="proajax" style="overflow:scroll;height:470px;">
 													<?php
 														if(array_key_exists($firstCat, $productList))
 														foreach($productList[$firstCat] as $pKey => $pValue){
