@@ -202,7 +202,7 @@
 		}
 
 
-		public function getSaleBills(){
+		public function getTodaysSale(){
 			$return = array('error'=>false,'message'=>'','data'=>array());
 			if($_SERVER['REQUEST_METHOD'] == 'POST'){
 				$bills = $this->cDB->getDesign('billing')->getList('todays_sale','handle_updated_bills')->setParam(array("descending"=>"true","include_docs"=>"true","endkey"=>'["'.$this->getcDate().'"]'))->execute();
