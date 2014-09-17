@@ -115,28 +115,28 @@ if(is_array($data) && count($data)>0) {
 ?>		
       
    </tbody>
+   <?php if(MODULE == 'sales_register'){?>
    <tfoot>
         <tr class="text-right">
-            <th style="font-size:12px;">Total</td>
-            <th></th>
-            <th></th>
-            <?php if(MODULE == 'sales_register'){?>
-             <th class="text-right" style="font-size:12px;"></th>
-             <th class="text-right" style="font-size:12px;"></th>
-             <th class="text-right" style="font-size:12px;"></th>
-             <th class="text-right" style="font-size:12px;"></th>
-             <?php }?>
-           <th></th>
-           <th></th>
-           <th></th>
-           <th></th>
-           <th></th>
-           <th></th>
-           <th style="font-size:12px;">Avg Bill Value</th>
-           <th class="text-right" style="font-size:12px;"><?php echo ($counter!=0 ? number_format($due_amount/$counter,2) : 0);?></th>
+          <th style="font-size:12px;">Total</td>
+          <th></th>
+          <th></th>
+          <th class="text-right" style="font-size:12px;"></th>
+          <th class="text-right" style="font-size:12px;"></th>
+          <th class="text-right" style="font-size:12px;"></th>
+          <th class="text-right" style="font-size:12px;"></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th style="font-size:12px;">Avg Bill Value</th>
+          <th class="text-right" style="font-size:12px;"><?php echo ($counter!=0 ? number_format($due_amount/$counter,2) : 0);?></th>
            
         </tr> 
       </tfoot>
+  <?php }?>
 </table>
 </div>
 </div>
