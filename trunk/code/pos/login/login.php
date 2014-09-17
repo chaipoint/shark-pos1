@@ -70,7 +70,7 @@
 				$result = $resultJSON;
 				if(!array_key_exists('cMessage', $result)){
 					if(!$result['error']){
-						if($_POST['validateFor'] == 'sales_register'){
+						if($_POST['validateFor'] == 'sales_register' || $_POST['validateFor'] == 'cash_reconciliation'){
 
 						}else{
 							$userData["_id"] = $result['data']['_id'];
