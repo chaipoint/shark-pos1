@@ -33,6 +33,23 @@ $(document).ready(function(){
 		$("#error_message_modal").hide();
 		$('#login_holder_home').modal('show');
 	});
+
+$('#home_tab').click(function(){
+		$('#hom').addClass('active');
+		$('#sal').removeClass('active');
+		$('#home_data').removeClass('hidden');
+		$('#sales_data').addClass('hidden');
+		
+	});
+
+	$('#sales_tab').click(function(){
+		$('#hom').removeClass('active');
+		$('#sal').addClass('active');
+		$('#home_data').addClass('hidden');
+		$('#sales_data').removeClass('hidden');
+		
+	});
+
 });
 function CashRHandleResponse(){
 
