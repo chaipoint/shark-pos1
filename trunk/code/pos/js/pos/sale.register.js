@@ -129,7 +129,7 @@ $("#search_button").click(function(){
 			event.preventDefault();
 			$.ajax({
 				type: 'POST',
-				url: "index.php?dispatch=billing.getSaleBills",
+				url: "index.php?dispatch=billing.getTodaysSale",
 		  		data : {request_type:'todays_bill'},
 			}).done(function(response) {
 					var result = $.parseJSON(response);
