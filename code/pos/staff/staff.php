@@ -17,6 +17,23 @@
 
 			$result = $this->cDB->getDesign('store')->getView('store_shift')->setParam(array('key'=>'"'.$this->getCDate().'"', 'include_docs'=>'true'))->execute();
 			$total_rows = count($result['rows']);
+
+			$inward = 0;
+			$resultInward = $this->cDB->getDesign('petty_expense')->getView('get_inward')->setParam(array('key'=>'"'.$this->getCDate().'"'))->execute();
+			if( count($resultInward['rows']) >0 ){
+				$inward = $resultInward['rows'][0]['value'];
+			}
+			require_once DIR.'/sales_register/sales_register.php';
+			$sr = new sales_register();
+			$resultExpenseList = $sr->getExpenseData($this->getCDate());
+			$pettyExpence = 0;
+			if(count($resultExpenseList['rows'])>0){
+				$rows = $resultExpenseList['rows'];
+				foreach($rows as $pKey => $pValue){
+					$pettyExpence += $pValue['doc']['expense_amount'];
+				}
+			}		
+
 			if(array_key_exists('rows', $result) && $total_rows == 1){
 				if($_POST['mode'] == 'day_start'){
 					$return['error'] = true;
@@ -45,27 +62,17 @@
 						}
 					}	
 					if(!$return['error']){
-						if($_POST['mode'] == 'day_end' || $_POST['mode'] == 'shift_end'){
-								$inward = 0;
-								$resultInward = $this->cDB->getDesign('petty_expense')->getView('get_inward')->setParam(array('key'=>'"'.$this->getCDate().'"'))->execute();
-								if( count($resultInward['rows']) >0 ){
-									$inward = $resultInward['rows'][0]['value'];
-								}
-								require_once DIR.'/sales_register/sales_register.php';
-								$sr = new sales_register();
-								$resultExpenseList = $sr->getExpenseData($this->getCDate());
-								$pettyExpence = 0;
-								if(count($resultExpenseList['rows'])>0){
-									$rows = $resultExpenseList['rows'];
-										foreach($rows as $pKey => $pValue){
-											$pettyExpence += $pValue['doc']['expense_amount'];
-										}
-								}
-								$data['opening_petty_cash'] = $result['rows'][0]['doc']['day']['start_cash'];
-								$data['petty_expense'] = $pettyExpence ;
-								$data['closing_petty_cash'] = ($result['rows'][0]['doc']['day']['start_cash'] + $inward - $pettyExpence);
-								$data['inward_petty_cash'] = $inward;
+						if($totalShifts == 0){
+							$opening_petty_cash_at_start = $result['rows'][0]['doc']['day']['petty_cash_balance']['opening_petty_cash'] + $result['rows'][0]['doc']['day']['petty_cash_balance']['inward_petty_cash'] - $result['rows'][0]['doc']['day']['petty_cash_balance']['petty_expense'];
+						}else{
+							$opening_petty_cash_at_start = $result['rows'][0]['doc']['shift'][$totalShifts-1]['petty_cash_balance']['closing_petty_cash'];
 						}
+						$opening_petty_cash_at_start  =  $result['rows'][0]['doc']['day']['start_cash'];
+						$data['opening_petty_cash'] = $opening_petty_cash_at_start;
+						$data['petty_expense'] = $pettyExpence ;
+						$data['closing_petty_cash'] = ($data['opening_petty_cash'] + $inward - $pettyExpence);
+						$data['inward_petty_cash'] = $inward;
+						
 						$result = $this->cDB->getDesign('store')->getUpdate('store_shift',$result['rows'][0]['id'])->setParam($data)->execute();
 						if($data['type'] == 'shift_start'){
 							$_SESSION['user']['counter'] = $_POST['counter_no'];
@@ -88,7 +95,7 @@
 				$data['day']['end_login_id'] = '';
 				$data['day']['end_staff_name'] = '';
 				$data['day']['end_fullcash'] = '';
-				$data['day']['petty_cash_balance'] = array('opening_petty_cash'=>0,'petty_expense'=>0,'closing_petty_cash'=>0,'inward_petty_cash'=>0);
+				$data['day']['petty_cash_balance'] = array('opening_petty_cash'=>$_POST['petty_cash'],'petty_expense'=> $pettyExpence,'closing_petty_cash'=>0,'inward_petty_cash'=>$inward);
 				$data['shift'] = array();
 				$result = $this->cDB->saveDocument()->execute($data);
 
