@@ -102,7 +102,7 @@ $logger->trace("Array To Update Staff In CouchDb: ".json_encode($updateArray));
 
 if (is_array($updateArray) && count($updateArray)>0){
 	$result=$couch->saveDocument(true)->execute(array("docs"=>$updateArray));
-	print_r($result);
+	//print_r($result);
   if(array_key_exists('error', $result)){
   	$logger->debug("ERROR:Staff Not Updated IN CouchDb");
   	$html['error'] = true;
@@ -131,6 +131,7 @@ function updateStore(){
     $couch = new CouchPHP();
 	$result = $couch->getDesign('design_ho')->getView('store_by_mysql_id')->setParam(array("include_docs"=>"true"))->execute();
 	$storeList = array();
+	$_idList = array();
 
     if(array_key_exists('rows', $result)){
 		$docs = $result['rows'];
@@ -243,6 +244,18 @@ function updateStore(){
 										$j++;
 									}
                                 }
+
+                        	$getStaff = "SELECT ss.staff_id id, sm.name name, sm.title_id FROM store_staff ss
+										 LEFT JOIN staff_master sm ON sm.id = ss.staff_id 
+										 WHERE ss.store_id = '".$storeDetails['mysql_id']."' AND ss.active = 'Y' AND sm.active = 'Y'";
+							$staffList = mysql_query($getStaff);
+							$k = 0;
+							while ($row = mysql_fetch_assoc($staffList)) {
+								$updateArray[$i]['store_staff'][$k]['mysql_id'] = $row['id']; 
+								$updateArray[$i]['store_staff'][$k]['name'] = $row['name'];
+								$updateArray[$i]['store_staff'][$k]['title_id'] = $row['title_id'];
+								$k++;
+							}
 				
 						$i++;
 					}
