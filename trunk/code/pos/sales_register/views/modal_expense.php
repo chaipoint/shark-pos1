@@ -59,9 +59,9 @@
 							<td>
 								<span class="inv_cus_con"> 
 									<select name="expense_done_by_id" id="expense_done_by_id" class="form-control" required data-bv-notempty-message="The last name is required and cannot be empty">
-	                                     <option value=''>Select Payer</option>
+	                                     <option value=''>Select Done By</option>
 	                                     <?php foreach ($staff_list as $key => $value) { ?>
-	                                     <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
+	                                     <option value="<?php echo $key; ?>"><?php echo $value['name']; ?></option>
 	                                     <?php } ?>
 									</select>	
 								</span>
@@ -73,10 +73,11 @@
 							<td>
 								<span class="inv_cus_con"> 
 									<select name="expense_approved_by_id" id="expense_approved_by_id" class="form-control" required data-bv-notempty-message="The last name is required and cannot be empty">
-	                                     <option value=''>Select Payer</option>
-	                                     <?php foreach ($staff_list as $key => $value) { ?>
-	                                     <option value="<?php echo $key; ?>"><?php echo $value; ?></option>
-	                                     <?php } ?>
+	                                     <option value=''>Select Approved By</option>
+	                                     <?php foreach ($staff_list as $key => $value) {
+	                                     		if($value['title_id']==3 || $value['title_id']==4 || $value['title_id']==6 ){?>
+	                                     <option value="<?php echo $key; ?>"><?php echo $value['name']; ?></option>
+	                                     <?php }} ?>
 									</select>	
 								</span>
 							</td>
@@ -127,8 +128,8 @@
                     				$head = $head_data[$value['doc']['expense_head']];
                     			}
                     			if(array_key_exists($value['doc']['expense_done_by_id'], $staff_list)){ 
-                    				$done_by = $staff_list[$value['doc']['expense_done_by_id']];
-                    				$approved_by = $staff_list[$value['doc']['expense_approved_by_id']];
+                    				$done_by = $staff_list[$value['doc']['expense_done_by_id']]['name'];
+                    				$approved_by = $staff_list[$value['doc']['expense_approved_by_id']]['name'];
                     			}
                                	echo '<tr>
                                          <td>'.$i.'</td>
