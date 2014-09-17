@@ -19,7 +19,7 @@ $(document).ready(function(){
 	}else{
 		$('#shift_nav li:first a').addClass('btn-primary');
 	}
-	$('#shift_nav a:not(.btn-primary,#apart_day_shift)').attr("disabled","disabled");
+	$('#shift_nav a:not(.btn-primary,.apart_day_shift)').attr("disabled","disabled");
 	$('#shift_nav a[disabled="disabled"]').css('color','black');
 	$('#shift_nav li a.btn-primary').click(function(){
 		$('#store_shift_logic form').addClass('hide');
@@ -27,7 +27,16 @@ $(document).ready(function(){
 		console.log('#store_'+$('a',this).attr('id')+"_form");
 	});
 	keyboard.push($('input[name="identity"],input[name="password"],#petty_cash, #counter_no, #petty_cash_end, #box_cash, #box_cash_end').cKeyboard());
+	
+	$('#login_holder_home div#error_message').attr('id','error_message_modal');
+	$('#details_button_tabs').click(function(){
+		$("#error_message_modal").hide();
+		$('#login_holder_home').modal('show');
+	});
 });
+function CashRHandleResponse(){
+
+}
 function staffHandleResponse(response){
 
 	$('#store_shift_message').html(response.message);

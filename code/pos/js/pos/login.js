@@ -3,7 +3,8 @@
 //navigator.onLine
 $(document).ready(function(){
 			$('#username,#password').cKeyboard();
-			$("#error_message").hide(); //Hide Error Message Block on Load of Content
+			$("#error_message").hide();
+			$("#error_message_modal").hide(); //Hide Error Message Block on Load of Content
 			//console.log($("#username","#loginform"));
 			$("#loginform, .store_shift").submit(function(event){
 				var form = $(this);
@@ -53,6 +54,10 @@ $(document).ready(function(){
 							dataObj.mode = 'day_end';
 							if((dataObj.box_cash).trim() == ""){msg += "<li>Provide Box Cash</li>";}
 							break;
+						default:
+						if(dataObj.validateFor == 'shift'){
+							dataObj.validateFor = 'cash_reconciliation';
+						}
 					}					
 
 				if(msg){
@@ -70,12 +75,18 @@ $(document).ready(function(){
 						var $res =  $.parseJSON(response); //Parse result of response
 						if($res.error){ //If Their Exists any problem in login then show errors
 							msg = $res.message; 
-							$("#error_message").show();$("#error_message ul").html(msg);
+							if(dataObj.validateFor == 'cash_reconciliation'){
+								$("#error_message_modal").show();$("#error_message_modal ul").html(msg);
+							}else{
+								$("#error_message").show();$("#error_message ul").html(msg);
+							}
 						}else{
 							if(dataObj.validateFor == 'user'){
 								window.location = $res.data.redirect; //Transfer to Next Page After setting session and login
 							}else if (dataObj.validateFor == 'shift') {
 								staffHandleResponse($res)
+							}else if (dataObj.validateFor == 'cash_reconciliation') {
+								CashRHandleResponse($res)
 							}else{
 								handleResponse($res);								
 							}
