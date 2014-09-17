@@ -1,7 +1,84 @@
 <script>var is_store_open = <?php echo $is_store_open; ?>;</script>
 <script>var is_shift_running = <?php echo $is_shift_running; ?>;</script>
 <script src="<?php echo JS;?>pos/home.js"></script>
-<script src="<?php echo JS;?>pos/login.js"></script>
+<div class="">
+	<div class="">
+		<div class="panel panel-success" id="sthift_trace_panel">
+    		<div class="panel-heading">
+      			<h4 class="panel-title">Shift Data</h4>
+  			</div>
+    		<div class="panel-body">
+    			<table class="table">
+    				<thead>
+    					<tr>
+    						<th>Event</th>
+    						<th>Petty Cash</th>
+    						<th>Petty Cash Inward</th>
+    						<th>Petty Cash Expense</th>
+    						<th>Shift End Cash</th>
+    						<th>Shift End (Cash in the box)</th>
+    						<th>Closing Cash</th>
+    						<th>Excess Cash</th>
+    						<th>Cash in the box</th>
+    					</tr>
+    				</thead>
+    				<tbody>
+    					
+    						<?php $display = '';if(count($shift_data['rows'])){
+								$shifts = $shift_data['rows'][0]['doc']['shift'];
+    							$total = count($shifts);
+    							$day = $shift_data['rows'][0]['doc']['day'];
+    							$shift_end_cash = ($day['start_cash']+$day['petty_cash_balance']['inward_petty_cash']-$day['petty_cash_balance']['petty_expense']);
+								$display .='<tr>
+			    						<td>Day Start</td>
+			    						<td>'.$day['start_cash'].'</td>
+			    						<td>'.$day['petty_cash_balance']['inward_petty_cash'].'</td>
+			    						<td>'.$day['petty_cash_balance']['petty_expense'].'</td>
+			    						<td>'.(($total == 0) ? 0 : $shifts[$total-1]['end_petty_cash']).'</td>
+			    						<td>'.(($total == 0) ? 0 : $shifts[$total-1]['end_cash_inbox']).'</td>
+			    						<td>'.$shift_end_cash.'</td>
+			    						<td>'.(($total == 0) ? 0 : ($shifts[$total-1]['end_petty_cash'] -$shift_end_cash)).'</td>
+			    						<td>'.$day['end_fullcash'].'</td>
+			    						</tr>
+								';
+								foreach($shifts as $key => $values){
+									$closing_cash = (($day['start_cash'] + $values['petty_cash_balance']['opening_petty_cash'])
+				    								+($day['petty_cash_balance']['inward_petty_cash'] + $values['petty_cash_balance']['inward_petty_cash']) 
+													-($day['petty_cash_balance']['petty_expense'] + $values['petty_cash_balance']['petty_expense']) 
+				    								);
+									$display .='<tr>
+				    						<td>Shift '.$values['shift_no'].'</td>
+				    						<td>'.$values['petty_cash_balance']['opening_petty_cash'].'</td>
+				    						<td>'.$values['petty_cash_balance']['inward_petty_cash'].'</td>
+				    						<td>'.$values['petty_cash_balance']['inward_petty_cash'].'</td>
+				    						<td>'.$values['end_petty_cash'].'</td>
+				    						<td>'.$values['end_cash_inbox'].'</td>
+				    						<td>'.$closing_cash
+				    						.'</td><td>'.($values['end_petty_cash']-$closing_cash).'</td>
+				    						<td>'.$values['end_cash_inbox'].'</td>
+				    						</tr>
+									';
+								}
+    						}
+    						echo $display;
+    						?>
+    					
+    				</tbody>
+    			</table>
+    		</div>
+    	</div>
+	</div>
+	<div class="">
+		<div class="panel panel-success" id="cash_reconcilation_panel">
+    		<div class="panel-heading">
+      			<h4 class="panel-title">Cash Reconciliation</h4>
+  			</div>
+    		<div class="panel-body">
+    		</div>
+    	</div>
+	</div>
+</div>
+
 <div class="panel panel-success" id="store_shift_logic">
     <div class="panel-heading">
       <h4 class="panel-title">Dashboard</h4>
@@ -13,7 +90,7 @@
 				  <li><a class="btn btn-default btn-lg btn3d" id="shift_start">Shift Start</a></li>
 				  <li><a class="btn btn-default btn-lg btn3d" id="shift_end">Shift End</a></li>
 				  <li><a class="btn btn-default btn-lg btn3d" id="day_end">Day End</a></li>
-				  <li class="pull-right"><a class="btn btn-default btn-lg btn3d" id="apart_day_shift">Cash Reconcilation</a></li>
+				  <li class="pull-right"><a class="btn btn-default btn-lg btn3d apart_day_shift" id="details_button_tabs">Cash Reconcilation</a></li>
 			    </ul>
 			    <!--
 			    <ul class="pull-right nav nav-pills " role="tablist">
@@ -177,6 +254,7 @@
 		</div>
     </div>
 </div>
-
-<?php //require_once DIR.'/sales_register/views/paid_bills_table.php';?>
+<div id="login_holder_home" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <?php require_once DIR.'/login/views/index.php';?>
+</div><?php //require_once DIR.'/sales_register/views/paid_bills_table.php';?>
 <?php //require_once DIR.'/sales_register/views/modal_expense.php';?>
