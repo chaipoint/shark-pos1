@@ -171,6 +171,7 @@ function updateStore(){
 						    }
 
 							$updateArray[$i]['cd_doc_type'] = 'store_master';
+							$updateArray[$i]['address'] = $storeDetails['address'];
 							$updateArray[$i]['location']['id'] = $storeDetails['location_id'];
 							$updateArray[$i]['location']['name'] = $storeDetails['location_name'];
                             $updateArray[$i]['phone'][] = $updateArray[$i]['phone_1'];
@@ -245,15 +246,18 @@ function updateStore(){
 									}
                                 }
 
-                        	$getStaff = "SELECT ss.staff_id id, sm.name name, sm.title_id FROM store_staff ss
+                        	$getStaff = "SELECT ss.staff_id id, sm.code, sm.name name, sm.title_id, tm.name title_name  FROM store_staff ss
 										 LEFT JOIN staff_master sm ON sm.id = ss.staff_id 
-										 WHERE ss.store_id = '".$storeDetails['mysql_id']."' AND ss.active = 'Y' AND sm.active = 'Y'";
+										 LEFT JOIN title_master tm ON tm.id = sm.title_id 
+										 WHERE ss.store_id = '".$storeDetails['mysql_id']."' AND ss.active = 'Y' AND sm.active = 'Y' AND tm.active = 'Y'";
 							$staffList = mysql_query($getStaff);
 							$k = 0;
 							while ($row = mysql_fetch_assoc($staffList)) {
-								$updateArray[$i]['store_staff'][$k]['mysql_id'] = $row['id']; 
+								$updateArray[$i]['store_staff'][$k]['mysql_id'] = $row['id'];
+								$updateArray[$i]['store_staff'][$k]['code'] = $row['code']; 
 								$updateArray[$i]['store_staff'][$k]['name'] = $row['name'];
 								$updateArray[$i]['store_staff'][$k]['title_id'] = $row['title_id'];
+								$updateArray[$i]['store_staff'][$k]['title_name'] = $row['title_name'];
 								$k++;
 							}
 				
