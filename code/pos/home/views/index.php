@@ -79,11 +79,23 @@
 	</div>
 </div>
 
-<div class="panel panel-success" id="store_shift_logic">
+<script type="text/javascript" src="<?php echo (JS.'jquery.dataTables.js');?>"></script>
+<script type="text/javascript" src="<?php echo (JS.'dataTables.tableTools.js');?>"></script>
+<link rel="stylesheet" type="text/css" href="<?php echo (CSS.'ui-lightness/jquery-ui-1.8.20.custom.css'); ?>" />
+<link rel="stylesheet" href="<?php echo (CSS.'jquery.dataTables_themeroller.css');?>">
+
+<div class="panel panel-info" style="margin-left:20px;margin-right:20px;" id="store_shift_logic">
     <div class="panel-heading">
-      <h4 class="panel-title">Dashboard</h4>
+      <h4 class="panel-title">Home</h4>
   	</div>
-    <div class="panel-body">
+  	<div class="panel-body tabbable">
+        <ul class="nav nav-pills" role="tablist">
+        	<li class='active' id='hom'><a id='home_tab' href="javascript:void(0)">Home</a></li>
+        	<li id='sal'><a id='sales_tab' href="javascript:void(0)">Sales</a></li>
+        </ul>
+
+    		<div id="home_data">
+    			
     		<div class="col-lg-12">
 				<ul class="list-unstyled list-inline" role="tablist" id="shift_nav">
 				  <li><a class="btn btn-default btn-lg btn3d" id="day_start">Day Start</a></li>
@@ -252,7 +264,26 @@
 					</form>
 				</div>
 		</div>
-    </div>
+	</div>
+	
+	<div id="sales_data" class="hidden" style='margin-top:20px;'>
+		<!-- Split button -->
+		<div class="btn-group pull-right" style="margin-top:-55px;">
+  			<button type="button" class="btn btn-sm btn-info">Petty Expense</button>
+  			<button type="button" class="btn btn-sm btn-info dropdown-toggle" data-toggle="dropdown">
+    			<span class="caret"></span>
+    			<span class="sr-only">Toggle Dropdown</span>
+  			</button>
+  			<ul class="dropdown-menu" role="menu">
+    			<li><a href="#" id="add_expense">Add Expense</a></li>
+    			<li><a href="#" id="view_expense">View Expense</a></li>
+    			
+  			</ul>
+		</div>
+		<?php require_once DIR.'/sales_register/views/modal_expense.php';?>
+		<?php require_once DIR.'/sales_register/views/paid_bills_table.php';?>
+	</div>
+  </div>
 </div>
 <div id="login_holder_home" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
   <?php require_once DIR.'/login/views/index.php';?>
