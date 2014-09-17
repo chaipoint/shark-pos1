@@ -23,7 +23,6 @@ $(document).ready(function(){
 					switch(param[0]){
 						case 'home':
 							dataObj.validateFor = 'shift';
-							dataObj.mode = $('#shift_nav li.active a').attr('id');
 							break;
 						case 'sales_register':
 							dataObj.validateFor = 'sales_register';
@@ -34,21 +33,25 @@ $(document).ready(function(){
 					switch($(this).attr('id')){
 						case 'store_day_start_form':
 							dataObj.petty_cash = $(this).find("#petty_cash").val();	
+							dataObj.mode = 'day_start';
 							if((dataObj.petty_cash).trim() == ""){msg += "<li>Provide Petty Cash</li>";}
 							break;
 						case 'store_shift_start_form':
 							dataObj.counter_no = $('input#counter_no',this).val();
+							dataObj.mode = 'shift_start';
 							if((dataObj.counter_no).trim() == ""){msg += "<li>Provide Counter No</li>";}
 							break;						
 						case 'store_shift_end_form':
 							dataObj.petty_cash = $('input#petty_cash_end',this).val();
 							dataObj.box_cash = $('input#box_cash',this).val();
+							dataObj.mode = 'shift_end';
 							if((dataObj.petty_cash).trim() == ""){msg += "<li>Provide Petty Cash</li>";}
 							if((dataObj.box_cash).trim() == ""){msg += "<li>Provide Box Cash</li>";}
 							break;						
 						case 'store_day_end_form':
 							dataObj.box_cash = $('input#box_cash_end',this).val();
-							if((box_cash.counter_no).trim() == ""){msg += "<li>Provide Box Cash</li>";}
+							dataObj.mode = 'day_end';
+							if((dataObj.box_cash).trim() == ""){msg += "<li>Provide Box Cash</li>";}
 							break;
 					}					
 
@@ -65,7 +68,6 @@ $(document).ready(function(){
 
 					}).done(function(response) {
 						var $res =  $.parseJSON(response); //Parse result of response
-						console.log(response);
 						if($res.error){ //If Their Exists any problem in login then show errors
 							msg = $res.message; 
 							$("#error_message").show();$("#error_message ul").html(msg);
