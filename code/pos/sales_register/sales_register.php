@@ -64,13 +64,15 @@
 				return $resultExpenseList;
 		}
 		function getStaffList(){
-				require_once DIR.'/staff/staff.php';
-				$staff = new staff();
-				$staffList = $staff->getStaff();
-				$rows = $staffList['rows'];
+				$staffList = $this->cDB->getDesign('store')->getView('store_mysql_id')->setParam(array("include_docs"=>"true"))->execute();
+				$rows = $staffList['rows'][0]['doc']['store_staff'];
 				$staffList = array();
 				foreach($rows as $key => $value){
-					$staffList[$value['doc']['mysql_id']] = $value['doc']['name'] ;
+					$staffList[$value['mysql_id']]['mysql_id'] = $value['mysql_id'] ;
+					$staffList[$value['mysql_id']]['code'] = $value['code'] ;
+					$staffList[$value['mysql_id']]['name'] = $value['name'] ;
+					$staffList[$value['mysql_id']]['title_id'] = $value['title_id'] ;
+					$staffList[$value['mysql_id']]['title_name'] = $value['title_name'] ;
 				}
 				ksort($staffList);
 				return $staffList;
