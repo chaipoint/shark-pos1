@@ -13,6 +13,7 @@
 				  <li><a class="btn btn-default btn-lg btn3d" id="shift_start">Shift Start</a></li>
 				  <li><a class="btn btn-default btn-lg btn3d" id="shift_end">Shift End</a></li>
 				  <li><a class="btn btn-default btn-lg btn3d" id="day_end">Day End</a></li>
+				  <li class="pull-right"><a class="btn btn-default btn-lg btn3d" id="apart_day_shift">Cash Reconcilation</a></li>
 			    </ul>
 			    <!--
 			    <ul class="pull-right nav nav-pills " role="tablist">
