@@ -153,6 +153,9 @@
 
 						$result = $couch->saveDocument()->execute($_POST);
 						if(array_key_exists('ok', $result)){
+							$res = $this->printBill($_POST);
+			                $return['error'] = $res['error'];
+			                $return['message'] = $res['message'];
 							$return['data']['bill_no'] = $currentBillNo;
 						}
 					}else{
@@ -194,9 +197,6 @@
 				$return['message'] = 'Request Method Not Allowed';
 			}
 			$re = json_encode($return);
-			$this->printBill($_POST);
-			//file_put_contents('D:\printbill\bill.txt',json_encode($_POST),true);
-			//exec("D:\printbill\JSON PRINT.exe");
 			$this->log->trace("RESPONSE \r\n".$re);
 			return $re;
 		}
@@ -247,14 +247,19 @@
         
         function printBill($data){
         	$return = array('error'=>false,'message'=>'','data'=>array());
-				if(!empty($data)){
-        		file_put_contents('D:\printbill\bill.txt', json_encode($data));
-        		exec('D:\printbill\JSON PRINT.exe');
-        		$return['error'] = false;
-        		$return['message'] = 'Print Successfully';
+			if(!empty($data)){
+				$path = file_exists('D:\printbill\json1.exe');
+				if($path){
+					file_put_contents('D:\printbill\bill.txt', json_encode($data,true));
+        			exec($path,$output,$return_value) ;
+        			if($return_value==1){
+        				$return['message'] = 'Error In Printing! Please Contact Admin';
+        			}
+				}else{
+					$return['message'] = 'Print Utility Not Exists';
+				}
 			}else{
-				$return['error'] = True;
-        		$return['message'] = 'Please Provide Data';
+				 $return['message'] = 'Provide Printing Data';
 			}
 			return $return;
         }
