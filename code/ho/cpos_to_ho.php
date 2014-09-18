@@ -343,7 +343,7 @@ function updateConfig(){
         $count = count($idexplode);
         
         for ($j=0; $j < $count ; $j++){
-        	if($row['mode']=='ppc_api' || $row['mode']=='sms_api' || $row['mode']=='db_detail'){
+        	if($row['mode']=='ppc_api' || $row['mode']=='sms_api' || $row['mode']=='db_detail' || $row['mode']=='company_details'){
  				$updateArray[$row['mode']][$codeexplode[$j]] = $nameexplode[$j];
         	}else{
 		     $updateArray[$row['mode']][$idexplode[$j]] = $nameexplode[$j];
