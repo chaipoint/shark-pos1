@@ -1,7 +1,4 @@
 <?php	
-	if(!array_key_exists('shift', $_SESSION['user'])){
-		header("LOCATION:index.php");
-	}
 	class Billing extends App_config{
 		private $cDB;
 		private $configData;
@@ -14,6 +11,9 @@
 			$this->configData = (count($configResult['data']) > 0) ? $configResult['data'] : array();
 		}
 		function index(){
+			if(!array_key_exists('shift', $_SESSION['user'])){
+				header("LOCATION:index.php");
+			}
 			//Block to get Configs and need to have a generic methode for that
 			$data = array('error' => false,'catList'=>array(),'productList'=>array(),'firstCat'=>0, 'config_data'=>array(),'bill'=>array(),'lastBillNo'=>'','lastBillTime'=>'');
 			$resultJSON = $this->cDB->getDesign('store')->getView('store_mysql_id')->setParam(array('include_docs'=>'true',"key"=>'"'.$_SESSION['user']['store']['id'].'"'))->execute();
@@ -204,7 +204,6 @@
 
 		public function getTodaysSale(){
 			$return = array('error'=>false,'message'=>'','data'=>array());
-			if($_SERVER['REQUEST_METHOD'] == 'POST'){
 				$bills = $this->cDB->getDesign('billing')->getList('todays_sale','handle_updated_bills')->setParam(array("descending"=>"true","include_docs"=>"true","endkey"=>'["'.$this->getcDate().'"]'))->execute();
 				$bill_array = array();
 				if(array_key_exists('error', $bills)){
@@ -215,10 +214,6 @@
 					$return['data']['summary'] = $bills;
 					$return['data']['payment_type'] = $payment_type;
 				}
-			}else{
-				$return['error'] = true;
-				$return['message'] = 'Request Method Not Allowed';
-			}
 			return json_encode($return);
 		}
 

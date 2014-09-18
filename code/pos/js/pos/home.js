@@ -1,4 +1,5 @@
 var keyboard = new Array();
+var resData = '';
 $(document).ready(function(){	
 	
 	if(is_store_open){
@@ -29,6 +30,8 @@ $(document).ready(function(){
 	keyboard.push($('input[name="identity"],input[name="password"],#petty_cash, #counter_no, #petty_cash_end, #box_cash, #box_cash_end').cKeyboard());
 	
 	$('#login_holder_home div#error_message').attr('id','error_message_modal');
+	resData = $("#wrapper_restricted").html();
+	$("#wrapper_restricted").html('');
 	$('#details_button_tabs').click(function(){
 		$("#error_message_modal").hide();
 		$('#login_holder_home').modal('show');
@@ -52,7 +55,9 @@ $('#home_tab').click(function(){
 
 });
 function CashRHandleResponse(){
-
+	$('#login_holder_home').modal('hide');
+	$("#wrapper_restricted").html(resData);
+	$("#wrapper_restricted").show();
 }
 function staffHandleResponse(response){
 
