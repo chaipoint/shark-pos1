@@ -130,6 +130,7 @@ $(document).ready(function(){
 		});
 
 		//---END--- Event For Product Selection
+		/* Function For Re-Print */
 		$('#print-can').on('click', function(event){
 			event.preventDefault();
 			if(modifyBill){
@@ -144,9 +145,13 @@ $(document).ready(function(){
 						if(response.error){
 							bootbox.alert(response.message);
 						}else{
+							if(response.message!=''){		
 							bootbox.alert(response.message,function(){
 							window.location = "?dispatch=sales_register";													
-						});
+							});
+							}else{
+							window.location = "?dispatch=sales_register";
+							}
 						}
 						});
 				}
@@ -447,7 +452,13 @@ $(document).ready(function(){
 					bootbox.alert(result.message);
 				}else{
 					$('#payModal').modal('hide');
+					if(result.message!=''){
+						bootbox.alert(result.message, function(){
+							window.location.reload(true);
+						});
+					}else{
 					window.location.reload(true);
+					}
 					//bootbox.alert('Bill Successfully Saved');
 					//<a class="label label-primary print-bill-today" href="billprint.php?bill_no='+result.data.bill_no+'" target="_blank">Print</a>
 					resetBill(true);	
