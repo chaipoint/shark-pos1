@@ -248,9 +248,10 @@
         function printBill($data){
         	$return = array('error'=>false,'message'=>'','data'=>array());
 			if(!empty($data)){
-				$path = file_exists('D:\printbill\json1.exe');
-				if($path){
-					file_put_contents('D:\printbill\bill.txt', json_encode($data,true));
+				$path = 'D:\utility\json1.exe';
+				$check = file_exists($path);
+				if($check){
+					file_put_contents('D:\utility\bill.txt', json_encode($data,true));
         			exec($path,$output,$return_value) ;
         			if($return_value==1){
         				$return['message'] = 'Error In Printing! Please Contact Admin';
