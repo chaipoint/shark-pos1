@@ -9,8 +9,12 @@
 		public function index(){
 			$result = $this->cDB->getDesign('store')->getView('store_shift')->setParam(array('key'=>'"'.$this->getCDate().'"','include_docs'=>'true'))->execute();
 			$data = array();
+			
 			require_once DIR.'/sales_register/sales_register.php';
+			require_once DIR.'/billing/billing.php';
 			$sr = new sales_register();
+			$bl = new billing();
+
 			$data = $sr->getBills($this->getCDate());
 			$data['is_store_open'] = 'false';
 			$data['is_shift_running'] = 'false';
@@ -27,6 +31,8 @@
 					}
 				}
 			}
+			$todaysale = json_decode($bl->getTodaysSale(),true);
+			$data['payment_sum'] = (!$todaysale['error']) ? $todaysale['data'] : array();
 			$data['shift_data'] = $result;
 			$data['staff_list'] = $sr->getStaffList();
 			$data['total_shift'] = $totalShifts;
@@ -34,6 +40,7 @@
 			$data['head_data'] = $configHead['data']['head'];
 			$data['expense_data'] = $sr->getExpenseData($this->getCDate());
 
+			//print_r($data['payment_sum']);
 			$this->commonView('header_html');
 			$this->commonView('navbar');
 			$this->view($data);			

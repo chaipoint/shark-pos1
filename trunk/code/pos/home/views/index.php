@@ -1,9 +1,9 @@
 <script>var is_store_open = <?php echo $is_store_open; ?>;</script>
 <script>var is_shift_running = <?php echo $is_shift_running; ?>;</script>
 <script src="<?php echo JS;?>pos/home.js"></script>
-<div class="">
+<div id="wrapper_restricted" style="display:none;">
 	<div class="">
-		<div class="panel panel-success" id="sthift_trace_panel">
+		<div class="panel panel-success" id="sthift_trace_panel" style="margin-left:20px;margin-right:20px;">
     		<div class="panel-heading">
       			<h4 class="panel-title">Shift Data</h4>
   			</div>
@@ -24,7 +24,7 @@
     				</thead>
     				<tbody>
     					
-    						<?php $display = '';if(count($shift_data['rows'])){
+    						<?php $display = ''; $excess = ""; if(count($shift_data['rows'])){
 								$shifts = $shift_data['rows'][0]['doc']['shift'];
     							$total = count($shifts);
     							$day = $shift_data['rows'][0]['doc']['day'];
@@ -42,7 +42,8 @@
 			    						</tr>
 								';
 								foreach($shifts as $key => $values){
-									$closing_cash = (($day['start_cash'] + $values['petty_cash_balance']['opening_petty_cash'])
+									$excess .= '<tr><td>Shift '.$values['shift_no'].' Excess Cash</td><td>'.($values['petty_cash_balance']['closing_petty_cash'] - $values['end_petty_cash']).'</td></tr>';
+									$closing_cash = (( $values['petty_cash_balance']['opening_petty_cash'])
 				    								+($day['petty_cash_balance']['inward_petty_cash'] + $values['petty_cash_balance']['inward_petty_cash']) 
 													-($day['petty_cash_balance']['petty_expense'] + $values['petty_cash_balance']['petty_expense']) 
 				    								);
@@ -50,7 +51,7 @@
 				    						<td>Shift '.$values['shift_no'].'</td>
 				    						<td>'.$values['petty_cash_balance']['opening_petty_cash'].'</td>
 				    						<td>'.$values['petty_cash_balance']['inward_petty_cash'].'</td>
-				    						<td>'.$values['petty_cash_balance']['inward_petty_cash'].'</td>
+				    						<td>'.$values['petty_cash_balance']['petty_expense'].'</td>
 				    						<td>'.$values['end_petty_cash'].'</td>
 				    						<td>'.$values['end_cash_inbox'].'</td>
 				    						<td>'.$closing_cash
@@ -69,11 +70,27 @@
     	</div>
 	</div>
 	<div class="">
-		<div class="panel panel-success" id="cash_reconcilation_panel">
+		<div class="panel panel-success" id="cash_reconcilation_panel" style="margin-left:20px;margin-right:20px;">
     		<div class="panel-heading">
       			<h4 class="panel-title">Cash Reconciliation</h4>
   			</div>
     		<div class="panel-body">
+    			<table class="table">
+    				<tbody>
+    					<?php 
+    						$display = '';
+    						foreach($payment_type['amount'] as $pKey => $pValue){
+	    						$display .= '<tr><td>'.$pKey.'</td><td>'.$pValue.'</td></tr>';
+    						}
+    						echo $display.$excess;
+
+    					?>
+    				</tbody>
+<!--    				<tfoot>
+    					<tr><th>Total</th><th></th></tr>
+    				</tfoot>-->
+    			</table>
+
     		</div>
     	</div>
 	</div>

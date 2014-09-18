@@ -16,9 +16,9 @@ class Database{
 	{
 		global $sql_host,$sql_user,$sql_password,$sql_db;
 
-		self::$m_pInstance = mysql_connect($sql_host, $sql_user, $sql_password, false, MYSQL_CLIENT_INTERACTIVE);
+		self::$m_pInstance = @mysql_connect($sql_host, $sql_user, $sql_password, false, MYSQL_CLIENT_INTERACTIVE);
 
-		mysql_select_db($sql_db) || die("Could not connect to SQL db");
+		mysql_select_db($sql_db);
 	}
 
 	/**

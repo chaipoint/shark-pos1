@@ -7,6 +7,8 @@ $(document).ready(function(){
 			$("#error_message_modal").hide(); //Hide Error Message Block on Load of Content
 			//console.log($("#username","#loginform"));
 			$("#loginform, .store_shift").submit(function(event){
+				$("#error_message").hide();
+				$("#error_message_modal").hide();
 				var form = $(this);
 				var url = $.url();
 				var param = url.param('dispatch') ? url.param('dispatch').split('.') : '.';
@@ -61,8 +63,11 @@ $(document).ready(function(){
 					}					
 
 				if(msg){
-					$("#error_message").show();
-					$("#error_message ul").html(msg);
+					if(dataObj.validateFor == 'cash_reconciliation'){
+						$("#error_message_modal").show();$("#error_message_modal ul").html(msg);
+					}else{
+						$("#error_message").show();$("#error_message ul").html(msg);
+					}
 				}else{
 					$("#error_message").hide();
 					$("#error_message ul").html("");
