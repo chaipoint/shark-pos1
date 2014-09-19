@@ -274,3 +274,10 @@ if(is_array($data) && count($data)>0) {
 <div id="login_holder" class="modal fade" id="sync-modal" tabindex="-1" role="dialog" aria-hidden="true">
   <?php require_once DIR.'/login/views/index.php';?>
 </div>
+<script>
+var oTable = null;
+var footerRow = [3,4,5,6];
+var media_path = "<?php echo JS;?>";
+//oTable = createDataTable(media_path,'active_bill_table',footerRow);
+oTable = createDataTable(media_path,'cancel_bill_table',footerRow);
+</script>
