@@ -85,7 +85,7 @@ if(is_array($data) && count($data)>0) {
                </a>-->
                 <?php if(empty($_GET['sales_reg_search']) || (!empty($_GET['sales_reg_search']) && $_GET['sales_reg_search']==date('d-F-Y'))) { ?>
                  <a class="tip btn btn-warning btn-xs edit-bill text-center" style="width:25px;" title="Cancel Bill" href="<?php echo URL;?>?dispatch=billing&bill_no=<?php echo $value['_id']; ?>&bill=<?php echo $value['bill_no']; ?>&referer=<?php echo MODULE;?>">
-  		              C
+  		              M
   		           </a>
                <?php  
                 if($value['bill_status'] == "CoD") {
@@ -118,21 +118,21 @@ if(is_array($data) && count($data)>0) {
    <?php if(MODULE == 'sales_register'){?>
    <tfoot>
         <tr class="text-right">
-          <th style="font-size:12px;">Total</td>
+          <th style="font-size:11px;"><strong>Total</strong></td>
           <th></th>
           <th></th>
-          <th class="text-right" style="font-size:12px;"></th>
-          <th class="text-right" style="font-size:12px;"></th>
-          <th class="text-right" style="font-size:12px;"></th>
-          <th class="text-right" style="font-size:12px;"></th>
-          <th></th>
-          <th></th>
-          <th></th>
+          <th class="text-right" style="font-size:11px;"></th>
+          <th class="text-right" style="font-size:11px;"></th>
+          <th class="text-right" style="font-size:11px;"></th>
+          <th class="text-right" style="font-size:11px;"></th>
           <th></th>
           <th></th>
           <th></th>
-          <th style="font-size:12px;">Avg Bill Value</th>
-          <th class="text-right" style="font-size:12px;"><?php echo ($counter!=0 ? number_format($due_amount/$counter,2) : 0);?></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th style="font-size:11px;">Avg Bill Value</th>
+          <th class="text-right" style="font-size:11px;"><?php echo ($counter!=0 ? number_format($due_amount/$counter,2) : 0);?></th>
            
         </tr> 
       </tfoot>
@@ -146,5 +146,5 @@ var oTable = null;
 var footerRow = [3,4,5,6];
 var media_path = "<?php echo JS;?>";
 oTable = createDataTable(media_path,'active_bill_table',footerRow);
-oTable = createDataTable(media_path,'cancel_bill_table',footerRow);
+
 </script>
