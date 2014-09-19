@@ -285,15 +285,29 @@
 	
 	<div id="sales_data" class="hidden" style='margin-top:20px;'>
 		<!-- Split button -->
-		<div class="btn-group pull-right" style="margin-top:-55px;">
-  			<button type="button" class="btn btn-sm btn-info">Petty Expense</button>
-  			<button type="button" class="btn btn-sm btn-info dropdown-toggle" data-toggle="dropdown">
+		<div class="btn-group pull-right" style="margin-top:-55px;margin-right:120px;">
+  			<button type="button" class="btn btn-sm btn-info"><strong>Petty Expense</strong></button>
+  			<button type="button" class="btn btn-sm btn-info dropdown-toggle" data-toggle="dropdown"  style="margin-right:10px;">
     			<span class="caret"></span>
     			<span class="sr-only">Toggle Dropdown</span>
   			</button>
   			<ul class="dropdown-menu" role="menu">
     			<li><a href="#" id="add_expense">Add Expense</a></li>
     			<li><a href="#" id="view_expense">View Expense</a></li>
+    			
+  			</ul>
+
+  			
+		</div>
+		<div class="btn-group pull-right" style="margin-top:-55px;">
+			<button type="button" class="btn btn-sm btn-success"><strong>Petty Inward</strong></button>
+  			<button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown">
+    			<span class="caret"></span>
+    			<span class="sr-only">Toggle Dropdown</span>
+  			</button>
+  			<ul class="dropdown-menu" role="menu">
+    			<li><a href="#" id="add_inward">Add Inward</a></li>
+    			<!-- <li><a href="#" id="view_inward">View Inward</a></li> -->
     			
   			</ul>
 		</div>
@@ -304,5 +318,5 @@
 </div>
 <div id="login_holder_home" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
   <?php require_once DIR.'/login/views/index.php';?>
-</div><?php //require_once DIR.'/sales_register/views/paid_bills_table.php';?>
+</div><?php require_once 'modal_inward.php';?>
 <?php //require_once DIR.'/sales_register/views/modal_expense.php';?>
