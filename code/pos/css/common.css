@@ -14,14 +14,14 @@ color: black !important;
 }
 
 table.dataTable th {
-font-size: 12px;
+font-size: 10px;
 font-weight: bold;
 padding: 3px 2px;
 	
 } 
 
 .dataTable td {
-font-size: 13px;
+font-size: 11px;
 }
 
 .smallstat {
