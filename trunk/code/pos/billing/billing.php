@@ -7,7 +7,7 @@
 			global $couch;
 			$this->cDB = $couch;
 			$this->log =  Logger::getLogger("CP-POS|BILLING");
-			$configResult = $this->getConfig($this->cDB, array('channel','bill_status',"payment_mode", 'delivery_channel'));
+			$configResult = $this->getConfig($this->cDB, array('channel','bill_status','payment_mode', 'delivery_channel','company_details'));
 			$this->configData = (count($configResult['data']) > 0) ? $configResult['data'] : array();
 		}
 		function index(){
@@ -247,10 +247,14 @@
         
         function printBill($data){
         	$return = array('error'=>false,'message'=>'','data'=>array());
-			if(!empty($data)){
+        	$company_data = array();
+			$company_data = $this->configData['company_details'];
+
+			if(!empty($data) && !empty($company_data) ){
 				$path = 'D:\utility\json1.exe';
 				$check = file_exists($path);
 				if($check){
+					file_put_contents('D:\utility\company.txt', json_encode($company_data,true));
 					file_put_contents('D:\utility\bill.txt', json_encode($data,true));
         			exec($path,$output,$return_value) ;
         			if($return_value==1){
