@@ -53,6 +53,53 @@ $('#home_tab').click(function(){
 		
 	});
 
+	/* Function To Add Prety Inward */
+	$('#add_inward').click(function(event){
+		event.preventDefault();
+		$('#addInwardModal').modal();
+		$('#inward_amount').val('');
+		$('#inward_amount').cKeyboard();
+		setTimeout(function(){
+			$('#inward_amount').focus();				
+		},500);
+
+	});
+
+/* Function To View Prety Expense */
+	$('#view_inward').click(function(event){
+		event.preventDefault();
+		$('#viewInwardModal').modal();
+	});
+		
+	$('.close-model').click(function(){
+		$("div.ui-keyboard").hide();
+	});
+
+	/* Function To Save Petty Inward */
+	$('#add-inward-form').on('submit', function(event){
+		event.preventDefault();
+        $('#add-inward-form').bootstrapValidator();
+		var data = $('form#add-inward-form').serializeArray();
+		console.log(data);
+		$.ajax({
+				type: 'POST',
+				url: "index.php?dispatch=home.save",
+		  		data : data ,
+			 }).done(function(response) {
+				console.log(response);
+				result = $.parseJSON(response);
+				if(result.error){
+					bootbox.alert(result.message);
+				}else{
+					$('#addInwardModal').modal('hide');
+					bootbox.alert('Inward Successfully Saved');
+					window.location.reload(true);
+				}
+			});
+
+	});
+
+
 });
 function CashRHandleResponse(){
 	$('#login_holder_home').modal('hide');
