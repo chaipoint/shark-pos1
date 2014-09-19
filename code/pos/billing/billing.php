@@ -251,11 +251,11 @@
 			$company_data = $this->configData['company_details'];
 
 			if(!empty($data) && !empty($company_data) ){
-				$path = 'D:\utility\json1.exe';
+				$path = 'D:\utility\printBill.exe';
 				$check = file_exists($path);
 				if($check){
-					file_put_contents('D:\utility\company.txt', json_encode($company_data,true));
-					file_put_contents('D:\utility\bill.txt', json_encode($data,true));
+					file_put_contents('C:\BillJson\company.txt', json_encode($company_data,true));
+					file_put_contents('C:\BillJson\bill.txt', json_encode($data,true));
         			exec($path,$output,$return_value) ;
         			if($return_value==1){
         				$return['message'] = 'Error In Printing! Please Contact Admin';
