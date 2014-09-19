@@ -351,6 +351,7 @@ $.fn.cKeyboard = function(){
 				case '#petty_cash_end':
 				case '#box_cash':
 				case '#box_cash_end':
+				case '#inward_amount':
 					options.layout = 'caustom';
 					options.customLayout = {
 							'default':['0 1 2 3 4','5 6 7 8 9','{clear} {bksp} {accept} {cancel}']
