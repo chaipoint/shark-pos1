@@ -170,7 +170,7 @@
         <div class="panel-body">
           <table id="cancel_bill_table" class="table table-striped table-bordered table-condensed table-hover" style="margin-bottom:5px;">
            <thead>
-              <tr id="filter_row11">
+              <tr id="filter_cancel">
                 <th></th>
                 <th></th>
                 <th></th>
@@ -277,7 +277,7 @@ if(is_array($data) && count($data)>0) {
 <script>
 var oTable = null;
 var footerRow = [3,4,5,6];
+var filteRow = 'filter_cancel';
 var media_path = "<?php echo JS;?>";
-//oTable = createDataTable(media_path,'active_bill_table',footerRow);
-oTable = createDataTable(media_path,'cancel_bill_table',footerRow);
+oTable = createDataTable(media_path,'cancel_bill_table',footerRow,filteRow);
 </script>
