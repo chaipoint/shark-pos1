@@ -78,7 +78,7 @@ $(document).ready(function(){
 		});
 });
 
-var createDataTable = function (path,table,footerRow,filterRow) { alert(filterRow); 
+var createDataTable = function (path,table,footerRow,filterRow) { //alert(filterRow); 
     var media_path = path;
     var iDisplay = 25;
     var oTable=null;
