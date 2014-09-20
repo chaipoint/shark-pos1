@@ -493,19 +493,19 @@ $(document).ready(function(){
 								'<td>'+(parseFloat(data.price)).toFixed(2)+'</td>'+
 								'<td>'+(parseFloat(data.priceBT)).toFixed(2)+'</td>'+
 								'<td>'+data.qty+'</td>'+
-								'<td>'+((parseFloat(data.priceBT)) * data.qty).toFixed(2)+'</td>'+
-								'<td>'+(parseFloat(data.discountAmount) * data.qty).toFixed(2)+'</td>'+
-								'<td>'+(parseFloat(data.taxAbleAmount) * data.qty).toFixed(2)+'</td>'+
+								'<td>'+((parseFloat(data.subtotal))).toFixed(2)+'</td>'+
+								'<td>'+(parseFloat(data.discountAmount)).toFixed(2)+'</td>'+
+								'<td>'+(parseFloat(data.priceAD)).toFixed(2)+'</td>'+
 								'<td>'+(((data.tax) ? data.tax : 0) * 100).toFixed(2)+'</td>'+
-								'<td>'+(parseFloat(data.taxAmount) * data.qty).toFixed(2)+'</td>'+
+								'<td>'+(parseFloat(data.taxAmount)).toFixed(2)+'</td>'+
 								'<td>'+(parseFloat(data.netAmount)).toFixed(2)+'</td>'+
 							'</tr>';
 							qty += parseInt(data.qty);
 							netAmount += data.netAmount;
-							taxAmount += (data.taxAmount  * data.qty);
-							discountAmount += (data.discountAmount * data.qty);
-							subTotalSum += ((parseFloat(data.priceBT)) * data.qty);
-							priceAfterDiscount += (parseFloat(data.taxAbleAmount) * data.qty);
+							taxAmount += (data.taxAmount);
+							discountAmount += (data.discountAmount);
+							subTotalSum += ((parseFloat(data.subtotal)));
+							priceAfterDiscount += (parseFloat(data.priceAD));
 			});
 			$viewData += '</tbody>'+
 						'<tfoot><tr class="active"><th>Total</th><th></th><th></th><th class="text-right">'+qty+'</th><th class="text-right">'+subTotalSum.toFixed(2)+'</th><th class="text-right">'+(discountAmount).toFixed(2)+'</th><th class="text-right">'+(priceAfterDiscount).toFixed(2)+'</th><th></th><th class="text-right">'+(taxAmount).toFixed(2)+'</th><th class="text-right">'+(netAmount).toFixed(2)+'</th></tr></tfoot>'
