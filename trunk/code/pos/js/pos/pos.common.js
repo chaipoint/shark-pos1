@@ -78,7 +78,7 @@ $(document).ready(function(){
 		});
 });
 
-var createDataTable = function (path,table,footerRow) {  
+var createDataTable = function (path,table,footerRow,filterRow) { alert(filterRow); 
     var media_path = path;
     var iDisplay = 25;
     var oTable=null;
@@ -142,7 +142,8 @@ var createDataTable = function (path,table,footerRow) {
 			"iDisplayLength" : iDisplay,
 			"bSort": true,
 		});
-		$("#filter_row th").each( function ( i ) {				
+		if(filterRow!=undefined){
+			$("#"+filterRow+" th").each( function ( i ) {				
 					if(i==7 || i==8 || i==9 || i==10 || i==11 || i==12 || i==13)
 					{
 					var select = $('<select style="width:90%;"><option value=""></option></select>')
@@ -157,7 +158,8 @@ var createDataTable = function (path,table,footerRow) {
 						select.append( '<option value="'+d+'">'+d+'</option>' )
 					} );
 					}
-				});
+			});
+		}
 }
 
 $(document).on('keydown.autocomplete', ".autocomplete", autocomplete);
