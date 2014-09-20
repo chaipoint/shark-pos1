@@ -107,11 +107,17 @@
   	</div>
   	<div class="panel-body tabbable">
         <ul class="nav nav-pills" role="tablist">
-        	<li class='active' id='hom'><a id='home_tab' href="javascript:void(0)">Home</a></li>
-        	<li id='sal'><a id='sales_tab' href="javascript:void(0)">Sales</a></li>
+        	<li class='active'><a id='home_tab' class="home_tabs" href="javascript:void(0)">Home</a></li>
+        	<li><a id='sales_tab' class="home_tabs" href="javascript:void(0)">Sales</a></li>
+        	<li><a id='shift_data_tab' class="home_tabs" href="javascript:void(0)">Shift Data</a></li>
+        	<li><a id='cash_reconciliation_tab' class="home_tabs" href="javascript:void(0)">Cash Reconcilition</a></li>
         </ul>
+    		<div id="shift_data_tab_data" class="tabs_data hidden">
+			</div>
+    		<div id="cash_reconciliation_tab_data" class="tabs_data hidden">
+			</div>
 
-    		<div id="home_data">
+    		<div id="home_tab_data" class="tabs_data">
     			
     		<div class="col-lg-12">
 				<ul class="list-unstyled list-inline" role="tablist" id="shift_nav">
@@ -121,24 +127,8 @@
 				  <li><a class="btn btn-default btn-lg btn3d" id="day_end">Day End</a></li>
 				  <li class="pull-right"><a class="btn btn-default btn-lg btn3d apart_day_shift" id="details_button_tabs">Cash Reconcilation</a></li>
 			    </ul>
-			    <!--
-			    <ul class="pull-right nav nav-pills " role="tablist">
-			    	<li class="active">
-			    		<a class="" id="pe_tg" data-toggle="dropdown">Petty Expence</a>
-
-            			<ul class="dropdown-menu" role="menu">
-            				<li><a href='#' id="add_expense">Add Expense</a></li>
-            				<li><a href='#' id="view_expense">View Expense</a></li>
-          				</ul>
-			    	</li>
-			    </ul>-->
 			</div>
 		<div class="col-lg-12 padded">
-		    	<!--<div class="col-lg-12">
-    				<div class="alert alert-warning" id="store_shift_message">Store is Closed.</div>
-    				<span class="hidden" id="shift_count"><?php echo $total_shift;?></span>
-    				<span class="hidden" id="shift_starter"><?php echo $shift_starter;?></span>
-				</div>-->
 				<div class="col-lg-6 col-md-5 col-sm-6">
 					<ul class="list-unstyled">
 						<?php if(array_key_exists('rows', $shift_data) && count($shift_data['rows']) > 0) {?>
@@ -283,7 +273,7 @@
 		</div>
 	</div>
 	
-	<div id="sales_data" class="hidden" style='margin-top:20px;'>
+	<div id="sales_tab_data" class="tabs_data hidden" style='margin-top:20px;'>
 		<!-- Split button -->
 		<div class="btn-group pull-right" style="margin-top:-55px;margin-right:120px;">
   			<button type="button" class="btn btn-sm btn-info"><strong>Petty Expense</strong></button>
