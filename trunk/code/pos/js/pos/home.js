@@ -37,21 +37,25 @@ $(document).ready(function(){
 		$('#login_holder_home').modal('show');
 	});
 
-$('#home_tab').click(function(){
-		$('#hom').addClass('active');
-		$('#sal').removeClass('active');
-		$('#home_data').removeClass('hidden');
-		$('#sales_data').addClass('hidden');
-		
-	});
 
-	$('#sales_tab').click(function(){
-		$('#hom').removeClass('active');
-		$('#sal').addClass('active');
-		$('#home_data').addClass('hidden');
-		$('#sales_data').removeClass('hidden');
-		
-	});
+
+
+
+$('.home_tabs').click(function(){
+	var active = $('li.active',$(this).closest('ul'));
+	var eClass = $(this).attr('class');
+	var id = $(this).attr('id');
+	console.log(eClass);
+	if( eClass == 'home_tabs remove'){
+		$('#'+id+'_data').html('');
+		$('#cash_reconciliation_tab').addClass('remove');
+	}
+	active.removeClass('active');
+	$(this).parent().addClass('active');
+	$('.tabs_data').addClass('hidden');
+	$('#'+$(this).attr('id')+'_data').removeClass('hidden');
+
+});
 
 	/* Function To Add Prety Inward */
 	$('#add_inward').click(function(event){
@@ -101,10 +105,12 @@ $('#home_tab').click(function(){
 
 
 });
-function CashRHandleResponse(){
+function CashRHandleResponse(response){
 	$('#login_holder_home').modal('hide');
-	$("#wrapper_restricted").html(resData);
-	$("#wrapper_restricted").show();
+	$('#shift_data_tab').trigger('click');
+	$('#shift_data_tab').addClass('remove');
+	$('#shift_data_tab_data').html(response.data.shift_table);
+	$('#cash_reconciliation_tab_data').html(response.data.cash_reconciliation_table);
 }
 function staffHandleResponse(response){
 

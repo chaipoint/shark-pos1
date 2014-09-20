@@ -69,10 +69,10 @@
 				$staffList = array();
 				foreach($rows as $key => $value){
 					$staffList[$value['mysql_id']]['mysql_id'] = $value['mysql_id'] ;
-					$staffList[$value['mysql_id']]['code'] = $value['code'] ;
+					$staffList[$value['mysql_id']]['code'] = @$value['code'] ;
 					$staffList[$value['mysql_id']]['name'] = $value['name'] ;
 					$staffList[$value['mysql_id']]['title_id'] = $value['title_id'] ;
-					$staffList[$value['mysql_id']]['title_name'] = $value['title_name'] ;
+					$staffList[$value['mysql_id']]['title_name'] = @$value['title_name'] ;
 				}
 				ksort($staffList);
 				return $staffList;
@@ -89,6 +89,7 @@
 				$this->log->trace("DATA \r\n".json_encode($_POST));
                 $_POST['cd_doc_type'] = 'petty_expense';
 				$_POST['expense_time'] = $this->getCTime();
+				$_POST['shift_no'] = $_SESSION['user']['shift'];
 				$result = $couch->saveDocument()->execute($_POST);
 				if(array_key_exists('error', $result)){
 					$return['error'] = true;
