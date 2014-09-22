@@ -29,12 +29,7 @@ $(document).ready(function(){
 	keyboard.push($('input[name="identity"],input[name="password"],#petty_cash, #counter_no, #petty_cash_end, #box_cash, #box_cash_end').cKeyboard());
 	
 	$('#login_holder_home div#error_message').attr('id','error_message_modal');
-	resData = $("#wrapper_restricted").html();
-	$("#wrapper_restricted").html('');
-	$('#details_button_tabs').click(function(){
-		$("#error_message_modal").hide();
-		$('#login_holder_home').modal('show');
-	});
+
 
 
 
@@ -42,24 +37,15 @@ $(document).ready(function(){
 
 $('#tab_selection_menu').on('click','.home_tabs',function(){
 	var active = $('li.active',$(this).closest('ul'));
-	var eClass = active.attr('class');
-	var id = active.attr('id');
-	console.log(id);	
-	switch($(this).attr('id')){
-		case 'shift_data_tab':
-			$('#'+id+'_data').html('');
-			$('#'+id).closest('li').remove();
-			break;
-		case 'cash_reconciliation_tab':
-			$('#'+id+'_data').html('');
-			$('#'+id).closest('li').remove();
-			break;
-	}
 	active.removeClass('active');
 	$(this).parent().addClass('active');
 	$('.tabs_data').addClass('hidden');
-	$('#'+$(this).attr('id')+'_data').removeClass('hidden');
-
+	var thisId = $(this).attr('id');
+	$('#'+thisId+'_data').removeClass('hidden');
+	if(($('#'+thisId+'_data').html()).trim() == ''){
+		$("#error_message_modal").hide();
+		$('#login_holder_home').modal('show');
+	}
 });
 
 	/* Function To Add Prety Inward */
@@ -111,11 +97,8 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 
 });
 function CashRHandleResponse(response){
-	$("#tab_selection_menu").append('<li><a id="shift_data_tab" class="home_tabs" href="javascript:void(0)">Shift Data</a></li><li><a id="cash_reconciliation_tab" class="home_tabs" href="javascript:void(0)">Cash Reconcilition</a></li>');
 	$('#login_holder_home').modal('hide');
-	$('#shift_data_tab').trigger('click');
-	$('#shift_data_tab_data').html(response.data.shift_table);
-	$('#cash_reconciliation_tab_data').html(response.data.cash_reconciliation_table);
+	$('#shift_data_tab_data').html(response.data.shift_table+response.data.cash_reconciliation_table);
 }
 function staffHandleResponse(response){
 

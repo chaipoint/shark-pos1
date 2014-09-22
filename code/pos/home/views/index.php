@@ -15,14 +15,12 @@
         <ul id="tab_selection_menu"class="nav nav-pills" role="tablist">
         	<li class='active'><a id='home_tab' class="home_tabs" href="javascript:void(0)">Home</a></li>
         	<li><a id='sales_tab' class="home_tabs" href="javascript:void(0)">Sales</a></li>
-
-<!--        	<li><a id='shift_data_tab' class="home_tabs" href="javascript:void(0)">Shift Data</a></li>
-        	<li><a id='cash_reconciliation_tab' class="home_tabs" href="javascript:void(0)">Cash Reconcilition</a></li>
-        -->
+			<li><a id='shift_data_tab' class="home_tabs" href="javascript:void(0)">Shift Data</a></li>
         </ul>
     		<div id="shift_data_tab_data" class="tabs_data hidden">
-			</div>
-    		<div id="cash_reconciliation_tab_data" class="tabs_data hidden">
+    			<?php
+    				echo $shift.$reconcilation;
+    			?> 
 			</div>
 
     		<div id="home_tab_data" class="tabs_data">
@@ -33,7 +31,6 @@
 				  <li><a class="btn btn-default btn-lg btn3d" id="shift_start">Shift Start</a></li>
 				  <li><a class="btn btn-default btn-lg btn3d" id="shift_end">Shift End</a></li>
 				  <li><a class="btn btn-default btn-lg btn3d" id="day_end">Day End</a></li>
-				  <li class="pull-right"><a class="btn btn-default btn-lg btn3d apart_day_shift" id="details_button_tabs">Cash Reconcilation</a></li>
 			    </ul>
 			</div>
 		<div class="col-lg-12 padded">

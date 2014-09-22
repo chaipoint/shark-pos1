@@ -78,61 +78,9 @@
 								switch($staffList[$result['data']['mysql_id']]['title_id']){
 									case 4:
 									case 6:
-										require_once DIR.'/billing/billing.php';
-										$bl = new billing();
-										$todaysale = json_decode($bl->getTodaysSale(),true);
-										$sales_reg = $sr->getBills($this->getCDate());
-
-										$shift_data = $this->cDB->getDesign('store')->getView('store_shift')->setParam(array('key'=>'"'.$this->getCDate().'"','include_docs'=>'true'))->execute();
-										$excess = "";
-										$tablesShiftData = '<div class="panel panel-success"><div class="panel-heading"><h4 class="panel-title">Shift Data</h4></div><div class="panel-body"><table class="table">
-																<thead><tr><th>Event</th><th>Petty Cash</th><th>Petty Cash Inward</th><th> Petty Cash Variance</th><th>Shift End Petty Cash</th><th>Shift End (Cash in the box)</th><th>Expected Closing Cash</th><th>Excess Cash</th><th>Expected Cash in the Box</th><th>Sales Cash Variance</th></tr></thead>
-    															<tbody>';
-    						 			if(count($shift_data['rows'])){
-											$shifts = $shift_data['rows'][0]['doc']['shift'];
-							    			$total = count($shifts);
-							    			$day = $shift_data['rows'][0]['doc']['day'];
-							    			$shift_end_cash = ($day['start_cash']+$day['petty_cash_balance']['inward_petty_cash']-$day['petty_cash_balance']['petty_expense']);
-											$tablesShiftData .='<tr><td>DAY START</td>
-			    										<td class="text-center">'.$day['start_cash'].'</td>
-			    										<td class="text-center">'.$day['petty_cash_balance']['inward_petty_cash'].'</td>
-			    										<td class="text-center">'.$day['petty_cash_balance']['petty_expense'].'</td>
-			    										<td class="text-center">0</td>
-			    										<td class="text-center">0</td>
-			    										<td class="text-center">'.$shift_end_cash.'</td>
-			    										<td class="text-center">'.(-$shift_end_cash).'</td>
-			    										<td class="text-center">'.$day['end_fullcash'].'</td>
-							    						<td class="text-center">'.($day['end_fullcash']).'</td>
-			    									</tr>';
-											foreach($shifts as $key => $values){
-												$excess .= '<tr><td>SHIFT '.$values['shift_no'].' EXCESS CASH</td><td>'.($values['petty_cash_balance']['closing_petty_cash'] - $values['end_petty_cash']).'</td></tr>';
-												$closing_cash = (( $values['petty_cash_balance']['opening_petty_cash'])
-				    								+($day['petty_cash_balance']['inward_petty_cash'] + $values['petty_cash_balance']['inward_petty_cash']) 
-													-($day['petty_cash_balance']['petty_expense'] + $values['petty_cash_balance']['petty_expense']) 
-				    								);
-												$tablesShiftData .='<tr>
-						    						<td>SHIFT '.$values['shift_no'].'</td>
-						    						<td class="text-center">'.$values['petty_cash_balance']['opening_petty_cash'].'</td>
-						    						<td class="text-center">'.$values['petty_cash_balance']['inward_petty_cash'].'</td>
-						    						<td class="text-center">'.$values['petty_cash_balance']['petty_expense'].'</td>
-						    						<td class="text-center">'.$values['end_petty_cash'].'</td>
-						    						<td class="text-center">'.$values['end_cash_inbox'].'</td>
-						    						<td class="text-center">'.$closing_cash.'</td>
-						    						<td class="text-center">'.($values['end_petty_cash']-$closing_cash).'</td>
-						    						<td class="text-center">'.$values['end_cash_inbox'].'</td>
-						    						<td class="text-center">'.($values['end_cash_inbox']-$values['end_cash_inbox']).'</td>
-						    						</tr>';
-											}
-    									}
-			    						$tablesShiftData .='</tbody></table></div></div>';
-			    						$returnData['data']['shift_table'] = $tablesShiftData;
-			    						$cash_reconciliation_table = '<div class="panel panel-success"><div class="panel-heading"><h4 class="panel-title">Cash Reconciliation</h4></div><div class="panel-body"><table class="table"><tbody>';
-    									foreach($sales_reg['payment_type']['amount'] as $pKey => $pValue){
-	    									$cash_reconciliation_table .= '<tr><td>'.$pKey.'</td><td class="text-center">'.$pValue.'</td></tr>';
-    									}
-    									$cash_reconciliation_table .= $excess;
-    									$cash_reconciliation_table .= '</tbody></table></div></div>';
-			    						$returnData['data']['cash_reconciliation_table'] = $cash_reconciliation_table;
+										require_once DIR.'/home/home.php';
+										$hm = new home();
+										$returnData = $hm->getShiftAndCashRe();
 									break;
 									default:
 										$returnData['error'] = true;
