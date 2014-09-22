@@ -42,7 +42,7 @@
 			$data['shift'] = '';
 			$data['reconcilation'] = '';
 			$data['is_login_allowed'] = 'true';
-			if($_SESSION['user']['title']['id'] == 4 || $_SESSION['user']['title']['id'] == 6){
+			if($_SESSION['user']['title']['id'] == 2 || $_SESSION['user']['title']['id'] == 6){
 				$returned = $this->getShiftAndCashRe();
 				$data['shift'] = $returned['data']['shift_table'];
 				$data['reconcilation'] = $returned['data']['cash_reconciliation_table'];
