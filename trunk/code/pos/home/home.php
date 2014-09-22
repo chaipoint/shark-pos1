@@ -104,16 +104,18 @@
 			    	<td class="text-center">'.$day['start_cash'].'</td>
 			    	<td class="text-center">'.$day['petty_cash_balance']['inward_petty_cash'].'</td>
 			    	<td class="text-center">'.$day['petty_cash_balance']['petty_expense'].'</td>
-			    	<td class="text-center">0</td>
-			    	<td class="text-center">0</td>
+			    	<td class="text-center"></td>
+			    	<td class="text-center"></td>
 			    	<td class="text-center">'.$shift_end_cash.'</td>
 			    	<td class="text-center">'.(-$shift_end_cash).'</td>
-			    	<td class="text-center">'.$day['end_fullcash'].'</td>
-					<td class="text-center">'.($day['end_fullcash']).'</td>
+			    	<td class="text-center"></td>
+					<td class="text-center"></td>
 			    	</tr>';
 			    	$shift_in = 0;
 			    	$shift_ex = 0;
+			   	$allow_day_end_block = false;
 				foreach($shifts as $key => $values){
+				   	$allow_day_end_block = true;
 				    $inw = (empty($values['petty_cash_balance']['inward_petty_cash']) ? $shift_inward : $values['petty_cash_balance']['inward_petty_cash']);
 				    $exp = (empty($values['petty_cash_balance']['petty_expense']) ? $shift_expense : $values['petty_cash_balance']['petty_expense']);
 
@@ -126,7 +128,7 @@
 					
 					$tablesShiftData .='<tr>
 						<td>SHIFT '.$values['shift_no'].'</td>
-						<td class="text-center">0</td>
+						<td class="text-center"></td>
 						<td class="text-center">'.$inw.'</td>
 						<td class="text-center">'.$exp.'</td>
 						<td class="text-center">'.$values['end_petty_cash'].'</td>
@@ -136,6 +138,19 @@
 						<td class="text-center">'.$values['end_cash_inbox'].'</td>
 						<td class="text-center">'.($values['end_cash_inbox']-$values['end_cash_inbox']).'</td>
 						</tr>';
+				}
+				if($allow_day_end_block){
+					$tablesShiftData .='<tr><td>DAY END</td>
+				    	<td class="text-center"></td>
+				    	<td class="text-center"></td>
+				    	<td class="text-center"></td>
+				    	<td class="text-center">'.$values['end_petty_cash'].'</td>
+				    	<td class="text-center">'.$day['end_fullcash'].'</td>
+				    	<td class="text-center">'.$closing_cash.'</td>
+				    	<td class="text-center">'.($values['end_petty_cash']-$closing_cash).'</td>
+				    	<td class="text-center"></td>
+						<td class="text-center"></td>
+				    	</tr>';
 				}
     		}
 			$tablesShiftData .='</tbody></table></div></div>';
