@@ -23,7 +23,7 @@ class CouchPHP{
 		$this->log =  Logger::getLogger("CP-POS|COUCHDB");
 
 		$this->port = "5984";
-		$this->url = 'http://pos:pos@127.0.0.1:'.$this->port."/";
+		$this->url = 'http://127.0.0.1:'.$this->port."/";
 		$this->db = 'sharkpos';
 		$this->userName = '';
 		$this->password = '';
