@@ -11,8 +11,11 @@
 			$this->configData = (count($configResult['data']) > 0) ? $configResult['data'] : array();
 		}
 		function index(){
-			if(!array_key_exists('shift', $_SESSION['user'])){
-				header("LOCATION:index.php");
+			if(array_key_exists('referer',$_GET) && $_GET['referer'] == 'home'){
+			}else{
+				if(!array_key_exists('shift', $_SESSION['user'])){
+					header("LOCATION:index.php");
+				}
 			}
 			//Block to get Configs and need to have a generic methode for that
 			$data = array('error' => false,'catList'=>array(),'productList'=>array(),'firstCat'=>0, 'config_data'=>array(),'bill'=>array(),'lastBillNo'=>'','lastBillTime'=>'');
