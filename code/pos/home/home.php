@@ -65,7 +65,6 @@
 			$todaysale = json_decode($bl->getTodaysSale(),true);
 			$sales_reg = $sr->getBills($this->getCDate());
 
-
 			$shift_inward = 0;
 			$shift_expense = 0;
 			if(array_key_exists('shift', $_SESSION['user'])){
@@ -114,6 +113,7 @@
 			    	$shift_in = 0;
 			    	$shift_ex = 0;
 			   	$allow_day_end_block = false;
+			   	$cashSum = 0;
 				foreach($shifts as $key => $values){
 				   	$allow_day_end_block = true;
 				    $inw = (empty($values['petty_cash_balance']['inward_petty_cash']) ? $shift_inward : $values['petty_cash_balance']['inward_petty_cash']);
@@ -135,9 +135,10 @@
 						<td class="text-center">'.$values['end_cash_inbox'].'</td>
 						<td class="text-center">'.$closing_cash.'</td>
 						<td class="text-center">'.($values['end_petty_cash']-$closing_cash).'</td>
-						<td class="text-center">'.$values['end_cash_inbox'].'</td>
-						<td class="text-center">'.($values['end_cash_inbox']-$values['end_cash_inbox']).'</td>
+						<td class="text-center">'.(array_key_exists($values['shift_no'], $sales_reg['shift_cash']) ? $sales_reg['shift_cash'][$values['shift_no']] : 0).'</td>
+						<td class="text-center">'.($values['end_cash_inbox']-(array_key_exists($values['shift_no'], $sales_reg['shift_cash']) ? $sales_reg['shift_cash'][$values['shift_no']] : 0)).'</td>
 						</tr>';
+						$cashSum += (array_key_exists($values['shift_no'], $sales_reg['shift_cash']) ? $sales_reg['shift_cash'][$values['shift_no']] : 0);
 				}
 				if($allow_day_end_block){
 					$tablesShiftData .='<tr><td>DAY END</td>
@@ -148,8 +149,8 @@
 				    	<td class="text-center">'.$day['end_fullcash'].'</td>
 				    	<td class="text-center">'.$closing_cash.'</td>
 				    	<td class="text-center">'.($values['end_petty_cash']-$closing_cash).'</td>
-				    	<td class="text-center"></td>
-						<td class="text-center"></td>
+				    	<td class="text-center">'.$cashSum.'</td>
+						<td class="text-center">'.($day['end_fullcash']-$cashSum).'</td>
 				    	</tr>';
 				}
     		}
