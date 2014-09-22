@@ -93,7 +93,7 @@
 			$shift_data = $this->cDB->getDesign('store')->getView('store_shift')->setParam(array('key'=>'"'.$this->getCDate().'"','include_docs'=>'true'))->execute();
 			$excess = "";
 			$tablesShiftData = '<div class="panel panel-success"><div class="panel-heading"><h4 class="panel-title">Shift Data</h4></div><div class="panel-body"><table class="table">
-					<thead><tr><th>Event</th><th>Petty Cash</th><th>Petty Cash Inward</th><th>Petty Cash Expense</th><th>Shift End Petty Cash</th><th>Shift End (Cash in the box)</th><th>Expected Closing Cash</th><th>Excess Cash</th><th>Expected Cash in the Box</th><th>Sales Cash Variance</th></tr></thead>
+					<thead><tr><th>Event</th><th>Petty Cash</th><th>Petty Cash Inward</th><th>Petty Cash Expense</th><th>Shift End Petty Cash</th><th>Shift End (Cash in the box)</th><th>Expected Closing Petty  Cash</th><th>Petty Cash  Variance</th><th>Expected Cash in the box</th><th>Sales Cash Variance</th></tr></thead>
     				<tbody>';
     		if(count($shift_data['rows'])){
 				$shifts = $shift_data['rows'][0]['doc']['shift'];
