@@ -67,6 +67,7 @@ function uploadBill(){
 								"is_credit" => $doc['is_credit'],
 								"payment_type" => $doc['payment_type'],
 			            		"card_no" => $doc['card_no'],
+			            		"order_no" => $doc['order_no'],
 			            		"coupon_id" => 1,
 			            		"coupon_code" => $doc['coupon_code'],
 			            		"shift" => $doc['shift'],
