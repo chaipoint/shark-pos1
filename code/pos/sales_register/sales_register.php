@@ -96,8 +96,10 @@
 					$_POST['inward_time'] = $this->getCTime();
 				}
 				
-				if(array_key_exists('shift', $_SESSION['user'])){
+				if(array_key_exists('shift', $_SESSION['user']) && array_key_exists('store', $_SESSION['user'])){
 					$_POST['shift_no'] = $_SESSION['user']['shift'];
+					$_POST['store_id'] = $_SESSION['user']['store']['id'];
+					$_POST['store_name'] = $_SESSION['user']['store']['name'];
 					$result = $couch->saveDocument()->execute($_POST);
 					if(array_key_exists('error', $result)){
 						$return['error'] = true;
