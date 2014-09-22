@@ -171,6 +171,9 @@ function init(){
               "expense_no_mysql_id" => array(
                 "map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'petty_expense' && !doc.mysql_id){ emit(doc.expense_date,null); } }"
                 ),
+              "inward_no_mysql_id" => array(
+                "map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'petty_inward' && !doc.mysql_id){ emit(doc.inward_date,null); } }"
+                ),
               "get_inward" => array(
                 "map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type=='petty_inward'){ emit(doc.inward_date, doc.inward_amount); } }"
                 )
