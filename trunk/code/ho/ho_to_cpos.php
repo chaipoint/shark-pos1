@@ -88,10 +88,10 @@ function uploadBill(){
 			if($insertId > 0){
 				foreach ($doc['items'] as $itemKey => $itemVvalue) {
 					$pValue = $itemVvalue;
-					$productsArray[] = "('".$insertId."','".$pValue['id']."','".$pValue['name']."','".$pValue['category_id']."','".$pValue['category_name']."','".$pValue['qty']."','".$pValue['price']."','".$pValue['tax']."','".$pValue['priceBT']."','".$pValue['discount']."','".$pValue['discountAmount']."','".$pValue['taxAbleAmount']."','".$pValue['taxAmount']."','".$pValue['totalAmount']."','".$pValue['netAmount']."')";
+					$productsArray[] = "('".$insertId."','".$pValue['id']."','".$pValue['name']."','".$pValue['category_id']."','".$pValue['category_name']."','".$pValue['qty']."','".$pValue['price']."','".$pValue['tax']."','".$pValue['priceBT']."','".$pValue['discount']."','".$pValue['discountAmount']."','".$pValue['taxAbleAmount']."','".$pValue['taxAmount']."','".$pValue['netAmount']."','".$pValue['priceAD']."','".$pValue['subTotal']."')";
 				}		
 				if(count($productsArray) > 0){
-					$insertProducst = 'insert into cp_pos_storeorders_products (order_id, product_id, product_name, category_id, category_name, qty, price, tax, priceBT, discount, discount_amount, taxable_amount, tax_amount, total_amount, net_amount) values '.implode(',',$productsArray);
+					$insertProducst = 'insert into cp_pos_storeorders_products (order_id, product_id, product_name, category_id, category_name, qty, price, tax, priceBT, discount, discount_amount, taxable_amount, tax_amount, net_amount, priceAD, subTotal) values '.implode(',',$productsArray);
 					$res = $db->db_query($insertProducst);	
 				    $returnResult = $couch->getDesign('design_ho')->getUpdate('insert_mysql_id', $docsData['_id'])->setParam(array('mysql_id'=>$insertId))->execute();				
 				    //print_r($returnResult);
@@ -218,6 +218,9 @@ function uploadPettyExpense(){
 								"expense_amount" => $doc['expense_amount'],
 								"expense_done_by" => $doc['expense_done_by_id'],
 								"expense_approved_by" => $doc['expense_approved_by_id'],
+								"store_id" => $doc['store_id'],
+								"store_name" => $doc['store_name'],
+								"shift_no" => $doc['shift_no'],
 								"created_date" => date('Y-m-d H:i:s'),
 								"created_by" => '' 
 							);
@@ -231,7 +234,7 @@ function uploadPettyExpense(){
 				$logger->debug("ERROR: SOME ERROR");
   				$html['error'] = true;
 				$html['update'] = false;
-				$html['msg'] = 'Sorry! Some Error Please Contact Admin';
+				$html['msg'] = 'Sorry! Some Error While Upload Petty Expense Please Contact Admin';
 				$result = json_encode($html,true);
 				$logger->debug("End OF Petty Expense Function");
 				return $result;
@@ -239,21 +242,78 @@ function uploadPettyExpense(){
 		}
 	}else{
 		$logger->debug("ERROR: NO Expense To Be Upload");
-  		$html['error'] = true;
-		$html['update'] = false;
-		$html['msg'] = 'Sorry! No Expense To Be Upload';
-		$result = json_encode($html,true);
+  		$result = uploadPettyInward();
 		$logger->debug("End OF Petty Expense Function");
 		return $result;
 	}
 	//echo $success;
 	if($success==1){
 		$logger->debug("Success: Petty Expense Uploaded Successfully");
+  		$result = uploadPettyInward();
+		$logger->debug("End OF Petty Expense Function");
+		return $result;
+	}
+}
+
+
+/* Function To Upload Petty Inward On CPOS*/
+function uploadPettyInward(){
+	global $logger, $db;
+	$logger->debug("Calling Upload Petty Inward Function");
+	$couch = new CouchPHP();
+	$html = array();
+	$expenseData = $couch->getDesign('petty_expense')->getView('inward_no_mysql_id')->setParam(array('include_docs'=>'true'))->execute();
+	//print_r($expenseData);
+	$success = $counter = 0;
+	if(array_key_exists('rows', $expenseData) && count($expenseData['rows'])>0){
+ 		foreach($expenseData['rows'] as $key => $value){
+ 			$doc = $value['doc'];
+ 			$docKey = $value['key'];
+ 			$dValue['doc'] = $doc;
+			$docsData = array(	"_id"  => $doc['_id'],
+								"_rev" => $doc['_rev'],
+								"inward_date" => $doc['inward_date'].' '.$doc['inward_time'],
+								"inward_amount" => $doc['inward_amount'],
+								"inward_received_by" => $doc['inward_receive_by_id'],
+								"store_id" => $doc['store_id'],
+								"store_name" => $doc['store_name'],
+								"shift_no" => $doc['shift_no'],
+								"created_date" => date('Y-m-d H:i:s'),
+								"created_by" => '' 
+							);
+			$db->func_array2insert("cp_pos_petty_inward", $docsData);
+			$insertId = $db->db_insert_id();
+			if($insertId > 0){
+				$returnResult = $couch->getDesign('design_ho')->getUpdate('insert_mysql_id', $docsData['_id'])->setParam(array('mysql_id'=>$insertId))->execute();
+				$counter++;
+				$success = 1;
+			}else{
+				$logger->debug("ERROR: SOME ERROR");
+  				$html['error'] = true;
+				$html['update'] = false;
+				$html['msg'] = 'Sorry! Some Error While Upload Petty Inward Please Contact Admin';
+				$result = json_encode($html,true);
+				$logger->debug("End OF Petty Inward Function");
+				return $result;
+			}
+		}
+	}else{
+		$logger->debug("ERROR: NO Inward To Be Upload");
+  		$html['error'] = true;
+		$html['update'] = false;
+		$html['msg'] = 'Sorry! No Data To Be Upload';
+		$result = json_encode($html,true);
+		$logger->debug("End OF Petty Inward Function");
+		return $result;
+	}
+	//echo $success;
+	if($success==1){
+		$logger->debug("Success: Petty Inward Uploaded Successfully");
   		$html['error'] = false;
 		$html['update'] = true;
-		$html['msg'] = "$counter Petty Expense Uplaoded Successfully";
+		$html['msg'] = "Data Uplaoded Successfully";
 		$result = json_encode($html,true);
-		$logger->debug("End OF Petty Expense Function");
+		$logger->debug("End OF Petty Inward Function");
 		return $result;
 	}
 }
