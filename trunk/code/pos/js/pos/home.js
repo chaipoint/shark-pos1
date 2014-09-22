@@ -1,7 +1,6 @@
 var keyboard = new Array();
 var resData = '';
 $(document).ready(function(){	
-	
 	if(is_store_open){
 		$('#shift_breadcrumb').text($('#shift_nav li:nth-child(2)').text());
 		$('#store_shift_message').text('Store is Opened.');
@@ -41,14 +40,20 @@ $(document).ready(function(){
 
 
 
-$('.home_tabs').click(function(){
+$('#tab_selection_menu').on('click','.home_tabs',function(){
 	var active = $('li.active',$(this).closest('ul'));
-	var eClass = $(this).attr('class');
-	var id = $(this).attr('id');
-	console.log(eClass);
-	if( eClass == 'home_tabs remove'){
-		$('#'+id+'_data').html('');
-		$('#cash_reconciliation_tab').addClass('remove');
+	var eClass = active.attr('class');
+	var id = active.attr('id');
+	console.log(id);	
+	switch($(this).attr('id')){
+		case 'shift_data_tab':
+			$('#'+id+'_data').html('');
+			$('#'+id).closest('li').remove();
+			break;
+		case 'cash_reconciliation_tab':
+			$('#'+id+'_data').html('');
+			$('#'+id).closest('li').remove();
+			break;
 	}
 	active.removeClass('active');
 	$(this).parent().addClass('active');
@@ -87,7 +92,7 @@ $('.home_tabs').click(function(){
 		console.log(data);
 		$.ajax({
 				type: 'POST',
-				url: "index.php?dispatch=home.save",
+				url: "index.php?dispatch=sales_register.save",
 		  		data : data ,
 			 }).done(function(response) {
 				console.log(response);
@@ -106,9 +111,9 @@ $('.home_tabs').click(function(){
 
 });
 function CashRHandleResponse(response){
+	$("#tab_selection_menu").append('<li><a id="shift_data_tab" class="home_tabs" href="javascript:void(0)">Shift Data</a></li><li><a id="cash_reconciliation_tab" class="home_tabs" href="javascript:void(0)">Cash Reconcilition</a></li>');
 	$('#login_holder_home').modal('hide');
 	$('#shift_data_tab').trigger('click');
-	$('#shift_data_tab').addClass('remove');
 	$('#shift_data_tab_data').html(response.data.shift_table);
 	$('#cash_reconciliation_tab_data').html(response.data.cash_reconciliation_table);
 }

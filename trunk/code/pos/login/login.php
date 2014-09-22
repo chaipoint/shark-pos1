@@ -86,7 +86,7 @@
 										$shift_data = $this->cDB->getDesign('store')->getView('store_shift')->setParam(array('key'=>'"'.$this->getCDate().'"','include_docs'=>'true'))->execute();
 										$excess = "";
 										$tablesShiftData = '<div class="panel panel-success"><div class="panel-heading"><h4 class="panel-title">Shift Data</h4></div><div class="panel-body"><table class="table">
-																<thead><tr><th>Event</th><th>Petty Cash</th><th>Petty Cash Inward</th><th>Petty Cash Expense</th><th>Shift End Cash</th><th>Shift End (Cash in the box)</th><th>Closing Cash</th><th>Excess Cash</th><th>Cash in the box</th></tr></thead>
+																<thead><tr><th>Event</th><th>Petty Cash</th><th>Petty Cash Inward</th><th> Petty Cash Variance</th><th>Shift End Petty Cash</th><th>Shift End (Cash in the box)</th><th>Expected Closing Cash</th><th>Excess Cash</th><th>Expected Cash in the Box</th><th>Sales Cash Variance</th></tr></thead>
     															<tbody>';
     						 			if(count($shift_data['rows'])){
 											$shifts = $shift_data['rows'][0]['doc']['shift'];
@@ -102,6 +102,7 @@
 			    										<td class="text-center">'.$shift_end_cash.'</td>
 			    										<td class="text-center">'.(-$shift_end_cash).'</td>
 			    										<td class="text-center">'.$day['end_fullcash'].'</td>
+							    						<td class="text-center">'.($day['end_fullcash']).'</td>
 			    									</tr>';
 											foreach($shifts as $key => $values){
 												$excess .= '<tr><td>SHIFT '.$values['shift_no'].' EXCESS CASH</td><td>'.($values['petty_cash_balance']['closing_petty_cash'] - $values['end_petty_cash']).'</td></tr>';
@@ -119,6 +120,7 @@
 						    						<td class="text-center">'.$closing_cash.'</td>
 						    						<td class="text-center">'.($values['end_petty_cash']-$closing_cash).'</td>
 						    						<td class="text-center">'.$values['end_cash_inbox'].'</td>
+						    						<td class="text-center">'.($values['end_cash_inbox']-$values['end_cash_inbox']).'</td>
 						    						</tr>';
 											}
     									}

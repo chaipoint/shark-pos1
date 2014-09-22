@@ -7,9 +7,8 @@
 				<button type="button" class="close close-model" data-dismiss="modal" aria-hidden="true"><i class="glyphicon glyphicon-remove"></i></button>
 				<h4 class="modal-title" id="addExpenseModalLabel">Add Petty Expense</h4>
 			</div>
-			<form method="post" name="add-expense-form" id="add-expense-form">
-				
 			<div class="modal-body">
+				<form method="post" name="add-expense-form" id="add-expense-form">
 				<table class="table table-striped">
 					<tbody>
 						<tr>
@@ -84,15 +83,14 @@
 						</tr>
 						
 						</tbody>
-
 					</table>
-				</div>
-				<div class="modal-footer">
+					<div class="modal-footer">
 					<button class="btn btn-success" id="submit-expense">Submit</button>
 					<button type="button" class="close-model btn btn-primary" data-dismiss="modal">Close</button>
-					
 				</div>
 				</form>
+
+				</div>
 			</div>
 		</div>
 	</div>
