@@ -42,7 +42,8 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 	$('.tabs_data').addClass('hidden');
 	var thisId = $(this).attr('id');
 	$('#'+thisId+'_data').removeClass('hidden');
-	if(($('#'+thisId+'_data').html()).trim() == ''){
+	if(thisId == 'shift_data_tab' && (($('#'+thisId+'_data').html()).trim() == '' || is_login_allowed)){
+		$('#'+thisId+'_data').html('');
 		$("#error_message_modal").hide();
 		$('#login_holder_home').modal('show');
 	}

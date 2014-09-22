@@ -12,7 +12,6 @@
 			return $staffList;
 		}	
 		function save_petty(){
-			
 			$return = array('error'=>false, 'message'=>'', 'data'=>array());
 
 			$result = $this->cDB->getDesign('store')->getView('store_shift')->setParam(array('key'=>'"'.$this->getCDate().'"', 'include_docs'=>'true'))->execute();
@@ -54,7 +53,7 @@
 							if( count($resultInward['rows']) >0 ){
 								foreach($resultInward['rows'] as $iKey => $iValue){
 									if($iValue['doc']['shift_no'] == $result['rows'][0]['doc']['shift'][$totalShifts-1]['shift_no']){
-										$inward = $resultInward['rows'][0]['value'];									
+										$inward = $iValue['doc']['inward_amount'];									
 									}
 								}
 							}
