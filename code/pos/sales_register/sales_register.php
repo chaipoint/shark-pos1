@@ -87,18 +87,31 @@
 			if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
 				$this->log->trace("DATA \r\n".json_encode($_POST));
-                $_POST['cd_doc_type'] = 'petty_expense';
-				$_POST['expense_time'] = $this->getCTime();
-				$_POST['shift_no'] = $_SESSION['user']['shift'];
-				$result = $couch->saveDocument()->execute($_POST);
-				if(array_key_exists('error', $result)){
-					$return['error'] = true;
-					$return['message'] = 'OOPS! Some Error Contact Admin';
+
+				if(array_key_exists('expense_head',$_POST)){
+	                $_POST['cd_doc_type'] = 'petty_expense';
+					$_POST['expense_time'] = $this->getCTime();					
+				}elseif(array_key_exists('inward_amount',$_POST)){
+	                $_POST['cd_doc_type'] = 'petty_inward';
+					$_POST['inward_time'] = $this->getCTime();
+				}
+				
+				if(array_key_exists('shift', $_SESSION['user'])){
+					$_POST['shift_no'] = $_SESSION['user']['shift'];
+					$result = $couch->saveDocument()->execute($_POST);
+					if(array_key_exists('error', $result)){
+						$return['error'] = true;
+						$return['message'] = 'OOPS! Some Error Contact Admin';
+					}else{
+							$return['message'] = 'Saved Successfully';
+					}
 				}else{
-						$return['error'] = false;
-						$return['message'] = 'Save Successfully';
-				    }
+					$return['error'] = true;
+					$return['message'] = 'Please Start Shift, Befor Saving Expense';	
+				}
+			
 			}
+
 			$res = json_encode($return);
 			$this->log->trace("RESPONSE \r\n".$res);
 			return $res;

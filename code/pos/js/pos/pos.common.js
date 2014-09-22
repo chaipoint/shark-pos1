@@ -344,12 +344,17 @@ $.fn.cKeyboard = function(){
 						}
 					};			
 					break;
+				case '#counter_no':
+					options.layout = 'caustom';
+					options.customLayout = {
+							'default':['1 2 3 4','{clear} {bksp} {accept} {cancel}']
+						};					
+					break;
 				case '#phone_number':
 				case '#petty_cash':
 				case '.bill_qty_input':
 				case '#ppc' :
 				case '#expense_amount' :
-				case '#counter_no':
 				case '#petty_cash_end':
 				case '#box_cash':
 				case '#box_cash_end':

@@ -47,27 +47,4 @@
 			$this->commonView('footer_inner');
 			$this->commonView('footer_html');
 		} 
-
-		function save(){
-			global $couch;
-			$return = array('error'=>false,'message'=>'','data'=>array());
-			if($_SERVER['REQUEST_METHOD'] == 'POST'){
-
-				$this->log->trace("DATA \r\n".json_encode($_POST));
-                $_POST['cd_doc_type'] = 'petty_inward';
-                $_POST['shift_no'] = $_SESSION['user']['shift'];
-				$_POST['inward_time'] = $this->getCTime();
-				$result = $couch->saveDocument()->execute($_POST);
-				if(array_key_exists('error', $result)){
-					$return['error'] = true;
-					$return['message'] = 'OOPS! Some Error Contact Admin';
-				}else{
-						$return['error'] = false;
-						$return['message'] = 'Save Successfully';
-				    }
-			}
-			$res = json_encode($return);
-			$this->log->trace("RESPONSE \r\n".$res);
-			return $res;
-		}
-	}
+}

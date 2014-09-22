@@ -1,100 +1,6 @@
 <script>var is_store_open = <?php echo $is_store_open; ?>;</script>
 <script>var is_shift_running = <?php echo $is_shift_running; ?>;</script>
 <script src="<?php echo JS;?>pos/home.js"></script>
-<div id="wrapper_restricted" style="display:none;">
-	<div class="">
-		<div class="panel panel-success" id="sthift_trace_panel" style="margin-left:20px;margin-right:20px;">
-    		<div class="panel-heading">
-      			<h4 class="panel-title">Shift Data</h4>
-  			</div>
-    		<div class="panel-body">
-    			<table class="table">
-    				<thead>
-    					<tr>
-    						<th>Event</th>
-    						<th>Petty Cash</th>
-    						<th>Petty Cash Inward</th>
-    						<th>Petty Cash Expense</th>
-    						<th>Shift End Cash</th>
-    						<th>Shift End (Cash in the box)</th>
-    						<th>Closing Cash</th>
-    						<th>Excess Cash</th>
-    						<th>Cash in the box</th>
-    					</tr>
-    				</thead>
-    				<tbody>
-    					
-    						<?php $display = ''; $excess = ""; if(count($shift_data['rows'])){
-								$shifts = $shift_data['rows'][0]['doc']['shift'];
-    							$total = count($shifts);
-    							$day = $shift_data['rows'][0]['doc']['day'];
-    							$shift_end_cash = ($day['start_cash']+$day['petty_cash_balance']['inward_petty_cash']-$day['petty_cash_balance']['petty_expense']);
-								$display .='<tr>
-			    						<td>Day Start</td>
-			    						<td>'.$day['start_cash'].'</td>
-			    						<td>'.$day['petty_cash_balance']['inward_petty_cash'].'</td>
-			    						<td>'.$day['petty_cash_balance']['petty_expense'].'</td>
-			    						<td>'.(($total == 0) ? 0 : $shifts[$total-1]['end_petty_cash']).'</td>
-			    						<td>'.(($total == 0) ? 0 : $shifts[$total-1]['end_cash_inbox']).'</td>
-			    						<td>'.$shift_end_cash.'</td>
-			    						<td>'.(($total == 0) ? 0 : ($shifts[$total-1]['end_petty_cash'] -$shift_end_cash)).'</td>
-			    						<td>'.$day['end_fullcash'].'</td>
-			    						</tr>
-								';
-								foreach($shifts as $key => $values){
-									$excess .= '<tr><td>Shift '.$values['shift_no'].' Excess Cash</td><td>'.($values['petty_cash_balance']['closing_petty_cash'] - $values['end_petty_cash']).'</td></tr>';
-									$closing_cash = (( $values['petty_cash_balance']['opening_petty_cash'])
-				    								+($day['petty_cash_balance']['inward_petty_cash'] + $values['petty_cash_balance']['inward_petty_cash']) 
-													-($day['petty_cash_balance']['petty_expense'] + $values['petty_cash_balance']['petty_expense']) 
-				    								);
-									$display .='<tr>
-				    						<td>Shift '.$values['shift_no'].'</td>
-				    						<td>'.$values['petty_cash_balance']['opening_petty_cash'].'</td>
-				    						<td>'.$values['petty_cash_balance']['inward_petty_cash'].'</td>
-				    						<td>'.$values['petty_cash_balance']['petty_expense'].'</td>
-				    						<td>'.$values['end_petty_cash'].'</td>
-				    						<td>'.$values['end_cash_inbox'].'</td>
-				    						<td>'.$closing_cash
-				    						.'</td><td>'.($values['end_petty_cash']-$closing_cash).'</td>
-				    						<td>'.$values['end_cash_inbox'].'</td>
-				    						</tr>
-									';
-								}
-    						}
-    						echo $display;
-    						?>
-    					
-    				</tbody>
-    			</table>
-    		</div>
-    	</div>
-	</div>
-	<div class="">
-		<div class="panel panel-success" id="cash_reconcilation_panel" style="margin-left:20px;margin-right:20px;">
-    		<div class="panel-heading">
-      			<h4 class="panel-title">Cash Reconciliation</h4>
-  			</div>
-    		<div class="panel-body">
-    			<table class="table">
-    				<tbody>
-    					<?php 
-    						$display = '';
-    						foreach($payment_type['amount'] as $pKey => $pValue){
-	    						$display .= '<tr><td>'.$pKey.'</td><td>'.$pValue.'</td></tr>';
-    						}
-    						echo $display.$excess;
-
-    					?>
-    				</tbody>
-<!--    				<tfoot>
-    					<tr><th>Total</th><th></th></tr>
-    				</tfoot>-->
-    			</table>
-
-    		</div>
-    	</div>
-	</div>
-</div>
 
 <script type="text/javascript" src="<?php echo (JS.'jquery.dataTables.js');?>"></script>
 <script type="text/javascript" src="<?php echo (JS.'dataTables.tableTools.js');?>"></script>
@@ -106,11 +12,13 @@
       <h4 class="panel-title">Home</h4>
   	</div>
   	<div class="panel-body tabbable">
-        <ul class="nav nav-pills" role="tablist">
+        <ul id="tab_selection_menu"class="nav nav-pills" role="tablist">
         	<li class='active'><a id='home_tab' class="home_tabs" href="javascript:void(0)">Home</a></li>
         	<li><a id='sales_tab' class="home_tabs" href="javascript:void(0)">Sales</a></li>
-        	<li><a id='shift_data_tab' class="home_tabs" href="javascript:void(0)">Shift Data</a></li>
+
+<!--        	<li><a id='shift_data_tab' class="home_tabs" href="javascript:void(0)">Shift Data</a></li>
         	<li><a id='cash_reconciliation_tab' class="home_tabs" href="javascript:void(0)">Cash Reconcilition</a></li>
+        -->
         </ul>
     		<div id="shift_data_tab_data" class="tabs_data hidden">
 			</div>
@@ -195,7 +103,7 @@
 							<span class="input-group-addon">
 								<i class="glyphicon glyphicon-lock"></i> 
 							</span> 
-							<input type="text" name="counter_no" value="" id="counter_no" class="input-sm form-control" placeholder="Counter Number" autocomplete="off"/>
+							<input type="text" name="counter_no" value="1" id="counter_no" class="input-sm form-control" placeholder="Counter Number" autocomplete="off"/>
 						</div>
 
 						<div class="row padded">
