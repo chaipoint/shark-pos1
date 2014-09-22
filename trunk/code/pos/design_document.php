@@ -1,5 +1,5 @@
 <?php 
-require_once 'common/couchdb.phpclass.php';
+require_once 'common/couchdb_phpclass.php';
 
 echo init();
 function init(){
