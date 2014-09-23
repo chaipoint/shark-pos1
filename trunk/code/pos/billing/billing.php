@@ -252,23 +252,22 @@
         	$return = array('error'=>false,'message'=>'','data'=>array());
         	$company_data = array();
 			$company_data = $this->configData['company_details'];
+			$path = 'D:\utility\printBill.exe';
+			$check = file_exists($path);
 
-			if(!empty($data) && !empty($company_data) ){
-				$path = 'D:\utility\printBill.exe';
-				$check = file_exists($path);
-				if($check){
-					file_put_contents('C:\BillJson\company.txt', json_encode($company_data,true));
-					file_put_contents('C:\BillJson\bill.txt', json_encode($data,true));
-        			exec($path,$output,$return_value) ;
-        			if($return_value==1){
-        				$return['message'] = 'Error In Printing! Please Contact Admin';
-        			}
-				}else{
-					$return['message'] = 'Print Utility Not Exists';
+			if($check){
+				if(!empty($data) && !empty($company_data)){
+					file_put_contents('D:\utility\company.txt', json_encode($company_data,true));
+					file_put_contents('D:\utility\bill.txt', json_encode($data,true));
+        			exec($path,$output,$return_value);
+					$return['message'] = ($return_value=='1' ? 'Printer Not Found' : ($return_value=='2' ? 'File Missing' : 'JSON Not Readable'));
+     			}else{
+					$return['message'] = 'Bill Data Missing';
 				}
 			}else{
-				 $return['message'] = 'Provide Printing Data';
+				$return['message'] = 'Print Utility Not Exists';
 			}
+			
 			return $return;
         }
 
