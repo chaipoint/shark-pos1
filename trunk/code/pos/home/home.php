@@ -42,7 +42,7 @@
 			$data['shift'] = '';
 			$data['reconcilation'] = '';
 			$data['is_login_allowed'] = 'true';
-			if($_SESSION['user']['title']['id'] == 2 || $_SESSION['user']['title']['id'] == 6){
+			if($_SESSION['user']['title']['id'] == 4 || $_SESSION['user']['title']['id'] == 6){
 				$returned = $this->getShiftAndCashRe();
 				$data['shift'] = $returned['data']['shift_table'];
 				$data['reconcilation'] = $returned['data']['cash_reconciliation_table'];
@@ -107,28 +107,26 @@
 			    	<td class="text-center">'.$day['petty_cash_balance']['petty_expense'].'</td>
 			    	<td class="text-center"></td>
 			    	<td class="text-center"></td>
-			    	<td class="text-center">'.$shift_end_cash.'</td>
-			    	<td class="text-center">'.(-$shift_end_cash).'</td>
+			    	<td class="text-center"></td>
+			    	<td class="text-center"></td>
 			    	<td class="text-center"></td>
 					<td class="text-center"></td>
-			    	</tr>';
+			    	</tr>';//last  4 .$shift_end_cash. last 3(-$shift_end_cash) 
 			    	$shift_in = 0;
 			    	$shift_ex = 0;
-			   	$allow_day_end_block = false;
 			   	$cashSum = 0;
 				foreach($shifts as $key => $values){
-				   	$allow_day_end_block = true;
 				    $inw = (empty($values['petty_cash_balance']['inward_petty_cash']) ? $shift_inward : $values['petty_cash_balance']['inward_petty_cash']);
 				    $exp = (empty($values['petty_cash_balance']['petty_expense']) ? $shift_expense : $values['petty_cash_balance']['petty_expense']);
 
 				    $shift_in += $inw;
 				    $shift_ex += $exp;
 
-					$excess .= '<tr><td>SHIFT '.$values['shift_no'].' EXCESS CASH</td><td class="text-center">'.($values['petty_cash_balance']['closing_petty_cash'] - $values['end_petty_cash']).'</td></tr>';
 					$cash_reconciliation_insert['shift_'.$values['shift_no'].'_excess_cash'] = ($values['petty_cash_balance']['closing_petty_cash'] - $values['end_petty_cash']);
 					
 					$closing_cash = $day['start_cash'] + $shift_in - $shift_ex;
-					
+					$saleCashVeriance = ($values['end_cash_inbox']-(array_key_exists($values['shift_no'], $sales_reg['shift_cash']) ? $sales_reg['shift_cash'][$values['shift_no']] : 0));
+					$pettyCashVeriance = ($values['end_petty_cash']-$closing_cash);
 					$tablesShiftData .='<tr>
 						<td>SHIFT '.$values['shift_no'].'</td>
 						<td class="text-center"></td>
@@ -137,13 +135,14 @@
 						<td class="text-center">'.$values['end_petty_cash'].'</td>
 						<td class="text-center">'.$values['end_cash_inbox'].'</td>
 						<td class="text-center">'.$closing_cash.'</td>
-						<td class="text-center">'.($values['end_petty_cash']-$closing_cash).'</td>
+						<td class="text-center">'.$pettyCashVeriance.'</td>
 						<td class="text-center">'.(array_key_exists($values['shift_no'], $sales_reg['shift_cash']) ? $sales_reg['shift_cash'][$values['shift_no']] : 0).'</td>
-						<td class="text-center">'.($values['end_cash_inbox']-(array_key_exists($values['shift_no'], $sales_reg['shift_cash']) ? $sales_reg['shift_cash'][$values['shift_no']] : 0)).'</td>
+						<td class="text-center">'.$saleCashVeriance.'</td>
 						</tr>';
 						$cashSum += (array_key_exists($values['shift_no'], $sales_reg['shift_cash']) ? $sales_reg['shift_cash'][$values['shift_no']] : 0);
+						$excess .= '<tr><td>SHIFT '.$values['shift_no'].' EXCESS CASH</td><td class="text-center">'.($saleCashVeriance+$pettyCashVeriance).'</td></tr>';
 				}
-				if($allow_day_end_block){
+				if(!empty($shift_data['rows'][0]['end_time'])){
 					$tablesShiftData .='<tr><td>DAY END</td>
 				    	<td class="text-center"></td>
 				    	<td class="text-center"></td>
@@ -166,7 +165,7 @@
     		}
     		$cash_reconciliation_table .= $excess;
     		$cash_reconciliation_table .= '</tbody></table></div></div>';
-    		if(!$returnData['error']){
+    		if(!$returnData['error'] && array_key_exists(0, $shift_data['rows'])){
 				$result = $this->cDB->getDesign('store')->getUpdate('store_shift',$shift_data['rows'][0]['id'])->setParam($cash_reconciliation_insert)->execute();
     		}
 			$returnData['data']['cash_reconciliation_table'] = $cash_reconciliation_table;
