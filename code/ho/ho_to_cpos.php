@@ -25,6 +25,64 @@
 		case "uploadLoginHistory":
 		echo uploadLoginHistory();
 		break;
+		case "shift_data":
+		echo uploadShiftData();
+		break;
+}
+
+function uploadShiftData(){
+	global $logger, $db;
+	$logger->debug("Shift Data From HO to CPOS");
+	$couch = new CouchPHP();
+	$shift_data = $couch->getDesign('design_ho')->getView('store_shift')->setParam(array('include_docs'=>'true','descending'=>'true'))->execute();//,'key'=>'"'.date('Y-m-d').'"'
+	if(array_key_exists('rows', $shift_data) && count($shift_data['rows']) > 0){
+		$selectFromDB = "SELECT _id, _rev from cp_pos_day_data";// where date(start_time) = curdate()
+		$resultDay = $db->func_query($selectFromDB);
+		$dbList = array();
+		if($resultDay){
+			foreach($resultDay as $dKey => $dValue){
+				$dbList[$dValue['_id']] = $dValue['_rev'];
+			}
+		}
+
+		$rows = $shift_data['rows'];
+		foreach($rows as $key => $value){
+
+			if(array_key_exists($value['id'], $dbList)){
+				if($dbList[$value['id']] !== $value['doc']['_rev']){
+
+				}
+			}else{
+				$insretArray = array('_id' => $value['doc']['_id'], 
+						'_rev' => $value['doc']['_rev'], 
+						'store_id' => $value['doc']['store_id'], 
+						'start_time' => $value['doc']['day']['start_time'], 
+						'end_time' => $value['doc']['day']['end_time'], 
+						'start_staff_id' => $value['doc']['day']['start_login_id'], 
+						'end_staff_id' => $value['doc']['day']['end_login_id'], 
+						'pos_login_id' => $value['doc']['login_id'], 
+						'start_cash' => $value['doc']['day']['start_cash'], 
+						'end_full_cash' => $value['doc']['day']['end_fullcash'], 
+						'opening_petty_cash' => $value['doc']['day']['petty_cash_balance']['opening_petty_cash'], 
+						'petty_expense' => $value['doc']['day']['petty_cash_balance']['petty_expense'], 
+						'closing_petty_cash' => $value['doc']['day']['petty_cash_balance']['closing_petty_cash'], 
+						'inward_petty_cash' => $value['doc']['day']['petty_cash_balance']['inward_petty_cash'],
+						'last_shift' => count($value['doc']['shift'])
+				);
+				$db->func_array2insert("cp_pos_day_data", $insretArray);
+				$insertId = $db->db_insert_id();
+				$shiftInsert = array();
+				foreach($value['doc']['shift'] as $sKey => $sValue){
+						$shiftInsert[] = "(".$insertId.",'".$sValue['start_time']."','".$sValue['end_time']."',".$sValue['start_login_id'].",'".$sValue['end_petty_cash']."','".$sValue['end_cash_inbox']."',".$sValue['counter_no'].",".$sValue['shift_no'].",'".$sValue['petty_cash_balance']['opening_petty_cash']."', '".$sValue['petty_cash_balance']['petty_expense']."','".$sValue['petty_cash_balance']['closing_petty_cash']."',inward_petty_cash='".$sValue['petty_cash_balance']['inward_petty_cash']."')";
+				}
+				if(count($shiftInsert)>0){
+					$insertQuery = "insert into cp_pos_shift_data (pos_day_id, start_time, end_time, staff_id, end_petty_cash, end_cash_inbox, counter_no, shift_no, opening_petty_cash, petty_expense, closing_petty_cash, inward_petty_cash) values ".implode(",", $shiftInsert);
+					$db->db_query($insertQuery);
+				}		
+		}
+	}
+
+}
 }
 
 /* Function To Upload Bill On CPOS*/
