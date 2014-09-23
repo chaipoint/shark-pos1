@@ -280,6 +280,8 @@ $.fn.cKeyboard = function(){
 	$.each(element, function(index,value){
 		value = $.trim(value);
 		var options = new Object();
+			options.tabNavigation = true;
+			options.enterNavigation = true;
 
 			options.restrictInput = true;
 			options.preventPaste = true;
