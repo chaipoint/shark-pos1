@@ -46,6 +46,8 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 		$('#'+thisId+'_data').html('');
 		$("#error_message_modal").hide();
 		$('#login_holder_home').modal('show');
+	}else{
+		$('#shift_data_tab_holder').removeClass('hidden');
 	}
 });
 
@@ -100,6 +102,7 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 function CashRHandleResponse(response){
 	$('#login_holder_home').modal('hide');
 	$('#shift_data_tab_data').html(response.data.shift_table+response.data.cash_reconciliation_table);
+	$('#shift_data_tab_holder').removeClass('hidden');
 }
 function staffHandleResponse(response){
 
@@ -134,4 +137,19 @@ function staffHandleResponse(response){
 	$('#shift_nav li a.btn-primary').removeClass('btn-primary');
 	$('#shift_nav li a#'+active).addClass('btn-primary');
 	window.location.reload(true);	
+}
+function searchShiftData(){
+	var date = $("#shift_data_search").val();
+	$.ajax({
+			type: 'POST',
+			url: "index.php?dispatch=home.getShiftAndCashRe",
+	  		data : {date:date} ,
+		}).done(function(response) {
+			var result = $.parseJSON(response);
+			if(result.error){
+				bootbox.alert(result.message);
+			}else{
+				CashRHandleResponse(result);
+			}
+		});
 }

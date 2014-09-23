@@ -40,7 +40,12 @@
 	$class = new $accessedClass();
 	if(method_exists($class, MODE)){
 		$method = MODE;
-		echo $class->$method();
+		$res = $class->$method();
+		if(is_array($res)){
+			echo json_encode($res);
+		}else{
+			echo $res;
+		}
 	}else{
 		$logger->trace('Mode Not Found '.MODULE.'{'.MODE.'}');
 		echo "Unable To Process Request, Call To Undifiend File";

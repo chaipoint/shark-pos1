@@ -7,8 +7,9 @@ function toggleRepBT (){
 		$("#billing_sync_bt").removeClass('hidden')		
 	}
 }
+    var url = null;
 $(document).ready( function(){
-    var url = $.url();
+    url = $.url();
     if((url.param('dispatch').split('.'))[0] == 'sales_register'){
 		toggleRepBT ();
 	}
@@ -27,12 +28,15 @@ $(document).ready( function(){
 	}
 $('.datepicker').datepicker('update', new Date(date.getFullYear(), date.getMonth(), date.getDate()))
     .on('changeDate', function(e){
-    	console.log(e);
     	$("#search_button").trigger('click');
     });
+
 $("#search_button").click(function(){
-	$("#search_form").submit();
-	console.log('hello');
+	if((url.param('dispatch').split('.'))[0] == 'sales_register'){
+		$("#search_form").submit();
+	}else{
+		searchShiftData();
+	}
 });
 /* Function To Add Prety Expense */
 	$('#add_expense').click(function(event){
