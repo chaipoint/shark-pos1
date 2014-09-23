@@ -7,7 +7,6 @@
 <script type="text/javascript" src="<?php echo (JS.'dataTables.tableTools.js');?>"></script>
 <link rel="stylesheet" type="text/css" href="<?php echo (CSS.'ui-lightness/jquery-ui-1.8.20.custom.css'); ?>" />
 <link rel="stylesheet" href="<?php echo (CSS.'jquery.dataTables_themeroller.css');?>">
-
 <div class="panel panel-info" style="margin-left:20px;margin-right:20px;" id="store_shift_logic">
     <div class="panel-heading">
       <h4 class="panel-title">Home</h4>
@@ -18,11 +17,24 @@
         	<li><a id='sales_tab' class="home_tabs" href="javascript:void(0)">Sales</a></li>
 			<li><a id='shift_data_tab' class="home_tabs" href="javascript:void(0)">Shift Data</a></li>
         </ul>
+        <div class="hidden" id="shift_data_tab_holder">
+		   	<form class="form-inline alert" id="shift_search_form" action="#"> 
+		  		<input type="hidden" name="dispatch" value="sales_register"/>
+				<div class="form-group">
+					<div class="input-group">
+		      			<input type="text" name = "shift_data_search" id="shift_data_search" class="form-control datepicker" required data-provide="datepicker-inline" data-date-format="dd-MM-yyyy"  data-date-autoclose = "true" data-date-end-date="+0d" name="expense_date" readonly/>      
+		      			<span class="input-group-btn">
+		        			<button class="btn btn-primary" type="button" style="padding-top:4px; padding-bottom:5px;" id="search_button"><i class="glyphicon glyphicon-search"></i></button>
+			      		</span>
+					</div>
+				</div>
+			</form>
     		<div id="shift_data_tab_data" class="tabs_data hidden">
     			<?php
     				echo $shift.$reconcilation;
     			?> 
 			</div>
+		</div>
 
     		<div id="home_tab_data" class="tabs_data">
     			

@@ -42,7 +42,7 @@
 			$data['shift'] = '';
 			$data['reconcilation'] = '';
 			$data['is_login_allowed'] = 'true';
-			if($_SESSION['user']['title']['id'] == 4 || $_SESSION['user']['title']['id'] == 6){
+			if($_SESSION['user']['title']['id'] == 2 || $_SESSION['user']['title']['id'] == 6){
 				$returned = $this->getShiftAndCashRe();
 				$data['shift'] = $returned['data']['shift_table'];
 				$data['reconcilation'] = $returned['data']['cash_reconciliation_table'];
@@ -56,6 +56,10 @@
 			$this->commonView('footer_html');
 		} 
 		function getShiftAndCashRe(){
+			$date = $this->getCDate();
+			if(array_key_exists('date', $_POST)){
+				$date = date('Y-m-d',strtotime($_POST['date']));		
+			}
 			$returnData = array('error'=>false,'message'=>'','data'=>array());
 			$cash_reconciliation_insert = array();
 			$cash_reconciliation_insert['type'] = 'cash_reconciliation';
@@ -64,13 +68,13 @@
 			require_once DIR.'/sales_register/sales_register.php';
 			$sr = new sales_register();
 
-			$todaysale = json_decode($bl->getTodaysSale(),true);
-			$sales_reg = $sr->getBills($this->getCDate());
+			$todaysale = json_decode($bl->getTodaysSale($date),true);
+			$sales_reg = $sr->getBills($date);
 
 			$shift_inward = 0;
 			$shift_expense = 0;
 			if(array_key_exists('shift', $_SESSION['user'])){
-				$resultInward = $this->cDB->getDesign('petty_expense')->getView('get_inward')->setParam(array('key'=>'"'.$this->getCDate().'"','include_docs'=>'true'))->execute();
+				$resultInward = $this->cDB->getDesign('petty_expense')->getView('get_inward')->setParam(array('key'=>'"'.$date.'"','include_docs'=>'true'))->execute();
 				if(count($resultInward['rows'])>0){
 					foreach($resultInward['rows'] as $key => $value){
 						if($value['doc']['shift_no'] == $_SESSION['user']['shift']){
@@ -80,7 +84,7 @@
 					}
 				}
 
-				$resultExpense = $this->cDB->getDesign('petty_expense')->getView('get_expense')->setParam(array('key'=>'"'.$this->getCDate().'"','include_docs'=>'true'))->execute();
+				$resultExpense = $this->cDB->getDesign('petty_expense')->getView('get_expense')->setParam(array('key'=>'"'.$date.'"','include_docs'=>'true'))->execute();
 				if(count($resultExpense['rows'])>0){
 					foreach($resultExpense['rows'] as $key => $value){
 						if($value['doc']['shift_no'] == $_SESSION['user']['shift']){
@@ -91,7 +95,7 @@
 				}
 			}
 
-			$shift_data = $this->cDB->getDesign('store')->getView('store_shift')->setParam(array('key'=>'"'.$this->getCDate().'"','include_docs'=>'true'))->execute();
+			$shift_data = $this->cDB->getDesign('store')->getView('store_shift')->setParam(array('key'=>'"'.$date.'"','include_docs'=>'true'))->execute();
 			$excess = "";
 			$tablesShiftData = '<div class="panel panel-success"><div class="panel-heading"><h4 class="panel-title">Shift Data</h4></div><div class="panel-body"><table class="table">
 					<thead><tr><th>Event</th><th>Petty Cash</th><th>Petty Cash Inward</th><th>Petty Cash Expense</th><th>Shift End Petty Cash</th><th>Shift End (Cash in the box)</th><th>Expected Closing Petty  Cash</th><th>Petty Cash  Variance</th><th>Expected Cash in the box</th><th>Sales Cash Variance</th></tr></thead>
@@ -122,7 +126,6 @@
 				    $shift_in += $inw;
 				    $shift_ex += $exp;
 
-					$cash_reconciliation_insert['shift_'.$values['shift_no'].'_excess_cash'] = ($values['petty_cash_balance']['closing_petty_cash'] - $values['end_petty_cash']);
 					
 					$closing_cash = $day['start_cash'] + $shift_in - $shift_ex;
 					$saleCashVeriance = ($values['end_cash_inbox']-(array_key_exists($values['shift_no'], $sales_reg['shift_cash']) ? $sales_reg['shift_cash'][$values['shift_no']] : 0));
@@ -141,6 +144,7 @@
 						</tr>';
 						$cashSum += (array_key_exists($values['shift_no'], $sales_reg['shift_cash']) ? $sales_reg['shift_cash'][$values['shift_no']] : 0);
 						$excess .= '<tr><td>SHIFT '.$values['shift_no'].' EXCESS CASH</td><td class="text-center">'.($saleCashVeriance+$pettyCashVeriance).'</td></tr>';
+						$cash_reconciliation_insert['shift_'.$values['shift_no'].'_excess_cash'] = ($saleCashVeriance+$pettyCashVeriance);
 				}
 				if(!empty($shift_data['rows'][0]['end_time'])){
 					$tablesShiftData .='<tr><td>DAY END</td>
@@ -165,7 +169,7 @@
     		}
     		$cash_reconciliation_table .= $excess;
     		$cash_reconciliation_table .= '</tbody></table></div></div>';
-    		if(!$returnData['error'] && array_key_exists(0, $shift_data['rows'])){
+    		if(!$returnData['error'] && array_key_exists(0, $shift_data['rows']) && !array_key_exists('date', $_POST)){
 				$result = $this->cDB->getDesign('store')->getUpdate('store_shift',$shift_data['rows'][0]['id'])->setParam($cash_reconciliation_insert)->execute();
     		}
 			$returnData['data']['cash_reconciliation_table'] = $cash_reconciliation_table;
