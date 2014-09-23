@@ -1,4 +1,5 @@
 <?php
+
     include_once 'common/connection.php' ;
 	require_once 'common/couchdb.phpclass.php';
 	require_once 'common/logger.php';
@@ -29,19 +30,23 @@
 		echo uploadShiftData();
 		break;
 }
-
 function uploadShiftData(){
 	global $logger, $db;
 	$logger->debug("Shift Data From HO to CPOS");
 	$couch = new CouchPHP();
-	$shift_data = $couch->getDesign('design_ho')->getView('store_shift')->setParam(array('include_docs'=>'true','descending'=>'true'))->execute();//,'key'=>'"'.date('Y-m-d').'"'
+	$shift_data = $couch->getDesign('design_ho')->getView('store_shift')->setParam(array('include_docs'=>'true','keys'=>'["'.date('Y-m-d').'","'.date('Y-m-d',(time()-(24*60*60))).'"]'))->execute();//,'key'=>'"'.date('Y-m-d').'"'
+	$logger->debug("URL to sccess data ".$couch->getLastUrl());
 	if(array_key_exists('rows', $shift_data) && count($shift_data['rows']) > 0){
-		$selectFromDB = "SELECT _id, _rev from cp_pos_day_data";// where date(start_time) = curdate()
+		$selectFromDB = "SELECT id, if(end_time is null or end_time = '0000-00-00 00:00:00', 'N', 'Y') is_day_ended, _id, _rev, last_shift from cp_pos_day_data where date(start_time) = curdate() or date(start_time) = date(curdate()-1)";
+		$logger->debug("Query To get 2 days data  ".$selectFromDB);
 		$resultDay = $db->func_query($selectFromDB);
 		$dbList = array();
 		if($resultDay){
 			foreach($resultDay as $dKey => $dValue){
-				$dbList[$dValue['_id']] = $dValue['_rev'];
+				$dbList[$dValue['_id']]['_rev'] = $dValue['_rev'];
+				$dbList[$dValue['_id']]['_last_shift'] = $dValue['_rev'];
+				$dbList[$dValue['_id']]['is_day_ended'] = $dValue['is_day_ended'];
+				$dbList[$dValue['_id']]['id'] = $dValue['id'];
 			}
 		}
 
@@ -49,8 +54,38 @@ function uploadShiftData(){
 		foreach($rows as $key => $value){
 
 			if(array_key_exists($value['id'], $dbList)){
-				if($dbList[$value['id']] !== $value['doc']['_rev']){
+				if($dbList[$value['id']]['_rev'] !== $value['doc']['_rev']){
+					$updateQuery = "UPDATE cp_pos_day_data 
+								SET end_time = '".$value['doc']['day']['end_time']."', 
+								end_staff_id = '".$value['doc']['day']['end_login_id']."',
+								end_full_cash = '".$value['doc']['day']['end_fullcash']."', 
+								opening_petty_cash = '".$value['doc']['day']['petty_cash_balance']['opening_petty_cash']."', 
+								petty_expense = '".$value['doc']['day']['petty_cash_balance']['petty_expense']."', 
+								closing_petty_cash = '".$value['doc']['day']['petty_cash_balance']['closing_petty_cash']."', 
+								inward_petty_cash = '".$value['doc']['day']['petty_cash_balance']['inward_petty_cash']."', last_shift  = '".count($value['doc']['shift'])."'
+								where _id = '".$value['id']."'";
+					$db->db_query($updateQuery);
+					$logger->debug("Day Id Updated  ".$value['id']." on ".$value['id']." with total shifts ".count($value['doc']['shift']));
 
+					$selectShiftData = "select id, shift_no from cp_pos_shift_data where pos_day_id = ".$dbList[$value['id']]['id'];
+					$resultSelectData = $db->func_query($selectShiftData);
+					$shiftList = array();
+					foreach($resultSelectData as $sKey => $sValue){
+						$shiftList[$sValue['shift_no']] = $sValue['id'];
+					}
+					if(count($shiftList)>0){
+						foreach($value['doc']['shift'] as $shKey => $shValue){
+							if(array_key_exists($shValue['shift_no'], $shiftList)){
+								$upsQuery = "UPDATE cp_pos_shift_data 
+									SET end_time = '".$shValue['end_time']."', end_petty_cash = '".$shValue['end_petty_cash']."', end_cash_inbox = '".$shValue['end_cash_inbox']."',opening_petty_cash='".$shValue['petty_cash_balance']['opening_petty_cash']."', petty_expense='".$shValue['petty_cash_balance']['petty_expense']."',closing_petty_cash='".$shValue['petty_cash_balance']['closing_petty_cash']."',inward_petty_cash='".$shValue['petty_cash_balance']['inward_petty_cash']."' where id=".$shiftList[$shValue['shift_no']];
+								$db->db_query($upsQuery);
+							}else{
+								$insertQuery = "insert into cp_pos_shift_data (pos_day_id, start_time, end_time, staff_id, end_petty_cash, end_cash_inbox, counter_no, shift_no, opening_petty_cash, petty_expense, closing_petty_cash, inward_petty_cash) values ";
+								$insertQuery .= "(".$dbList[$value['id']]['id'].",'".$shValue['start_time']."','".$shValue['end_time']."',".$shValue['start_login_id'].",'".$shValue['end_petty_cash']."','".$shValue['end_cash_inbox']."',".$shValue['counter_no'].",".$shValue['shift_no'].",'".$shValue['petty_cash_balance']['opening_petty_cash']."', '".$shValue['petty_cash_balance']['petty_expense']."','".$shValue['petty_cash_balance']['closing_petty_cash']."',inward_petty_cash='".$shValue['petty_cash_balance']['inward_petty_cash']."')";								
+								$db->db_query($insertQuery);
+							}
+						}
+					}
 				}
 			}else{
 				$insretArray = array('_id' => $value['doc']['_id'], 
@@ -64,13 +99,14 @@ function uploadShiftData(){
 						'start_cash' => $value['doc']['day']['start_cash'], 
 						'end_full_cash' => $value['doc']['day']['end_fullcash'], 
 						'opening_petty_cash' => $value['doc']['day']['petty_cash_balance']['opening_petty_cash'], 
-						'petty_expense' => $value['doc']['day']['petty_cash_balance']['petty_expense'], 
-						'closing_petty_cash' => $value['doc']['day']['petty_cash_balance']['closing_petty_cash'], 
+						'petty_expense' => $value['doc']['day']['petty_cash_balance']['petty_expense'],
+						'closing_petty_cash' => $value['doc']['day']['petty_cash_balance']['closing_petty_cash'],
 						'inward_petty_cash' => $value['doc']['day']['petty_cash_balance']['inward_petty_cash'],
 						'last_shift' => count($value['doc']['shift'])
 				);
 				$db->func_array2insert("cp_pos_day_data", $insretArray);
 				$insertId = $db->db_insert_id();
+				$logger->debug("Day Id Inserted  ".$value['doc']['_id']." on ".$insertId." with total shifts ".count($value['doc']['shift']));
 				$shiftInsert = array();
 				foreach($value['doc']['shift'] as $sKey => $sValue){
 						$shiftInsert[] = "(".$insertId.",'".$sValue['start_time']."','".$sValue['end_time']."',".$sValue['start_login_id'].",'".$sValue['end_petty_cash']."','".$sValue['end_cash_inbox']."',".$sValue['counter_no'].",".$sValue['shift_no'].",'".$sValue['petty_cash_balance']['opening_petty_cash']."', '".$sValue['petty_cash_balance']['petty_expense']."','".$sValue['petty_cash_balance']['closing_petty_cash']."',inward_petty_cash='".$sValue['petty_cash_balance']['inward_petty_cash']."')";
