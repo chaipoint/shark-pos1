@@ -453,9 +453,10 @@ $(document).ready(function(){
 				}else{
 					$('#payModal').modal('hide');
 					if(result.message!=''){
+
 						bootbox.alert(result.message, function(){
 							window.location.reload(true);
-						});
+						}).find(".btn-primary").removeClass("btn-primary").addClass("btn-danger");
 					}else{
 					window.location.reload(true);
 					}
