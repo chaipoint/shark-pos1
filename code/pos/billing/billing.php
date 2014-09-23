@@ -260,7 +260,7 @@
 					file_put_contents('D:\utility\company.txt', json_encode($company_data,true));
 					file_put_contents('D:\utility\bill.txt', json_encode($data,true));
         			exec($path,$output,$return_value);
-					$return['message'] = ($return_value=='1' ? 'Printer Not Found' : ($return_value=='2' ? 'File Missing' : 'JSON Not Readable'));
+					$return['message'] = ($return_value=='1' ? 'Printer Not Found' : ($return_value=='2' ? 'File Missing' : ($return_value=='3' ? 'JSON Not Readable' : '')));
      			}else{
 					$return['message'] = 'Bill Data Missing';
 				}
