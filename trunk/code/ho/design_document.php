@@ -150,6 +150,9 @@ function init(){
                 ),
               "get_expense" => array(
                   "map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type=='petty_expense'){ emit(doc.expense_date, null); } }"
+                ),
+              "store_shift" => array(
+                  "map" => "function(doc) { if(doc.cd_doc_type == 'store_shift'){ var date = doc.login_time.split(' '); emit(date[0], null); } }"
                 )
             ),
           "updates" => array(
