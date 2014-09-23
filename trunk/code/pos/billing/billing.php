@@ -205,9 +205,13 @@
 		}
 
 
-		public function getTodaysSale(){
+		public function getTodaysSale($date = ''){
+			if(empty($date)){
+				$date = $this->getCDate();
+			}
+			
 			$return = array('error'=>false,'message'=>'','data'=>array());
-				$bills = $this->cDB->getDesign('billing')->getList('todays_sale','handle_updated_bills')->setParam(array("descending"=>"true","include_docs"=>"true","endkey"=>'["'.$this->getcDate().'"]'))->execute();
+				$bills = $this->cDB->getDesign('billing')->getList('todays_sale','handle_updated_bills')->setParam(array("descending"=>"true","include_docs"=>"true","endkey"=>'["'.$date.'"]'))->execute();
 				$bill_array = array();
 				if(array_key_exists('error', $bills)){
 					$return['data'] = true;
