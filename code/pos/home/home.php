@@ -8,6 +8,10 @@
 		}
 		public function index(){
 			$result = $this->cDB->getDesign('store')->getView('store_shift')->setParam(array('key'=>'"'.$this->getCDate().'"','include_docs'=>'true'))->execute();
+			if(!array_key_exists('rows', $result)){
+				header("LOCATION:index.php?error=true");
+				die;
+			}			
 			$data = array();
 			
 			require_once DIR.'/sales_register/sales_register.php';
@@ -42,7 +46,7 @@
 			$data['shift'] = '';
 			$data['reconcilation'] = '';
 			$data['is_login_allowed'] = 'true';
-			if($_SESSION['user']['title']['id'] == 2 || $_SESSION['user']['title']['id'] == 6){
+			if($_SESSION['user']['title']['id'] == 4 || $_SESSION['user']['title']['id'] == 6){
 				$returned = $this->getShiftAndCashRe();
 				$data['shift'] = $returned['data']['shift_table'];
 				$data['reconcilation'] = $returned['data']['cash_reconciliation_table'];
