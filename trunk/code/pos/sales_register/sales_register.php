@@ -3,6 +3,7 @@
 	class Sales_Register extends App_config{
 		function __construct(){
 			parent::__construct();
+			$this->log =  Logger::getLogger("CP-POS|SALE-REGISTER");
 		}
 		function index(){
 			$error = false;
