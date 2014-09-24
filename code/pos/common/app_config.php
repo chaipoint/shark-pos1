@@ -72,7 +72,12 @@
 			if(file_exists($iniFile)){
 				if(is_writable($iniFile) && is_readable($iniFile)){
 					$configData = parse_ini_file($this->root."/pos.ini", true);
-					$return['data'] = $configData;
+					if(array_key_exists('store_config', $configData) && array_key_exists('is_configured', $configData['store_config']) && array_key_exists('store_id', $configData['store_config']) && !empty($configData['store_config']['store_id']) && preg_match("/^[0-9]{1,5}$/", $configData['store_config']['store_id']) && !preg_match("/^[0]{1,100}$/", $configData['store_config']['store_id'])){
+						$return['data'] = $configData;
+					}else{
+						$return['error'] = true;
+						$return['message'] = 'OPPS! Some Problem Please Contact Admin.';
+					}
 				}else{
 					$return['error'] = true;
 					$return['message'] = 'Unable to read or write file';					

@@ -4,13 +4,9 @@
 		private $configData;
 		public function __construct(){
 			parent::__construct();
-
 			$this->log =  Logger::getLogger("CP-POS|LOGIN");
-			
-
 			global $couch;
 			$this->cDB = $couch;
-			
 			$this->configData = $this->getInstallationConfig();
 			if(array_key_exists('data', $this->configData)){
 				if(!$this->configData['data']['store_config']['is_configured']){
@@ -24,7 +20,6 @@
 				die();
 			}
 		}
-
 		public function config($data){
 			$this->commonView('header_html');
 			$this->commonView('initial_config', array('data'=>$data));
@@ -91,6 +86,11 @@
 								$returnData['message'] = 'You are not allowed to access.';
 							}
 						}else{
+
+
+							$resultJSON = $this->cDB->getDesign('store')->getView('store_mysql_id')->setParam(array("key"=>'"'.$this->store.'"'))->execute();
+							$userData["store"]['name'] = $resultJSON['rows'][0]['value'];
+
 							$userData["_id"] = $result['data']['_id'];
 							$userData["_rev"] = $result['data']['_rev'];
 							$userData["code"] = $result['data']['code'];
@@ -106,8 +106,6 @@
 							$userData["title"]['name'] = $result['data']['title']['name'];
 							$userData["store"]['id'] = $this->store;
 
-							$resultJSON = $this->cDB->getDesign('store')->getView('store_mysql_id')->setParam(array("key"=>'"'.$this->store.'"'))->execute();
-							$userData["store"]['name'] = $resultJSON['rows'][0]['value'];
 
 
 

@@ -90,10 +90,12 @@
 
 				if(array_key_exists('expense_head',$_POST)){
 	                $_POST['cd_doc_type'] = 'petty_expense';
-					$_POST['expense_time'] = $this->getCTime();					
+					$_POST['expense_time'] = $this->getCTime();
+					$return['message'] = 'Please Start Shift, Befor Saving Expense';					
 				}elseif(array_key_exists('inward_amount',$_POST)){
 	                $_POST['cd_doc_type'] = 'petty_inward';
 					$_POST['inward_time'] = $this->getCTime();
+					$return['message'] = 'Please Start Shift, Befor doing Petty Cash Inward';
 				}
 				
 				if(array_key_exists('shift', $_SESSION['user']) && array_key_exists('store', $_SESSION['user'])){
@@ -108,8 +110,7 @@
 							$return['message'] = 'Saved Successfully';
 					}
 				}else{
-					$return['error'] = true;
-					$return['message'] = 'Please Start Shift, Befor Saving Expense';	
+					$return['error'] = true;	
 				}
 			
 			}
