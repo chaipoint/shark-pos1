@@ -50,7 +50,7 @@
       
 
       
-        <div class="smallstat box col-lg-2 col-sm-4" style="width:135px;margin-left:8px;">
+        <div class="smallstat box col-lg-2 col-sm-4" style="width:150px;margin-left:8px;">
           <i class="glyphicon glyphicon-usd fa red"></i>
           <span class="title">Petty Expense</span>
           <span class="value"><?php echo $p_ex;?> &nbsp;
