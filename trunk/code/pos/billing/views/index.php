@@ -108,7 +108,7 @@
 															</td>
 														</tr>
 														<tr class="success">
-															<td width="25%">
+															<td width="25%" rowspan="2">
 																<div class="input-group">
 																			<input type="text" class="form-control input-sm" id="discount_input_box" placeholder="%" name="discount_input_box"/>
 																			<span class="input-group-addon">
@@ -116,11 +116,16 @@
 																		</span>
 																</div>
 															</td>
-															<td><span id="ds_con">0</span></td>
+															<td rowspan="2"></td>
+															<td width="25%">Discount (-)</td>
+															<td class="text_right"><span id="ds_con">0</span></td>
+														</tr>
+
+														<tr class="success">
 															<td width="25%"> <a href="#" id="add_tax"
 																style="color: #FFF;">Tax <i
 																	class="glyphicon glyphicon-pencil"></i> 
-																</a>
+																</a> (+)
 															</td>
 															<td class="text_right"><span id="ts_con">0</span></td>
 														</tr>
