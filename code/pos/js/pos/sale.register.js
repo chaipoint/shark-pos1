@@ -129,7 +129,7 @@ $("#search_button").click(function(){
 	});
 
 /* Todays Sale Function */
-	$('#todays_sale').click(function(event){
+	$('#todays_sale').click(function(event){ 
 			event.preventDefault();
 			$.ajax({
 				type: 'POST',
@@ -154,7 +154,7 @@ $("#search_button").click(function(){
 								var total = 0;
 										
 								$.each(result.data.payment_type, function(subIndex, subDetails){
-									trs += '<td class="text-right">'+(details[subIndex] ?  details[subIndex] : 0)+'</td>';
+									trs += '<td class="text-right">'+(details[subIndex] ?  details[subIndex].toFixed(2) : 0)+'</td>';
 									total += (details[subIndex] ?  details[subIndex] : 0);
 									if(subIndex in sumPaymenyTypes){
 										sumPaymenyTypes[subIndex] += (details[subIndex] ?  details[subIndex] : 0);
@@ -162,19 +162,19 @@ $("#search_button").click(function(){
 										sumPaymenyTypes[subIndex] = (details[subIndex] ?  details[subIndex] : 0);
 									}
 								});
-                            	trs += '<td class="text-right">'+total+'</td></tr>';
+                            	trs += '<td class="text-right">'+total.toFixed(2)+'</td></tr>';
                             	sumTotal += total;
                             });
                             console.log(sumPaymenyTypes);
 							trh += '<tr><th></th>';
 							$.each(result.data.payment_type,function(index,details){
 								trh += '<th>'+index+'</th>';
-								tfs += '<th class="text-right">'+(sumPaymenyTypes[index] ? sumPaymenyTypes[index] : 0)+'</th>';
+								tfs += '<th class="text-right">'+(sumPaymenyTypes[index] ? sumPaymenyTypes[index].toFixed(2) : 0)+'</th>';
 							});
 							trh += '<th class="text-right">Total</th></tr>';
 							$("#today-sale-table thead").html(trh);
 							$("#today-sale-table tbody").html(trs);
-							$("#today-sale-table tfoot").html('<tr><th>Total</th>'+tfs+'<th class="text-right">'+sumTotal+'</th></tr>');
+							$("#today-sale-table tfoot").html('<tr><th>Total</th>'+tfs+'<th class="text-right">'+sumTotal.toFixed(2)+'</th></tr>');
 				} 
 			});
 		});
