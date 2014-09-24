@@ -47,7 +47,11 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 		$("#error_message_modal").hide();
 		$('#login_holder_home').modal('show');
 	}else{
-		$('#shift_data_tab_holder').removeClass('hidden');
+		if(thisId == 'shift_data_tab'){
+			$('#shift_data_tab_holder').removeClass('hidden');			
+		}else{
+			$('#shift_data_tab_holder').addClass('hidden');
+		}
 	}
 });
 
