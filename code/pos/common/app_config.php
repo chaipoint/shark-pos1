@@ -1,12 +1,8 @@
 <?php session_start();
 	class App_config{
-		public $log;
  		public $db;
 		private $module = 'login';
 		private $mode = 'index'; 
-
-
-
 		private $app;
 		private $root;
 		private $base_path;
@@ -26,8 +22,12 @@
 		public $iniConfigFile;
 		public $userIdField = 'mysql_id';
 		protected $return;
+		protected $cDB = null;
+
 		public function __construct(){
-			$this->log = Logger::getLogger("CP-POS|APP-CONFIG");
+			require_once 'couchdb_phpclass.php';
+			$this->cDB = new CouchPHP();
+			
 			$this->return = array('error'=>false,'message'=>'','data'=>array());
 
 			/*Set all Config things like application base folder and Others Directory as URL, CSS, JS*/
@@ -41,7 +41,6 @@
 
 			if(array_key_exists('dispatch', $_GET)){
 
-				//$this->log->trace("parameter ".$_GET['dispatch']);
 
 				$queryArray = explode(".",$_GET['dispatch']);
 				if(empty($queryArray[0])){
@@ -55,7 +54,7 @@
 					}
 				}
 			}else{
-				//$this->log->trace("default ".$this->getModule().'.'.$this->getMode());
+
 			}
 			if($this->module != 'login' && $this->module != 'utils'){
 				if(!array_key_exists('user', is_array(@$_SESSION) ? $_SESSION : array())){
@@ -65,6 +64,7 @@
 				}
 			}
 		}
+		
 		public function getInstallationConfig(){
 			$iniFile = $this->root."/pos.ini";
 			$this->iniConfigFile = $iniFile;
@@ -88,6 +88,7 @@
 			}
 			return $return;
 		}
+
 		public function setIniFile($file,$data){
 			$result = '';
 			foreach($data as $key => $value){

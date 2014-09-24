@@ -1,6 +1,12 @@
 var keyboard = new Array();
 var resData = '';
-$(document).ready(function(){	
+$(document).ready(function(){
+	$("#active_bill_table_wrapper").on('click', '.edit-bill', function(event){
+		if(!is_shift_running){
+			event.preventDefault();
+			bootbox.alert('Please Start Shift Before Modify Bill.');
+		}
+	});	
 	if(is_store_open){
 		$('#shift_breadcrumb').text($('#shift_nav li:nth-child(2)').text());
 		$('#store_shift_message').text('Store is Opened.');

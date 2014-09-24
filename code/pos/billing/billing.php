@@ -1,11 +1,8 @@
 <?php	
 	class Billing extends App_config{
-		private $cDB;
 		private $configData;
 		function __construct(){
 			parent::__construct();
-			global $couch;
-			$this->cDB = $couch;
 			$this->log =  Logger::getLogger("CP-POS|BILLING");
 			$configResult = $this->getConfig($this->cDB, array('channel','bill_status','payment_mode', 'delivery_channel','company_details'));
 			$this->configData = (count($configResult['data']) > 0) ? $configResult['data'] : array();
@@ -105,7 +102,6 @@
 
 
 		function save(){
-			global $couch;
 			$return = array('error'=>false,'message'=>'','data'=>array());
 			if($_SERVER['REQUEST_METHOD'] == 'POST'){
 				if(array_key_exists('request_type', $_POST) && $_POST['request_type'] == 'save_bill'){
@@ -149,12 +145,12 @@
 					}
 
 
-					$currentBillNo = $couch->getDesign('billing')->getUpdate('getbillno','generateBill')->setParam(array('month'=>$this->getCMonth()))->execute();
+					$currentBillNo = $this->cDB->getDesign('billing')->getUpdate('getbillno','generateBill')->setParam(array('month'=>$this->getCMonth()))->execute();
 					if(is_numeric($currentBillNo)){
 						$_POST['bill_no'] = $currentBillNo;
 						unset($_POST['request_type']);					
 
-						$result = $couch->saveDocument()->execute($_POST);
+						$result = $this->cDB->saveDocument()->execute($_POST);
 						if(array_key_exists('ok', $result)){
 							$res = $this->printBill($_POST);
 			                $return['error'] = $res['error'];
@@ -180,7 +176,7 @@
 							$billDataReturned['data']['bill_status_id'] = $_POST['bill_status_id'];
 							$billDataReturned['data']['time']['updated'] = $this->getCDTime();
 							$billDataReturned['data']['cancel_reason'] = array_key_exists('cancel_reason', $_POST) ? $_POST['cancel_reason'] : '';
-							$billSaveResult = $couch->saveDocument()->execute($billDataReturned['data']);
+							$billSaveResult = $this->cDB->saveDocument()->execute($billDataReturned['data']);
 							$return['message'] = 'Bill <b>'.$_POST['bill_status_name']."</b> Successfully".(strlen($billDataReturned['data']['cancel_reason'])>0 ? '<br/>Change Return is <b>'.$_POST['due_amount'].'</b>' : '');
 							if(!array_key_exists('ok', $billSaveResult)){
 								$return['error'] = true;

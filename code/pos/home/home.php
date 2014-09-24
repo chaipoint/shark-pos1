@@ -1,10 +1,7 @@
 <?php
 	class Home extends App_config{
-		private $cDB;
 		function __construct(){
 			parent::__construct();
-			global $couch;
-			$this->cDB = $couch;
 		}
 		public function index(){
 			$result = $this->cDB->getDesign('store')->getView('store_shift')->setParam(array('key'=>'"'.$this->getCDate().'"','include_docs'=>'true'))->execute();
@@ -166,10 +163,10 @@
     		}
 			$tablesShiftData .='</tbody></table></div></div>';
 			$returnData['data']['shift_table'] = $tablesShiftData;
-			$cash_reconciliation_table = '<div class="panel panel-success"><div class="panel-heading"><h4 class="panel-title">Cash Reconciliation</h4></div><div class="panel-body"><table class="table"><tbody>';
+			$cash_reconciliation_table = '<div class="panel panel-success"><div class="panel-heading"><h4 class="panel-title">Cash Reconciliation</h4></div><div class="panel-body"><table class="table"><thead><tr><th>Description</th><th>Value</th></tr></thead><tbody>';
     		foreach($sales_reg['payment_type']['amount'] as $pKey => $pValue){
 				$cash_reconciliation_insert[$pKey] = $pValue;
-	    		$cash_reconciliation_table .= '<tr><td>'.$pKey.'</td><td class="text-center">'.$pValue.'</td></tr>';
+	    		$cash_reconciliation_table .= '<tr><td>'.strtoupper($pKey).'</td><td class="text-center">'.$pValue.'</td></tr>';
     		}
     		$cash_reconciliation_table .= $excess;
     		$cash_reconciliation_table .= '</tbody></table></div></div>';

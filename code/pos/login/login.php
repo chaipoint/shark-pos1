@@ -1,12 +1,9 @@
 <?php
 	class Login extends App_config{
-		private $cDB;
 		private $configData;
 		public function __construct(){
 			parent::__construct();
 			$this->log =  Logger::getLogger("CP-POS|LOGIN");
-			global $couch;
-			$this->cDB = $couch;
 			$this->configData = $this->getInstallationConfig();
 			if(array_key_exists('data', $this->configData)){
 				if(!$this->configData['data']['store_config']['is_configured']){

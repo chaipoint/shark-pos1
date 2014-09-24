@@ -3,7 +3,7 @@
 		if(array_key_exists('error', $data) && $data['error']){
 		?>
 			<div class="alert alert-danger"><?php echo $data['message']?></div>
-		<?php
+		<?php die;
 		}elseif(!$data['data']['store_config']['is_configured']){
 		?>
 			<div><img src="<?php echo IMG;?>loader.gif"></div>

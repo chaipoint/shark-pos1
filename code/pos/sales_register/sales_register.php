@@ -1,11 +1,8 @@
 <?php
 	
 	class Sales_Register extends App_config{
-		private $cDB;
 		function __construct(){
 			parent::__construct();
-			global $couch;
-			$this->cDB = $couch;
 		}
 		function index(){
 			$error = false;
@@ -82,7 +79,6 @@
 				return 	$resultBillList;
 		}
 		function save(){
-			global $couch;
 			$return = array('error'=>false,'message'=>'','data'=>array());
 			if($_SERVER['REQUEST_METHOD'] == 'POST'){
 
@@ -102,7 +98,7 @@
 					$_POST['shift_no'] = $_SESSION['user']['shift'];
 					$_POST['store_id'] = $_SESSION['user']['store']['id'];
 					$_POST['store_name'] = $_SESSION['user']['store']['name'];
-					$result = $couch->saveDocument()->execute($_POST);
+					$result = $this->cDB->saveDocument()->execute($_POST);
 					if(array_key_exists('error', $result)){
 						$return['error'] = true;
 						$return['message'] = 'OOPS! Some Error Contact Admin';

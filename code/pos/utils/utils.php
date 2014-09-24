@@ -2,8 +2,6 @@
 	class utils extends App_config{
 		function __construct(){
 			parent::__construct();
-			global $couch;
-			$this->cDB = $couch;
 		}
 		function sync(){
 			$return = array('error'=>false, 'message'=>'');

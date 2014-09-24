@@ -2,22 +2,19 @@
 	class Orders extends App_config{
 		function __construct(){
 			parent::__construct();
-			global $couch;
-            $this->cDB = $couch;
 			if(MODE != 'getStaff'){
 				$this->log =  Logger::getLogger("CP-POS|ORDERS");
-				$this->getDBConnection($couch);
+				$this->getDBConnection($this->cDB);
 			}
 		}
 		function updateOrderStatus(){
 			//print_r($_POST);
 		    $dir =  dirname(__FILE__).'/../lib/msg_api/sms.php';
             require_once $dir; 
-            global $couch;
             if(getType($this->db->getInstance()) != 'resource'){
 				return json_endcode(array('error' => true, 'message' => 'Server Down! Please Contact Admin', 'data' => array()));					
 			}
-            $details = $this->getConfig($couch,'sms_api');
+            $details = $this->getConfig($this->cDB,'sms_api');
 			$return = array('error' => false, 'message' => '', 'data' => array());
 			if(array_key_exists('new_status', $_POST) && array_key_exists('current_status', $_POST)){
 				$current = $_POST['current_status'];
