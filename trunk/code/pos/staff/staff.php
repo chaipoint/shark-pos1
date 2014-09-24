@@ -1,10 +1,7 @@
 <?php	
 	class Staff extends App_config{
-		private $cDB;
 		function __construct(){
 			parent::__construct();
-			global $couch;
-			$this->cDB = $couch;
 		}
 		
 		function getStaff(){

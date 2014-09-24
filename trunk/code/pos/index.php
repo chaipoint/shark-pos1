@@ -1,7 +1,6 @@
 <?php
 	date_default_timezone_set('Asia/Calcutta');
 
-	global $couch;
 	/*Configuration Class For Whole Application*/
 
 	require_once 'lib/log4php/Logger.php';
@@ -10,12 +9,10 @@
 	
 
 	require_once 'common/app_config.php';
-	require_once 'common/couchdb_phpclass.php';
 	require_once 'lib/mysql/db.php';
 
 	$appConfig = new App_config();
 
-	$couch = new CouchPHP();
 
 		/*Constant's For App*/
 	define(	'APP',		$appConfig->getApp()	);
@@ -27,12 +24,12 @@
 	define(	'IMG',		$appConfig->getImg()	);
 	define('DIR', dirname(__FILE__));
 	
-	$logger->trace('Dispatch '.MODULE.".".MODE);
+	$logger->debug('Dispatch '.MODULE.".".MODE);
 	
 	if(file_exists(MODULE."/".MODULE.".php")){
 		require_once MODULE."/".MODULE.".php";
 	}else{
-		$logger->trace('Module Not Found {'.MODULE.'}');
+		$logger->debug('Module Not Found {'.MODULE.'}');
 		echo "Unable To Process Request, Call To Undifiend Module";
 		die();
 	}
@@ -47,7 +44,7 @@
 			echo $res;
 		}
 	}else{
-		$logger->trace('Mode Not Found '.MODULE.'{'.MODE.'}');
+		$logger->debug('Mode Not Found '.MODULE.'{'.MODE.'}');
 		echo "Unable To Process Request, Call To Undifiend File";
 	}
 

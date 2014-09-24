@@ -5,8 +5,7 @@
 			parent::__construct();
 		}
 		function select(){
-			global $couch;
-			$storeResult = json_decode($couch->getDesign('store')->getView('store_as_option', array_key_exists('store', $_POST)? $_POST['store'] : 0)->execute(),true);
+			$storeResult = json_decode($this->cDB->getDesign('store')->getView('store_as_option', array_key_exists('store', $_POST)? $_POST['store'] : 0)->execute(),true);
 			$storeList = $storeResult['rows'];
 			
 			if($_SERVER['REQUEST_METHOD'] == "POST"){
