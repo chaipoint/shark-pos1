@@ -2,11 +2,18 @@
 	class Staff extends App_config{
 		function __construct(){
 			parent::__construct();
+			$this->getDBConnection($this->cDB);
 		}
 		
 		function getStaff(){
 			$staffList = $this->cDB->getDesign('staff')->getView('staff_username')->setParam(array("include_docs"=>"true"))->execute();
 			return $staffList;
+		}
+		function getDeliveryBoy(){ 
+			$token = $_REQUEST['token'];
+			$getStaff = "SELECT name label, id FROM staff_master WHERE active = 'Y' AND location_id = '".$_SESSION['user']['location']['id']."' AND name LIKE '%$token%'";
+			$result = $this->db->func_query($getStaff);
+			echo json_encode($result);
 		}	
 		function save_petty(){
 			$return = array('error'=>false, 'message'=>'', 'data'=>array());
