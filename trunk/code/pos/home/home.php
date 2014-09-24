@@ -150,7 +150,7 @@
 						$excess .= '<tr><td>SHIFT '.$values['shift_no'].' EXCESS CASH</td><td class="text-center">'.($saleCashVeriance+$pettyCashVeriance).'</td></tr>';
 						$cash_reconciliation_insert['shift_'.$values['shift_no'].'_excess_cash'] = ($saleCashVeriance+$pettyCashVeriance);
 				}
-				if(!empty($shift_data['rows'][0]['end_time'])){
+				if(!empty($shift_data['rows'][0]['doc']['day']['end_time'])){
 					$tablesShiftData .='<tr><td>DAY END</td>
 				    	<td class="text-center"></td>
 				    	<td class="text-center"></td>
