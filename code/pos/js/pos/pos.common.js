@@ -144,7 +144,7 @@ var createDataTable = function (path,table,footerRow,filterRow) { //alert(filter
 		});
 		if(filterRow!=undefined){
 			$("#"+filterRow+" th").each( function ( i ) {				
-					if(i==7 || i==8 || i==9 || i==10 || i==11 || i==12 || i==13)
+					if(i==8 || i==9 || i==10 || i==11 || i==12 || i==13 || i==14)
 					{
 					var select = $('<select style="width:90%;"><option value=""></option></select>')
 						.appendTo( $(this).empty() )
