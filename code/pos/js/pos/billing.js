@@ -11,6 +11,7 @@ var order = 0;
 var loadedBill = null;
 var modifyBill = false;
 var popupKeyboard = null;
+
 $(document).ready(function(){
 	var url = $.url();
 	$(this).attr("title", "Shark |ChaiPoint POS| Billing"); 
@@ -550,8 +551,8 @@ $(document).ready(function(){
 });
 function generateSalesTable(productId, qty, productData){
 	resetBill(false);
-	var productID = productId;
-	if(productId && productId > 0){
+	var productID = (productId) ? productId : 0;
+	if(productID && productID > 0){
 		var  newqty = isNaN(parseInt(qty)) ? 0 : qty;
 		if(! (productID in $billingItems)){
 			$billingItems[productID] = new Object();
@@ -584,8 +585,8 @@ function generateSalesTable(productId, qty, productData){
 			$billingItems[productID].netAmount = $billingItems[productID].priceAD + $billingItems[productID].taxAmount;
 		}
 	}
-	
 	var tableRows = '';
+
 	for(var index in $billingItems){
 			$billingItems[index].discount = $intDiscount;
 			$billingItems[index].subTotal = $billingItems[index].qty * $billingItems[index].priceBT;
@@ -593,19 +594,28 @@ function generateSalesTable(productId, qty, productData){
 			$billingItems[index].priceAD = $billingItems[index].subTotal - $billingItems[index].discountAmount;
 			$billingItems[index].taxAmount = $billingItems[index].priceAD * $billingItems[index].tax;
 			$billingItems[index].netAmount = $billingItems[index].priceAD + $billingItems[index].taxAmount;
-		tableRows +='<tr billing-product="'+index+'">'+
-			'<td style="width:9%"><span class="glyphicon glyphicon-remove-sign del_row"></span></td>'+
-			'<td style="width:53%" class="btn-warning">'+$billingItems[index].name+'&nbsp;@&nbsp;'+$billingItems[index].price+'</td>'+
-			'<td style="width:12%"><span class="bill_item_qty"><input type="text" class="keyboard nkb-input bill_qty_input" value="'+$billingItems[index].qty+'"/></span></td>'+
-			'<td style="width:26%" class="text-right"><span class="bill_item_price text-right">'+($billingItems[index].qty * $billingItems[index].taxAbleAmount).toFixed(2)+'</span></td>'+
-			'</tr>';
-
+		if(productID != index){
+			tableRows +='<tr billing-product="'+index+'">'+
+				'<td style="width:9%"><span class="glyphicon glyphicon-remove-sign del_row"></span></td>'+
+				'<td style="width:53%" class="btn-warning">'+$billingItems[index].name+'&nbsp;@&nbsp;'+$billingItems[index].price+'</td>'+
+				'<td style="width:12%"><span class="bill_item_qty"><input type="text" class="keyboard nkb-input bill_qty_input" value="'+$billingItems[index].qty+'"/></span></td>'+
+				'<td style="width:26%" class="text-right"><span class="bill_item_price text-right">'+($billingItems[index].qty * $billingItems[index].taxAbleAmount).toFixed(2)+'</span></td>'+
+				'</tr>';
+		}
 		$totalBillQty += parseInt($billingItems[index].qty);
 		$totalAmountWOT += ($billingItems[index].subTotal);
 		$totalAmountWT += $billingItems[index].netAmount;
 		$totalTaxAmount += ($billingItems[index].taxAmount );
 		$totalDiscountAmount += ($billingItems[index].discountAmount );
 
+	}
+	if(productID>0){
+			tableRows +='<tr billing-product="'+productID+'">'+
+				'<td style="width:9%"><span class="glyphicon glyphicon-remove-sign del_row"></span></td>'+
+				'<td style="width:53%" class="btn-warning">'+$billingItems[productID].name+'&nbsp;@&nbsp;'+$billingItems[productID].price+'</td>'+
+				'<td style="width:12%"><span class="bill_item_qty"><input type="text" class="keyboard nkb-input bill_qty_input" value="'+$billingItems[productID].qty+'"/></span></td>'+
+				'<td style="width:26%" class="text-right"><span class="bill_item_price text-right">'+($billingItems[productID].qty * $billingItems[productID].taxAbleAmount).toFixed(2)+'</span></td>'+
+				'</tr>';
 	}
 	$('#saletbl tbody').html(tableRows);
 

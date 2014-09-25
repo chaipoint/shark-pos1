@@ -13,15 +13,17 @@ class CouchPHP{
 	private $isDelete = false;
 
 	function __construct(){
-
+		global $config;
 		$this->log =  Logger::getLogger("CP-POS|COUCHDB");
+		$OPM = $config['operating_mode'];
 
-		$this->port = "5984";
-		$this->url = 'http://127.0.0.1:'.$this->port."/";
-		$this->db = 'sharkpos';
-		$this->userName = '';
-		$this->password = '';
-		$this->remote = 'http://pos:pos@54.249.247.15:5984/sharkho';
+		$this->userName = $config[$OPM.'_cd_local_username'];
+		$this->password = $config[$OPM.'_cd_local_password'];
+
+		$this->port = $config[$OPM.'_cd_local_port'];
+		$this->url = $config[$OPM.'_cd_local_protocol'].'://'.$this->userName.':'.$this->password.'@'.$config[$OPM.'_cd_local_url'].':'.$this->port."/";
+		$this->db = $config[$OPM.'_cd_local_db'];
+		$this->remote = $config[$OPM.'_cd_remote_protocol'].'://'.$config[$OPM.'_cd_remote_username'].':'.$config[$OPM.'_cd_remote_password'].'@'.$config[$OPM.'_cd_remote_url'].':'.$config[$OPM.'_cd_remote_port'].'/'.$config[$OPM.'_cd_remote_db'];
 	}
 	public function getUrl(){
 		return $this->url;
