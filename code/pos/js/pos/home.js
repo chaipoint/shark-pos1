@@ -107,6 +107,12 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 
 	});
 
+	/* Cancel Form */
+	$('.cancel-btn').click(function(){
+		var form_name = $(this).closest('form').attr('id');
+		$('#'+form_name).addClass('hide');
+	});
+
 
 });
 function CashRHandleResponse(response){
