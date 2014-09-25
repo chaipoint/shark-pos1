@@ -305,11 +305,11 @@ $.fn.cKeyboard = function(){
 				case '#discount_input_box':
 					options.layout = 'caustom';
 					options.customLayout = {
-							'default':['0 1 2 3 4','5 6 7 8 9','{clear} {bksp} {accept} {cancel}']
+							'default':['1 2 3 {clear}','4 5 6 .','7 8 9 0','{accept} {cancel}']
 						};
 					options.beforeClose = function(e,keyboard,el,accepted){
 						if(accepted){
-							var dis = parseInt(keyboard.$preview[0].value);
+							var dis = parseFloat(keyboard.$preview[0].value);
 							if(!isNaN(dis) && dis<=100){
 								$intDiscount =  dis;
 								generateSalesTable();
