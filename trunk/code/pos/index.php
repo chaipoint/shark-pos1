@@ -2,7 +2,7 @@
 	date_default_timezone_set('Asia/Calcutta');
 
 	/*Configuration Class For Whole Application*/
-
+	require_once 'config.php';
 	require_once 'lib/log4php/Logger.php';
 	Logger::configure('common/config.xml');
 	$logger = Logger::getLogger("CP-POS|INDEX");;
