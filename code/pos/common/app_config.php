@@ -56,13 +56,15 @@
 			}else{
 
 			}
+			/*
 			if($this->module != 'login' && $this->module != 'utils'){
 				if(!array_key_exists('user', is_array(@$_SESSION) ? $_SESSION : array())){
 					header("Location:".$this->url);
 				}elseif(array_key_exists('user', $_SESSION) && !array_key_exists('mysql_id', $_SESSION['user'])){
 					header("Location:".$this->url);
 				}
-			}
+			}/**/
+
 		}
 		
 		public function getInstallationConfig(){

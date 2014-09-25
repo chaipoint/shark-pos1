@@ -1,10 +1,4 @@
 <?php
-
-/*$cd = new couchPHP();
-echo "<pre>";
-print_r($cd->fn);
-echo "</pre>";/**/
-
 class CouchPHP{
 	private $url;
 	private $port;
@@ -161,7 +155,8 @@ class CouchPHP{
    		$resArray = json_decode($result,true);
    		if(is_null($resArray)){
    			$resArray['error'] = true;
-   			$resArray['cMessage'] = 'server_error';
+   			$resArray['message'] = 'DataBase Server is Down.';
+   			$resArray['source'] = 'app';
    		}
        	return $resArray;
 	}

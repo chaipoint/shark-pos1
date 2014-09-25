@@ -507,6 +507,8 @@ $(document).ready(function(){
 							discountAmount += (data.discountAmount);
 							subTotalSum += ((parseFloat(data.subTotal)));
 							priceAfterDiscount += (parseFloat(data.priceAD));
+										console.log(data.priceBT);
+
 			});
 			$viewData += '</tbody>'+
 						'<tfoot><tr class="active"><th>Total</th><th></th><th></th><th class="text-right">'+qty+'</th><th class="text-right">'+subTotalSum.toFixed(2)+'</th><th class="text-right">'+(discountAmount).toFixed(2)+'</th><th class="text-right">'+(priceAfterDiscount).toFixed(2)+'</th><th></th><th class="text-right">'+(taxAmount).toFixed(2)+'</th><th class="text-right">'+(netAmount).toFixed(2)+'</th></tr></tfoot>'
@@ -560,7 +562,7 @@ function generateSalesTable(productId, qty, productData){
 			$billingItems[productID].id = productID;
 			$billingItems[productID].name = productData.name;
 			$billingItems[productID].price = isNaN(productData.price * 1) ? 0 : productData.price;
-			$billingItems[productID].priceBT = (productData.tax.rate) ? (productData.price - ( productData.price * parseFloat(productData.tax.rate) )) : $billingItems[productID].price;
+			$billingItems[productID].priceBT = decimalAdjust((productData.tax.rate) ? (productData.price - ( productData.price * parseFloat(productData.tax.rate) )) : $billingItems[productID].price , -2);
 			$billingItems[productID].taxAbleAmount = $billingItems[productID].priceBT;
 			$billingItems[productID].qty = newqty;
 			$billingItems[productID].subTotal = $billingItems[productID].qty * $billingItems[productID].priceBT;

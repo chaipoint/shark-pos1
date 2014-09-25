@@ -7,12 +7,25 @@
 			$this->configData = $this->getInstallationConfig();
 			if(array_key_exists('data', $this->configData)){
 				if(!$this->configData['data']['store_config']['is_configured']){
+					$this->log->debug('Initalizing first time for store '.$this->configData['data']['store_config']['store_id']);
 					$this->config($this->configData);
 					die();
 				}else{
-					$this->store = $this->configData['data']['store_config']['store_id'];
+					$this->log->debug('Configured Store is '.$this->configData['data']['store_config']['store_id']);
+					require_once DIR."/store/store.php";
+					$store = new Store();
+					$store_result = $store->getStore($this->configData['data']['store_config']['store_id']);
+					if(count($store_result) == 0){
+						die;
+					}elseif(array_key_exists('error', $store_result) && array_key_exists('source', $store_result)){
+						die;
+					}
+					$this->store = $store_result[0]['key'];
+					$this->store_name = $store_result[0]['value'];
+					$this->log->debug('Login Page is Ready For '.$this->store_name." | ".$this->store);
 				}
 			}else{
+				$this->log->debug('Config File Have Some Problem \n\r'.'Error Message :- '.$this->configData['message']);
 				$this->config($this->configData);
 				die();
 			}
@@ -60,7 +73,7 @@
 				$resultJSON = $this->cDB->getDesign('staff')->getList('getuser','staff_username')->execute($_POST);			
 
 				$result = $resultJSON;
-				if(!array_key_exists('cMessage', $result)){
+				if(!array_key_exists('for', $result)){
 					if(!$result['error']){
 						if($_POST['validateFor'] == 'sales_register' || $_POST['validateFor'] == 'cash_reconciliation'){
 							require_once DIR.'/sales_register/sales_register.php';
@@ -83,10 +96,7 @@
 								$returnData['message'] = 'You are not allowed to access.';
 							}
 						}else{
-
-
-							$resultJSON = $this->cDB->getDesign('store')->getView('store_mysql_id')->setParam(array("key"=>'"'.$this->store.'"'))->execute();
-							$userData["store"]['name'] = $resultJSON['rows'][0]['value'];
+							$userData["store"]['name'] = $this->store_name;
 
 							$userData["_id"] = $result['data']['_id'];
 							$userData["_rev"] = $result['data']['_rev'];
