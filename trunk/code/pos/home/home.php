@@ -120,6 +120,7 @@
 			    	$shift_in = 0;
 			    	$shift_ex = 0;
 			   	$cashSum = 0;
+			   	$total = 0;
 				foreach($shifts as $key => $values){
 				    $inw = (empty($values['petty_cash_balance']['inward_petty_cash']) ? $shift_inward : $values['petty_cash_balance']['inward_petty_cash']);
 				    $exp = (empty($values['petty_cash_balance']['petty_expense']) ? $shift_expense : $values['petty_cash_balance']['petty_expense']);
@@ -144,8 +145,9 @@
 						<td class="text-center">'.$saleCashVeriance.'</td>
 						</tr>';
 						$cashSum += (array_key_exists($values['shift_no'], $sales_reg['shift_cash']) ? $sales_reg['shift_cash'][$values['shift_no']] : 0);
-						$excess .= '<tr><td>SHIFT '.$values['shift_no'].' EXCESS CASH</td><td class="text-center">'.($saleCashVeriance+$pettyCashVeriance).'</td></tr>';
-						$cash_reconciliation_insert['shift_'.$values['shift_no'].'_excess_cash'] = ($saleCashVeriance+$pettyCashVeriance);
+						$excess .= '<tr><td>SHIFT '.$values['shift_no'].' EXCESS CASH</td><td class="text-center">'.(($saleCashVeriance > 0 ? $saleCashVeriance : 0)+($pettyCashVeriance >0 ? $pettyCashVeriance :0 )).'</td></tr>';
+						$cash_reconciliation_insert['shift_'.$values['shift_no'].'_excess_cash'] = (($saleCashVeriance > 0 ? $saleCashVeriance : 0)+($pettyCashVeriance >0 ? $pettyCashVeriance : 0 ));
+						$total	+= $cash_reconciliation_insert['shift_'.$values['shift_no'].'_excess_cash'];
 				}
 				if(!empty($shift_data['rows'][0]['doc']['day']['end_time'])){
 					$tablesShiftData .='<tr><td>DAY END</td>
@@ -167,9 +169,10 @@
     		foreach($sales_reg['payment_type']['amount'] as $pKey => $pValue){
 				$cash_reconciliation_insert[$pKey] = $pValue;
 	    		$cash_reconciliation_table .= '<tr><td>'.strtoupper($pKey).'</td><td class="text-center">'.$pValue.'</td></tr>';
+	    		$total += $pValue;
     		}
     		$cash_reconciliation_table .= $excess;
-    		$cash_reconciliation_table .= '</tbody></table></div></div>';
+    		$cash_reconciliation_table .= '</tbody><thead><tr><th>Total</th><th>'.($total).'</th></tr></thead></table></div></div>';
     		if(!$returnData['error'] && array_key_exists(0, $shift_data['rows']) && !array_key_exists('date', $_POST)){
 				$result = $this->cDB->getDesign('store')->getUpdate('store_shift',$shift_data['rows'][0]['id'])->setParam($cash_reconciliation_insert)->execute();
     		}
