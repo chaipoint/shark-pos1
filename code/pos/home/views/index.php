@@ -88,11 +88,17 @@
 							<input type="text" name="petty_cash" value="" id="petty_cash" class="input-sm form-control" placeholder="Petty Cash" autocomplete="off"/>
 						</div>
 						<div class="row padded">
-							<div class="col-md-12">
+							<div class="col-md-7">
 								<button type="submit" class="btn btn-success btn-sm btn-block btn-lg">Start Day 
 									<i class="glyphicon glyphicon-log-in"></i>
 								</button>
 							</div>
+							<div class="col-md-5">
+								<button type="button" class="btn btn-danger btn-sm btn-block btn-lg cancel-btn">Cancel 
+									<i class="glyphicon glyphicon-home"></i>
+								</button>
+							</div>
+							
 						</div>
 					</form>
 
@@ -111,15 +117,20 @@
 						</div>
 						<div class="input-group padded">
 							<span class="input-group-addon">
-								<i class="glyphicon glyphicon-lock"></i> 
+								<i class="glyphicon glyphicon-open"></i> 
 							</span> 
 							<input type="text" name="counter_no" value="1" id="counter_no" class="input-sm form-control" placeholder="Counter Number" autocomplete="off"/>
 						</div>
 
 						<div class="row padded">
-							<div class="col-md-12">
+							<div class="col-md-7">
 								<button type="submit" class="btn btn-success btn-sm btn-block btn-lg">Start Shift 
 									<i class="glyphicon glyphicon-log-in"></i>
+								</button>
+							</div>
+							<div class="col-md-5">
+								<button type="button" class="btn btn-danger btn-sm btn-block btn-lg cancel-btn">Cancel 
+									<i class="glyphicon glyphicon-home"></i>
 								</button>
 							</div>
 						</div>
@@ -140,21 +151,26 @@
 						</div>
 						<div class="input-group padded">
 							<span class="input-group-addon">
-								<i class="glyphicon glyphicon-lock"></i> 
+								<i class="glyphicon glyphicon-usd"></i> 
 							</span> 
 							<input type="text" name="petty_cash_end" value="" id="petty_cash_end" class="input-sm form-control" placeholder="Petty Cash" autocomplete="off"/>
 						</div>
 						<div class="input-group padded">
 							<span class="input-group-addon">
-								<i class="glyphicon glyphicon-lock"></i> 
+								<i class="glyphicon glyphicon-briefcase"></i> 
 							</span> 
 							<input type="text" name="box_cash" value="" id="box_cash" class="input-sm form-control" placeholder="Box Cash" autocomplete="off"/>
 						</div>
 
 						<div class="row padded">
-							<div class="col-md-12">
+							<div class="col-md-7">
 								<button type="submit" class="btn btn-success btn-sm btn-block btn-lg">End Shift 
 									<i class="glyphicon glyphicon-log-in"></i>
+								</button>
+							</div>
+							<div class="col-md-5">
+								<button type="button" class="btn btn-danger btn-sm btn-block btn-lg cancel-btn">Cancel 
+									<i class="glyphicon glyphicon-home"></i>
 								</button>
 							</div>
 						</div>
@@ -175,14 +191,19 @@
 						</div>
 						<div class="input-group padded">
 							<span class="input-group-addon">
-								<i class="glyphicon glyphicon-lock"></i> 
+								<i class="glyphicon glyphicon-briefcase"></i> 
 							</span> 
 							<input type="text" name="box_cash_end" value="" id="box_cash_end" class="input-sm form-control" placeholder="Box Cash" autocomplete="off"/>
 						</div>
 						<div class="row padded">
-							<div class="col-md-12">
+							<div class="col-md-7">
 								<button type="submit" class="btn btn-success btn-sm btn-block btn-lg">End Day 
 									<i class="glyphicon glyphicon-log-in"></i>
+								</button>
+							</div>
+							<div class="col-md-5">
+								<button type="button" class="btn btn-danger btn-sm btn-block btn-lg cancel-btn">Cancel 
+									<i class="glyphicon glyphicon-home"></i>
 								</button>
 							</div>
 						</div>
