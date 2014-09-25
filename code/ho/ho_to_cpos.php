@@ -26,10 +26,14 @@
 		case "uploadLoginHistory":
 		echo uploadLoginHistory();
 		break;
-		case "shift_data":
+		
+		case "uploadShiftData":
 		echo uploadShiftData();
 		break;
 }
+
+/* Function To Upload Shift Data On CPOS*/
+
 function uploadShiftData(){
 	global $logger, $db;
 	$logger->debug("Shift Data From HO to CPOS");
@@ -115,10 +119,26 @@ function uploadShiftData(){
 					$insertQuery = "insert into cp_pos_shift_data (pos_day_id, start_time, end_time, staff_id, end_petty_cash, end_cash_inbox, counter_no, shift_no, opening_petty_cash, petty_expense, closing_petty_cash, inward_petty_cash) values ".implode(",", $shiftInsert);
 					$db->db_query($insertQuery);
 				}		
+			}
 		}
+
+	}else{
+		$logger->debug("ERROR: NO Data To Be Upload");
+  		$html['error'] = true;
+		$html['update'] = false;
+		$html['msg'] = 'Sorry! No Shift Data Available';
+		$result = json_encode($html,true);
+		$logger->debug("End Of Uplaod Shift Data Function");
+		return $result;
 	}
 
-}
+		$logger->debug("SUCCESS: Data Uploaded Successfully");
+  		$html['error'] = false;
+		$html['update'] = true;
+		$html['msg'] = 'Data Uploaded Successfully';
+		$result = json_encode($html,true);
+		$logger->debug("End Of Uplaod Shift Data Function");
+		return $result;
 }
 
 /* Function To Upload Bill On CPOS*/
