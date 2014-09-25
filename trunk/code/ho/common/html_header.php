@@ -32,6 +32,7 @@
                 <li><a href="javascript:void(0);" id="bill_synk">Upload Bill</a></li>
                 <li><a href="javascript:void(0);" id="updated_bill_synk">Upload Updated Bill</a></li>
                 <li><a href="javascript:void(0);" id="petty_expense_synk">Upload Petty Expense</a></li>
+                <li><a href="javascript:void(0);" id="shift_data_synk">Upload Shift Data</a></li>
                 <li><a href="javascript:void(0);" id="login_history_synk">Upload Login History</a></li>
                 <li><a href="#">Upload Attendance</a></li>
               </ul>
