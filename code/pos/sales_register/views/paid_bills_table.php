@@ -24,6 +24,7 @@
                 <th></th>
                 <th></th>
                 <th></th>
+                <th></th>
                 <?php }?>
                 <th></th>
                 <th></th>
@@ -40,6 +41,7 @@
                 <th>Item Count</th>
                 <?php if(MODULE == 'sales_register'){?>
                 <th>Sub Total</th>
+                <th>Discount</th>
                 <th>Tax</th>
                 <th>Total Amount</th>
                 <th>Due Amount</th>
@@ -68,6 +70,7 @@ if(is_array($data) && count($data)>0) {
 		        <td style="text-align:center"><?php echo $value['total_qty']; ?></td>
             <?php if(MODULE == 'sales_register'){?>
 		        <td style="text-align:right"><?php echo  number_format($value['sub_total'],2); ?></td>
+            <td style="text-align:right"><?php echo  number_format($value['total_discount'],2); ?></td>
 		        <td class="text-right"><?php echo number_format($value['total_tax'],2); ?></td>
             <td class="text-right"><?php echo number_format($value['total_amount'],2); ?></td>
             <td class="text-right"><?php echo number_format($value['due_amount'],2); ?></td>
@@ -103,10 +106,6 @@ if(is_array($data) && count($data)>0) {
 		        </td>
         </tr>
 <?php	  
-      
-          $sub_total += $value['sub_total'];
-          $total_tax += $value['total_tax']; 
-          $total_amount += $value['total_amount'];
           $due_amount += $value['due_amount']; 
           $counter++; 
         }
@@ -121,6 +120,7 @@ if(is_array($data) && count($data)>0) {
           <th style="font-size:11px;"><strong>Total</strong></td>
           <th></th>
           <th></th>
+          <th class="text-right" style="font-size:11px;"></th>
           <th class="text-right" style="font-size:11px;"></th>
           <th class="text-right" style="font-size:11px;"></th>
           <th class="text-right" style="font-size:11px;"></th>
@@ -143,7 +143,7 @@ if(is_array($data) && count($data)>0) {
 </div>
 <script>
 var oTable = null;
-var footerRow = [3,4,5,6];
+var footerRow = [3,4,5,6,7];
 var filteRow = 'filter_active';
 var media_path = "<?php echo JS;?>";
 oTable = createDataTable(media_path,'active_bill_table',footerRow,filteRow);
