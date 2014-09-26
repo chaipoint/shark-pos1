@@ -43,12 +43,12 @@
                 <th>Sub Total</th>
                 <th>Discount</th>
                 <th>Tax</th>
-                <th>Total Amount</th>
-                <th>Due Amount</th>
+                <th>Total Amt</th>
+                <th>Due Amt</th>
                 <?php }?>
                 
-                <th>Sales Channel</th>
-                <th>Booking Channel</th>
+                <th>Sales Chanl</th>
+                <th>Booking Chanl</th>
                 <th>Paid By</th>
                 <th>Status</th>
                 <th>Is CoD</th>
