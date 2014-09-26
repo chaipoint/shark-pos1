@@ -112,10 +112,10 @@
 													<th style="font-size:11px">Petty Cash Expense</th>
 													<th style="font-size:11px">Shift End Petty Cash</th>
 													<th style="font-size:11px">Shift End (Cash in the box)</th>
-													<th style="font-size:11px">Expected Closing Petty  Cash</th>
-													<th style="font-size:11px">Petty Cash  Variance</th>
-													<th style="font-size:11px">Expected Cash in the box</th>
-													<th style="font-size:11px">Sales Cash Variance</th>
+													<th style="font-size:11px;background-color:#428BCA">Expected Closing Petty  Cash</th>
+													<th style="font-size:11px;background-color:#428BCA">Petty Cash  Variance</th>
+													<th style="font-size:11px;background-color:#428BCA">Expected Cash in the box</th>
+													<th style="font-size:11px;background-color:#428BCA">Sales Cash Variance</th>
 												</tr>
 											</thead>
     										<tbody>';
@@ -125,7 +125,7 @@
 				$total = count($shifts);
 				$day = $shift_data['rows'][0]['doc']['day'];
 				$shift_end_cash = ($day['start_cash']+$day['petty_cash_balance']['inward_petty_cash']-$day['petty_cash_balance']['petty_expense']);
-				$tablesShiftData .='<tr><td style="font-size:10px">DAY START</td>
+				$tablesShiftData .='<tr><td style="font-size:9px">DAY START</td>
 			    	<td class="text-center">'.$day['start_cash'].'</td>
 			    	<td class="text-center">'.$day['petty_cash_balance']['inward_petty_cash'].'</td>
 			    	<td class="text-center">'.$day['petty_cash_balance']['petty_expense'].'</td>
@@ -151,46 +151,46 @@
 					$saleCashVeriance = ($values['end_cash_inbox']-(array_key_exists($values['shift_no'], $sales_reg['shift_cash']) ? $sales_reg['shift_cash'][$values['shift_no']] : 0));
 					$pettyCashVeriance = ($values['end_petty_cash']-$closing_cash);
 					$tablesShiftData .='<tr>
-						<td style="font-size:10px">SHIFT '.$values['shift_no'].'</td>
+						<td style="font-size:9px">SHIFT '.$values['shift_no'].'</td>
 						<td class="text-center"></td>
 						<td class="text-center">'.$inw.'</td>
 						<td class="text-center">'.$exp.'</td>
 						<td class="text-center">'.$values['end_petty_cash'].'</td>
 						<td class="text-center">'.$values['end_cash_inbox'].'</td>
-						<td class="text-center">'.$closing_cash.'</td>
-						<td class="text-center">'.$pettyCashVeriance.'</td>
-						<td class="text-center">'.(array_key_exists($values['shift_no'], $sales_reg['shift_cash']) ? $sales_reg['shift_cash'][$values['shift_no']] : 0).'</td>
-						<td class="text-center">'.$saleCashVeriance.'</td>
+						<td class="text-center" style="background-color:#428BCA">'.$closing_cash.'</td>
+						<td class="text-center" style="background-color:#428BCA">'.$pettyCashVeriance.'</td>
+						<td class="text-center" style="background-color:#428BCA">'.(array_key_exists($values['shift_no'], $sales_reg['shift_cash']) ? $sales_reg['shift_cash'][$values['shift_no']] : 0).'</td>
+						<td class="text-center" style="background-color:#428BCA">'.$saleCashVeriance.'</td>
 						</tr>';
 						$cashSum += (array_key_exists($values['shift_no'], $sales_reg['shift_cash']) ? $sales_reg['shift_cash'][$values['shift_no']] : 0);
-						$excess .= '<tr><td>SHIFT '.$values['shift_no'].' EXCESS CASH</td><td class="text-center">'.(($saleCashVeriance > 0 ? $saleCashVeriance : 0)+($pettyCashVeriance >0 ? $pettyCashVeriance :0 )).'</td></tr>';
+						$excess .= '<tr><td style="font-size:9px">SHIFT '.$values['shift_no'].' EXCESS CASH</td><td class="text-center">'.(($saleCashVeriance > 0 ? $saleCashVeriance : 0)+($pettyCashVeriance >0 ? $pettyCashVeriance :0 )).'</td></tr>';
 						$cash_reconciliation_insert['shift_'.$values['shift_no'].'_excess_cash'] = (($saleCashVeriance > 0 ? $saleCashVeriance : 0)+($pettyCashVeriance >0 ? $pettyCashVeriance : 0 ));
 						$total	+= $cash_reconciliation_insert['shift_'.$values['shift_no'].'_excess_cash'];
 				}
 				if(!empty($shift_data['rows'][0]['doc']['day']['end_time'])){
-					$tablesShiftData .='<tr><td style="font-size:10px">DAY END</td>
+					$tablesShiftData .='<tr><td style="font-size:9px">DAY END</td>
 				    	<td class="text-center"></td>
 				    	<td class="text-center"></td>
 				    	<td class="text-center"></td>
 				    	<td class="text-center">'.$values['end_petty_cash'].'</td>
 				    	<td class="text-center">'.$day['end_fullcash'].'</td>
-				    	<td class="text-center">'.$closing_cash.'</td>
-				    	<td class="text-center">'.($values['end_petty_cash']-$closing_cash).'</td>
-				    	<td class="text-center">'.$cashSum.'</td>
-						<td class="text-center">'.($day['end_fullcash']-$cashSum).'</td>
+				    	<td class="text-center" style="background-color:#428BCA">'.$closing_cash.'</td>
+				    	<td class="text-center" style="background-color:#428BCA">'.($values['end_petty_cash']-$closing_cash).'</td>
+				    	<td class="text-center" style="background-color:#428BCA">'.$cashSum.'</td>
+						<td class="text-center" style="background-color:#428BCA">'.($day['end_fullcash']-$cashSum).'</td>
 				    	</tr>';
 				}
     		}
 			$tablesShiftData .='</tbody></table></div></div>';
 			$returnData['data']['shift_table'] = $tablesShiftData;
-			$cash_reconciliation_table = '<div class="panel panel-success"><div class="panel-heading"><h4 class="panel-title">Cash Reconciliation</h4></div><div class="panel-body"><table class="table"><thead><tr><th>Description</th><th>Value</th></tr></thead><tbody>';
+			$cash_reconciliation_table = '<div class="panel panel-success"><div class="panel-heading"><h4 class="panel-title">Cash Reconciliation</h4></div><div class="panel-body"><table class="table table-condensed"><thead><tr><th style="font-size:12px">Description</th><th style="font-size:12px">Value</th></tr></thead><tbody>';
     		foreach($sales_reg['payment_type']['amount'] as $pKey => $pValue){
 				$cash_reconciliation_insert[$pKey] = $pValue;
-	    		$cash_reconciliation_table .= '<tr><td>'.strtoupper($pKey).'</td><td class="text-center">'.$pValue.'</td></tr>';
+	    		$cash_reconciliation_table .= '<tr><td style="font-size:9px">'.strtoupper($pKey).'</td><td class="text-center">'.$pValue.'</td></tr>';
 	    		$total += $pValue;
     		}
     		$cash_reconciliation_table .= $excess;
-    		$cash_reconciliation_table .= '</tbody><thead><tr><th>Total</th><th>'.($total).'</th></tr></thead></table></div></div>';
+    		$cash_reconciliation_table .= '</tbody><thead><tr><th style="font-size:12px">Total</th><th>'.($total).'</th></tr></thead></table></div></div>';
     		if(!$returnData['error'] && array_key_exists(0, $shift_data['rows']) && !array_key_exists('date', $_POST)){
 				$result = $this->cDB->getDesign('store')->getUpdate('store_shift',$shift_data['rows'][0]['id'])->setParam($cash_reconciliation_insert)->execute();
     		}
