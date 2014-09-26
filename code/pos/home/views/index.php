@@ -156,7 +156,7 @@
 						<div class="input-group padded">
 							<span class="input-group-addon">
 								<i class="glyphicon glyphicon-usd"></i> 
-							</span> 
+							 </span> 
 							<input type="text" name="petty_cash_end" value="" id="petty_cash_end" class="input-sm form-control" placeholder="Petty Cash" autocomplete="off"/>
 						</div>
 						<div class="input-group padded">
