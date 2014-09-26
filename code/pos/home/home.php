@@ -125,7 +125,7 @@
 				$total = count($shifts);
 				$day = $shift_data['rows'][0]['doc']['day'];
 				$shift_end_cash = ($day['start_cash']+$day['petty_cash_balance']['inward_petty_cash']-$day['petty_cash_balance']['petty_expense']);
-				$tablesShiftData .='<tr><td>DAY START</td>
+				$tablesShiftData .='<tr><td style="font-size:10px">DAY START</td>
 			    	<td class="text-center">'.$day['start_cash'].'</td>
 			    	<td class="text-center">'.$day['petty_cash_balance']['inward_petty_cash'].'</td>
 			    	<td class="text-center">'.$day['petty_cash_balance']['petty_expense'].'</td>
@@ -151,7 +151,7 @@
 					$saleCashVeriance = ($values['end_cash_inbox']-(array_key_exists($values['shift_no'], $sales_reg['shift_cash']) ? $sales_reg['shift_cash'][$values['shift_no']] : 0));
 					$pettyCashVeriance = ($values['end_petty_cash']-$closing_cash);
 					$tablesShiftData .='<tr>
-						<td>SHIFT '.$values['shift_no'].'</td>
+						<td style="font-size:10px">SHIFT '.$values['shift_no'].'</td>
 						<td class="text-center"></td>
 						<td class="text-center">'.$inw.'</td>
 						<td class="text-center">'.$exp.'</td>
@@ -168,7 +168,7 @@
 						$total	+= $cash_reconciliation_insert['shift_'.$values['shift_no'].'_excess_cash'];
 				}
 				if(!empty($shift_data['rows'][0]['doc']['day']['end_time'])){
-					$tablesShiftData .='<tr><td>DAY END</td>
+					$tablesShiftData .='<tr><td style="font-size:10px">DAY END</td>
 				    	<td class="text-center"></td>
 				    	<td class="text-center"></td>
 				    	<td class="text-center"></td>
