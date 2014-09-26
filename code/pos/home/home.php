@@ -101,6 +101,7 @@
 			$tablesShiftData = '<div class="panel panel-success"><div class="panel-heading"><h4 class="panel-title">Shift Data</h4></div><div class="panel-body"><table class="table">
 					<thead><tr><th>Event</th><th>Petty Cash</th><th>Petty Cash Inward</th><th>Petty Cash Expense</th><th>Shift End Petty Cash</th><th>Shift End (Cash in the box)</th><th>Expected Closing Petty  Cash</th><th>Petty Cash  Variance</th><th>Expected Cash in the box</th><th>Sales Cash Variance</th></tr></thead>
     				<tbody>';
+		   	$total = 0;
     		if(count($shift_data['rows'])){
 				$shifts = $shift_data['rows'][0]['doc']['shift'];
 				$total = count($shifts);
@@ -120,7 +121,6 @@
 			    	$shift_in = 0;
 			    	$shift_ex = 0;
 			   	$cashSum = 0;
-			   	$total = 0;
 				foreach($shifts as $key => $values){
 				    $inw = (empty($values['petty_cash_balance']['inward_petty_cash']) ? $shift_inward : $values['petty_cash_balance']['inward_petty_cash']);
 				    $exp = (empty($values['petty_cash_balance']['petty_expense']) ? $shift_expense : $values['petty_cash_balance']['petty_expense']);
