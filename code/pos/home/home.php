@@ -98,9 +98,27 @@
 
 			$shift_data = $this->cDB->getDesign('store')->getView('store_shift')->setParam(array('key'=>'"'.$date.'"','include_docs'=>'true'))->execute();
 			$excess = "";
-			$tablesShiftData = '<div class="panel panel-success"><div class="panel-heading"><h4 class="panel-title">Shift Data</h4></div><div class="panel-body"><table class="table">
-					<thead><tr><th>Event</th><th>Petty Cash</th><th>Petty Cash Inward</th><th>Petty Cash Expense</th><th>Shift End Petty Cash</th><th>Shift End (Cash in the box)</th><th>Expected Closing Petty  Cash</th><th>Petty Cash  Variance</th><th>Expected Cash in the box</th><th>Sales Cash Variance</th></tr></thead>
-    				<tbody>';
+			$tablesShiftData = '<div class="panel panel-success">
+									<div class="panel-heading">
+										<h4 class="panel-title">Shift Data</h4>
+									</div>
+									<div class="panel-body">
+										<table class="table table-condensed">
+											<thead>
+												<tr>
+													<th style="font-size:11px">Event</th>
+													<th style="font-size:11px">Petty Cash</th>
+													<th style="font-size:11px">Petty Cash Inward</th>
+													<th style="font-size:11px">Petty Cash Expense</th>
+													<th style="font-size:11px">Shift End Petty Cash</th>
+													<th style="font-size:11px">Shift End (Cash in the box)</th>
+													<th style="font-size:11px">Expected Closing Petty  Cash</th>
+													<th style="font-size:11px">Petty Cash  Variance</th>
+													<th style="font-size:11px">Expected Cash in the box</th>
+													<th style="font-size:11px">Sales Cash Variance</th>
+												</tr>
+											</thead>
+    										<tbody>';
 		   	$total = 0;
     		if(count($shift_data['rows'])){
 				$shifts = $shift_data['rows'][0]['doc']['shift'];
