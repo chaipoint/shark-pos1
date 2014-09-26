@@ -7,7 +7,15 @@ function toggleRepBT (){
 		$("#billing_sync_bt").removeClass('hidden')		
 	}
 }
-    var url = null;
+function sales_register(data){
+	window.location = 'index.php?dispatch=sales_register';
+}
+function data_sync(data){
+		$("#login_holder_home").modal('hide');
+		$("#sync-modal").modal('show');
+		$('.alert',$("#sync-modal")).remove();
+}
+var url = null;
 $(document).ready( function(){
     url = $.url();
     if((url.param('dispatch').split('.'))[0] == 'sales_register'){
@@ -220,9 +228,4 @@ function getMonth(monthName){
 			break;
 	}
 	return monthNumber;
-}
-function handleResponse($res){
-		$("#login_holder").modal('hide');
-		$("#sync-modal").modal('show');
-		$('.alert',$("#sync-modal")).remove();
 }

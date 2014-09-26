@@ -77,10 +77,16 @@
 						<a href="index.php?dispatch=orders" class="btn nav-button btn-success btn-sm external <?php echo (MODULE == 'orders' ? 'active-btn' : ''); ?>" style="padding: 5px 8px; margin: 10px 0 5px 5px;">CoC Orders</a>
 					</li>
 
-					<li>
-						<a href="index.php?dispatch=sales_register" class="btn nav-button btn-success btn-sm external <?php echo (MODULE == 'sales_register' ? 'active-btn' : ''); ?>" style="padding: 5px 8px; margin: 10px 0 5px 5px;" data-toggle="modal" data-target="" id="pos_sale_register">Sale Register</a>
+				<?php }?>
+				<?php if(MODULE != 'billing'){?>					
+                     <li>
+						<a href="javascript:void(0)" class="require_valid_user btn nav-button btn-success btn-sm external" style="padding: 5px 8px; margin: 10px 0 5px 5px;" data-toggle="modal" data-target="" id="data_sync">Data Sync</a>
 					</li>
-				<?php }?>					
+					<li>
+						<a href="javascript:void(0)" class="require_valid_user btn nav-button btn-success btn-sm external <?php echo (MODULE == 'sales_register' ? 'active-btn' : ''); ?>" style="padding: 5px 8px; margin: 10px 0 5px 5px;" data-toggle="modal" data-target="" id="sales_register">Sale Register</a>
+					</li>
+				<?php }?>
+
 					<!--<li>
 					    <a
 					class="btn nav-button btn-success btn-sm external"
@@ -89,11 +95,6 @@
 				        </a>
 
 					</li>-->
-                    <?php if(MODULE=='sales_register') {?>
-                     <li>
-						<a class="btn nav-button btn-success btn-sm external" style="padding: 5px 8px; margin: 10px 0 5px 5px;" data-toggle="modal" data-target="" id="pos_sync">Data Sync</a>
-					</li>
-					<?php } ?>
                     
 					</ul>
 				<ul class="nav navbar-nav navbar-right">

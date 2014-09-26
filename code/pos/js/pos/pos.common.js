@@ -22,6 +22,19 @@ $(document).ready(function(){
 		$("#login_holder").modal({keyboard:false,'show':true});
 		//sales register have handleResponse
 	});
+
+
+	/*For Login Concept*/
+	$(".require_valid_user").click(function(){
+		$('#login_holder_home .alert').hide();
+		$('#login_holder_home').modal('show');
+		$('input[name="validateFor"]','#login_holder_home form').val($(this).attr('id'));
+		$('#username').getkeyboard().destroy();
+		$('#password').getkeyboard().destroy();
+		$('#username, #password').cKeyboard();
+	});
+
+
 	$(".sync-bt").click(function(){
 		var msgHolder = $(this).closest('.modal-body');
 		$("#loading_image").removeClass('hide');
@@ -239,6 +252,23 @@ function autocomplete(){
 	});	 
 }
 
+$.fn.serializeObject = function()
+{
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+        if (o[this.name] !== undefined) {
+            if (!o[this.name].push) {
+                o[this.name] = [o[this.name]];
+            }
+            o[this.name].push(this.value || '');
+        } else {
+            o[this.name] = this.value || '';
+        }
+    });
+    return o;
+};
+
 /*Function Block Start For AJAX Related Calls*/
 
 var cAjax = function(reqOptions){
@@ -291,12 +321,11 @@ $.fn.cKeyboard = function(){
 					keyboard.$preview[0].select();
 					keyboard.lastCaret.start = 0;
 					keyboard.lastCaret.end = (keyboard.$preview[0].value).length;
-					//console.log((keyboard.$preview[0].value).length);
 			}
 
 			switch(value){
 				case '#username':
-				case 'input[name="identity"]':
+				case 'input[name="username1"]':
 					options.layout = 'caustom';
 					options.customLayout = {
 							'default':['M T F 0 1 2 3 4 5 6 7 8 9 {Bksp}','{accept} {cancel}']

@@ -271,9 +271,6 @@ if(is_array($data) && count($data)>0) {
 </div>
 </div>
 <?php require_once 'modal_expense.php';?>
-<div id="login_holder" class="modal fade" id="sync-modal" tabindex="-1" role="dialog" aria-hidden="true">
-  <?php require_once DIR.'/login/views/index.php';?>
-</div>
 <script>
 var oTable = null;
 var footerRow = [3,4,5,6];
@@ -281,3 +278,6 @@ var filteRow = 'filter_cancel';
 var media_path = "<?php echo JS;?>";
 oTable = createDataTable(media_path,'cancel_bill_table',footerRow,filteRow);
 </script>
+<div id="login_holder_home" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+  <?php require_once DIR.'/login/views/index.php';?>
+</div>

@@ -22,7 +22,6 @@
 					}
 					$this->store = $store_result[0]['key'];
 					$this->store_name = $store_result[0]['value'];
-					$this->log->debug('Login Page is Ready For '.$this->store_name." | ".$this->store);
 				}
 			}else{
 				$this->log->debug('Config File Have Some Problem \n\r'.'Error Message :- '.$this->configData['message']);
@@ -37,6 +36,7 @@
 		}
 		
 		public function index(){
+			$this->log->debug('Login Page is Ready For '.$this->store_name." | ".$this->store);
 			unset($_SESSION);
 			session_destroy();
 			$edata = array('error'=>false);	
@@ -75,7 +75,7 @@
 				$result = $resultJSON;
 				if(!array_key_exists('for', $result)){
 					if(!$result['error']){
-						if($_POST['validateFor'] == 'sales_register' || $_POST['validateFor'] == 'cash_reconciliation'){
+						if($_POST['validateFor'] == 'sales_register' || $_POST['validateFor'] == 'shift_data_tab' || $_POST['validateFor'] == 'data_sync'){
 							require_once DIR.'/sales_register/sales_register.php';
 							$sr = new sales_register();
 							$staffList = $sr->getStaffList();
@@ -83,9 +83,11 @@
 								switch($staffList[$result['data']['mysql_id']]['title_id']){
 									case 4:
 									case 6:
-										require_once DIR.'/home/home.php';
-										$hm = new home();
-										$returnData = $hm->getShiftAndCashRe();
+										if($_POST['validateFor'] == 'shift_data_tab'){
+											require_once DIR.'/home/home.php';
+											$hm = new home();
+											$returnData = $hm->getShiftAndCashRe();
+										}
 									break;
 									default:
 										$returnData['error'] = true;
@@ -138,14 +140,14 @@
 							$this->log->trace('LOGIN HISTORY '."\r\n".json_encode($loginHistory));
 							$this->log->trace('SESSION DATA '."\r\n".json_encode($userData));
 
-							if($_POST['validateFor'] == 'shift'){
+							if($_POST['validateFor'] != 'login'){
 								require_once DIR.'/staff/staff.php';
 								$staff = new Staff();
 								$returnData = json_decode($staff->save_petty(),true);
 							}else{
 								require_once DIR.'/utils/utils.php';
 								$design = new utils();
-								$repDesign = $design->repDesign();
+								$repDesign['error'] = $design->repDesign();
 								//print_r($repDesign);
 								if($repDesign['error']==true){
 									$returnData['error'] = true;
