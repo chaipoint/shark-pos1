@@ -15,7 +15,7 @@
         <ul id="tab_selection_menu"class="nav nav-pills" role="tablist">
         	<li class='active'><a id='home_tab' class="home_tabs" href="javascript:void(0)">Home</a></li>
         	<li><a id='sales_tab' class="home_tabs" href="javascript:void(0)">Sales</a></li>
-			<li><a id='shift_data_tab' class="home_tabs" href="javascript:void(0)">Shift Data</a></li>
+			<li><a id='shift_data_tab' class="home_tabs require_valid_user" href="javascript:void(0)">Shift Data</a></li>
         </ul>
         <div class="hidden" id="shift_data_tab_holder">
 		   	<form class="form-inline alert" id="shift_search_form" action="#"> 
@@ -67,13 +67,15 @@
 					</ul>
 				</div>
 				<div class="col-lg-3 col-md-5 col-sm-5">
-					<div class="alert alert-danger" id="error_message"><ul></ul></div>
+					<div class="alert alert-danger" id="error_message_shift"><ul></ul></div>
+
 					<form id="store_day_start_form"  class="store_shift hide" action="" method="post" accept-charset="utf-8" class="separate-sections form-horizontal" autocomplete="off">
+						<input type="hidden" name="validateFor" value="shift">
 						<div class="input-group padded">
 							<span class="input-group-addon"> 
 								<i class="glyphicon glyphicon-user"></i>
 							</span> 
-							<input type="text" name="identity" value="" class="input-sm form-control" placeholder="Employee Code" autocomplete="off" autofocus="true"/>
+							<input type="text" name="username1" value="" class="input-sm form-control" placeholder="Employee Code" autocomplete="off" autofocus="true"/>
 						</div>
 						<div class="input-group padded">
 							<span class="input-group-addon">
@@ -103,11 +105,12 @@
 					</form>
 
 					<form id="store_shift_start_form"  class="store_shift hide" action="" method="post" accept-charset="utf-8" class="separate-sections form-horizontal" autocomplete="off">
+						<input type="hidden" name="validateFor" value="shift">
 						<div class="input-group padded">
 							<span class="input-group-addon"> 
 								<i class="glyphicon glyphicon-user"></i>
 							</span> 
-							<input type="text" name="identity" value=""  class="input-sm form-control" placeholder="Employee Code" autocomplete="off" autofocus="true"/>
+							<input type="text" name="username1" value=""  class="input-sm form-control" placeholder="Employee Code" autocomplete="off" autofocus="true"/>
 						</div>
 						<div class="input-group padded">
 							<span class="input-group-addon">
@@ -137,11 +140,12 @@
 					</form>
 
 					<form id="store_shift_end_form"  class="store_shift hide" action="" method="post" accept-charset="utf-8" class="separate-sections form-horizontal" autocomplete="off">
+						<input type="hidden" name="validateFor" value="shift">
 						<div class="input-group padded">
 							<span class="input-group-addon"> 
 								<i class="glyphicon glyphicon-user"></i>
 							</span> 
-							<input type="text" name="identity" value="" class="input-sm form-control" placeholder="Employee Code" autocomplete="off" autofocus="true"/>
+							<input type="text" name="username1" value="" class="input-sm form-control" placeholder="Employee Code" autocomplete="off" autofocus="true"/>
 						</div>
 						<div class="input-group padded">
 							<span class="input-group-addon">
@@ -177,11 +181,12 @@
 					</form>
 
 					<form id="store_day_end_form"  class="store_shift hide" action="" method="post" accept-charset="utf-8" class="separate-sections form-horizontal" autocomplete="off">
+						<input type="hidden" name="validateFor" value="shift">
 						<div class="input-group padded">
 							<span class="input-group-addon"> 
 								<i class="glyphicon glyphicon-user"></i>
 							</span> 
-							<input type="text" name="identity" value="" class="input-sm form-control" placeholder="Employee Code" autocomplete="off" autofocus="true"/>
+							<input type="text" name="username1" value="" class="input-sm form-control" placeholder="Employee Code" autocomplete="off" autofocus="true"/>
 						</div>
 						<div class="input-group padded">
 							<span class="input-group-addon">
@@ -247,5 +252,5 @@
 </div>
 <div id="login_holder_home" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
   <?php require_once DIR.'/login/views/index.php';?>
-</div><?php require_once 'modal_inward.php';?>
-<?php //require_once DIR.'/sales_register/views/modal_expense.php';?>
+</div>
+<?php require_once 'modal_inward.php';?>

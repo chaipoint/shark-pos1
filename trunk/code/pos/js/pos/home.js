@@ -1,6 +1,7 @@
 var keyboard = new Array();
 var resData = '';
 $(document).ready(function(){
+	$('#error_message_shift').hide();
 	$("#active_bill_table_wrapper").on('click', '.edit-bill', function(event){
 		if(!is_shift_running){
 			event.preventDefault();
@@ -30,11 +31,9 @@ $(document).ready(function(){
 	$('#shift_nav li a.btn-primary').click(function(){
 		$('#store_shift_logic form').addClass('hide');
 		$('#store_'+$(this).attr('id')+"_form").removeClass('hide');	
-		console.log('#store_'+$('a',this).attr('id')+"_form");
 	});
-	keyboard.push($('input[name="identity"],input[name="password"],#petty_cash, #counter_no, #petty_cash_end, #box_cash, #box_cash_end').cKeyboard());
+	keyboard.push($('input[name="username1"],input[name="password"],#petty_cash, #counter_no, #petty_cash_end, #box_cash, #box_cash_end').cKeyboard());
 	
-	$('#login_holder_home div#error_message').attr('id','error_message_modal');
 
 
 
@@ -50,8 +49,6 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 	$('#'+thisId+'_data').removeClass('hidden');
 	if(thisId == 'shift_data_tab' && (($('#'+thisId+'_data').html()).trim() == '' || is_login_allowed)){
 		$('#'+thisId+'_data').html('');
-		$("#error_message_modal").hide();
-		$('#login_holder_home').modal('show');
 	}else{
 		if(thisId == 'shift_data_tab'){
 			$('#shift_data_tab_holder').removeClass('hidden');			
@@ -60,6 +57,8 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 		}
 	}
 });
+
+
 
 	/* Function To Add Prety Inward */
 	$('#add_inward').click(function(event){
@@ -111,22 +110,23 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 	$('.cancel-btn').click(function(){
 		var form_name = $(this).closest('form').attr('id');
 		$('#'+form_name).addClass('hide');
+		$('#error_message_shift').hide();
 	});
 
 
 });
-function CashRHandleResponse(response){
+function shift_data_tab(response){
 	$('#login_holder_home').modal('hide');
-	$('#shift_data_tab_data').html(response.data.shift_table+response.data.cash_reconciliation_table);
+	$('#shift_data_tab_data').html(response.shift_table+response.cash_reconciliation_table);
 	$('#shift_data_tab_holder').removeClass('hidden');
 }
-function staffHandleResponse(response){
+function shift(response){
 
 	$('#store_shift_message').html(response.message);
 	active = '';
 	$("#store_shift_logic form:input").val('');
 	$('#store_shift_logic form').addClass('hide');
-	switch(response.data.mode){
+	switch(response.mode){
 		case 'day_start':
 			is_store_open = true;
 			active = 'shift_start';
@@ -165,7 +165,7 @@ function searchShiftData(){
 			if(result.error){
 				bootbox.alert(result.message);
 			}else{
-				CashRHandleResponse(result);
+				shift_data_tab(result.data);
 			}
 		});
 }

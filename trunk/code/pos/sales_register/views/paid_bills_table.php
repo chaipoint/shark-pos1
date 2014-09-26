@@ -142,9 +142,9 @@ if(is_array($data) && count($data)>0) {
 </div>
 </div>
 <script>
-var oTable = null;
-var footerRow = [3,4,5,6,7];
-var filteRow = 'filter_active';
-var media_path = "<?php echo JS;?>";
-oTable = createDataTable(media_path,'active_bill_table',footerRow,filteRow);
+  var oTable = null;
+  var footerRow = [3,4,5,6,7];
+  var filteRow = 'filter_active';
+  var media_path = "<?php echo JS;?>";  
+  oTable = createDataTable(media_path,'active_bill_table',footerRow,filteRow);
 </script>

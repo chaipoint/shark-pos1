@@ -46,10 +46,11 @@
 									</div>
 								
 									<form id="loginform" action="" method="post" accept-charset="utf-8" class="separate-sections form-horizontal" autocomplete="off">
+											<input type="hidden" name="validateFor" value="login">
 			    							<div class="input-group">
 											<span class="input-group-addon"> <i
 												class="glyphicon glyphicon-user"></i>
-											</span> <input type="text" name="identity" value=""
+											</span> <input type="text" name="username" value=""
 												id="username" class="form-control" autocomplete="off" autofocus="true"/>
 										</div>
 										<div class="input-group">

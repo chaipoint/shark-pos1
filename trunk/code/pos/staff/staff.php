@@ -118,6 +118,7 @@
 				$return['message'] = 'OOPS! Some Error Please Contact Admin';
 			}
 			$return['data']['mode'] = $_POST['mode'];
+			$return['data']['message'] = $return['message'];
 			return json_encode($return);
 		}
 
