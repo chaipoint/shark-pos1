@@ -106,16 +106,16 @@
 										<table class="table table-condensed">
 											<thead>
 												<tr>
-													<th style="font-size:10px">Event</th>
-													<th style="font-size:10px">Petty Cash</th>
-													<th style="font-size:10px">Petty Cash Inward</th>
-													<th style="font-size:10px">Petty Cash Expense</th>
-													<th style="font-size:10px">Shift End Petty Cash</th>
-													<th style="font-size:10px">Shift End (Cash in the box)</th>
-													<th style="font-size:10px">Expected Closing Petty  Cash</th>
-													<th style="font-size:10px">Petty Cash  Variance</th>
-													<th style="font-size:10px">Expected Cash in the box</th>
-													<th style="font-size:10px">Sales Cash Variance</th>
+													<th style="font-size:11px">Event</th>
+													<th style="font-size:11px">Petty Cash</th>
+													<th style="font-size:11px">Petty Cash Inward</th>
+													<th style="font-size:11px">Petty Cash Expense</th>
+													<th style="font-size:11px">Shift End Petty Cash</th>
+													<th style="font-size:11px">Shift End (Cash in the box)</th>
+													<th style="font-size:11px">Expected Closing Petty  Cash</th>
+													<th style="font-size:11px">Petty Cash  Variance</th>
+													<th style="font-size:11px">Expected Cash in the box</th>
+													<th style="font-size:11px">Sales Cash Variance</th>
 												</tr>
 											</thead>
     										<tbody>';
