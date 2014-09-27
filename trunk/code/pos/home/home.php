@@ -42,17 +42,14 @@
 			$data['expense_data'] = $sr->getExpenseData($this->getCDate());
 			$data['shift'] = '';
 			$data['reconcilation'] = '';
-			$data['is_login_allowed'] = 'true';
-			if($_SESSION['user']['title']['id'] == 4 || $_SESSION['user']['title']['id'] == 6){
-				$returned = $this->getShiftAndCashRe();
-				$data['shift'] = $returned['data']['shift_table'];
-				$data['reconcilation'] = $returned['data']['cash_reconciliation_table'];
-				$data['is_login_allowed'] = 'false';
-			}
-			//print_r($data['payment_sum']);
 			$this->commonView('header_html');
 			$this->commonView('navbar');
-			$this->view($data);			
+			$this->view($data);
+			
+			require_once DIR.'/login/login.php';
+			$login = new Login();
+			$login->form_login();
+			
 			$this->commonView('footer_inner');
 			$this->commonView('footer_html');
 		} 

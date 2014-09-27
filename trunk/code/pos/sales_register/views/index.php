@@ -278,6 +278,3 @@ var filteRow = 'filter_cancel';
 var media_path = "<?php echo JS;?>";
 oTable = createDataTable(media_path,'cancel_bill_table',footerRow,filteRow);
 </script>
-<div id="login_holder_home" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-  <?php require_once DIR.'/login/views/index.php';?>
-</div>

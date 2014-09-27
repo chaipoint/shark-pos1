@@ -1,8 +1,8 @@
 <?php session_start();
 	class App_config{
  		public $db;
-		private $module = 'login';
-		private $mode = 'index'; 
+		public $module = 'login';
+		public $mode = 'index'; 
 		private $app;
 		private $root;
 		private $base_path;
@@ -138,7 +138,7 @@
 						}
 					}
 				}
-				require_once $viewFile;
+				require $viewFile;
 			}
 		}
 

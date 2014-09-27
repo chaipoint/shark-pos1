@@ -20,8 +20,8 @@
 					}elseif(array_key_exists('error', $store_result) && array_key_exists('source', $store_result)){
 						die;
 					}
-					$this->store = $store_result[0]['key'];
-					$this->store_name = $store_result[0]['value'];
+					$this->store = $store_result['key'];
+					$this->store_name = $store_result['value']['name'];
 				}
 			}else{
 				$this->log->debug('Config File Have Some Problem \n\r'.'Error Message :- '.$this->configData['message']);
@@ -178,5 +178,21 @@
 			$re = json_encode($returnData);
 			$this->log->trace('RESPONSE '."\r\n".$re);
 			return $re;
+		}
+		function form_login(){
+			if(array_key_exists('user', $_SESSION)){
+				require_once DIR.'/store/store.php';
+				$store = new Store();
+				$staff = $store->get_store_staff($_SESSION['user']['store']['id']);
+				echo '<div id="login_holder_home" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">';
+				$orignalModule = $this->module;
+				$orignalMode = $this->mode;
+				$this->mode = 'index';
+				$this->module = 'login';
+				$this->view();			
+				$this->mode = $orignalMode;
+				$this->module = $orignalModule;
+				echo '</div> <script>var is_login_allowed = '.(!array_key_exists($_SESSION['user']['mysql_id'], $staff) ? 'false' : 'true').'; </script>';
+			}
 		}
 	}

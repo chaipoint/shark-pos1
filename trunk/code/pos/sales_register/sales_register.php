@@ -51,6 +51,11 @@
 					$resultBillList['expense_data'] = $resultExpenseList;
 					$resultBillList['at'] = $activeTask;
 					$this->view($resultBillList);//array("bill_data"=>$resultBillList['data'],"cash_in_hand"=>$resultBillList['cash_inhand'],"cash_in_delivery"=> $resultBillList['cash_indelivery']));
+
+					require_once DIR.'/login/login.php';
+					$login = new Login();
+					$login->form_login();
+
 				}
 			}
 			$this->commonView('footer_inner');

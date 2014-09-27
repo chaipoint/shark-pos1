@@ -5,6 +5,7 @@ Please Don't Make any Changes in this File Prior permissson to
 	9992749952
 */
 /*Reload as Toggle between Network offline and online*/
+var is_login_allowed;
 window.addEventListener("offline", function(e) { window.location.reload(true);})
 window.addEventListener("online", function(e) { window.location.reload(true);})
 //setTimeout(,2000);
@@ -26,12 +27,18 @@ $(document).ready(function(){
 
 	/*For Login Concept*/
 	$(".require_valid_user").click(function(){
-		$('#login_holder_home .alert').hide();
-		$('#login_holder_home').modal('show');
-		$('input[name="validateFor"]','#login_holder_home form').val($(this).attr('id'));
-		$('#username').getkeyboard().destroy();
-		$('#password').getkeyboard().destroy();
-		$('#username, #password').cKeyboard();
+		var id = $(this).attr('id');
+		if(is_login_allowed){
+			$('#login_holder_home .alert').hide();
+			$('#login_holder_home').modal('show');
+			$('input[name="validateFor"]','#login_holder_home form').val(id);
+			$('#username').getkeyboard().destroy();
+			$('#password').getkeyboard().destroy();
+			$('#username, #password').cKeyboard();
+		}else{
+			var func = window[id];
+			func();
+		}
 	});
 
 
