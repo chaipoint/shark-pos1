@@ -103,7 +103,7 @@
 										<h4 class="panel-title">Shift Data</h4>
 									</div>
 									<div class="panel-body">
-										<table class="table table-condensed">
+										<table class="table table-hover table-condensed table-bordered">
 											<thead>
 												<tr>
 													<th style="font-size:11px">Event</th>
@@ -138,7 +138,7 @@
 			    	</tr>';//last  4 .$shift_end_cash. last 3(-$shift_end_cash) 
 			    	$shift_in = 0;
 			    	$shift_ex = 0;
-			   	$cashSum = 0;
+			   		$cashSum = 0;
 			   
 				foreach($shifts as $key => $values){
 				    $inw = (empty($values['petty_cash_balance']['inward_petty_cash']) ? $shift_inward : $values['petty_cash_balance']['inward_petty_cash']);
@@ -184,14 +184,14 @@
     		}
 			$tablesShiftData .='</tbody></table></div></div>';
 			$returnData['data']['shift_table'] = $tablesShiftData;
-			$cash_reconciliation_table = '<div class="panel panel-success"><div class="panel-heading"><h4 class="panel-title">Cash Reconciliation</h4></div><div class="panel-body"><table class="table table-condensed"><thead><tr><th style="font-size:12px">Description</th><th style="font-size:12px">Value</th></tr></thead><tbody>';
+			$cash_reconciliation_table = '<div class="panel panel-success"><div class="panel-heading"><h4 class="panel-title">Cash Reconciliation</h4></div><div class="panel-body"><table class="table table-condensed table-bordered"><thead><tr><th style="font-size:12px;text-align:left;">Description</th><th style="font-size:12px">Value</th></tr></thead><tbody>';
     		foreach($sales_reg['payment_type']['amount'] as $pKey => $pValue){
 				$cash_reconciliation_insert[$pKey] = $pValue;
 	    		$cash_reconciliation_table .= '<tr><td style="font-size:9px">'.strtoupper($pKey).'</td><td class="text-center">'.$pValue.'</td></tr>';
 	    		$total += $pValue;
     		}
     		$cash_reconciliation_table .= $excess;
-    		$cash_reconciliation_table .= '</tbody><thead><tr><th style="font-size:12px">Total</th><th>'.($total).'</th></tr></thead></table></div></div>';
+    		$cash_reconciliation_table .= '</tbody><thead><tr><th style="font-size:12px;text-align:left">Total</th><th>'.($total).'</th></tr></thead></table></div></div>';
     		if(!$returnData['error'] && array_key_exists(0, $shift_data['rows']) && !array_key_exists('date', $_POST)){
 				$result = $this->cDB->getDesign('store')->getUpdate('store_shift',$shift_data['rows'][0]['id'])->setParam($cash_reconciliation_insert)->execute();
     		}
