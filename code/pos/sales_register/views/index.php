@@ -54,11 +54,11 @@
           <span class="title">Petty Expense</span>
           <span class="value"><?php echo $p_ex;?> &nbsp;
           <?php if(empty($_GET['sales_reg_search']) || (!empty($_GET['sales_reg_search']) && $_GET['sales_reg_search']==date('d-F-Y'))) { ?>
-            <em data-toggle="dropdown" id="pe_tg" class="glyphicon glyphicon-chevron-right"></em> 
-            <ul class="dropdown-menu" role="menu">
-            <li><a href='#' id="add_expense">Add Expense</a></li>
-            <li><a href='#' id="view_expense">View Expense</a></li>
-          </ul>
+            <!-- <em data-toggle="dropdown" id="pe_tg" class="glyphicon glyphicon-chevron-right"></em>  -->
+            <!-- <ul class="dropdown-menu" role="menu"> -->
+            <!-- <li><a href='#' id="add_expense">Add Expense</a></li> -->
+            <!-- <li><a href='#' id="view_expense">View Expense</a></li> -->
+          <!-- </ul> -->
            <?php } ?>
             </span>
         </div>
