@@ -1,6 +1,5 @@
 <script>var is_store_open = <?php echo $is_store_open; ?>;</script>
 <script>var is_shift_running = <?php echo $is_shift_running; ?>;</script>
-<script>var is_login_allowed = <?php echo $is_login_allowed; ?>;</script>
 <script src="<?php echo JS;?>pos/home.js"></script>
 
 <script type="text/javascript" src="<?php echo (JS.'jquery.dataTables.js');?>"></script>
@@ -249,8 +248,5 @@
 		<?php require_once DIR.'/sales_register/views/paid_bills_table.php';?>
 	</div>
   </div>
-</div>
-<div id="login_holder_home" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-  <?php require_once DIR.'/login/views/index.php';?>
 </div>
 <?php require_once 'modal_inward.php';?>

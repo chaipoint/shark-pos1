@@ -116,12 +116,15 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 
 });
 function shift_data_tab(response){
+	if(!response){
+		searchShiftData();
+		return;
+	}
 	$('#login_holder_home').modal('hide');
 	$('#shift_data_tab_data').html(response.shift_table+response.cash_reconciliation_table);
 	$('#shift_data_tab_holder').removeClass('hidden');
 }
 function shift(response){
-
 	$('#store_shift_message').html(response.message);
 	active = '';
 	$("#store_shift_logic form:input").val('');
