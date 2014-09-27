@@ -191,7 +191,7 @@
 				$this->view();			
 				$this->mode = $orignalMode;
 				$this->module = $orignalModule;
-				echo '</div> <script>var is_login_allowed = '.(!array_key_exists($_SESSION['user']['mysql_id'], $staff) ? 'false' : 'true').'; </script>';
+				echo '</div> <script>var is_login_allowed = '.(array_key_exists($_SESSION['user']['mysql_id'], $staff) ? 'false' : 'true').'; </script>';
 			}
 		}
 	}

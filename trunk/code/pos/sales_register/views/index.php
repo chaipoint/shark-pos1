@@ -1,4 +1,3 @@
-<script>var is_rep_running = <?php echo array_key_exists(0, $at) ? 'true' : 'false';?>;</script>
 <div class="container-fluid">
 <form class="form-inline" id="search_form" action="?dispatch=sales_register"> 
   <input type="hidden" name="dispatch" value="sales_register"/>

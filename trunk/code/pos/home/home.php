@@ -49,6 +49,10 @@
 			require_once DIR.'/login/login.php';
 			$login = new Login();
 			$login->form_login();
+
+			require_once DIR.'/utils/utils.php';
+			$utils = new Utils();
+			$utils->generate_rep_running_flag();
 			
 			$this->commonView('footer_inner');
 			$this->commonView('footer_html');

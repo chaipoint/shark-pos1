@@ -566,25 +566,27 @@ function generateSalesTable(productId, qty, productData){
 			$billingItems[productID].priceBT = decimalAdjust((productData.tax.rate) ? (productData.price - ( productData.price * parseFloat(productData.tax.rate) )) : $billingItems[productID].price , -2);
 			$billingItems[productID].taxAbleAmount = $billingItems[productID].priceBT;
 			$billingItems[productID].qty = newqty;
-			$billingItems[productID].subTotal = $billingItems[productID].qty * $billingItems[productID].priceBT;
-			$billingItems[productID].discount = $intDiscount;
-			$billingItems[productID].discountAmount = $billingItems[productID].subTotal * $billingItems[productID].discount/100;
-			$billingItems[productID].priceAD = $billingItems[productID].subTotal - $billingItems[productID].discountAmount;
 			$billingItems[productID].tax = productData.tax.rate;
 
-			$billingItems[productID].taxAmount = $billingItems[productID].priceAD * $billingItems[productID].tax;
-			$billingItems[productID].netAmount = $billingItems[productID].priceAD + $billingItems[productID].taxAmount;
-		}else{
-			$billingItems[productID].qty = newqty;
-
-			$billingItems[productID].discount = $intDiscount;
+/*			$billingItems[productID].discount = $intDiscount;
 			$billingItems[productID].subTotal = $billingItems[productID].qty * $billingItems[productID].priceBT;
 			$billingItems[productID].discountAmount = $billingItems[productID].subTotal * $billingItems[productID].discount/100;
 			$billingItems[productID].priceAD = $billingItems[productID].subTotal - $billingItems[productID].discountAmount;
-			$billingItems[productID].taxAmount = $billingItems[productID].priceAD * $billingItems[productID].tax;
+			$billingItems[productID].taxAmount = $billingItems[productID].price - $billingItems[productID].taxAbleAmount;
 			$billingItems[productID].netAmount = $billingItems[productID].priceAD + $billingItems[productID].taxAmount;
-		}
+/**/
+		}else{//menu price - taxable amount *
+			$billingItems[productID].qty = newqty;
+
+/*			$billingItems[productID].discount = $intDiscount;
+			$billingItems[productID].subTotal = $billingItems[productID].qty * $billingItems[productID].priceBT;
+			$billingItems[productID].discountAmount = $billingItems[productID].subTotal * $billingItems[productID].discount/100;
+			$billingItems[productID].priceAD = $billingItems[productID].subTotal - $billingItems[productID].discountAmount;
+			$billingItems[productID].taxAmount = ( $billingItems[productID].price - $billingItems[productID].taxAbleAmount ) * $billingItems[productID].qty;
+			$billingItems[productID].netAmount = $billingItems[productID].priceAD + $billingItems[productID].taxAmount;
+/**/	}
 	}
+//	console.log($billingItems);
 	var tableRows = '';
 
 	for(var index in $billingItems){
@@ -592,7 +594,7 @@ function generateSalesTable(productId, qty, productData){
 			$billingItems[index].subTotal = $billingItems[index].qty * $billingItems[index].priceBT;
 			$billingItems[index].discountAmount = $billingItems[index].subTotal * $billingItems[index].discount/100;
 			$billingItems[index].priceAD = $billingItems[index].subTotal - $billingItems[index].discountAmount;
-			$billingItems[index].taxAmount = $billingItems[index].priceAD * $billingItems[index].tax;
+			$billingItems[index].taxAmount = ( $billingItems[index].price - $billingItems[index].taxAbleAmount ) * $billingItems[index].qty;
 			$billingItems[index].netAmount = $billingItems[index].priceAD + $billingItems[index].taxAmount;
 		if(productID != index){
 			tableRows +='<tr billing-product="'+index+'">'+
