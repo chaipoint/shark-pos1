@@ -139,6 +139,7 @@
 			    	$shift_in = 0;
 			    	$shift_ex = 0;
 			   	$cashSum = 0;
+			   
 				foreach($shifts as $key => $values){
 				    $inw = (empty($values['petty_cash_balance']['inward_petty_cash']) ? $shift_inward : $values['petty_cash_balance']['inward_petty_cash']);
 				    $exp = (empty($values['petty_cash_balance']['petty_expense']) ? $shift_expense : $values['petty_cash_balance']['petty_expense']);
