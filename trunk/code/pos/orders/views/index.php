@@ -3,12 +3,12 @@
   <div class="panel-heading">COC Orders</div>
 	 <div class="panel-body tabbable">
         <ul class="nav nav-pills" role="tablist">
-		  <li class="<?php echo ($status == 'New' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders&status=New">New&nbsp;&nbsp;<span id="New" class="badge"><?php echo $order_count['New']; ?></span></a></li>
-		  <li class="<?php echo ($status == 'Confirmed' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders&status=Confirmed">Confirmed&nbsp;&nbsp;<span id="Confirmed" class="badge"><?php echo $order_count['Confirmed']; ?></span></a></li>
-		  <li class="<?php echo ($status == 'Cancelled' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders&status=Cancelled">Cancelled&nbsp;&nbsp;<span id="Cancelled" class="badge"><?php echo $order_count['Cancelled']; ?></span></a></li>
-		  <li class="<?php echo ($status == 'Dispatched' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders&status=Dispatched">Dispatched&nbsp;&nbsp;<span id="Dispatched" class="badge"><?php echo $order_count['Dispatched']; ?></span></a></li>
-		  <li class="<?php echo ($status == 'Delivered' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders&status=Delivered">Delivered&nbsp;&nbsp;<span id="Delivered" class="badge"><?php echo $order_count['Delivered']; ?></span></a></li>
-		  <li class="<?php echo ($status == 'Paid' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders&status=Paid">Paid&nbsp;&nbsp;<span id="Paid" class="badge"><?php echo $order_count['Paid']; ?></span></a></li>
+		  <li class="<?php echo ($status == 'New' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders&status=New">New&nbsp;&nbsp;<span id="New" class="badge" <?php echo ($order_count['New']!=0) ? 'style="color:red"' : ''; ?>><?php echo $order_count['New']; ?></span></a></li>
+		  <li class="<?php echo ($status == 'Confirmed' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders&status=Confirmed">Confirmed&nbsp;&nbsp;<span id="Confirmed" class="badge" <?php echo ($order_count['Confirmed']!=0) ? 'style="color:red"' : ''; ?>><?php echo $order_count['Confirmed']; ?></span></a></li>
+		  <li class="<?php echo ($status == 'Cancelled' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders&status=Cancelled">Cancelled&nbsp;&nbsp;<span id="Cancelled" class="badge" <?php echo ($order_count['Cancelled']!=0) ? 'style="color:red"' : ''; ?>><?php echo $order_count['Cancelled']; ?></span></a></li>
+		  <li class="<?php echo ($status == 'Dispatched' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders&status=Dispatched">Dispatched&nbsp;&nbsp;<span id="Dispatched" class="badge" <?php echo ($order_count['Dispatched']!=0) ? 'style="color:red"' : ''; ?>><?php echo $order_count['Dispatched']; ?></span></a></li>
+		  <li class="<?php echo ($status == 'Delivered' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders&status=Delivered">Delivered&nbsp;&nbsp;<span id="Delivered" class="badge" <?php echo ($order_count['Delivered']!=0) ? 'style="color:red"' : ''; ?>><?php echo $order_count['Delivered']; ?></span></a></li>
+		  <li class="<?php echo ($status == 'Paid' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders&status=Paid">Paid&nbsp;&nbsp;<span id="Paid" class="badge" <?php echo ($order_count['Paid']!=0) ? 'style="color:red"' : ''; ?>><?php echo $order_count['Paid']; ?></span></a></li>
 	    </ul>
 
          <table class="table table-bordered table-stripped" id="order-holder" style="font-size:10px;">
