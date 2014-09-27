@@ -145,16 +145,15 @@
 								$staff = new Staff();
 								$returnData = json_decode($staff->save_petty(),true);
 							}else{
-								//require_once DIR.'/utils/utils.php';
-								//$design = new utils();
-								//$repDesign['error'] = $design->repDesign();
-								//print_r($repDesign);
-								//if($repDesign['error']==true){
-								//	$returnData['error'] = true;
-								//	$returnData['message'] = 'Some Error! While Replicating Design Document';
-								//}else{
-								$returnData['data']['redirect'] = 'index.php?dispatch=home'; 
-								//} 								
+								require_once DIR.'/utils/utils.php';
+								$design = new utils();
+								$repDesign = $design->repDesign();
+								if($repDesign['error']==true){
+									$returnData['error'] = true;
+									$returnData['message'] = 'Some Error! While Replicating Design Document';
+								}else{
+									$returnData['data']['redirect'] = 'index.php?dispatch=home'; 
+								} 								
 							}
 						}
 						//$returnData['data']['redirect'] = 'index.php?dispatch=billing.index'; 

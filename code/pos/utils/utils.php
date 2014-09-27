@@ -187,37 +187,6 @@
 				$return = array('error'=>true, 'message'=>'OOPS! Some Problem Contact Admin');
 			}			
 			return $return;
-/*Array
-(
-    [ok] => 1
-    [session_id] => 0460031c6cc7d26daf5681bf99a9de63
-    [source_last_seq] => 2085
-    [replication_id_version] => 3
-    [history] => Array
-        (
-            [0] => Array
-                (
-                    [session_id] => 0460031c6cc7d26daf5681bf99a9de63
-                    [start_time] => Tue, 12 Aug 2014 06:01:28 GMT
-                    [end_time] => Tue, 12 Aug 2014 06:01:33 GMT
-                    [start_last_seq] => 0
-                    [end_last_seq] => 2085
-                    [recorded_seq] => 2085
-                    [missing_checked] => 6
-                    [missing_found] => 6
-                    [docs_read] => 6
-                    [docs_written] => 6
-                    [doc_write_failures] => 0
-                )
-
-        )
-
-)
-			echo "<pre>";
-			print_r($result);
-			echo "</pre>";/**/
-
-			/*curl -X POST http://127.0.0.1:5984/_replicate -H "Content-Type:application/json" -d '{"source":"http://127.0.0.1:5984/cpos_pos","target":"http://54.249.247.15:5984/rakesh_cpos_ho", "filter":"doc_replication/design_replication"}'*/
 		}
 		function init(){
 			$designDocs = array();
