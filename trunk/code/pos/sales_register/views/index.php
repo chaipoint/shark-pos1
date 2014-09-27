@@ -107,7 +107,7 @@
               <tr>
                 <td class="text-center"><?php echo $key;?></td>
                 <td class="text-center"><?php echo $value;?></td>
-                <td class="text-center"><?php echo ($key == 'Cancelled') ? 0 : $bill_status['amount'][$key];?></td>
+                <td class="text-center"><?php echo $bill_status['amount'][$key];?></td>
               </tr>
           <?php }?>
             </tbody>
