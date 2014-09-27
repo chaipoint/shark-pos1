@@ -387,4 +387,8 @@
 			echo "</pre>";
 
 		}/**/
+		function generate_rep_running_flag(){
+			$activeTask = $this->cDB->getActiveTask();
+			echo '<script>var is_rep_running = '.(array_key_exists(0, $activeTask) ? 'true' : 'false').'; $(document).ready(function(){toggleRepBT ();});</script>';
+		}
 	}

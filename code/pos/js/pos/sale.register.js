@@ -1,12 +1,3 @@
-function toggleRepBT (){
-	if(is_rep_running){
-		$("#billing_sync_bt").addClass('hidden')
-		$("#billing_stop_sync_bt").removeClass('hidden')
-	}else{
-		$("#billing_stop_sync_bt").addClass('hidden')
-		$("#billing_sync_bt").removeClass('hidden')		
-	}
-}
 function sales_register(data){
 	window.location = 'index.php?dispatch=sales_register';
 }
@@ -18,9 +9,7 @@ function data_sync(data){
 var url = null;
 $(document).ready( function(){
     url = $.url();
-    if((url.param('dispatch').split('.'))[0] == 'sales_register'){
-		toggleRepBT ();
-	}
+
 /* DatePicker Class Function */
     $('.datepicker').datepicker({
 		maxDate:0,

@@ -5,12 +5,10 @@ Please Don't Make any Changes in this File Prior permissson to
 	9992749952
 */
 /*Reload as Toggle between Network offline and online*/
-var is_login_allowed;
 window.addEventListener("offline", function(e) { window.location.reload(true);})
 window.addEventListener("online", function(e) { window.location.reload(true);})
 //setTimeout(,2000);
 $(document).ready(function(){
-	console.log(navigator.onLine);
 	if(! navigator.onLine){
 		$('#pos_sync').addClass('btn-danger').attr('id','');
 
@@ -430,4 +428,13 @@ function decimalAdjust(value, exp) {
 		// Shift back
 		value = value.toString().split('e');
 		return +(value[0] + 'e' + (value[1] ? (+value[1] + exp) : exp));
+}
+function toggleRepBT (){
+	if(is_rep_running){
+		$("#billing_sync_bt").addClass('hidden')
+		$("#billing_stop_sync_bt").removeClass('hidden')
+	}else{
+		$("#billing_stop_sync_bt").addClass('hidden')
+		$("#billing_sync_bt").removeClass('hidden')		
+	}
 }
