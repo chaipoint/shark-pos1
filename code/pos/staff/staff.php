@@ -33,7 +33,7 @@
 					if(count($result['rows']) == 1){
 						$totalShifts = count($result['rows'][0]['doc']['shift']);
 						if($totalShifts != 0 && empty($result['rows'][0]['doc']['shift'][$totalShifts-1]['end_time'])){
-							$data = array('type'=>'shift_end','end_petty_cash'=>$_POST['petty_cash'], 'box_cash'=>$_POST['box_cash'], 'time'=>$this->getCDTime(), 'login' =>$_SESSION['user']['mysql_id'], 'name' =>$_SESSION['user']['name']);
+							$data = array('type'=>'shift_end','end_petty_cash'=>$_POST['petty_cash_end'], 'box_cash'=>$_POST['box_cash'], 'time'=>$this->getCDTime(), 'login' =>$_SESSION['user']['mysql_id'], 'name' =>$_SESSION['user']['name']);
 							$return['message'] = 'Store Shift Ended';
 							if($result['rows'][0]['doc']['shift'][$totalShifts-1]['start_login_id'] != $_SESSION['user']['mysql_id']){
 								$return['error'] = true;
@@ -44,7 +44,7 @@
 							}
 						}else{
 							if($_POST['mode'] == 'day_end'){
-								$data = array('type'=>'day_end','cash'=>$_POST['box_cash'], 'time'=>$this->getCDTime(), 'login' =>$_SESSION['user']['mysql_id'], 'name' =>$_SESSION['user']['name']);
+								$data = array('type'=>'day_end','cash'=>$_POST['box_cash_end'], 'time'=>$this->getCDTime(), 'login' =>$_SESSION['user']['mysql_id'], 'name' =>$_SESSION['user']['name']);
 									$return['message'] = 'Store Day Ended';
 							}
 						}
