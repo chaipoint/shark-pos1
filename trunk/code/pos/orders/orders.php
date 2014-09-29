@@ -7,6 +7,22 @@
 				$this->getDBConnection($this->cDB);
 			}
 		}
+
+		function getCocOrder(){
+        	$return = array('error'=>false,'message'=>'','count'=>false,'data'=>array());
+        	if(array_key_exists('request_type', $_REQUEST) && $_REQUEST['request_type']=='getCOCOrder'){
+        		$getOrder = 'SELECT id FROM cp_orders WHERE store_id = "'.$_SESSION['user']['store']['id'].'"  AND DATE(created_date) = CURDATE() AND status = "New"';
+        		$result = $this->db->func_query($getOrder);
+        		if(is_array($result) && count($result)>0){
+        			$return['message'] = 'New Order Placed';
+        			$return['count'] = true;  
+				}
+				$res = json_encode($return,true);
+				return $res;
+        	}
+
+        }
+        
 		function updateOrderStatus(){
 			//print_r($_POST);
 			//die();
