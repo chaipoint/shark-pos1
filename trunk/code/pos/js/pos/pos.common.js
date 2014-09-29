@@ -27,7 +27,7 @@ $(document).ready(function(){
 		window.setInterval(function(){
 			$.ajax({
 				type: 'POST',
-				url: 'index.php?dispatch=billing.getCocOrder',
+				url: 'index.php?dispatch=orders.getCocOrder',
 				data: {request_type:'getCOCOrder'},
 			}).done(function(response){
 				console.log(response);
