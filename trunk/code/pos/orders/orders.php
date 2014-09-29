@@ -31,23 +31,33 @@
 								$this->log->trace("RESPONSE \r\n".$re);
 								return $re;							
 						}
-					}else if($_POST['new_status']=='Paid'){
+					}else if($_POST['new_status']=='Paid' || $_POST['new_status']=='Cancelled'){
 						$getDoc = $this->cDB->getDesign('billing')->getView('bill_by_order')->setParam(array('key'=> '"'.$_POST['order'].'"','include_docs'=>'true'))->execute();
-						$doc = $getDoc['rows'][0]['doc']['_id'];
-						$_POST['request_type'] = 'update_bill';
-						$_POST['doc'] = $doc;
-						$_POST['bill_status_id'] = 68;
-						$_POST['bill_status_name'] = 'Paid';
-						require_once DIR.'/billing/billing.php';
-						$bl = new billing();
-						$result = $bl->save($_POST);
-						$response = json_decode($result,true); 
-						if($response['error']=='true'){
-							$return['error'] = true;
-							$return['message'] = "Some Error! Please Contact Admin";
-							$re = json_encode($return);
-							$this->log->trace("RESPONSE \r\n".$re);
-							return $re;		
+						if(array_key_exists(0, $getDoc['rows'])){
+							$doc = $getDoc['rows'][0]['doc']['_id'];
+						   	$_POST['request_type'] = 'update_bill';
+							$_POST['doc'] = $doc;
+							if($_POST['new_status']=='Paid'){
+								$_POST['bill_status_id'] = 68;
+								$_POST['bill_status_name'] = 'Paid';
+							}else if($_POST['new_status']=='Cancelled'){
+								$_POST['bill_status_id'] = 67;
+								$_POST['bill_status_name'] = 'Cancelled';
+								$_POST['cancel_reason'] = $_POST['reason'];
+								$_POST['due_amount'] = $_POST['net_amount'];
+							}
+								
+							require_once DIR.'/billing/billing.php';
+							$bl = new billing();
+							$result = $bl->save($_POST);
+							$response = json_decode($result,true); 
+							if($response['error']=='true'){
+								$return['error'] = true;
+								$return['message'] = "Some Error! Please Contact Admin";
+								$re = json_encode($return);
+								$this->log->trace("RESPONSE \r\n".$re);
+								return $re;		
+							}
 						}
 					} 
 					
