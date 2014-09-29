@@ -87,7 +87,9 @@
 						<a href="javascript:void(0)" class="require_valid_user btn nav-button btn-success btn-sm external <?php echo (MODULE == 'sales_register' ? 'active-btn' : ''); ?>" style="padding: 5px 8px; margin: 10px 0 5px 5px;" data-toggle="modal" data-target="" id="sales_register">Sale Register</a>
 					</li>
 				<?php }?>
-
+					<li class="hide" id="notification">
+						<img src="<?php echo IMG; ?>noti.ico" class="con">
+					</li>
 					<!--<li>
 					    <a
 					class="btn nav-button btn-success btn-sm external"
