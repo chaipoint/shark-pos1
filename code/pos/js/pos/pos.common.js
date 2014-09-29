@@ -338,8 +338,12 @@ $.fn.cKeyboard = function(){
 
 			options.restrictInput = true;
 			options.preventPaste = true;
-			options.autoAccept = false;
-			//options.lockInput = true;
+			options.caretToEnd = true;
+			options.initialFocus = true;
+			options.autoAccept =false;
+			options.usePreview = false;
+
+			//options.appendLocally=true;
 			options.visible = function(event, keyboard, input){
 					keyboard.$preview[0].select();
 					keyboard.lastCaret.start = 0;
@@ -420,7 +424,7 @@ $.fn.cKeyboard = function(){
 					break;
 
 			}
-		$(value).keyboard(options);
+		$(value).keyboard(options).addTyping();
 		returnEle[value] = $(value).getkeyboard();
 	});
 	return returnEle;
