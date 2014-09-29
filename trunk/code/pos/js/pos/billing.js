@@ -163,7 +163,7 @@ $(document).ready(function(){
 		$("#cancel").click(function(){
 			if(modifyBill){
 				bootbox.dialog({
-					message:'<div class="form-group"><textarea name="cancel_reason_bill" id="cancel_reason_bill" class="form-control" autofocus ></textarea></div>',
+					message:'<div class="form-group"><textarea name="cancel_reason_bill" id="cancel_reason_bill" class="form-control"></textarea></div>',
 					title:"Bill Cancel Reason",
 					buttons:{
 						main:{
@@ -206,6 +206,7 @@ $(document).ready(function(){
 					}
 				});
 				$('#cancel_reason_bill').cKeyboard();
+				setTimeout(function(){$('#cancel_reason_bill').focus();},600);
 			}
 			resetBill(true);
 		});
