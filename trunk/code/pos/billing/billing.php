@@ -274,22 +274,7 @@
 			return $return;
         }
 
-        function getCocOrder(){
-        	$return = array('error'=>false,'message'=>'','count'=>false,'data'=>array());
-        	if(array_key_exists('request_type', $_REQUEST) && $_REQUEST['request_type']=='getCOCOrder'){
-        		$getOrder = 'SELECT id FROM cp_orders WHERE store_id = "'.$_SESSION['user']['store']['id'].'"  AND DATE(created_date) = CURDATE() AND status = "New"';
-        		$result = $this->db->func_query($getOrder);
-        		if(is_array($result) && count($result)>0){
-        			$return['message'] = 'New Order Placed';
-        			$return['count'] = true;  
-				}
-				$res = json_encode($return,true);
-				return $res;
-        	}
-
-        }
-
-		function print_bill(){
+        function print_bill(){
 			if(array_key_exists('bill', $_GET) && is_numeric($_GET['bill']) && $_GET['bill'] > 0){
 				$billData = $this->cDB->getDesign('billing')->getView('bill_no')->setParam(array("include_docs"=>"true",'key'=>$_GET['bill']))->execute();
 				if(array_key_exists(0, $billData['rows'])){
