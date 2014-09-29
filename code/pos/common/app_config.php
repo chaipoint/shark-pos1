@@ -1,4 +1,8 @@
-<?php session_start();
+<?php 
+//$currentParams = session_get_cookie_params();
+//session_set_cookie_params($currentParams['lifetime'], '/pos/',$_SERVER['HTTP_HOST'], $currentParams['secure'], $currentParams['httponly']);
+//session_name('pos');
+session_start();
 /*
 <?php
 

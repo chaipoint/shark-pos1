@@ -341,7 +341,6 @@ $.fn.cKeyboard = function(){
 
 			options.restrictInput = true;
 			options.preventPaste = true;
-			options.caretToEnd = true;
 			options.initialFocus = true;
 			options.autoAccept =false;
 			options.usePreview = false;

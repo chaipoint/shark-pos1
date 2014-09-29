@@ -147,6 +147,7 @@
 							}else{
 								require_once DIR.'/utils/utils.php';
 								$design = new utils();
+								//$repDesign['error'] = false;
 								$repDesign = $design->repDesign();
 								if($repDesign['error']==true){
 									$returnData['error'] = true;
@@ -191,7 +192,7 @@
 				$this->view();			
 				$this->mode = $orignalMode;
 				$this->module = $orignalModule;
-				echo '</div> <script>var is_login_allowed = '.(array_key_exists($_SESSION['user']['mysql_id'], $staff) ? 'false' : 'true').'; </script>';
+				echo '</div> <script>var is_login_allowed = '.( array_key_exists($_SESSION['user']['mysql_id'], $staff) && ($_SESSION['user']['title']['id'] == 4 || $_SESSION['user']['title']['id'] == 6 ) ? 'false' : 'true').'; </script>';
 			}
 		}
 	}
