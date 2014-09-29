@@ -56,7 +56,7 @@
 							<td class="text-center"><b style="font-size:12px;">'.date('h:i A',strtotime($data['order_time'])).'</b></td>
 							<td class="text-center">'.$data['channel_name'].'</td>
 							<td class="text-right"><b>'.$data['net_amount'].'</b></td>
-							<td><a class="products_list_toggle" data-target="product_list_'.$data['order_id'].'" style="float:right;font-size:12px;">Hide Detail</a>
+							<td><a class="products_list_toggle" data-target="product_list_'.$data['order_id'].'" href="javascript:void(0);" style="float:right;font-size:12px;">Hide Detail</a>
 									<table class="table toggle-table" id="product_list_'.$data['order_id'].'">
 										<tbody>';
 								$product =  $data['products'];

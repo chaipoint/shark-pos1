@@ -9,6 +9,7 @@
 		}
 		function updateOrderStatus(){
 			//print_r($_POST);
+			//die();
 		    $dir =  dirname(__FILE__).'/../lib/msg_api/sms.php';
             require_once $dir; 
             if(getType($this->db->getInstance()) != 'resource'){
@@ -30,8 +31,26 @@
 								$this->log->trace("RESPONSE \r\n".$re);
 								return $re;							
 						}
+					}else if($_POST['new_status']=='Paid'){
+						$getDoc = $this->cDB->getDesign('billing')->getView('bill_by_order')->setParam(array('key'=> '"'.$_POST['order'].'"','include_docs'=>'true'))->execute();
+						$doc = $getDoc['rows'][0]['doc']['_id'];
+						$_POST['request_type'] = 'update_bill';
+						$_POST['doc'] = $doc;
+						$_POST['bill_status_id'] = 68;
+						$_POST['bill_status_name'] = 'Paid';
+						require_once DIR.'/billing/billing.php';
+						$bl = new billing();
+						$result = $bl->save($_POST);
+						$response = json_decode($result,true); 
+						if($response['error']=='true'){
+							$return['error'] = true;
+							$return['message'] = "Some Error! Please Contact Admin";
+							$re = json_encode($return);
+							$this->log->trace("RESPONSE \r\n".$re);
+							return $re;		
+						}
 					} 
-
+					
 						$updateStatus = "UPDATE cp_orders SET ".(array_key_exists('staff_id', $_POST) ? " delivery_boy = '".mysql_real_escape_string($_POST['staff_id'])."', " : '')." ".(array_key_exists('reason', $_POST) ? " cancel_reason = '".mysql_real_escape_string($_POST['reason'])."', " : '')." status = '".$new."', updated_by = ".$_SESSION['user']['mysql_id'].", updated_date = '".$this->getCDTime()."' where id = ".$order." and status = '".$current."'";
 						$this->db->db_query($updateStatus);
 						if( ! $this->db->db_affected_rows()){
