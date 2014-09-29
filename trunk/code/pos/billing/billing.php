@@ -162,6 +162,7 @@
 						$return['message'] = 'OOPS! Some Error Contact Admin.';
 					}
 				}elseif(array_key_exists('request_type', $_POST) && $_POST['request_type'] == 'update_bill'){
+					//print_r($_POST);die();
 					$billDataReturned = $this->getBillData($_POST['doc']);
 					if($billDataReturned['error']){
 						$return['error'] = true;
