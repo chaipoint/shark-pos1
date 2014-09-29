@@ -8,6 +8,7 @@ Please Don't Make any Changes in this File Prior permissson to
 window.addEventListener("offline", function(e) { window.location.reload(true);})
 window.addEventListener("online", function(e) { window.location.reload(true);})
 //setTimeout(,2000);
+var url = $.url();
 $(document).ready(function(){
 	if(! navigator.onLine){
 		$('#pos_sync').addClass('btn-danger').attr('id','');
@@ -26,7 +27,8 @@ $(document).ready(function(){
 	/*For Login Concept*/
 	$(".require_valid_user").click(function(){
 		var id = $(this).attr('id');
-		if(is_login_allowed){
+		var param = (url.param('dispatch')).split('.');
+		if(is_login_allowed && param[0] != 'sales_register'){
 			$('#login_holder_home .alert').hide();
 			$('#login_holder_home').modal('show');
 			$('input[name="validateFor"]','#login_holder_home form').val(id);
