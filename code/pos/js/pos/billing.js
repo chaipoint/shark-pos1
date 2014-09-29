@@ -263,6 +263,7 @@ $(document).ready(function(){
                   url:  'index.php?dispatch=billing.getBalanceInq',
                   data:  {'ppc_no':ppc_no},
                }).done(function(response){
+               	  console.log(response);
                	  $("span#loading_image").addClass('hide');
                	  //alert(response);
                	  result = $.parseJSON(response.trim());
@@ -309,16 +310,9 @@ $(document).ready(function(){
 				$("#is_credit").val('N');
 				$("#bill_status_id").val(68);
 				$("#bill_status").val(config_data.bill_status[68]);
-				var amountoBePaid = Math.ceil($totalAmountWT.toFixed(2));
-				if(amountoBePaid%50 != 0){
-					var divder = Math.floor(amountoBePaid/50);
-					amountoBePaid = 50 * (divder + 1);
-				}
-				$("#paid-amount").val(amountoBePaid);
-				console.log(amountoBePaid - Math.ceil($totalAmountWT.toFixed(2)));
-				$("#balance").text(amountoBePaid - Math.ceil($totalAmountWT.toFixed(2)));
 				if(loadedBill){ 
 					$('.payment-type-bt[data-value="'+loadedBill.payment_method+'"]').trigger('click');
+					$("#paid-amount").val(Math.ceil($totalAmountWT.toFixed(2)));
 					$("#delivery_channel").val(63);
 					$("#delivery_channel_name").val(config_data.delivery_channel[63]);
 					$("#booking_channel").val(loadedBill.channel_id);
@@ -372,8 +366,8 @@ $(document).ready(function(){
 			var phoneno = /^\d{10}$/;
 			if($('#phone_number').val()!='' && !$('#phone_number').val().match(phoneno)){
 				bootbox.alert('Please Enter Valid Phone No', function() { 
-					setTimeout('setFocus("phone_number")',100);
-				});
+				setTimeout('setFocus("phone_number")',100);
+			});
         		return false;
 			}
 			if(!$('#paid-amount').val()){
@@ -381,6 +375,7 @@ $(document).ready(function(){
 				return false;
 			}
 			if(parseInt($('#paid-amount').val()) < Math.ceil($totalAmountWT)){
+				console.log(Math.ceil($totalAmountWT));
 				bootbox.alert("Paid Amount is Less");
 				return false;
 			}
@@ -406,6 +401,8 @@ $(document).ready(function(){
 			billDetails.round_off = Math.ceil(billDetails.total_amount) - billDetails.total_amount;
 			billDetails.due_amount = billDetails.total_amount + billDetails.round_off;
 			billDetails.paid_amount = $('#paid-amount').val();
+			
+
 			billDetails.payment_type = $("#paid_by").val();
 
 			billDetails.is_cod = $("#is_cod").val();
@@ -438,7 +435,13 @@ $(document).ready(function(){
 			billDetails.card.txn_no = '';
 			billDetails.card.balance = '';
 			billDetails.reprint = 1;
+
+
 			billDetails.request_type = 'save_bill';
+
+
+			
+
 			$.ajax({
 				type: 'POST',
 				url: "index.php?dispatch=billing.save",
@@ -456,7 +459,7 @@ $(document).ready(function(){
 							window.location.reload(true);
 						}).find(".btn-primary").removeClass("btn-primary").addClass("btn-danger");
 					}else{
-						window.location.reload(true);
+					window.location.reload(true);
 					}
 					//bootbox.alert('Bill Successfully Saved');
 					//<a class="label label-primary print-bill-today" href="billprint.php?bill_no='+result.data.bill_no+'" target="_blank">Print</a>
@@ -467,9 +470,19 @@ $(document).ready(function(){
 		});
 		//---END--- SUbmit Payment Bill
 
+		
+
 		//---START-TAX POPUP --//
 		$("#add_tax").click(function(){
-			$viewData = '<table class="table table-striped table-condensed table-hover protable small" width="100%" border="0" cellspacing="0" cellpadding="0"><thead><tr class="active"><th>Product Name</th><th>Menu Price</th><th>Price Before Tax</th><th>Qty</th><th>subTotal</th><th>Discount</th><th>Price After Discount</th><th>Tax %</th><th>Tax</th><th>Net Amount</th></tr></thead><tbody>';
+
+			console.log($billingItems);
+			$viewData = '<table class="table table-striped table-condensed table-hover protable small" width="100%" border="0" cellspacing="0" cellpadding="0">'+
+							'<thead>'+
+								'<tr class="active">'+
+									'<th>Product Name</th><th>Menu Price</th><th>Price Before Tax</th><th>Qty</th><th>subTotal</th><th>Discount</th><th>Price After Discount</th><th>Tax %</th><th>Tax</th><th>Net Amount</th>'+
+								'</tr>'+
+							'</thead>'+
+						'<tbody>';
 						var qty = 0;
 						var netAmount = 0.0;
 						var taxAmount = 0.0;
@@ -498,7 +511,10 @@ $(document).ready(function(){
 										console.log(data.priceBT);
 
 			});
-			$viewData += '</tbody><tfoot><tr class="active"><th>Total</th><th></th><th></th><th class="text-right">'+qty+'</th><th class="text-right">'+subTotalSum.toFixed(2)+'</th><th class="text-right">'+(discountAmount).toFixed(2)+'</th><th class="text-right">'+(priceAfterDiscount).toFixed(2)+'</th><th></th><th class="text-right">'+(taxAmount).toFixed(2)+'</th><th class="text-right">'+(netAmount).toFixed(2)+'</th></tr></tfoot></table>';
+			$viewData += '</tbody>'+
+						'<tfoot><tr class="active"><th>Total</th><th></th><th></th><th class="text-right">'+qty+'</th><th class="text-right">'+subTotalSum.toFixed(2)+'</th><th class="text-right">'+(discountAmount).toFixed(2)+'</th><th class="text-right">'+(priceAfterDiscount).toFixed(2)+'</th><th></th><th class="text-right">'+(taxAmount).toFixed(2)+'</th><th class="text-right">'+(netAmount).toFixed(2)+'</th></tr></tfoot>'
+						+'</table>';
+
 			bootbox.dialog({
 				message:$viewData,
 				title:"Product Pricing Details",
@@ -508,7 +524,8 @@ $(document).ready(function(){
 						label:"Close",
 						className:"btn-primary btn-sm",
 					}
-				}
+			}
+
 			});
 		});
 	//---END--- Functions Work After Page Load via Events
@@ -533,15 +550,10 @@ $(document).ready(function(){
 
 });
 function generateSalesTable(productId, qty, productData){
-	var addAtLast = false;
-	if(productData){
-		addAtLast = true;
-	}
 	resetBill(false);
 	var productID = (productId) ? productId : 0;
-	var  newqty = 0;
 	if(productID && productID > 0){
-		newqty = isNaN(parseInt(qty)) ? 0 : qty;
+		var  newqty = isNaN(parseInt(qty)) ? 0 : qty;
 		if(! (productID in $billingItems)){
 			$billingItems[productID] = new Object();
 
@@ -555,19 +567,36 @@ function generateSalesTable(productId, qty, productData){
 			$billingItems[productID].taxAbleAmount = $billingItems[productID].priceBT;
 			$billingItems[productID].qty = newqty;
 			$billingItems[productID].tax = productData.tax.rate;
-		}else{
+
+/*			$billingItems[productID].discount = $intDiscount;
+			$billingItems[productID].subTotal = $billingItems[productID].qty * $billingItems[productID].priceBT;
+			$billingItems[productID].discountAmount = $billingItems[productID].subTotal * $billingItems[productID].discount/100;
+			$billingItems[productID].priceAD = $billingItems[productID].subTotal - $billingItems[productID].discountAmount;
+			$billingItems[productID].taxAmount = $billingItems[productID].price - $billingItems[productID].taxAbleAmount;
+			$billingItems[productID].netAmount = $billingItems[productID].priceAD + $billingItems[productID].taxAmount;
+/**/
+		}else{//menu price - taxable amount *
 			$billingItems[productID].qty = newqty;
-		}
+
+/*			$billingItems[productID].discount = $intDiscount;
+			$billingItems[productID].subTotal = $billingItems[productID].qty * $billingItems[productID].priceBT;
+			$billingItems[productID].discountAmount = $billingItems[productID].subTotal * $billingItems[productID].discount/100;
+			$billingItems[productID].priceAD = $billingItems[productID].subTotal - $billingItems[productID].discountAmount;
+			$billingItems[productID].taxAmount = ( $billingItems[productID].price - $billingItems[productID].taxAbleAmount ) * $billingItems[productID].qty;
+			$billingItems[productID].netAmount = $billingItems[productID].priceAD + $billingItems[productID].taxAmount;
+/**/	}
 	}
+//	console.log($billingItems);
 	var tableRows = '';
+
 	for(var index in $billingItems){
 			$billingItems[index].discount = $intDiscount;
 			$billingItems[index].subTotal = $billingItems[index].qty * $billingItems[index].priceBT;
 			$billingItems[index].discountAmount = $billingItems[index].subTotal * $billingItems[index].discount/100;
 			$billingItems[index].priceAD = $billingItems[index].subTotal - $billingItems[index].discountAmount;
 			$billingItems[index].taxAmount = ( $billingItems[index].price - $billingItems[index].taxAbleAmount ) * $billingItems[index].qty;
-			$billingItems[index].netAmount = $billingItems[index].priceAD + $billingItems[index].taxAmount;			
-		if(productID != index || !addAtLast){
+			$billingItems[index].netAmount = $billingItems[index].priceAD + $billingItems[index].taxAmount;
+		if(productID != index){
 			tableRows +='<tr billing-product="'+index+'">'+
 				'<td style="width:9%"><span class="glyphicon glyphicon-remove-sign del_row"></span></td>'+
 				'<td style="width:53%" class="btn-warning">'+$billingItems[index].name+'&nbsp;@&nbsp;'+$billingItems[index].price+'</td>'+
@@ -582,7 +611,7 @@ function generateSalesTable(productId, qty, productData){
 		$totalDiscountAmount += ($billingItems[index].discountAmount );
 
 	}
-	if(productID>0 && addAtLast){
+	if(productID>0){
 			tableRows +='<tr billing-product="'+productID+'">'+
 				'<td style="width:9%"><span class="glyphicon glyphicon-remove-sign del_row"></span></td>'+
 				'<td style="width:53%" class="btn-warning">'+$billingItems[productID].name+'&nbsp;@&nbsp;'+$billingItems[productID].price+'</td>'+
@@ -612,6 +641,7 @@ function resetBill(refresh){
 	$totalAmountWT = 0.0;
 	$totalTaxAmount = 0.0;
 	$totalDiscountAmount = 0.0;
+	//$intDiscount = 0;
 	$("#count").text($totalBillQty);		
 	$("#total").text($totalAmountWOT);
 	$("#total-payable").text($totalAmountWT);	
