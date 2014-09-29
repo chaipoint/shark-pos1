@@ -427,7 +427,7 @@ $.fn.cKeyboard = function(){
 					break;
 
 			}
-		$(value).keyboard(options).addTyping();
+		$(value).keyboard(options);
 		returnEle[value] = $(value).getkeyboard();
 	});
 	return returnEle;
