@@ -34,6 +34,9 @@ $(document).ready(function(){
 				var $res = $.parseJSON(response);
 				if($res.count){
 					beep(2000,2);
+					$('#notification').removeClass('hide');
+				}else{
+					$('#notification').addClass('hide');
 				}
 			})
 		},30000);
