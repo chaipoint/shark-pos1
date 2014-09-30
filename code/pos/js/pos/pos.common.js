@@ -22,26 +22,27 @@ $(document).ready(function(){
 		$("#login_holder").modal({keyboard:false,'show':true});
 		//sales register have handleResponse
 	});
-
-	$(function(){
-		window.setInterval(function(){
-			$.ajax({
-				type: 'POST',
-				url: 'index.php?dispatch=orders.getCocOrder',
-				data: {request_type:'getCOCOrder'},
-			}).done(function(response){
-				console.log(response);
-				var $res = $.parseJSON(response);
-				if($res.count){
-					beep(2000,2);
-					$('#notification').removeClass('hide');
-				}else{
-					$('#notification').addClass('hide');
-				}
-			})
-		},30000);
-	});
-
+	
+	if(is_shift_running){
+		$(function(){
+			window.setInterval(function(){
+				$.ajax({
+					type: 'POST',
+					url: 'index.php?dispatch=orders.getCocOrder',
+					data: {request_type:'getCOCOrder'},
+				}).done(function(response){
+					console.log(response);
+					var $res = $.parseJSON(response);
+					if($res.count){
+						beep(2000,2);
+						$('#notification').removeClass('hide');
+					}else{
+						$('#notification').addClass('hide');
+					}
+				})
+			},30000);
+		});
+	}
 
 	/*For Login Concept*/
 	$(".require_valid_user").click(function(){
