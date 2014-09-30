@@ -52,7 +52,7 @@ $(document).ready(function(){
 		loadedBill = orderData;
 		//console.log(loadedBill);
 		if(orderData){
-			localStorage.removeItem(order);			
+			//localStorage.removeItem(order);			
 			var productNewList = new Object();
 			$.each(productArray, function(index, data){
 				var category = index;
@@ -289,8 +289,6 @@ $(document).ready(function(){
 		/* END -- Payment Using PPC NO  */
 
 		$("#payment").click(function(){
-
-
 			$("#twt").text(Math.ceil($totalAmountWT.toFixed(2)));
 			if($totalBillQty == 0){
 				bootbox.alert('Please add product to sale first');
@@ -343,6 +341,8 @@ $(document).ready(function(){
 					$("#is_credit").val('N');
 					$("#bill_status").val(config_data.bill_status[65]);
 					$("#bill_status_id").val(65);
+					$("#customer_type").val('coc').attr('readonly');
+					$("#customer_type").prop('disabled',true);
 			}
 			popupKeyboard = $('#paid-amount, #phone_number, #billing_customer').cKeyboard();
 
@@ -352,6 +352,28 @@ $(document).ready(function(){
 
 			}
 
+		});
+		$("#customer_type").change(function(){
+			switch($(this).val()){
+				case 'walk_in':
+					$("#is_cod").val('N');
+					$("#is_prepaid").val('Y');
+					$("#is_credit").val('N');
+					$('.payment-type-bt[data-value="cash"]').trigger('click');
+					break;
+				case 'coc':
+					$("#is_cod").val('Y');
+					$("#is_prepaid").val('N');
+					$("#is_credit").val('N');
+					$('.payment-type-bt[data-value="cash"]').trigger('click');
+					break;
+				case 'caw':
+					$("#is_cod").val('N');
+					$("#is_prepaid").val('N');
+					$("#is_credit").val('Y');
+					$('.payment-type-bt[data-value="caw"]').trigger('click');
+				break;
+			}
 		});
 		//---END--- Payment Event After Products selection  or Without Product Selection
 
