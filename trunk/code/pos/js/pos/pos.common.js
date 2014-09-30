@@ -362,6 +362,7 @@ $.fn.cKeyboard = function(){
 					break;
 				case '#discount_input_box':
 					options.layout = 'caustom';
+					options.usePreview = true;
 					options.customLayout = {
 							'default':['1 2 3 {clear}','4 5 6 .','7 8 9 0','{accept} {cancel}']
 						};
