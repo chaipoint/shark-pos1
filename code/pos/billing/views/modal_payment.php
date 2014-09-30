@@ -42,6 +42,16 @@
 				<table class="table table-striped" style="font-size:12px;">
 					<tbody>
 						<tr class="row">
+							<td>Customer Type</td>
+							<td>
+								<select class="form-control" name="customer_type" id="customer_type">
+									<option value="walk_in">Walk In</option>
+									<option  value="coc">COC</option>
+									<option  value="caw">CAW</option>
+								</select>
+							</td>
+						</tr>
+						<tr class="row">
 							<td width="50%">Customer <!--<a href="#"
 									class="btn btn-primary btn-xs showCModal"><i
 										class="glyphicon glyphicon-plus-sign"></i> Add Customer </a>-->
@@ -108,7 +118,7 @@
 							<td><?php if(is_array($config_data['payment_mode']) && count($config_data['payment_mode'])>0){
 										foreach ($config_data['payment_mode'] as $key => $value) { ?>
 										
-								<a class="btn btn-sm btn-primary payment-type-bt <?php echo ($value=='Cash' ? 'btn-success' : ''); ?>" data-value="<?php echo strtolower($value); ?>"><?php echo $value; ?></a>
+									<a class="btn btn-sm btn-primary payment-type-bt <?php echo ($value=='Cash' ? 'btn-success' : ''); ?>" data-value="<?php echo strtolower($value); ?>" data-id="<?php echo $key; ?>"><?php echo $value; ?></a>
 								<?php }} ?>
 								<input type="hidden" name="paid_by" id="paid_by" value="cash">
 							</td>
