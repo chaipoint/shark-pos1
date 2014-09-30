@@ -1,3 +1,7 @@
+<script> 
+var is_shift_running = false;
+is_shift_running = <?php if(array_key_exists('shift', $_SESSION['user'])){ echo 'true';} ?>
+</script>
 <!DOCTYPE html>
 <html>
 	<head>
