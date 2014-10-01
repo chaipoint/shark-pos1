@@ -1,6 +1,5 @@
 <script> 
-var is_shift_running = false;
-is_shift_running = <?php if(array_key_exists('shift', $_SESSION['user'])){ echo 'true';} ?>
+var is_shift_running = <?php if(!empty($_SESSION) && array_key_exists('shift', $_SESSION['user'])){ echo 'true';}else{ echo 'false' ;} ?>;
 </script>
 <!DOCTYPE html>
 <html>
