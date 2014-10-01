@@ -11,15 +11,15 @@ window.addEventListener("online", function(e) { window.location.reload(true);})
 var url = $.url();
 $(document).ready(function(){
 	if(! navigator.onLine){
-		$('#pos_sync').addClass('btn-danger').attr('id','');
+		$('#data_sync').addClass('btn-danger').attr('id','');
 
 	}
-	$(document).on('click','#pos_sync',function(){
+	$(document).on('click','#data_sync',function(){
 		if(! navigator.onLine){
 			alert("No Internet Connection Available");
 			return  false;
 		}
-		$("#login_holder").modal({keyboard:false,'show':true});
+		data_sync();
 		//sales register have handleResponse
 	});
 	
@@ -44,6 +44,7 @@ $(document).ready(function(){
 			},30000);
 		});
 	}
+
 
 	/*For Login Concept*/
 	$(".require_valid_user").click(function(){

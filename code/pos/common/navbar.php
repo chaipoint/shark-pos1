@@ -80,7 +80,7 @@
 				<?php }?>
 				<?php if(MODULE != 'billing'){?>					
                      <li>
-						<a href="javascript:void(0)" class="require_valid_user btn nav-button btn-success btn-sm external" style="padding: 5px 8px; margin: 10px 0 5px 5px;" data-toggle="modal" data-target="" id="data_sync">Data Sync</a>
+						<a href="javascript:void(0)" class="btn nav-button btn-success btn-sm external" style="padding: 5px 8px; margin: 10px 0 5px 5px;" data-toggle="modal" data-target="" id="data_sync">Data Sync</a>
 					</li>
 				<?php } if(MODULE != 'billing' && MODULE != 'orders' ){?>
 					<li>
@@ -114,13 +114,13 @@
 					</li>
 					<li>
 						<?php 
-						$connected = @fsockopen("www.google.com", 80);
+					/*	$connected =true;// @fsockopen("www.google.com", 80);
 						if($connected) { 
 							echo '<img src="'.IMG.'ok.png" class="con">';
-							fclose($connected);
+						//	fclose($connected);
 						}else {
 							echo '<img src="'.IMG.'not_ok.png" class="con" >';
-						} 
+						} /**/
 						?>
 						
 					</li>
