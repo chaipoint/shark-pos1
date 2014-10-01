@@ -23,6 +23,7 @@ $(document).ready(function(){
 		//sales register have handleResponse
 	});
 	
+	is_shift_running = (is_shift_running==undefined) ? false : is_shift_running;
 	if(is_shift_running){
 		$(function(){
 			window.setInterval(function(){
