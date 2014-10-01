@@ -117,6 +117,7 @@ function changeStatus(data){
 					$('tr[data-order-id="'+data.order+'"]','#order-holder').remove();//ele.closest('tr').remove();
 					$("span#"+data.current_status).text(parseInt($("span#"+data.current_status).text())-1);
 					$("span#"+data.new_status).text(parseInt($("span#"+data.new_status).text())+1);
+					$('#tot-amt').text(parseFloat($('#tot-amt').text().replace(',', '')) - parseFloat((data.net_amount).replace(',', '')));
 				}
 			});	
 }
