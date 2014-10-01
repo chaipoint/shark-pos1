@@ -6,5 +6,5 @@
 		<script type="text/javascript" src="<?php echo JS;?>jquery-ui.min.js"></script>
 		<script type="text/javascript" src="<?php echo JS;?>bootstrapValidator.js"></script>
 		<script type="text/javascript" src="<?php echo JS;?>jquery.bxslider.min.js"></script>
-		<script type="text/javascript" src="<?php echo JS;?>jquery.keyboard.min.js"></script>
 		<script type="text/javascript" src="<?php echo JS;?>bootbox.js"></script>
+		<script type="text/javascript" src="<?php echo JS;?>jquery.keyboard1.min.js"></script>
