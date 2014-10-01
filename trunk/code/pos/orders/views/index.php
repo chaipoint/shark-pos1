@@ -89,7 +89,7 @@
 	   	<tr>
 	   		<th class="text-center">Total</th>
 	   		<th colspan="5"></th>
-	   		<th class="text-right"><?php echo number_format($total,2); ?></th>
+	   		<th class="text-right" id="tot-amt"><?php echo number_format($total,2); ?></th>
 	   		<th colspan="3"></th>
 	   	</tr>
 	   </tfoot>
