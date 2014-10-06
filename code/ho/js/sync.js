@@ -15,6 +15,30 @@ $("#search_button").click(function(){
 	$("#search_form").submit();
 	console.log('hello');
 });
+
+
+/* Function To Update Staff Data */
+$('#retail_customer_synk').on('click',function(){
+	$('#progress').show();	
+ $.ajax({
+	 type: 'POST',
+	 url: "cpos_to_ho.php",
+	 data : {'action':'updateCustomers'}
+	 
+  }).done(function(response) {
+  	 var $res =  $.parseJSON(response); //Parse result of response
+	 console.log(response);
+	 $('#progress').hide();
+	 if($res.error){ //If Their Exists any problem in Update then show errors
+	    bootbox.alert($res.msg); 
+	 }else{
+		 bootbox.alert('Total<br/>Inserted Customers : '+$res.data.inserted+'<br/>Updated Customers : '+$res.data.updated+'<br/>Deleted Customers : '+$res.data.deleted); 
+	}
+	
+	});
+});
+
+
 /* Function To Update Staff Data */
 $('#staff_synk').on('click',function(){
 	$('#progress').show();	
