@@ -24,9 +24,10 @@
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="color:#ffffff;">Data Sync <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
-                <li><a href="javascript:void(0);" id="staff_synk">Download Staff From CPOS</a></li>
-                <li><a href="javascript:void(0);" id="store_synk">Download Store From CPOS</a></li>
-                <li><a href="javascript:void(0);" id="config_synk">Download Config From CPOS</a></li>
+                <li><a href="javascript:void(0);" id="staff_synk">Staff From CPOS</a></li>
+                <li><a href="javascript:void(0);" id="store_synk">Store From CPOS</a></li>
+                <li><a href="javascript:void(0);" id="config_synk">Config From CPOS</a></li>
+                <li><a href="javascript:void(0);" id="retail_customer_synk">Retail Customers From CPOS</a></li>
                 <li class="divider"></li>
                 <!--<li class="dropdown-header">Nav header</li>-->
                 <li><a href="javascript:void(0);" id="bill_synk">Upload Bill</a></li>
