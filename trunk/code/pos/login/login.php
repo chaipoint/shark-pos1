@@ -22,6 +22,7 @@
 					}
 					$this->store = $store_result['key'];
 					$this->store_name = $store_result['value']['name'];
+					$this->store_location = $store_result['value']['location'];
 				}
 			}else{
 				$this->log->debug('Config File Have Some Problem \n\r'.'Error Message :- '.$this->configData['message']);
@@ -99,6 +100,8 @@
 							}
 						}else{
 							$userData["store"]['name'] = $this->store_name;
+							$userData["store"]['location'] = $this->store_location['id'];
+							$userData["store"]['location_name'] = $this->store_location['name'];
 
 							$userData["_id"] = $result['data']['_id'];
 							$userData["_rev"] = $result['data']['_rev'];
@@ -147,8 +150,8 @@
 							}else{
 								require_once DIR.'/utils/utils.php';
 								$design = new utils();
-								//$repDesign['error'] = false;
-								$repDesign = $design->repDesign();
+								$repDesign['error'] = false;
+								//$repDesign = $design->repDesign();
 								if($repDesign['error']==true){
 									$returnData['error'] = true;
 									$returnData['message'] = 'Some Error! While Replicating Design Document';
