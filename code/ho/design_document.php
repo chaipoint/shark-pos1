@@ -102,7 +102,7 @@ function init(){
               "design_replication" => "function(doc,req){ if(doc.language || (doc.cd_doc_type && ( doc.cd_doc_type == 'bill_counter' || doc.cd_doc_type == 'config_master'))) {return  true;}else{return  false;} }",
               "bill_replication" => "function(doc, req){ if(doc.cd_doc_type && ( doc.cd_doc_type == 'store_bill' || doc.cd_doc_type == 'petty_expense' || doc.cd_doc_type == 'petty_inward' || doc.cd_doc_type == 'store_shift' || doc.cd_doc_type == 'login_history' ) && !doc.mysql_id){ return true;} else { return false;}}",
               "config_replication" => "function(doc, req){ if(doc.cd_doc_type && doc.cd_doc_type == 'config_master'){ return true;} else { return false;}} ",
-              "retail_customer_replication" => "function(doc, req){ if(doc.cd_doc_type && doc.cd_doc_type == 'retail_customers'){ return true;} else { return false;}} "        
+              "retail_customer_replication" => "function(doc, req){ if(doc.cd_doc_type && doc.cd_doc_type == 'retail_customers' && doc.location_id == req.query.location){ return true;} else { return false;}} "        
               )
       );
 
