@@ -26,7 +26,7 @@ $(document).ready(function(){
 	is_shift_running = (is_shift_running==undefined) ? false : is_shift_running;
 	if(is_shift_running){
 		$(function(){
-			window.setInterval(function(){
+			/*window.setInterval(function(){
 				$.ajax({
 					type: 'POST',
 					url: 'index.php?dispatch=orders.getCocOrder',
@@ -41,7 +41,7 @@ $(document).ready(function(){
 						$('#notification').addClass('hide');
 					}
 				})
-			},30000);
+			},30000);/**/
 		});
 	}
 
