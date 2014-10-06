@@ -390,7 +390,7 @@
         		"language" => "javascript",
           		"views" => array(
               		"retail_customer_list" => array(
-                  		"map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'retail_customers'){ emit(doc.mysql_id * 1, doc.name); } }",
+                  		"map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'retail_customers'){ emit(doc.name,doc.mysql_id * 1); } }",
 	                )
             	)
       		);
