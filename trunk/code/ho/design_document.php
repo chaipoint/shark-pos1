@@ -153,7 +153,11 @@ function init(){
                 ),
               "store_shift" => array(
                   "map" => "function(doc) { if(doc.cd_doc_type == 'store_shift'){ var date = doc.login_time.split(' '); emit(date[0], null); } }"
+                ),
+              "retail_customer_list" => array(
+                  "map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'retail_customers'){ emit(1*doc.mysql_id, null); } }"
                 )
+
             ),
           "updates" => array(
               "insert_mysql_id" => "function(doc,req){ if(doc) { if(doc) { doc.mysql_id = req.query.mysql_id; return [doc,req.query.mysql_id]; } } }"
