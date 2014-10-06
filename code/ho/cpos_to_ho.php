@@ -22,7 +22,75 @@ switch ($action){
 		echo updateConfig();
 		break;
 
+		case "updateCustomers":
+		echo updateCustomers();
+		break;
 
+}
+function updateCustomers(){
+	global $logger, $db;
+	$logger->debug("Calling Customer Block");
+    
+	$couch = new CouchPHP();
+	$existingRC = array(); 
+	$listRC = $couch->getDesign('design_ho')->getview('retail_customer_list')->setParam(array('include_docs'=>'true'))->execute();
+	if(array_key_exists('rows', $listRC)){
+		foreach ($listRC['rows'] as $rkey => $rvalue) {
+					$existingRC[$rvalue['doc']['mysql_id']]['_id'] = $rvalue['doc']['_id'];
+					$existingRC[$rvalue['doc']['mysql_id']]['_rev'] = $rvalue['doc']['_rev'];
+				}
+	}
+
+	$cusQuery = "SELECT id, name, address, phone, contact_person, e_mail, location_id, customer_id, type, note from customer_master where active = 'Y'";
+	$dbResult = $db->func_query($cusQuery);
+	$insertArray = array();
+	$updateCounter = 0;
+	$insertCounter = 0;
+	$deleteCounter = 0;
+	foreach($dbResult as $key => $value){
+		if(array_key_exists($value['id'], $existingRC)){
+			$value['_id'] = $existingRC[$value['id']]['_id'];
+			$value['_rev'] = $existingRC[$value['id']]['_rev'];
+			unset($existingRC[$value['id']]);
+			$updateCounter++;
+		}else{
+		$insertCounter++;
+	}
+		$value['cd_doc_type'] = 'retail_customers';
+		$value['mysql_id'] = $value['id'];
+		$value['address'] = str_replace(array('"',"'"), ' ', $value['address']);
+		unset($value['id']);
+		$insertArray[] = $value;
+	}
+	if(count($existingRC)>0){
+		foreach($existingRC as $keyR => $valueR){
+			$res = $couch->deleteDoc($valueR['_id'])->setParam(array('rev'=>$valueR['_rev']))->execute();
+			$deleteCounter++;
+		}
+	}
+
+
+	$totalInsert = count($insertArray);
+	if($totalInsert > 0){
+	//	print_r($insertArray);
+		$result=$couch->saveDocument(true)->execute(array("docs"=>$insertArray));
+  		if(array_key_exists('error', $result)){
+  				$logger->debug("ERROR:Retail Customers Not Updated IN CouchDb");
+  				$html['error'] = true;
+				$html['update'] = false;
+				$html['msg'] = 'Some Error Please Contact Admin';
+   		}else{
+  			$logger->debug("Retail Customers Updated Successfully IN CouchDb");
+  			$html['error'] = false;
+			$html['update'] = true;
+			$html['data']['inserted'] = $insertCounter;
+			$html['data']['updated'] = $updateCounter;
+			$html['data']['deleted'] = $deleteCounter;
+  		}
+	}
+	$result = json_encode($html,true);
+	$logger->debug("End OF updateStaff Function");
+	return $result;
 }
 /* Function To Update Staff Data */
 
