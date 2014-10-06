@@ -56,7 +56,7 @@ function init(){
         'language' => 'javascript', 
         'views' => array(
           "store_mysql_id"=>array(
-            "map"=>"function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'store_master'){ emit(doc.mysql_id,{name:doc.name, staff:doc.store_staff}); } }"
+            "map"=>"function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'store_master'){ emit(doc.mysql_id,{name:doc.name, staff:doc.store_staff, location:location}); } }"
             ),
           "store_shift"=>array(
             "map"=>"function(doc) { if(doc.cd_doc_type == 'store_shift'){ var date = doc.login_time.split(' '); emit(date[0], null); } }"
