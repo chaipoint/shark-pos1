@@ -5,6 +5,7 @@
 		}
 		function sync(){
 			$return = array('error'=>false, 'message'=>'');
+			$result = array('error'=>false, 'message'=>'');
 			if(array_key_exists('mode', $_GET) && !empty($_GET['mode']))	{
 				switch($_GET['mode']){
 					case 'staff_sync_bt':
@@ -27,6 +28,9 @@
 					case 'design_sync_bt':
 							$result = $this->repDesign();
 					break;
+					case 'retail_customers_sync_bt':
+							$result = $this->repRetailCustomers();
+					break;
 					case 'billing_stop_sync_bt':
 							$rep = $this->cDB->getActiveTask();//json_decode('[{"pid":"<0.19819.0>","checkpoint_interval":5000,"checkpointed_source_seq":259,"continuous":true,"doc_id":null,"doc_write_failures":0,"docs_read":1,"docs_written":1,"missing_revisions_found":1,"progress":100,"replication_id":"21b9ee56f33d6ec7e12c737f46f4a7b6+continuous","revisions_checked":1,"source":"http://127.0.0.1:5984/testing/","source_seq":259,"started_on":1408442813,"target":"http://pos:*****@54.249.247.15:5984/vente_ho_db/","type":"replication","updated_on":1408443075},{"pid":"<0.20189.0>","checkpoint_interval":5000,"checkpointed_source_seq":259,"continuous":true,"doc_id":null,"doc_write_failures":0,"docs_read":256,"docs_written":256,"missing_revisions_found":256,"progress":100,"replication_id":"cee10645c91448e7e411aff39d56a9f1+continuous","revisions_checked":257,"source":"testing","source_seq":259,"started_on":1408443071,"target":"rk","type":"replication","updated_on":1408443076}]',true);
 							//print_r($rep);
@@ -47,6 +51,18 @@
 				$return['message'] = 'OOPS! Some Problem Please Cotact Admin.';								
 			}
 			return  json_encode($return);
+		}
+		function repRetailCustomers(){
+			$return = array('error'=>false, 'message'=>'');
+			$source = $this->cDB->getRemote();
+			$target = $this->cDB->getUrl().$this->cDB->getDB();
+			$result = $this->cDB->replicate()->execute(array('source'=>$source, 'target'=>$target, 'filter'=>'doc_replication/retail_customer_replication', 'query_params'=>array("location"=>$_SESSION['user']['store']['location'])));
+			if(array_key_exists('ok', $result) && $result['ok']){
+
+			}else{
+				$return = array('error'=>true, 'message'=>'OOPS! Some Problem Contact Admin');
+			}			
+			return $return;
 		}
 		function repConfig(){
 			$return = array('error'=>false, 'message'=>'');
@@ -180,7 +196,7 @@
 				//$source = $this->cDB->getUrl().$this->cDB->getDB();
 				//$target = $this->cDB->getRemote();
 		//	}
-			$result = $this->cDB->replicate()->execute(array('source'=>$source, 'target'=>$target, 'filter'=>'doc_replication/design_replication'));
+			$result = $this->cDB->replicate()->execute(array('source'=>$source, 'target'=>$target, 'filter'=>'doc_replication/design_replication', 'continuous' => true));
 			if(array_key_exists('ok', $result) && $result['ok']){
 
 			}else{
@@ -241,7 +257,7 @@
 		        'language' => 'javascript', 
 		        'views' => array(
 		          "store_mysql_id"=>array(
-		            "map"=>"function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'store_master'){ emit(doc.mysql_id,{name:doc.name, staff:doc.store_staff}); } }"
+		            "map"=>"function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'store_master'){ emit(doc.mysql_id,{name:doc.name, staff:doc.store_staff, location:doc.location}); } }"
 		            ),
 		          "store_shift"=>array(
 		            "map"=>"function(doc) { if(doc.cd_doc_type == 'store_shift'){ var date = doc.login_time.split(' '); emit(date[0], null); } }"
@@ -282,11 +298,12 @@
 		            )
 		        ), 
 		        'filters'=> array(
-		          "staff_replication" => "function(doc,req){ if(doc.cd_doc_type && doc.cd_doc_type == 'staff_master' && doc.location_id == req.query.location) { return  true;}else{return  false;} }",
-		              "store_replication" => "function(doc,req){ if(doc.cd_doc_type && doc.cd_doc_type == 'store_master' && doc.mysql_id == req.query.mysql_id) {return  true;}else{return  false;} }",
-		              "design_replication" => "function(doc,req){ if(doc.language || (doc.cd_doc_type && ( doc.cd_doc_type == 'bill_counter' || doc.cd_doc_type == 'config_master'))) {return  true;}else{return  false;} }",
-		              "bill_replication" => "function(doc, req){ if(doc.cd_doc_type && ( doc.cd_doc_type == 'store_bill' || doc.cd_doc_type == 'petty_expense' || doc.cd_doc_type == 'petty_inward' || doc.cd_doc_type == 'store_shift' || doc.cd_doc_type == 'login_history' ) && !doc.mysql_id){ return true;} else { return false;}}",
-		              "config_replication" => "function(doc, req){ if(doc.cd_doc_type && doc.cd_doc_type == 'config_master'){ return true;} else { return false;}} "        
+		          		"staff_replication" => "function(doc,req){ if(doc.cd_doc_type && doc.cd_doc_type == 'staff_master' && doc.location_id == req.query.location) { return  true;}else{return  false;} }",
+		              	"store_replication" => "function(doc,req){ if(doc.cd_doc_type && doc.cd_doc_type == 'store_master' && doc.mysql_id == req.query.mysql_id) {return  true;}else{return  false;} }",
+		              	"design_replication" => "function(doc,req){ if(doc.language || (doc.cd_doc_type && ( doc.cd_doc_type == 'bill_counter' || doc.cd_doc_type == 'config_master'))) {return  true;}else{return  false;} }",
+		              	"bill_replication" => "function(doc, req){ if(doc.cd_doc_type && ( doc.cd_doc_type == 'store_bill' || doc.cd_doc_type == 'petty_expense' || doc.cd_doc_type == 'petty_inward' || doc.cd_doc_type == 'store_shift' || doc.cd_doc_type == 'login_history' ) && !doc.mysql_id){ return true;} else { return false;}}",
+		              	"config_replication" => "function(doc, req){ if(doc.cd_doc_type && doc.cd_doc_type == 'config_master'){ return true;} else { return false;}} ",
+		              	"retail_customer_replication" => "function(doc, req){ if(doc.cd_doc_type && doc.cd_doc_type == 'retail_customers' && doc.location_id == req.query.location){ return true;} else { return false;}} "
 		              )
 		      );
 
@@ -338,7 +355,11 @@
 		                ),
 		              "store_shift" => array(
 		                  "map" => "function(doc) { if(doc.cd_doc_type == 'store_shift'){ var date = doc.login_time.split(' '); emit(date[0], null); } }"
-		                )
+		                ),
+					"retail_customer_list" =>  array(
+				           "map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'retail_customers'){ emit(1*doc.mysql_id, null); } }"
+       					)
+
 		            ),
 		          "updates" => array(
 		              "insert_mysql_id" => "function(doc,req){ if(doc) { if(doc) { doc.mysql_id = req.query.mysql_id; return [doc,req.query.mysql_id]; } } }"
@@ -364,6 +385,16 @@
 		                )
 		            )
 		      );
+             $designDocs[] = array(
+		        "_id" => "_design/customers",
+        		"language" => "javascript",
+          		"views" => array(
+              		"retail_customer_list" => array(
+                  		"map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'retail_customers'){ emit(doc.mysql_id * 1, doc.name); } }",
+	                )
+            	)
+      		);
+
 
 		      if(count($designDocs) > 0){
 		        foreach($designDocs as $key => $value){
