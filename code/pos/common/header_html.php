@@ -46,6 +46,10 @@
 								<td class="text-center"><a class="btn btn-success sync-bt btn-sm col-lg-10" id="design_sync_bt">Design Docs</a></td>
 								<td class="text-center"></td>
 							</tr>
+							<tr>
+								<td class="text-center"><a class="btn btn-success sync-bt btn-sm col-lg-10" id="retail_customers_sync_bt">Retail Customers</a></td>
+								<td class="text-center"></td>
+							</tr>
 						</tbody>
 					</table>
 				</div>
