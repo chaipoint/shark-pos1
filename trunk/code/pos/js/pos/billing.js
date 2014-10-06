@@ -309,6 +309,10 @@ $(document).ready(function(){
 				$("#is_credit").val('N');
 				$("#bill_status_id").val(68);
 				$("#bill_status").val(config_data.bill_status[68]);
+				$("#customer_type").prop('disabled',false);
+				$("#customer_type option:first").prop('selected',true);
+				$("#customer_type").trigger('change');
+				$("#customer_type").prop('disabled',false);
 				if(loadedBill){ 
 					$('.payment-type-bt[data-value="'+loadedBill.payment_method+'"]').trigger('click');
 					$("#paid-amount").val(Math.ceil($totalAmountWT.toFixed(2)));
@@ -354,26 +358,38 @@ $(document).ready(function(){
 
 		});
 		$("#customer_type").change(function(){
+			var cusID = $('input[name="customer_id"]');
+			if(cusID){
+				cusID.remove();
+			}
+			$('#customer_name').val('');
 			switch($(this).val()){
 				case 'walk_in':
 					$("#is_cod").val('N');
 					$("#is_prepaid").val('Y');
 					$("#is_credit").val('N');
 					$('.payment-type-bt[data-value="cash"]').trigger('click');
+					$('#customer_name').addClass('hide');
+					$('#billing_customer').removeClass('hide');
 					break;
 				case 'coc':
 					$("#is_cod").val('Y');
 					$("#is_prepaid").val('N');
 					$("#is_credit").val('N');
 					$('.payment-type-bt[data-value="cash"]').trigger('click');
+					$('#customer_name').addClass('hide');
+					$('#billing_customer').removeClass('hide');
 					break;
 				case 'caw':
 					$("#is_cod").val('N');
 					$("#is_prepaid").val('N');
 					$("#is_credit").val('Y');
 					$('.payment-type-bt[data-value="caw"]').trigger('click');
+					$('#billing_customer').addClass('hide');
+					$('#customer_name').removeClass('hide');
 				break;
 			}
+			$("#customer_type").prop('disabled',true);
 		});
 		//---END--- Payment Event After Products selection  or Without Product Selection
 
@@ -443,6 +459,7 @@ $(document).ready(function(){
 
 			billDetails.customer = new Object();
 			billDetails.customer.name = $("#billing_customer").val();
+			billDetails.customer.type = $("#customer_type").val();
 			billDetails.customer.city = $("#billing_customer_city").val();
 			billDetails.customer.locality = $("#billing_customer_locality").val();
 			billDetails.customer.sub_locality = $("#billing_customer_sub_locality").val();

@@ -59,6 +59,7 @@
 							<td width="50%">
 								<span class="inv_cus_con"> 
 									<input type="text" id="billing_customer" class="form-control" name="billing_customer" value="Walkin Client"/>	
+									<input type="text" id="customer_name" name="customer_name" class="hide form-control autocomplete ui-autocomplete-input" target="customer_id" size="20" placeholder="Customer Name" action="customer.retail_customer" autocomplete="off">
 								</span>
 								<span class="inv_cus_con hide" id="customer"> </span>
 							</td>
