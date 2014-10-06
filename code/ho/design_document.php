@@ -193,7 +193,7 @@ function init(){
           "language" => "javascript",
           "views" => array(
               "retail_customer_list" => array(
-                  "map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'retail_customers'){ emit(doc.location_id * 1, null); } }",
+                  "map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'retail_customers'){ emit(doc.mysql_id * 1, doc.name); } }",
                 )
             )
       );
