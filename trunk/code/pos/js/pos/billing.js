@@ -322,6 +322,7 @@ $(document).ready(function(){
 				$("#paid-amount").val(amountoBePaid);
 				$("#balance").text(amountoBePaid - Math.ceil($totalAmountWT.toFixed(2)));
 				if(loadedBill){ 
+					$("#customer_type").append('<option  value="coc">COC</option>');
 					$('.payment-type-bt[data-value="'+loadedBill.payment_method+'"]').trigger('click');
 					$("#paid-amount").val(Math.ceil($totalAmountWT.toFixed(2)));
 					$("#delivery_channel").val(63);
@@ -353,7 +354,7 @@ $(document).ready(function(){
 					$("#is_credit").val('N');
 					$("#bill_status").val(config_data.bill_status[65]);
 					$("#bill_status_id").val(65);
-					$("#customer_type").val('coc').attr('readonly');
+					$("#customer_type").val('coc');
 					$("#customer_type").prop('disabled',true);
 			}
 			popupKeyboard = $('#paid-amount, #phone_number, #billing_customer').cKeyboard();
