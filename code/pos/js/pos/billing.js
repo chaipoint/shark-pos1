@@ -313,6 +313,14 @@ $(document).ready(function(){
 				$("#customer_type option:first").prop('selected',true);
 				$("#customer_type").trigger('change');
 				$("#customer_type").prop('disabled',false);
+
+				var amountoBePaid = Math.ceil($totalAmountWT.toFixed(2));
+				if(amountoBePaid%50 != 0){
+					var divder = Math.floor(amountoBePaid/50);
+					amountoBePaid = 50 * (divder + 1);
+				}
+				$("#paid-amount").val(amountoBePaid);
+				$("#balance").text(amountoBePaid - Math.ceil($totalAmountWT.toFixed(2)));
 				if(loadedBill){ 
 					$('.payment-type-bt[data-value="'+loadedBill.payment_method+'"]').trigger('click');
 					$("#paid-amount").val(Math.ceil($totalAmountWT.toFixed(2)));
@@ -389,7 +397,7 @@ $(document).ready(function(){
 					$('#customer_name').removeClass('hide');
 				break;
 			}
-			$("#customer_type").prop('disabled',true);
+			//$("#customer_type").prop('disabled',true);
 		});
 		//---END--- Payment Event After Products selection  or Without Product Selection
 
@@ -459,6 +467,12 @@ $(document).ready(function(){
 
 			billDetails.customer = new Object();
 			billDetails.customer.name = $("#billing_customer").val();
+			console.log($('#customer_name'));
+			console.log($('#customer_name').hasClass('hide'));
+			if(!$('#customer_name').hasClass('hide')){
+				billDetails.customer.name = $("#customer_name option:selected").text();				
+				billDetails.customer.id = $("#customer_name").val();				
+			}
 			billDetails.customer.type = $("#customer_type").val();
 			billDetails.customer.city = $("#billing_customer_city").val();
 			billDetails.customer.locality = $("#billing_customer_locality").val();
@@ -478,6 +492,7 @@ $(document).ready(function(){
 
 
 			billDetails.request_type = 'save_bill';
+			console.log(billDetails);
 
 
 			
@@ -590,8 +605,13 @@ $(document).ready(function(){
 
 });
 function generateSalesTable(productId, qty, productData){
+	var addAtLast = false;
+	if(productData){
+		addAtLast = true;
+	}
 	resetBill(false);
 	var productID = (productId) ? productId : 0;
+	var  newqty = 0;
 	if(productID && productID > 0){
 		var  newqty = isNaN(parseInt(qty)) ? 0 : qty;
 		if(! (productID in $billingItems)){
@@ -608,23 +628,9 @@ function generateSalesTable(productId, qty, productData){
 			$billingItems[productID].qty = newqty;
 			$billingItems[productID].tax = productData.tax.rate;
 
-/*			$billingItems[productID].discount = $intDiscount;
-			$billingItems[productID].subTotal = $billingItems[productID].qty * $billingItems[productID].priceBT;
-			$billingItems[productID].discountAmount = $billingItems[productID].subTotal * $billingItems[productID].discount/100;
-			$billingItems[productID].priceAD = $billingItems[productID].subTotal - $billingItems[productID].discountAmount;
-			$billingItems[productID].taxAmount = $billingItems[productID].price - $billingItems[productID].taxAbleAmount;
-			$billingItems[productID].netAmount = $billingItems[productID].priceAD + $billingItems[productID].taxAmount;
-/**/
 		}else{//menu price - taxable amount *
 			$billingItems[productID].qty = newqty;
-
-/*			$billingItems[productID].discount = $intDiscount;
-			$billingItems[productID].subTotal = $billingItems[productID].qty * $billingItems[productID].priceBT;
-			$billingItems[productID].discountAmount = $billingItems[productID].subTotal * $billingItems[productID].discount/100;
-			$billingItems[productID].priceAD = $billingItems[productID].subTotal - $billingItems[productID].discountAmount;
-			$billingItems[productID].taxAmount = ( $billingItems[productID].price - $billingItems[productID].taxAbleAmount ) * $billingItems[productID].qty;
-			$billingItems[productID].netAmount = $billingItems[productID].priceAD + $billingItems[productID].taxAmount;
-/**/	}
+		}
 	}
 //	console.log($billingItems);
 	var tableRows = '';
