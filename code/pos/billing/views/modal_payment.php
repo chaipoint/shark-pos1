@@ -46,7 +46,6 @@
 							<td>
 								<select class="form-control" name="customer_type" id="customer_type">
 									<option value="walk_in">Walk In</option>
-									<option  value="coc">COC</option>
 									<option  value="caw">CAW</option>
 								</select>
 							</td>
