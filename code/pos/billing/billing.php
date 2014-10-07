@@ -64,7 +64,10 @@
 	  			$data = array('error' => false,'catList'=>$catList,'productList'=>$productList,'firstCat'=>$firstCat, 'config_data'=>$this->configData,'bill'=>$billData,'lastBillNo'=>$lastBillNo,'lastBillTime'=>$lastBillTime);
 
 	  		}
-
+	  		require_once DIR.'/customer/customer.php';
+	  		$cus = new Customer();
+	  		$data['customer'] = $cus->retail_customer();
+	  		
 			$this->commonView('header_html',array('error'=>$data['error']));
 			$this->commonView('navbar');
 			if(!$data['error']){
