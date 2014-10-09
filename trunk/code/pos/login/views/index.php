@@ -70,7 +70,7 @@
 									</form>
 									</div>
 							</div>
-							<div class="row"><div class="col-md-8 col-md-offset-2">Copyright &copy; 2014 ChaiPoint</div></div>
+							<div class="row"><div class="col-md-12 col-md-offset-0">Copyright &copy; 2014 ChaiPoint <?php global $config; echo $config['version']; ?></div></div>
 						</div>
 					</div>
 		</div>
