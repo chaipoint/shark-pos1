@@ -7,6 +7,7 @@
 */
 global $config;
 $config['operating_mode'] = 'test';
+$config['version'] = '1.0.0.0';
 /*
 	Operation Mode test Local Details
 */
