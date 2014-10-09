@@ -38,6 +38,13 @@
 				<input type="hidden" name="billing_customer_sub_locality" id="billing_customer_sub_locality">
 				<input type="hidden" name="billing_customer_landmark" id="billing_customer_landmark">
 				<input type="hidden" name="billing_customer_company_name" id="billing_customer_company_name">
+				<input type="hidden" name="card_number" id="card_number">
+				<input type="hidden" name="card_type" id="card_type">
+				<input type="hidden" name="card_company" id="card_company">
+				<input type="hidden" name="card_redeem_amount" id="card_redeem_amount">
+				<input type="hidden" name="card_txn_no" id="card_txn_no">
+				<input type="hidden" name="card_balance" id="card_balance">
+
 			<div class="modal-body">
 				<table class="table table-striped" style="font-size:12px;">
 					<tbody>
