@@ -38,7 +38,7 @@ function balanceINQ($details){
 		$return['msg'] = $configDetails->getErrorMessage();
 		return $return;
 	}
-	$cardNo = $details['ppc_no'];
+	$cardNo = $details['card_number'];
 	$pin = '';//$details['ppc_no'];
 	$notes='ChaiPoint Order Transcation On '.Date("d/m/Y H:i:s");
 	$trackData = '';//$details['data'];
