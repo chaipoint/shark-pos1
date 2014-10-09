@@ -228,18 +228,17 @@ $(document).ready(function(){
 		});
 		//---START--- Payment Event After Products selection  or Without Product Selection
 		$(".payment-type-bt").click(function(){
-			var type = $(this).data('value');
+			var type = $(this).data('value');//alert(type);
 			$("#paid_by").val(type);
 			$('.payment-type-bt').removeClass('btn-success').addClass('btn-primary');
 			$(this).removeClass('btn-primary').addClass('btn-success');
-
-			if(type == 'ppc'){ 
+			if(type == 'ppc' || type == 'ppa'){ 
 				$(".ppc").show();
 				$('#balance').closest('tr').hide();
-					$("#ppc").cKeyboard();
+					//$("#ppc").cKeyboard();
 				bootbox.alert('Please Swipe The Card', function() { 
 					setTimeout(function(){
-						$("#ppc").cKeyboard();
+						//$("#ppc").cKeyboard();
 						$("#ppc").focus();
 					},600);	
 				});
@@ -251,29 +250,41 @@ $(document).ready(function(){
 
 			}
 		});
+		
 		/* START -- Payment Using PPC NO  */
-        
-        $('#ppc').on('keyup', function() {
-           var ppc_no = $(this).val();
-
-          if(ppc_no!='' && ppc_no.length==16) {
+        $('#ppc').on('change', function() {
+           var card_no = $(this).val();
+           var payment_type = $('#paid_by').val();
+           var total_amount = $('#twt').text();
+          	if(card_no!='') {
               if(navigator.onLine === true) {
                 $("span#loading_image").removeClass('hide');
                 $.ajax({
                   type: 'POST',
-                  url:  'index.php?dispatch=billing.getBalanceInq',
-                  data:  {'ppc_no':ppc_no},
+                  url:  (payment_type=='ppc') ? 'index.php?dispatch=billing.ppcBill' : 'index.php?dispatch=billing.ppaBill',
+                  data:  {'card_number':card_no,'amount':total_amount},
                }).done(function(response){
                	  console.log(response);
                	  $("span#loading_image").addClass('hide');
-               	  //alert(response);
+               	 // alert(response);
                	  result = $.parseJSON(response.trim());
                	 if(result.error){
 				 	$('.ppc_balance').hide();
 					bootbox.alert(result.message);
+				}else if(result.data['success']=='False'){
+					$('.ppc_balance').hide();
+					bootbox.alert(result.data['message']);
 				}else{
 					$('.ppc_balance').show();
 					$('#ac_balance').text(result.data['balance']);
+					$('#card_number').val(result.data['card_number']);
+					$('#card_type').val(payment_type);
+					$('#card_company').val('urbanPiper');
+					$('#card_redeem_amount').val(total_amount);
+					$('#card_txn_no').val(result.data['approval_code']);
+					$('#card_balance').val(result.data['balance']);
+					$('#submit-sale').trigger('click');
+
 				}
               });
               }else {
@@ -288,7 +299,7 @@ $(document).ready(function(){
 
 		/* END -- Payment Using PPC NO  */
 
-		$("#payment").click(function(){
+		$("#payment").click(function(){ 
 			$("#twt").text(Math.ceil($totalAmountWT.toFixed(2)));
 			if($totalBillQty == 0){
 				bootbox.alert('Please add product to sale first');
@@ -483,12 +494,12 @@ $(document).ready(function(){
 			billDetails.customer.company_name = $("#billing_customer_company_name").val();
 
 			billDetails.card = new Object();
-			billDetails.card.no = '';
-			billDetails.card.type = '';
-			billDetails.card.company = '';
-			billDetails.card.redeem_amount = '';
-			billDetails.card.txn_no = '';
-			billDetails.card.balance = '';
+			billDetails.card.no = $('#card_number').val();
+			billDetails.card.type = $('#card_type').val();;
+			billDetails.card.company = $('#card_company').val();;
+			billDetails.card.redeem_amount = $('#card_redeem_amount').val();;
+			billDetails.card.txn_no = $('#card_txn_no').val();;
+			billDetails.card.balance = $('#card_balance').val();;
 			billDetails.reprint = 1;
 
 
