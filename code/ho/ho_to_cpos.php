@@ -460,6 +460,7 @@ function uploadLoginHistory(){
 								"store_id" => $doc['store'],
 								"login_time" => $doc['login_time'],
 								"logout_time" => $doc['logout_time'],
+								"app_version" => $doc['app_version'],
 								"created_date" => date('Y-m-d H:i:s'),
 								"created_by" => '' 
 							);
