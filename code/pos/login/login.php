@@ -65,6 +65,7 @@
 			}
 		}
 		public function validate(){
+			global $config;
 			$returnData = array('error'=>false,'message'=>"",'data'=>array());
 			if($_SERVER['REQUEST_METHOD'] === 'POST'){
 
@@ -126,6 +127,7 @@
 							$loginHistory['store'] = $this->store;
 							$loginHistory['login_time'] = $this->getCDTime();
 							$loginHistory['logout_time'] = '';
+							$loginHistory['app_version'] = $config['version'];
 
 							$result = $this->cDB->saveDocument()->execute($loginHistory);
 							if(array_key_exists('ok', $result)){
