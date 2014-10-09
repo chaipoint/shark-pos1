@@ -228,27 +228,22 @@
         public function ppcBill(){
 			$dir =  dirname(__FILE__).'/../lib/svc/ppc_api.php';
             require_once $dir;
-		
 			$return = array('error'=>false,'message'=>'','data'=>array());
+			
 			if($_SERVER['REQUEST_METHOD'] == 'POST') {
-			$balance_check = array();
-			$balance_deduction = array();	
-			$balance_check = balanceINQ($_POST);
-			//print_r($balance_check);
-			  if(is_array($balance_check) && $balance_check['error']==true) {
-                
-                $return['error'] = true;
-				$return['message'] = $balance_check['msg'];
-				return json_encode($return);
-			  
-			  }else {
-
-			    $return['error'] = false;
-				$return['message'] = 'Your Balance';
-				$return['data']['balance'] = $balance_check['balance'];
-				return json_encode($return); 
-
-			  } 
+				$balance_check = array();
+				$balance_deduction = array();	
+				$balance_check = balanceINQ($_POST);
+				if(is_array($balance_check) && $balance_check['error']==true) {
+                	$return['error'] = true;
+					$return['message'] = $balance_check['msg'];
+					return json_encode($return);
+			  	}else {
+					$return['error'] = false;
+					$return['message'] = 'Your Balance';
+					$return['data']['balance'] = $balance_check['balance'];
+					return json_encode($return); 
+				} 
 			}
 
 		}
