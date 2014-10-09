@@ -5,7 +5,7 @@
 			parent::__construct();
 			$this->log =  Logger::getLogger("CP-POS|BILLING");
 			$this->getDBConnection($this->cDB);
-			$configResult = $this->getConfig($this->cDB, array('channel','bill_status','payment_mode', 'delivery_channel','company_details'));
+			$configResult = $this->getConfig($this->cDB, array('channel', 'bill_status', 'payment_mode', 'ppa_api', 'delivery_channel', 'company_details'));
 			$this->configData = (count($configResult['data']) > 0) ? $configResult['data'] : array();
 		}
 		function index(){
@@ -218,14 +218,14 @@
 					$return['data'] = true;
 					$return['message'] = 'OOPS! Some Problem. Please Contact Admin.';
 				}else{
-	                $payment_type = array('cash'=>0,'ppc'=>0,'c_card'=>0);
+	                $payment_type = array('cash'=>0,'ppc'=>0,'c_card'=>0,'ppa'=>0);
 					$return['data']['summary'] = $bills;
 					$return['data']['payment_type'] = $payment_type;
 				}
 			return json_encode($return);
 		}
 
-        public function getBalanceInq(){
+        public function ppcBill(){
 			$dir =  dirname(__FILE__).'/../lib/svc/ppc_api.php';
             require_once $dir;
 		
@@ -251,6 +251,17 @@
 			  } 
 			}
 
+		}
+
+		public function ppaBill(){
+			$dir =  dirname(__FILE__).'/../lib/api/ppa_api.php';
+            require_once $dir;
+            $config_data = $this->configData['ppa_api'];
+            $return = array('error'=>false,'message'=>'','data'=>array());
+			if($_SERVER['REQUEST_METHOD'] == 'POST') {
+				echo ppa_api($config_data,$_POST);
+			}
+            
 		}
         
         function printBill($data){
