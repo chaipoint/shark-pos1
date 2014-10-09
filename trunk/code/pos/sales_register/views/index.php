@@ -39,6 +39,12 @@
           <span class="title">PPC Rdmptn</span>
           <span class="value"><?php echo $ppcSale; ?></span>
         </div>
+
+        <div class="smallstat box col-lg-2 col-sm-4" style="width:125px;margin-left:8px;">
+          <i class="glyphicon glyphicon-usd fa blue"></i>
+          <span class="title">PPA Rdmptn</span>
+          <span class="value"><?php echo $ppaSale; ?></span>
+        </div>
      
       
         <div class="smallstat box col-lg-2 col-sm-4" style="width:115px;margin-left:8px;" >
@@ -76,7 +82,7 @@
         <div class="smallstat box col-lg-2 col-sm-4" style="width:110px;margin-left:8px;">
           <i class="glyphicon glyphicon-usd fa orange"></i>
           <span class="title">Total Sale</span>
-          <span class="value"><?php echo ($cash_sale + $cash_indelivery + $ppcSale) ;?></span>
+          <span class="value"><?php echo ($cash_sale + $cash_indelivery + $ppcSale + $ppaSale) ;?></span>
         </div>
       
 
