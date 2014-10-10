@@ -443,7 +443,7 @@ $(document).ready(function(){
 				return false;				
 			}
 			if($("#paid_by").val() == 'ppc' ){
-             bootbox.alert('Please Select Valid Payment Method');
+             //bootbox.alert('Please Select Valid Payment Method');
              return false;
 			}
 
