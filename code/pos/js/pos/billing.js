@@ -389,6 +389,7 @@ $(document).ready(function(){
 					$("#is_prepaid").val('Y');
 					$("#is_credit").val('N');
 					$('.payment-type-bt[data-value="cash"]').trigger('click');
+					$('.payment-type-bt').attr('disabled',false);
 					$('#customer_name').addClass('hide');
 					$('#billing_customer').removeClass('hide');
 					break;
@@ -397,6 +398,7 @@ $(document).ready(function(){
 					$("#is_prepaid").val('N');
 					$("#is_credit").val('N');
 					$('.payment-type-bt[data-value="cash"]').trigger('click');
+					$('.payment-type-bt').attr('disabled',false);
 					$('#customer_name').addClass('hide');
 					$('#billing_customer').removeClass('hide');
 					break;
@@ -404,7 +406,9 @@ $(document).ready(function(){
 					$("#is_cod").val('N');
 					$("#is_prepaid").val('N');
 					$("#is_credit").val('Y');
-					$('.payment-type-bt[data-value="caw"]').trigger('click');
+					$('.payment-type-bt[data-value="credit"]').trigger('click');
+					$('.payment-type-bt').attr('disabled',true);
+					$('.payment-type-bt[data-value="credit"]').attr('disabled',false);
 					$('#billing_customer').addClass('hide');
 					$('#customer_name').removeClass('hide');
 				break;
@@ -443,10 +447,14 @@ $(document).ready(function(){
 				return false;				
 			}
 			if($("#paid_by").val() == 'ppc' ){
-             //bootbox.alert('Please Select Valid Payment Method');
-             return false;
+             	//bootbox.alert('Please Select Valid Payment Method');
+             	return false;
 			}
-
+			if($('#customer_type').val()=='caw' && $('#customer_name').val()==''){
+				bootbox.alert('Please Select Customer Name');
+				return false;	
+			}
+			
 			var billDetails = new Object();
 			billDetails.items = new Object();
 			billDetails.items = $billingItems;
@@ -521,12 +529,11 @@ $(document).ready(function(){
 				}else{
 					$('#payModal').modal('hide');
 					if(result.message!=''){
-
 						bootbox.alert(result.message, function(){
-							window.location.reload(true);
+						window.location.reload(true);
 						}).find(".btn-primary").removeClass("btn-primary").addClass("btn-danger");
 					}else{
-					window.location.reload(true);
+						window.location.reload(true);
 					}
 					//bootbox.alert('Bill Successfully Saved');
 					//<a class="label label-primary print-bill-today" href="billprint.php?bill_no='+result.data.bill_no+'" target="_blank">Print</a>
