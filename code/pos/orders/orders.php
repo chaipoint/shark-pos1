@@ -11,7 +11,7 @@
 	        	if(array_key_exists('user', $_SESSION)){
 		        	if(array_key_exists('request_type', $_REQUEST) && $_REQUEST['request_type']=='getCOCOrder'){
 	    	    		
-		        		if(getType($db->getInstance()) == 'resource'){
+		        		if(getType($this->db->getInstance()) == 'resource'){
 		    	    		$getOrder = 'SELECT id FROM cp_orders WHERE store_id = "'.$_SESSION['user']['store']['id'].'"  AND DATE(created_date) = CURDATE() AND status = "New"';
 		        			$result = $this->db->func_query($getOrder);
 		        			if(is_array($result) && count($result)>0){
