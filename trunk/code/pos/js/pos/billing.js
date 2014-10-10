@@ -546,7 +546,7 @@ $(document).ready(function(){
 			$viewData = '<table class="table table-striped table-condensed table-hover protable small" width="100%" border="0" cellspacing="0" cellpadding="0">'+
 							'<thead>'+
 								'<tr class="active">'+
-									'<th>Product Name</th><th>Menu Price</th><th>Price Before Tax</th><th>Qty</th><th>subTotal</th><th>Discount</th><th>Price After Discount</th><th>Tax %</th><th>Tax</th><th>Net Amount</th>'+
+									'<th>Product Name</th><th>Menu Price</th><th>Price Before Tax</th><th>Qty</th><th>Sub Total</th><th>Discount</th><th>Price After Discount</th><th>Tax %</th><th>Tax</th><th>Net Amount</th>'+
 								'</tr>'+
 							'</thead>'+
 						'<tbody>';
