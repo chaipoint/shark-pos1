@@ -70,7 +70,7 @@ function uploadShiftData(){
 								where _id = '".$value['id']."'";
 					$db->db_query($updateQuery);
 					$logger->debug("Day Id Updated  ".$value['id']." on ".$value['id']." with total shifts ".count($value['doc']['shift']));
-
+					echo 'hi';
 					$selectShiftData = "select id, shift_no from cp_pos_shift_data where pos_day_id = ".$dbList[$value['id']]['id'];
 					$resultSelectData = $db->func_query($selectShiftData);
 					$shiftList = array();
