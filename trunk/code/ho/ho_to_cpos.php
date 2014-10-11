@@ -96,7 +96,7 @@ function uploadShiftData(){
 					}
 				}
 			}else{ echo 'h';
-				$insretArray = array('_id' => $value['doc']['_id'], 
+				$insretArray = array('_id' => $value['doc']['_id'] , 
 						'_rev' => $value['doc']['_rev'], 
 						'store_id' => $value['doc']['store_id'], 
 						'start_time' => $value['doc']['day']['start_time'], 
