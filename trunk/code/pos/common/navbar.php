@@ -114,13 +114,13 @@
 					</li>
 					<li>
 						<?php 
-					/*	$connected =true;// @fsockopen("www.google.com", 80);
+						$connected = @fsockopen("www.google.com", 80);
 						if($connected) { 
 							echo '<img src="'.IMG.'ok.png" class="con">';
-						//	fclose($connected);
+							fclose($connected);
 						}else {
 							echo '<img src="'.IMG.'not_ok.png" class="con" >';
-						} /**/
+						} 
 						?>
 						
 					</li>
