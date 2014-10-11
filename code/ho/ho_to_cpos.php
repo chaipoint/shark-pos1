@@ -55,7 +55,7 @@ function uploadShiftData(){
 		}
 
 		$rows = $shift_data['rows'];
-		foreach($rows as $key => $value){ echo 'hi2';
+		foreach($rows as $key => $value){ echo 'hi2'.'<br>';
 			echo $value['id'].'<br>';
 			print_r($dbList);
 			if(array_key_exists($value['id'], $dbList)){ echo '88888';
