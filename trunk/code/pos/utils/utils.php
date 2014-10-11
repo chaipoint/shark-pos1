@@ -46,17 +46,20 @@
 				$return['message'] = "Not allowed to follow this action";
 			}
 			//print_r($result);
-			if($result['error']){
+			if(array_key_exists('error', $result) && $result['error']==true){
 				$return['error'] = true;
 				$return['message'] = 'OOPS! Some Problem Please Cotact Admin.';								
 			}
 			return  json_encode($return);
 		}
 		function repRetailCustomers(){
+			//echo '<pre>';
+			//print_r($_SESSION['user']);
+			//echo '</pre>';
 			$return = array('error'=>false, 'message'=>'');
 			$source = $this->cDB->getRemote();
 			$target = $this->cDB->getUrl().$this->cDB->getDB();
-			$result = $this->cDB->replicate()->execute(array('source'=>$source, 'target'=>$target, 'filter'=>'doc_replication/retail_customer_replication', 'query_params'=>array("location"=>$_SESSION['user']['store']['location'])));
+			$result = $this->cDB->replicate()->execute(array('source'=>$source, 'target'=>$target, 'filter'=>'doc_replication/retail_customer_replication', 'query_params'=>array("location"=>$_SESSION['user']['store']['location']['id'])));
 			if(array_key_exists('ok', $result) && $result['ok']){
 
 			}else{
