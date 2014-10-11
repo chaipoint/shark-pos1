@@ -68,6 +68,7 @@ function uploadShiftData(){
 								closing_petty_cash = '".$value['doc']['day']['petty_cash_balance']['closing_petty_cash']."', 
 								inward_petty_cash = '".$value['doc']['day']['petty_cash_balance']['inward_petty_cash']."', last_shift  = '".count($value['doc']['shift'])."'
 								where _id = '".$value['id']."'";
+								echo $updateQuery;
 					$db->db_query($updateQuery);
 					echo 'ti';
 					$logger->debug("Day Id Updated  ".$value['id']." on ".$value['id']." with total shifts ".count($value['doc']['shift']));
