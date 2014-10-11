@@ -113,6 +113,7 @@ function uploadShiftData(){
 				);
 				print_r($insretArray);
 				$db->func_array2insert("cp_pos_day_data", $insretArray);
+				echo 'hello';
 				$insertId = $db->db_insert_id();
 				$logger->debug("Day Id Inserted  ".$value['doc']['_id']." on ".$insertId." with total shifts ".count($value['doc']['shift']));
 				$shiftInsert = array();
