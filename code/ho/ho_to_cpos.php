@@ -95,7 +95,7 @@ function uploadShiftData(){
 						}
 					}
 				}
-			}else{ echo 'h';
+			}else{ 
 				$insretArray = array('_id' => $value['doc']['_id'] , 
 						'_rev' => $value['doc']['_rev'], 
 						'store_id' => $value['doc']['store_id'], 
@@ -112,9 +112,9 @@ function uploadShiftData(){
 						'inward_petty_cash' => $value['doc']['day']['petty_cash_balance']['inward_petty_cash'],
 						'last_shift' => count($value['doc']['shift'])
 				);
-				print_r($insretArray);
+				//print_r($insretArray);
 				$db->func_array2insert("cp_pos_day_data", $insretArray);
-				echo 'sdfsdf';
+				
 				$insertId = $db->db_insert_id();
 				$logger->debug("Day Id Inserted  ".$value['doc']['_id']." on ".$insertId." with total shifts ".count($value['doc']['shift']));
 				$shiftInsert = array();
