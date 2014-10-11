@@ -57,9 +57,9 @@ function uploadShiftData(){
 		$rows = $shift_data['rows'];
 		foreach($rows as $key => $value){ echo 'hi';
 
-			if(array_key_exists($value['id'], $dbList)){
-				if($dbList[$value['id']]['_rev'] !== $value['doc']['_rev']){ echo '88888';
-					$updateQuery = "UPDATE cp_pos_day_data 
+			if(array_key_exists($value['id'], $dbList)){ echo '88888';
+				if($dbList[$value['id']]['_rev'] !== $value['doc']['_rev']){ 
+					echo $updateQuery = "UPDATE cp_pos_day_data 
 								SET end_time = '".$value['doc']['day']['end_time']."', 
 								end_staff_id = '".$value['doc']['day']['end_login_id']."',
 								end_full_cash = '".$value['doc']['day']['end_fullcash']."', 
@@ -68,7 +68,7 @@ function uploadShiftData(){
 								closing_petty_cash = '".$value['doc']['day']['petty_cash_balance']['closing_petty_cash']."', 
 								inward_petty_cash = '".$value['doc']['day']['petty_cash_balance']['inward_petty_cash']."', last_shift  = '".count($value['doc']['shift'])."'
 								where _id = '".$value['id']."'";
-								echo $updateQuery;
+								
 					$db->db_query($updateQuery);
 					echo 'ti';
 					$logger->debug("Day Id Updated  ".$value['id']." on ".$value['id']." with total shifts ".count($value['doc']['shift']));
