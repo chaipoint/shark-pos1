@@ -1,9 +1,9 @@
 function sales_register(data){
 	window.location = 'index.php?dispatch=sales_register';
 }
-function data_sync(data){
+function data_sync(data){ 
 		$("#login_holder_home").modal('hide');
-		$("#sync-modal").modal('show');
+		$("#sync-modal").modal({backdrop: 'static'});
 		$('.alert',$("#sync-modal")).remove();
 }
 var url = null;
