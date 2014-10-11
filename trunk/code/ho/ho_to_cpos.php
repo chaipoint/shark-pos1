@@ -97,18 +97,18 @@ function uploadShiftData(){
 			}else{ 
 				$insretArray = array('_id' => $value['doc']['_id'], 
 						'_rev' => $value['doc']['_rev'], 
-						'store_id' => $value['doc']['store_id'], 
+						'store_id' => "'".$value['doc']['store_id']."'", 
 						'start_time' => "'".$value['doc']['day']['start_time']."'", 
 						'end_time' => "'".$value['doc']['day']['end_time']."'", 
-						'start_staff_id' => $value['doc']['day']['start_login_id'], 
-						'end_staff_id' => $value['doc']['day']['end_login_id'], 
-						'pos_login_id' => $value['doc']['login_id'], 
-						'start_cash' => $value['doc']['day']['start_cash'], 
-						'end_full_cash' => $value['doc']['day']['end_fullcash'], 
-						'opening_petty_cash' => $value['doc']['day']['petty_cash_balance']['opening_petty_cash'], 
-						'petty_expense' => $value['doc']['day']['petty_cash_balance']['petty_expense'],
-						'closing_petty_cash' => $value['doc']['day']['petty_cash_balance']['closing_petty_cash'],
-						'inward_petty_cash' => $value['doc']['day']['petty_cash_balance']['inward_petty_cash'],
+						'start_staff_id' => "'".$value['doc']['day']['start_login_id']."'", 
+						'end_staff_id' => "'".$value['doc']['day']['end_login_id']."'", 
+						'pos_login_id' => "'".$value['doc']['login_id']."'", 
+						'start_cash' => "'".$value['doc']['day']['start_cash']."'", 
+						'end_full_cash' => "'".$value['doc']['day']['end_fullcash']."'", 
+						'opening_petty_cash' => "'".$value['doc']['day']['petty_cash_balance']['opening_petty_cash']."'", 
+						'petty_expense' => "'".$value['doc']['day']['petty_cash_balance']['petty_expense']."'",
+						'closing_petty_cash' => "'".$value['doc']['day']['petty_cash_balance']['closing_petty_cash']."'",
+						'inward_petty_cash' => "'".$value['doc']['day']['petty_cash_balance']['inward_petty_cash']."'",
 						'last_shift' => count($value['doc']['shift'])
 				);
 				print_r($insretArray);
