@@ -50,7 +50,7 @@
         <div class="smallstat box col-lg-2 col-sm-4" style="width:115px;margin-left:8px;" >
           <i class="glyphicon glyphicon-usd fa gray"></i>
           <span class="title">Credit Sale</span>
-          <span class="value"><?php echo $ppcSale; ?></span>
+          <span class="value"><?php echo $creditSale; ?></span>
         </div>
       
 
