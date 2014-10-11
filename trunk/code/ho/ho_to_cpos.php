@@ -38,7 +38,7 @@ function uploadShiftData(){
 	global $logger, $db;
 	$logger->debug("Shift Data From HO to CPOS");
 	$couch = new CouchPHP();
-	$shift_data = $couch->getDesign('design_ho')->getView('store_shift')->setParam(array('include_docs'=>'true','keys'=>'["'.date('Y-m-d').'","'.date('Y-m-d',(time()-(24*60*60))).'"]'))->execute();//,'key'=>'"'.date('Y-m-d').'"'
+	$shift_data = $couch->getDesign('design_ho')->getView('store_shift')->setParam(array('startkey' => "'".date('Y-m-d',(time()-(24*60*60)))."'", 'endkey' => "'".date('Y-m-d')."'",'include_docs'=>'true'))->execute();//,'key'=>'"'.date('Y-m-d').'"'
 	$logger->debug("URL to sccess data ".$couch->getLastUrl());
 	echo $couch->getLastUrl();
 	if(array_key_exists('rows', $shift_data) && count($shift_data['rows']) > 0){
