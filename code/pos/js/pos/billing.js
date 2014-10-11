@@ -111,9 +111,16 @@ $(document).ready(function(){
 		//---END--- Category SElection Ends
 
 
-		$("#saletbl").on("click",".del_row",function(){
+		$("#saletbl").on("click",".del_row",function(){ 
 			var tableTR = $(this).closest('tr');
 			var pID = tableTR.attr('billing-product');
+			//alert(pID);
+			$('.category-product').each(function(){
+				if($(this).prop('value')==pID){
+					$(this).removeClass('active-btn');
+					return false;
+				}
+			});
 			delete $billingItems[pID];
 			generateSalesTable();
 		});
@@ -613,7 +620,7 @@ $(document).ready(function(){
 
 			//---START--- Event For Product Selection
 		$("#proajax").on("click",".category-product",function(){
-			$(this).addClass('active-btn');
+			    $(this).addClass('active-btn');
 				var selectedSequence = $(this).attr('category-product-sequence');
 				var productData = productArray[selectedCat][selectedSequence];
 				var productID = productData.mysql_id;
