@@ -71,7 +71,7 @@ function uploadShiftData(){
 								where _id = '".$value['id']."'";
 								
 					$db->db_query($updateQuery);
-					echo 'ti';
+					
 					$logger->debug("Day Id Updated  ".$value['id']." on ".$value['id']." with total shifts ".count($value['doc']['shift']));
 
 					$selectShiftData = "select id, shift_no from cp_pos_shift_data where pos_day_id = ".$dbList[$value['id']]['id'];
@@ -94,7 +94,7 @@ function uploadShiftData(){
 						}
 					}
 				}
-			}else{
+			}else{ echo 'ti';
 				$insretArray = array('_id' => $value['doc']['_id'], 
 						'_rev' => $value['doc']['_rev'], 
 						'store_id' => $value['doc']['store_id'], 
