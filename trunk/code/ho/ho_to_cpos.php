@@ -40,6 +40,7 @@ function uploadShiftData(){
 	$couch = new CouchPHP();
 	$shift_data = $couch->getDesign('design_ho')->getView('store_shift')->setParam(array('include_docs'=>'true','keys'=>'["'.date('Y-m-d').'","'.date('Y-m-d',(time()-(24*60*60))).'"]'))->execute();//,'key'=>'"'.date('Y-m-d').'"'
 	$logger->debug("URL to sccess data ".$couch->getLastUrl());
+	echo $couch->getLastUrl();
 	if(array_key_exists('rows', $shift_data) && count($shift_data['rows']) > 0){
 		$selectFromDB = "SELECT id, if(end_time is null or end_time = '0000-00-00 00:00:00', 'N', 'Y') is_day_ended, _id, _rev, last_shift from cp_pos_day_data where date(start_time) = curdate() or date(start_time) = date(curdate()-1)";
 		$logger->debug("Query To get 2 days data  ".$selectFromDB);
@@ -55,9 +56,9 @@ function uploadShiftData(){
 		}
 
 		$rows = $shift_data['rows'];
-		foreach($rows as $key => $value){ echo 'hi2'.'<br>';
-			echo $value['id'].'<br>';
-			print_r($dbList);
+		foreach($rows as $key => $value){ 
+			//echo $value['id'].'<br>';
+			//print_r($dbList);
 			if(array_key_exists($value['id'], $dbList)){ echo '88888';
 				if($dbList[$value['id']]['_rev'] !== $value['doc']['_rev']){ 
 					echo $updateQuery = "UPDATE cp_pos_day_data 
@@ -111,9 +112,8 @@ function uploadShiftData(){
 						'inward_petty_cash' => "'".$value['doc']['day']['petty_cash_balance']['inward_petty_cash']."'",
 						'last_shift' => count($value['doc']['shift'])
 				);
-				print_r($insretArray);
+				//print_r($insretArray);
 				$db->func_array2insert("cp_pos_day_data", $insretArray);
-				echo 'hello';
 				$insertId = $db->db_insert_id();
 				$logger->debug("Day Id Inserted  ".$value['doc']['_id']." on ".$insertId." with total shifts ".count($value['doc']['shift']));
 				$shiftInsert = array();
