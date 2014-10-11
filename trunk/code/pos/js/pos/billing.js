@@ -533,7 +533,7 @@ $(document).ready(function(){
 						window.location.reload(true);
 						}).find(".btn-primary").removeClass("btn-primary").addClass("btn-danger");
 					}else{
-						window.location.reload(true);
+						window.location='index.php?dispatch=billing.index';
 					}
 					//bootbox.alert('Bill Successfully Saved');
 					//<a class="label label-primary print-bill-today" href="billprint.php?bill_no='+result.data.bill_no+'" target="_blank">Print</a>
