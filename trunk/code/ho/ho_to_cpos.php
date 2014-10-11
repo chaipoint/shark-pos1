@@ -40,7 +40,7 @@ function uploadShiftData(){
 	$couch = new CouchPHP();
 	$shift_data = $couch->getDesign('design_ho')->getView('store_shift')->setParam(array('startkey' => '"'.date("Y-m-d",(time()-(24*60*60))).'"', 'endkey' => '"'.date('Y-m-d').'"','include_docs'=>'true'))->execute();//,'key'=>'"'.date('Y-m-d').'"'
 	$logger->debug("URL to sccess data ".$couch->getLastUrl());
-	echo $couch->getLastUrl();
+	//echo $couch->getLastUrl();
 	if(array_key_exists('rows', $shift_data) && count($shift_data['rows']) > 0){
 		$selectFromDB = "SELECT id, if(end_time is null or end_time = '0000-00-00 00:00:00', 'N', 'Y') is_day_ended, _id, _rev, last_shift from cp_pos_day_data where date(start_time) = curdate() or date(start_time) = date(curdate()-1)";
 		$logger->debug("Query To get 2 days data  ".$selectFromDB);
@@ -61,7 +61,7 @@ function uploadShiftData(){
 			//print_r($dbList);
 			if(array_key_exists($value['id'], $dbList)){ echo '88888';
 				if($dbList[$value['id']]['_rev'] !== $value['doc']['_rev']){ 
-					echo $updateQuery = "UPDATE cp_pos_day_data 
+					$updateQuery = "UPDATE cp_pos_day_data 
 								SET end_time = '".$value['doc']['day']['end_time']."', 
 								end_staff_id = '".$value['doc']['day']['end_login_id']."',
 								end_full_cash = '".$value['doc']['day']['end_fullcash']."', 
