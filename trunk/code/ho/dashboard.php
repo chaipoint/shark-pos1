@@ -82,7 +82,7 @@
       <div class="col-lg-2 col-sm-4">
         <div class="smallstat box">
           <i class="glyphicon glyphicon-usd fa pink"></i>
-          <span class="title">Cash In Delivery</span>
+          <span class="title">Pending Cash</span>
           <span class="value"><?php echo $cashInDelivery;?></span>
         </div>
       </div>
