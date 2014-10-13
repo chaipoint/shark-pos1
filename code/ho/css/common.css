@@ -5,7 +5,7 @@
   background: white;
   padding: 10px;
   position: relative;
-  text-align: right;
+  text-align: left;
 }
 
 .box{
@@ -31,16 +31,22 @@ background: #0170D0;
 .smallstat i.pink {
 background: #EA488A;
 }
+.smallstat i.gray {
+background: #FF8C00;
+}
+.smallstat i.yel {
+background: #FF1493;
+}
 
 .smallstat i {
 text-align: center;
 display: block;
 color: black;
-width: 50px;
+width: 28px;
 font-size: 22px;
 padding: 14px 0;
 float: left;
-margin-right: 10px;
+margin-left: 0px;
 }
 
 .green {
@@ -59,7 +65,7 @@ line-height: 1;
 top: 12px;
 color: #b2b8bd;
 display: block;
-font-size: 12px;
+font-size: 10px;
 margin-top: 4px;
 font-weight: bold;
 }
