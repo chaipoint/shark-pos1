@@ -38,6 +38,7 @@
 				<input type="hidden" name="billing_customer_sub_locality" id="billing_customer_sub_locality">
 				<input type="hidden" name="billing_customer_landmark" id="billing_customer_landmark">
 				<input type="hidden" name="billing_customer_company_name" id="billing_customer_company_name">
+				<input type="hidden" name="billing_customer_address" id="billing_customer_address">
 				<input type="hidden" name="card_number" id="card_number">
 				<input type="hidden" name="card_type" id="card_type">
 				<input type="hidden" name="card_company" id="card_company">
@@ -77,6 +78,20 @@
 									</select>
 								</span>
 								<span class="inv_cus_con hide" id="customer"> </span>
+							</td>
+						</tr>
+
+						<tr class='row hide' > 
+							<td width="50%">Address</td>
+							<td width="50%">
+								<span class="inv_cus_con" id="address"> </span>
+							</td>
+						</tr>
+
+						<tr class='row hide' > 
+							<td width="50%">Contact Person</td>
+							<td width="50%">
+								<span class="inv_cus_con" id="contact_person"> </span>
 							</td>
 						</tr>
 
