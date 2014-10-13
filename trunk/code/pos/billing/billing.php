@@ -77,6 +77,28 @@
 			$this->commonView('footer_html');
 		}
 
+		public function getRetailCustomer(){
+			//print_r($_REQUEST);
+			$return = array('error'=>false, 'message'=>'', 'data' => array());
+			if(array_key_exists('request_type', $_REQUEST) && $_REQUEST['request_type']=='getRetailCustomer'){
+				$result = $this->cDB->getDesign('design_ho')->getView('retail_customer_list')->setParam(array('key'=>$_REQUEST["customer_id"],'include_docs'=>'true'))->execute();
+				if(array_key_exists('rows', $result)){
+					$rows = $result['rows'];
+					foreach($rows as $key => $value){
+						$return['data']['name'] = $value['doc']['name']; 
+						$return['data']['phone'] = $value['doc']['phone']; 
+						$return['data']['address'] = $value['doc']['address'];
+						$return['data']['contact_person'] = $value['doc']['contact_person'];
+						$return['data']['email'] = $value['doc']['e_mail'];
+					}
+				}
+			}else{
+				$return['error'] = true;
+				$return['message'] = 'Unknown Request Type';
+			}
+			return $return;
+		}
+
 		public function rePrint(){
 				$return = array('error'=>false, 'message'=>'', 'data' => array());
 				$bill = $_POST['doc'];
