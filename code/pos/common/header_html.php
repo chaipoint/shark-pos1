@@ -30,13 +30,13 @@
 							<tr>
 								<td class="text-center"><a class="btn btn-success sync-bt btn-sm col-lg-10" id="store_sync_bt">Store</a></td>
 								<td class="text-center">
-									<a class="btn btn-success sync-bt btn-sm col-lg-10 hidden" id="billing_sync_bt">Start Billing</a>
-									<a class="btn btn-success sync-bt btn-sm col-lg-10 hidden" id="billing_stop_sync_bt">Stop Billing</a>
+									<a class="btn btn-success sync-bt btn-sm col-lg-10 hidden" id="billing_sync_bt">Start Process</a>
+									<a class="btn btn-success sync-bt btn-sm col-lg-10 hidden" id="billing_stop_sync_bt">Stop Process</a>
 								</td>
 							</tr>
 							<tr>
 								<td class="text-center"><a class="btn btn-success sync-bt btn-sm col-lg-10" id="staff_sync_bt">Staff</a></td>
-								<td class="text-center"></td>
+								<td class="text-center"><strong>[Bill Data, Shift Data, Login History]</strong></td>
 							</tr>
 							<tr>
 								<td class="text-center"><a class="btn btn-success sync-bt btn-sm col-lg-10" id="config_sync_bt">Config</a></td>
