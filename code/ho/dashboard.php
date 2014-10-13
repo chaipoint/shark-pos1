@@ -75,61 +75,60 @@
       <!--<h2>Dashboard</h2>-->
       <div class='row' style="margin-top:20px;">
       
-      <div class="col-lg-2 col-sm-4">
-        <div class="smallstat box">
+      
+        <div class="smallstat box col-lg-2 col-sm-4" style="width:110px;margin-left:14px;">
           <i class="glyphicon glyphicon-usd fa green"></i>
           <span class="title">Cash Sale</span>
           <span class="value"><?php echo $cashSale;?></span>
         </div>
-      </div>
+      
 
-      <div class="col-lg-2 col-sm-4">
-        <div class="smallstat box">
+      
+        <div class="smallstat box col-lg-2 col-sm-4" style="width:130px;margin-left:8px;">
           <i class="glyphicon glyphicon-usd fa pink"></i>
           <span class="title">Pending Cash</span>
           <span class="value"><?php echo $cashInDelivery;?></span>
         </div>
-      </div>
+      
 
-      <div class="col-lg-2 col-sm-4">
-        <div class="smallstat box">
+        <div class="smallstat box col-lg-2 col-sm-4" style="width:125px;margin-left:8px;">
           <i class="glyphicon glyphicon-usd fa blue"></i>
           <span class="title">PPC Sale</span>
           <span class="value"><?php echo $ppcSale; ?></span>
         </div>
-      </div>
+      
 
-        <div class="col-lg-2 col-sm-4">
-        <div class="smallstat box">
+        
+        <div class="smallstat box col-lg-2 col-sm-4" style="width:125px;margin-left:8px;">
           <i class="glyphicon glyphicon-usd fa blue"></i>
           <span class="title">PPA Sale</span>
           <span class="value"><?php echo $ppaSale; ?></span>
         </div>
-      </div>
+      
 
-       <div class="col-lg-2 col-sm-4">
-        <div class="smallstat box">
+       
+        <div class="smallstat box col-lg-2 col-sm-4" style="width:115px;margin-left:8px;">
           <i class="glyphicon glyphicon-usd fa blue"></i>
           <span class="title">Credit Sale</span>
           <span class="value"><?php echo $creditSale; ?></span>
         </div>
-      </div>
+      
 
-      <div class="col-lg-2 col-sm-4">
-        <div class="smallstat box">
+      
+        <div class="smallstat box col-lg-2 col-sm-4" style="width:150px;margin-left:8px;">
           <i class="glyphicon glyphicon-usd fa red"></i>
           <span class="title">Petty Expense</span>
           <span class="value"><?php echo $petty_expense;?></span>
         </div>
-      </div>
+    
 
-      <div class="col-lg-2 col-sm-4">
-        <div class="smallstat box">
+      
+        <div class="smallstat box col-lg-2 col-sm-4" style="width:110px;margin-left:8px;">
           <i class="glyphicon glyphicon-usd fa orange"></i>
           <span class="title">Total Sale</span>
           <span class="value"><?php echo (($cashSale + $cashInDelivery + $ppcSale + $ppaSale) - $petty_expense) ;?></span>
         </div>
-      </div>
+      
 
       
 </div>
