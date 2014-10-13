@@ -395,6 +395,11 @@ $(document).ready(function(){
 					$("#is_cod").val('N');
 					$("#is_prepaid").val('Y');
 					$("#is_credit").val('N');
+					$('#phone_number').val('');
+					$('#billing_customer_address').val('');
+					$('#billing_customer_company_name').val('');
+					$("span#address").closest('tr').addClass('hide');
+					$("span#contact_person").closest('tr').addClass('hide');
 					$('.payment-type-bt[data-value="cash"]').trigger('click');
 					$('.payment-type-bt').attr('disabled',false);
 					$('#customer_name').addClass('hide');
@@ -423,6 +428,26 @@ $(document).ready(function(){
 			//$("#customer_type").prop('disabled',true);
 		});
 		//---END--- Payment Event After Products selection  or Without Product Selection
+
+		$('#customer_name').on('change', function(){
+			if(!$(this).val()){ return false;}
+			var customer_id = $(this).val();
+			$.ajax({
+					type: 'POST',
+					url: "index.php?dispatch=billing.getRetailCustomer",
+			  		data : {request_type:'getRetailCustomer','customer_id':customer_id},
+				}).done(function(response) { //alert(response);
+					console.log(response);
+					$result = $.parseJSON(response);
+					$('#phone_number').val($result.data['phone']);
+					$('#billing_customer_address').val($result.data['address']);
+					$('#billing_customer_company_name').val($result.data['name']);
+					$("span#address").closest('tr').removeClass('hide');
+					$("span#address").text($result.data['address']);
+					$("span#contact_person").closest('tr').removeClass('hide');
+					$("span#contact_person").text($result.data['contact_person']);
+				});
+		});
 
 		//---START--- SUbmit Payment Bill
 		$("#submit-sale").click(function(event){
@@ -507,6 +532,7 @@ $(document).ready(function(){
 			billDetails.customer.land_mark = $("#billing_customer_landmark").val();
 			billDetails.customer.phone_no = $("#phone_number").val();
 			billDetails.customer.company_name = $("#billing_customer_company_name").val();
+			billDetails.customer.address = $("#billing_customer_address").val();
 
 			billDetails.card = new Object();
 			billDetails.card.no = $('#card_number').val();
