@@ -11,6 +11,8 @@
   <?php require_once 'common/html_header.php';?>
   <?php
   $cashSale = 0;
+  $creditSale = 0;
+  $ppaSale = 0;
   $ppcSale = 0;
   $cashInDelivery = 0;
         $date = date('Y-m-d');
@@ -25,7 +27,9 @@
 
         $expense = $couch->getDesign('design_ho')->getList('petty_expense','get_expense')->setParam(array("include_docs"=>"true","key"=>'"'.$date.'"'))->execute();
         $cashSale = $result['cash_sale'];
+        $creditSale = $result['creditSale'];
         $ppcSale = $result['ppcSale'];
+        $ppaSale = $result['ppaSale'];
         $cashInDelivery = $result['cashinDelivery'];
         $petty_expense = $expense;
     }
@@ -95,6 +99,22 @@
         </div>
       </div>
 
+        <div class="col-lg-2 col-sm-4">
+        <div class="smallstat box">
+          <i class="glyphicon glyphicon-usd fa blue"></i>
+          <span class="title">PPA Sale</span>
+          <span class="value"><?php echo $ppaSale; ?></span>
+        </div>
+      </div>
+
+       <div class="col-lg-2 col-sm-4">
+        <div class="smallstat box">
+          <i class="glyphicon glyphicon-usd fa blue"></i>
+          <span class="title">Credit Sale</span>
+          <span class="value"><?php echo $creditSale; ?></span>
+        </div>
+      </div>
+
       <div class="col-lg-2 col-sm-4">
         <div class="smallstat box">
           <i class="glyphicon glyphicon-usd fa red"></i>
@@ -107,7 +127,7 @@
         <div class="smallstat box">
           <i class="glyphicon glyphicon-usd fa orange"></i>
           <span class="title">Total Sale</span>
-          <span class="value"><?php echo (($cashSale + $cashInDelivery + $ppcSale) - $petty_expense) ;?></span>
+          <span class="value"><?php echo (($cashSale + $cashInDelivery + $ppcSale + $ppaSale) - $petty_expense) ;?></span>
         </div>
       </div>
 
