@@ -38,6 +38,13 @@
 								foreach($rep as $key => $value){
 									$result = $this->cDB->replicate()->execute(array('replication_id'=>$value['replication_id'], 'cancel'=>true));
 								}
+								//print_r($result);
+								if(array_key_exists('ok', $result) && $result['ok']){
+									$result = array('error'=>false, 'message'=>'Process Stop SuccessFully');
+								}else{
+									$result = array('error'=>true, 'message'=>'OOPS! Some Problem Contact Admin');
+								}
+								return $result;
 							}
 					break;
 				}
@@ -46,9 +53,9 @@
 				$return['message'] = "Not allowed to follow this action";
 			}
 			//print_r($result);
-			if(array_key_exists('error', $result) && $result['error']==true){
-				$return['error'] = true;
-				$return['message'] = 'OOPS! Some Problem Please Cotact Admin.';								
+			if(is_array($result)){
+				$return['error'] = $result['error'];
+				$return['message'] = $result['message'];								
 			}
 			return  json_encode($return);
 		}
@@ -62,6 +69,7 @@
 			$target = $this->cDB->getUrl().$this->cDB->getDB();
 			$result = $this->cDB->replicate()->execute(array('source'=>$source, 'target'=>$target, 'filter'=>'doc_replication/retail_customer_replication', 'query_params'=>array("location"=>$_SESSION['user']['location']['id'])));
 			if(array_key_exists('ok', $result) && $result['ok']){
+				$return['message'] = 'Customers Downloaded SuccessFully';
 
 			}else{
 				$return = array('error'=>true, 'message'=>'OOPS! Some Problem Contact Admin');
@@ -74,6 +82,7 @@
 			$target = $this->cDB->getUrl().$this->cDB->getDB();
 			$result = $this->cDB->replicate()->execute(array('source'=>$source, 'target'=>$target, 'filter'=>'doc_replication/config_replication', "continuous" => true));
 			if(array_key_exists('ok', $result) && $result['ok']){
+				$return['message'] = 'Configuration Downloaded SuccessFully';
 
 			}else{
 				$return = array('error'=>true, 'message'=>'OOPS! Some Problem Contact Admin');
@@ -111,6 +120,7 @@
 			$source = $this->cDB->getUrl().$this->cDB->getDB();
 			$result = $this->cDB->replicate()->execute(array('source'=>$source, 'target'=>$this->cDB->getRemote(), 'filter'=>'doc_replication/bill_replication', "continuous" => true));
 			if(array_key_exists('ok', is_null($result) ? array() : $result)){
+				$return['message'] = 'Process Start SuccessFully';
 				//echo "Billing Replication Started SuccessFully";
 			}else{
 				$return = array('error'=>true,'message'=>'OOPS! Some Problem Contact Admin');
@@ -130,6 +140,7 @@
 					$target = $this->cDB->getUrl().$this->cDB->getDB();
 					$result = $this->cDB->replicate()->execute(array('source'=>$source, 'target'=>$target, 'filter'=>'doc_replication/staff_replication', 'query_params'=>array("location"=>$location)));
 					if(array_key_exists('ok', $result) && $result['ok']){
+						$return['message'] = 'Staff Downloaded SuccessFully';
 					}else{
 						$return = array('error'=>true, 'message'=>'OOPS! Some Problem Contact Admin');
 					}	
@@ -160,6 +171,7 @@
 				$target = $this->cDB->getUrl().$this->cDB->getDB();
 				$result = $this->cDB->replicate()->execute(array('source'=>$source, 'target'=>$target, 'filter'=>'doc_replication/store_replication', 'query_params'=>array("mysql_id"=>$store)));
 				if(array_key_exists('ok', $result) && $result['ok']){
+					$return['message'] = 'Store Downloaded SuccessFully';
 					if(array_key_exists('only_store', $_GET) && $_GET['only_store']){
 					}else{
 						$resultJSON = $this->cDB->getDesign('store')->getView('store_mysql_id')->setParam(array('include_docs'=>'true',"key"=>'"'.$store.'"'))->execute();
@@ -202,6 +214,7 @@
 		//	}
 			$result = $this->cDB->replicate()->execute(array('source'=>$source, 'target'=>$target, 'filter'=>'doc_replication/design_replication'));
 			if(array_key_exists('ok', $result) && $result['ok']){
+				$return['message'] = 'Design Document Downloaded SuccessFully';
 
 			}else{
 				$return = array('error'=>true, 'message'=>'OOPS! Some Problem Contact Admin');
