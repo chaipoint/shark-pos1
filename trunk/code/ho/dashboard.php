@@ -26,7 +26,7 @@
         $expense = $couch->getDesign('design_ho')->getList('petty_expense','get_expense')->setParam(array("include_docs"=>"true","key"=>'"'.$date.'"'))->execute();
         $cashSale = $result['cash_sale'];
         $ppcSale = $result['ppcSale'];
-        $cashInDelivery = $result['cash_indelivery'];
+        $cashInDelivery = $result['cashinDelivery'];
         $petty_expense = $expense;
     }
    
