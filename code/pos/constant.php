@@ -29,5 +29,17 @@ define ('UPDATE_BILL', 'update_bill');
 define ('REQUEST_TYPE_NOT_ALLOWED', 'Request Type Not Found');
 define ('REQUEST_METHOD_NOT_ALLOWED', 'Request Method Not Allowed');
 
+/* Other Constant */
+
+define ('ERROR', 'Some Error! Please Contact Admin');
+define ('HOME', 'home');
+define ('NA', 'NA');
+define ('ORDER_ALREADY_BILLED', 'Order Already Billed');
+define ('EXE_PATH', 'D:\utility\printBill.exe');
+define ('COMPANY_DETAIL_TXT_PATH', 'D:\utility\company.txt');
+define ('BILL_DETAIL_TXT_PATH', 'D:\utility\bill.txt');
+define ('BILL_DATA_MISSING', 'Bill_Data_Missing');
+define ('PRINT_UTILITY_NOT_EXISTS', 'PRINT_UTILITY_NOT_EXISTS');
+
 
 ?>
