@@ -66,6 +66,27 @@
 			$this->commonView('footer_html');
 
 		}
+
+		/* Function To Get Todays sale */
+		public function getTodaysSale($date = ''){
+			$return = array('error'=>false,'message'=>'','data'=>array());
+
+			if(empty($date)){
+				$date = $this->getCDate();
+			}
+			$bills = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getList(BILLING_DESIGN_DOCUMENT_LIST_TODAYS_SALE, BILLING_DESIGN_DOCUMENT_VIEW_HANDLE_UPDATED_BILLS)->setParam(array("descending"=>"true","include_docs"=>"true","endkey"=>'["'.$date.'"]'))->execute();
+			$this->log->trace("TODAYS SALE DETAILS \r\n".json_encode($bills));
+			if(array_key_exists('error', $bills)){
+				$return['error'] = true;
+				$return['message'] = ERROR.' '.($bills['error']);
+			}else{
+	            $payment_type = array('cash'=>0,'ppc'=>0,'c_card'=>0,'ppa'=>0);
+				$return['data']['summary'] = $bills;
+				$return['data']['payment_type'] = $payment_type;
+			}
+			return json_encode($return);
+		}
+
 		function getExpenseData($date){
 				$resultExpenseList = $this->cDB->getDesign('petty_expense')->getView('get_expense')->setParam(array("include_docs"=>"true","startkey"=>'"'.$date.'"',"endkey"=>'"'.$date.'"'))->execute();
 				return $resultExpenseList;
