@@ -6,7 +6,6 @@
 	.navbar {
 		margin-bottom: 1px;
 	}
-	
 </style>
 <script type="text/javascript" src="<?php echo JS;?>pos/billing.js"></script>
 <?php
