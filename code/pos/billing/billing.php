@@ -8,6 +8,8 @@
 			$configResult = $this->getConfig($this->cDB, array('channel', 'bill_status', 'payment_mode', 'ppa_api', 'delivery_channel', 'company_details'));
 			$this->configData = (count($configResult['data']) > 0) ? $configResult['data'] : array();
 		}
+
+		/* This Function Is Automatically Called When We Come On Billing Module */
 		function index(){
 			if(array_key_exists('referer',$_GET) && $_GET['referer'] == 'home'){
 			}else{
@@ -17,9 +19,11 @@
 			}
 			//Block to get Configs and need to have a generic methode for that
 			$data = array('error' => false,'catList'=>array(),'productList'=>array(),'firstCat'=>0, 'config_data'=>array(),'bill'=>array(),'lastBillNo'=>'','lastBillTime'=>'');
-			$resultStoreMenu = $this->cDB->getDesign('store')->getView('store_mysql_id')->setParam(array('include_docs'=>'true',"key"=>'"'.$_SESSION['user']['store']['id'].'"'))->execute();
-			$resultLastBill = $this->cDB->getDesign('billing')->getView('handle_updated_bills')->setParam(array("descending"=>"true","endkey" => '["'.$this->getCDate().'"]',"startkey" => '["'.$this->getCDate().'",{},{},{}]',"limit"=>"1"))->execute();
-			
+			$resultStoreMenu = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_MYSQL_ID)->setParam(array('include_docs'=>'true',"key"=>'"'.$_SESSION['user']['store']['id'].'"'))->execute();
+			$this->log->trace('LOGIN STORE DETAIL'."\r\n".json_encode($resultStoreMenu));
+			$resultLastBill = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getView(BILLING_DESIGN_DOCUMENT_VIEW_HANDLE_UPDATED_BILLS)->setParam(array("descending"=>"true","endkey" => '["'.$this->getCDate().'"]',"startkey" => '["'.$this->getCDate().'",{},{},{}]',"limit"=>"1"))->execute();
+			$this->log->trace('LAST BILL DETAILS'."\r\n".json_encode($resultLastBill));
+
 			$lastBillNo = '';
 			$lastBillTime = '';
 			if(array_key_exists('rows', $resultLastBill) && count($resultLastBill['rows'])>0){
@@ -61,9 +65,10 @@
 	 						$billData = $billDataReturned['data'];
 					}
 	  			}
-	  			$data = array('error' => false,'catList'=>$catList,'productList'=>$productList,'firstCat'=>$firstCat, 'config_data'=>$this->configData,'bill'=>$billData,'lastBillNo'=>$lastBillNo,'lastBillTime'=>$lastBillTime);
+	  			$data = array('error'=>false, 'catList'=>$catList, 'productList'=>$productList, 'firstCat'=>$firstCat, 'config_data'=>$this->configData, 'bill'=>$billData, 'lastBillNo'=>$lastBillNo, 'lastBillTime'=>$lastBillTime);
 
 	  		}
+	  		/* To Get Retail Customer*/
 	  		require_once DIR.'/customer/customer.php';
 	  		$cus = new Customer();
 	  		$data['customer'] = $cus->retail_customer();
@@ -77,10 +82,13 @@
 			$this->commonView('footer_html');
 		}
 
+		/* Function To Get Retail Customer Detail */
 		public function getRetailCustomer(){
 			$return = array('error'=>false, 'message'=>'', 'data' => array());
-			if(array_key_exists('request_type', $_REQUEST) && $_REQUEST['request_type']=='getRetailCustomer'){
-				$resultRetailCustomer = $this->cDB->getDesign('design_ho')->getView('retail_customer_list')->setParam(array('key'=>$_REQUEST["customer_id"],'include_docs'=>'true'))->execute();
+
+			if(array_key_exists('request_type', $_REQUEST) && $_REQUEST['request_type']==GET_RETAIL_CUSTOMER){
+				$resultRetailCustomer = $this->cDB->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_RETAIL_CUSTOMER_LIST)->setParam(array('key'=>$_REQUEST["customer_id"],'include_docs'=>'true'))->execute();
+				$this->log->trace('RETAIL CUSTOMER DETAILS'."\r\n".json_encode($resultRetailCustomer));
 				if(array_key_exists('rows', $resultRetailCustomer)){
 					$rows = $resultRetailCustomer['rows'];
 					foreach($rows as $key => $value){
@@ -100,6 +108,7 @@
 
 		public function rePrint(){
 				$return = array('error'=>false, 'message'=>'', 'data' => array());
+
 				$bill = $_POST['doc'];
 				$billDataReturned = $this->getBillData($bill); 
 				if(!$billDataReturned['error']){
@@ -113,9 +122,12 @@
 				}
 		}
 
+		/* Function To Get Bill Data */
 		public function getBillData($bill_id){
 				$return = array('error'=>false, 'message'=>'', 'data' => array());
+
   				$billDetails = $this->cDB->getDocs($bill_id);
+  				$this->log->trace('BILL DETAILS'."\r\n".json_encode($billDetails));
   				if(array_key_exists('error', $billDetails)){
   					$return['message'] = ($billDetails['error'] == 'not_found' ? 'Bill Not Found' : 'OOPS! Some Error Please Contact Admin.');
   					$return['error'] = true;
@@ -125,13 +137,14 @@
   				return $return;
 		}
 
-
+		/* Function To Save Bill Data */
 		function save(){
 			$return = array('error'=>false,'message'=>'','data'=>array());
+
 			if($_SERVER['REQUEST_METHOD'] == 'POST'){
-				if(array_key_exists('request_type', $_POST) && $_POST['request_type'] == 'save_bill'){
+				if(array_key_exists('request_type', $_POST) && $_POST['request_type'] == SAVE_BILL){
 					$this->log->trace("DATA \r\n".json_encode($_POST));
-					$_POST['cd_doc_type'] = 'store_bill';
+					$_POST['cd_doc_type'] = BILLING_DOC_TYPE ;
 					$_POST['time'] = array('created'=>$this->getCDTime(), 'updated'=>$this->getCDTime());
 					$_POST['store_id'] = $_SESSION['user']['store']['mysql_id'];
 					$_POST['store_name'] = $_SESSION['user']['store']['name'];
@@ -147,7 +160,8 @@
 					$_POST['shift'] = $_SESSION['user']['shift'];
 
 					if( $_POST['order_no'] > 0 ){
-						$orderNO = $this->cDB->getDesign('billing')->getView('bill_by_order')->setParam(array('key'=> '"'.$_POST['order_no'].'"' ))->execute();
+						$orderNO = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getView(BILLING_DESIGN_DOCUMENT_VIEW_BILL_BY_ORDER)->setParam(array('key'=> '"'.$_POST['order_no'].'"' ))->execute();
+						$this->log->trace("GET ORDER DETAILS \r\n".$orderNO);
 						if(array_key_exists('cMessage', $orderNO)){
 								$return['error'] = true;
 								$return['message'] = "OOPS! Some Problem Please Contact Admin.";
@@ -164,11 +178,13 @@
 						}
 					}
 
-					$currentBillNo = $this->cDB->getDesign('billing')->getUpdate('getbillno','generateBill')->setParam(array('month'=>$this->getCMonth()))->execute();
+					$currentBillNo = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getUpdate(BILLING_DESIGN_DOCUMENT_UPDATE_GET_BILL_NO,'generateBill')->setParam(array('month'=>$this->getCMonth()))->execute();
+					$this->log->trace("GET CURRENT BILL NO \r\n".$currentBillNo);
 					if(is_numeric($currentBillNo)){
 						$_POST['bill_no'] = $currentBillNo;
 						unset($_POST['request_type']);					
 						$result = $this->cDB->saveDocument()->execute($_POST);
+						$this->log->trace("SAVE BILL RESULT \r\n".json_encode($result));
 						if(array_key_exists('ok', $result)){
 							$res = $this->printBill($_POST);
 			                $return['error'] = $res['error'];
@@ -179,7 +195,7 @@
 						$return['error'] = true;
 						$return['message'] = 'OOPS! Some Error Contact Admin.';
 					}
-				}elseif(array_key_exists('request_type', $_POST) && $_POST['request_type'] == 'update_bill'){
+				}elseif(array_key_exists('request_type', $_POST) && $_POST['request_type'] == UPDATE_BILL){
 					$billDataReturned = $this->getBillData($_POST['doc']);
 					if($billDataReturned['error']){
 						$return['error'] = true;
@@ -195,6 +211,7 @@
 							$billDataReturned['data']['time']['updated'] = $this->getCDTime();
 							$billDataReturned['data']['cancel_reason'] = array_key_exists('cancel_reason', $_POST) ? $_POST['cancel_reason'] : '';
 							$billSaveResult = $this->cDB->saveDocument()->execute($billDataReturned['data']);
+							$this->log->trace("SAVE BILL RESULT \r\n".$result);
 							$return['message'] = 'Bill <b>'.$_POST['bill_status_name']."</b> Successfully".(strlen($billDataReturned['data']['cancel_reason'])>0 ? '<br/>Change Return is <b>'.$_POST['due_amount'].'</b>' : '');
 							if(!array_key_exists('ok', $billSaveResult)){
 								$return['error'] = true;
@@ -207,24 +224,26 @@
 					}
 				}else{
 					$return['error'] = true;
-					$return['message'] = 'Request Type not Found';
+					$return['message'] = REQUEST_TYPE_NOT_ALLOWED;
 				}
 			}else{
 				$return['error'] = true;
-				$return['message'] = 'Request Method Not Allowed';
+				$return['message'] = REQUEST_METHOD_NOT_ALLOWED;
 			}
 			$re = json_encode($return);
 			$this->log->trace("RESPONSE \r\n".$re);
 			return $re;
 		}
 
-
+		/* Function To Get Todays sale */
 		public function getTodaysSale($date = ''){
+			$return = array('error'=>false,'message'=>'','data'=>array());
+
 			if(empty($date)){
 				$date = $this->getCDate();
 			}
-			$return = array('error'=>false,'message'=>'','data'=>array());
-				$bills = $this->cDB->getDesign('billing')->getList('todays_sale','handle_updated_bills')->setParam(array("descending"=>"true","include_docs"=>"true","endkey"=>'["'.$date.'"]'))->execute();
+				$bills = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getList(BILLING_DESIGN_DOCUMENT_LIST_TODAYS_SALE, BILLING_DESIGN_DOCUMENT_VIEW_HANDLE_UPDATED_BILLS)->setParam(array("descending"=>"true","include_docs"=>"true","endkey"=>'["'.$date.'"]'))->execute();
+				$this->log->trace("TODAYS SALE DETAILS \r\n".$bills);
 				if(array_key_exists('error', $bills)){
 					$return['data'] = true;
 					$return['message'] = 'OOPS! Some Problem. Please Contact Admin.';
@@ -236,15 +255,17 @@
 			return json_encode($return);
 		}
 
+		/* Function To Bill Through PPC METHOD  */
         public function ppcBill(){
+			$return = array('error'=>false,'message'=>'','data'=>array());
+
 			$dir =  dirname(__FILE__).'/../lib/svc/ppc_api.php';
             require_once $dir;
-			$return = array('error'=>false,'message'=>'','data'=>array());
-			
 			if($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$balance_check = array();
 				$balance_deduction = array();	
 				$balance_check = balanceINQ($_POST);
+				$this->log->trace("PPC BILL BALANACE INQ \r\n".json_encode($balance_check));
 				if(is_array($balance_check) && $balance_check['error']==true) {
                 	$return['error'] = true;
 					$return['message'] = $balance_check['msg'];
@@ -259,21 +280,27 @@
 
 		}
 
+		/* Function To Bill Through PPA METHOD  */
 		public function ppaBill(){
+			$return = array('error'=>false,'message'=>'','data'=>array());
+			
 			$dir =  dirname(__FILE__).'/../lib/api/ppa_api.php';
             require_once $dir;
             $config_data = $this->configData['ppa_api'];
-            $return = array('error'=>false,'message'=>'','data'=>array());
-			if($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if($_SERVER['REQUEST_METHOD'] == 'POST') {
 				echo ppa_api($config_data,$_POST);
 			}
             
 		}
         
+        /* Function To Print Out Bill  */
         function printBill($data){
         	$return = array('error'=>false,'message'=>'','data'=>array());
+
+        	$this->log->trace("BILL DETAILS TO BE PRINT \r\n".json_encode($data));
         	$company_data = array();
 			$company_data = $this->configData['company_details'];
+			$this->log->trace("COMPANY DETAILS TO BE PRINT \r\n".json_encode($company_data));
 			$path = 'D:\utility\printBill.exe';
 			$check = file_exists($path);
 
@@ -282,6 +309,7 @@
 					file_put_contents('D:\utility\company.txt', json_encode($company_data,true));
 					file_put_contents('D:\utility\bill.txt', json_encode($data,true));
         			exec($path,$output,$return_value);
+        			$this->log->trace("EXE RESPONCE \r\n".json_encode($return_value));
         			$return['message'] = ($return_value=='1' ? 'Printer Not Found' : ($return_value=='2' ? 'File Missing' : ($return_value=='3' ? 'JSON Not Readable' : '')));
      			}else{
 					$return['message'] = 'Bill Data Missing';
