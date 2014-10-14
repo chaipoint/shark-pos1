@@ -32,7 +32,7 @@
 					}
 				}
 			}
-			$todaysale = json_decode($bl->getTodaysSale(),true);
+			$todaysale = json_decode($sr->getTodaysSale(),true);
 			$data['payment_sum'] = (!$todaysale['error']) ? $todaysale['data'] : array();
 			$data['shift_data'] = $result;
 			$data['staff_list'] = $sr->getStaffList();
@@ -70,7 +70,7 @@
 			require_once DIR.'/sales_register/sales_register.php';
 			$sr = new sales_register();
 
-			$todaysale = json_decode($bl->getTodaysSale($date),true);
+			$todaysale = json_decode($sr->getTodaysSale($date),true);
 			$sales_reg = $sr->getBills($date);
 
 			$shift_inward = 0;
