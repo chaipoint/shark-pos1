@@ -12,7 +12,7 @@ var loadedBill = null;
 var modifyBill = false;
 var popupKeyboard = null;
 
-$(document).ready(function(){
+$(document).ready(function(){ 
 	var url = $.url();
 	$(this).attr("title", "Shark |ChaiPoint POS| Billing"); 
 	/*
@@ -141,7 +141,7 @@ $(document).ready(function(){
 						type: 'POST',
 						url: "index.php?dispatch=billing.rePrint",
 						data : {request_type:'print_bill', doc:doc},
-					}).done(function(response) {
+					}).done(function(response) { 
 						response = $.parseJSON(response);
 						if(response.error){
 							bootbox.alert(response.message);
@@ -531,14 +531,9 @@ $(document).ready(function(){
 			billDetails.card.txn_no = $('#card_txn_no').val();;
 			billDetails.card.balance = $('#card_balance').val();;
 			billDetails.reprint = 1;
-
-
 			billDetails.request_type = 'save_bill';
+			billDetails.utility_check = printUtility;
 			console.log(billDetails);
-
-
-			
-
 			$.ajax({
 				type: 'POST',
 				url: "index.php?dispatch=billing.save",
@@ -555,6 +550,7 @@ $(document).ready(function(){
 						window.location.reload(true);
 						}).find(".btn-primary").removeClass("btn-primary").addClass("btn-danger");
 					}else{
+						if(!printUtility){bootbox.alert('Print Utility Not Exists').find(".btn-primary").removeClass("btn-primary").addClass("btn-danger");}
 						window.location='index.php?dispatch=billing.index';
 					}
 					

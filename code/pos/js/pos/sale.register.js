@@ -130,7 +130,7 @@ $("#search_button").click(function(){
 			event.preventDefault();
 			$.ajax({
 				type: 'POST',
-				url: "index.php?dispatch=billing.getTodaysSale",
+				url: "index.php?dispatch=sales_register.getTodaysSale",
 		  		data : {request_type:'todays_bill'},
 			}).done(function(response) {
 					var result = $.parseJSON(response);
