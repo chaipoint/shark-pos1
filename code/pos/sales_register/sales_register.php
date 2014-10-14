@@ -5,6 +5,7 @@
 			parent::__construct();
 			$this->log =  Logger::getLogger("CP-POS|SALE-REGISTER");
 		}
+		/* This Function Is Automatically Called When We Come On Sale Register Module */
 		function index(){
 			$error = false;
 			$activeTask = $this->cDB->getActiveTask();
@@ -28,28 +29,18 @@
 					}
 				}
 				$resultBillList['p_ex'] = $pettyExpence;
-
 				$configHead = $this->getConfig($this->cDB, 'head');
-				/*$this->getDBConnection($this->cDB);
-				$getHeadQuery = 'SELECT id, name FROM cp_reference_master WHERE active ="Y" AND mode = "head"';
-				$result = $this->db->func_query($getHeadQuery);/**/
-				if(!empty($result)){
-		            $headArray = array();
-		            foreach ($result as $key => $value) {
-						$headArray[$value['id']] = $value['name'];
-					}
-				} 
 			}
 			$this->commonView('header_html',array('error'=>$error));
 			$this->commonView('navbar');
 			if(!$error){
 				if(array_key_exists('error', $resultBillList) || array_key_exists('error', $resultExpenseList) ){
-					echo 'opps some problem please contact admin';
+					echo ERROR.' '.(array_key_exists('error', $resultBillList) ? $resultBillList['error'] : $resultExpenseList['error']);
 				}else{
 					$resultBillList['head_data'] = $configHead['data']['head'];
 					$resultBillList['staff_list'] = $this->getStaffList();
 					$resultBillList['expense_data'] = $resultExpenseList;
-					$this->view($resultBillList);//array("bill_data"=>$resultBillList['data'],"cash_in_hand"=>$resultBillList['cash_inhand'],"cash_in_delivery"=> $resultBillList['cash_indelivery']));
+					$this->view($resultBillList);
 
 					require_once DIR.'/login/login.php';
 					$login = new Login();
@@ -58,8 +49,6 @@
 					require_once DIR.'/utils/utils.php';
 					$utils = new Utils();
 					$utils->generate_rep_running_flag();
-
-
 				}
 			}
 			$this->commonView('footer_inner');
@@ -74,25 +63,30 @@
 			if(empty($date)){
 				$date = $this->getCDate();
 			}
+			//$paymentMode = $this->getConfig($this->cDB, 'payment_mode');
+			//print_r($paymentMode);
 			$bills = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getList(BILLING_DESIGN_DOCUMENT_LIST_TODAYS_SALE, BILLING_DESIGN_DOCUMENT_VIEW_HANDLE_UPDATED_BILLS)->setParam(array("descending"=>"true","include_docs"=>"true","endkey"=>'["'.$date.'"]'))->execute();
 			$this->log->trace("TODAYS SALE DETAILS \r\n".json_encode($bills));
 			if(array_key_exists('error', $bills)){
 				$return['error'] = true;
 				$return['message'] = ERROR.' '.($bills['error']);
 			}else{
-	            $payment_type = array('cash'=>0,'ppc'=>0,'c_card'=>0,'ppa'=>0);
+	            $payment_type = array('cash'=>0,'ppc'=>0,'credit'=>0,'ppa'=>0);
 				$return['data']['summary'] = $bills;
 				$return['data']['payment_type'] = $payment_type;
 			}
 			return json_encode($return);
 		}
 
+		/* Function To Get Petty Expense */
 		function getExpenseData($date){
-				$resultExpenseList = $this->cDB->getDesign('petty_expense')->getView('get_expense')->setParam(array("include_docs"=>"true","startkey"=>'"'.$date.'"',"endkey"=>'"'.$date.'"'))->execute();
+				$resultExpenseList = $this->cDB->getDesign(PETTY_EXPENSE_DESIGN_DOCUMENT)->getView(PETTY_EXPENSE_DESIGN_DOCUMENT_VIEW_GET_EXPENSE)->setParam(array("include_docs"=>"true","startkey"=>'"'.$date.'"',"endkey"=>'"'.$date.'"'))->execute();
 				return $resultExpenseList;
 		}
+
+		/* Function To Get Store Staff */
 		function getStaffList(){
-				$staffList = $this->cDB->getDesign('store')->getView('store_mysql_id')->setParam(array("include_docs"=>"true"))->execute();
+				$staffList = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_MYSQL_ID)->setParam(array("include_docs"=>"true"))->execute();
 				$rows = $staffList['rows'][0]['doc']['store_staff'];
 				$staffList = array();
 				foreach($rows as $key => $value){
@@ -105,22 +99,24 @@
 				ksort($staffList);
 				return $staffList;
 		}
+
+		/* Function To Get Todays Bill For Login Store */
 		function getBills($date){
-				$resultBillList = $this->cDB->getDesign('billing')->getList('sales_register','handle_updated_bills')->setParam(array("include_docs"=>"true","descending"=>"true","endkey" => '["'.$date.'"]',"startkey" => '["'.$date.'",{},{},{}]'))->execute();//endkey=["2014-09-04"]&startkey=["2014-09-04",{},{},{}]
+				$resultBillList = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getList(BILLING_DESIGN_DOCUMENT_LIST_SALES_REGISTER, BILLING_DESIGN_DOCUMENT_VIEW_HANDLE_UPDATED_BILLS)->setParam(array("include_docs"=>"true","descending"=>"true","endkey" => '["'.$date.'"]',"startkey" => '["'.$date.'",{},{},{}]'))->execute();
 				return 	$resultBillList;
 		}
+
+		/* Function To Save Petty Expense AND Petty Inward */
 		function save(){
 			$return = array('error'=>false,'message'=>'','data'=>array());
 			if($_SERVER['REQUEST_METHOD'] == 'POST'){
-
 				$this->log->trace("DATA \r\n".json_encode($_POST));
-
 				if(array_key_exists('expense_head',$_POST)){
-	                $_POST['cd_doc_type'] = 'petty_expense';
+	                $_POST['cd_doc_type'] = PETTY_EXPENSE_DOC_TYPE;
 					$_POST['expense_time'] = $this->getCTime();
 					$return['message'] = 'Please Start Shift, Befor Saving Expense';					
 				}elseif(array_key_exists('inward_amount',$_POST)){
-	                $_POST['cd_doc_type'] = 'petty_inward';
+	                $_POST['cd_doc_type'] = PETTY_INWARD_DOC_TYPE;
 					$_POST['inward_time'] = $this->getCTime();
 					$return['message'] = 'Please Start Shift, Befor doing Petty Cash Inward';
 				}
@@ -130,11 +126,12 @@
 					$_POST['store_id'] = $_SESSION['user']['store']['id'];
 					$_POST['store_name'] = $_SESSION['user']['store']['name'];
 					$result = $this->cDB->saveDocument()->execute($_POST);
+					$this->log->trace("SAVE PETTY EXPENSE RESULT \r\n".json_encode($result));
 					if(array_key_exists('error', $result)){
 						$return['error'] = true;
-						$return['message'] = 'OOPS! Some Error Contact Admin';
+						$return['message'] = ERROR.' '.$result['error'];
 					}else{
-							$return['message'] = 'Saved Successfully';
+							$return['message'] = SUCCESS;
 					}
 				}else{
 					$return['error'] = true;	
