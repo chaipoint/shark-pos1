@@ -24,7 +24,7 @@ $(document).ready(function(){
 		var button = '<button class="btn btn-primary" id="print-can">Save</button>&nbsp;' + ((bill_status_id != 68) ? '<button id="paid_button" class="btn btn-primary">Paid</button>' : '');
 		$('#botbuttons').append(button);
 		$('#payment').prop('disabled',true).addClass('hide');
-		for (var keys in $billingItems) {//$.each($billingItems, function(index,keys){
+		for (var keys in $billingItems) {
 			$intDiscount = $billingItems[keys].discount;
 			break;
 		};
@@ -50,9 +50,8 @@ $(document).ready(function(){
 		loadedBill = new Object();
 		var orderData = $.parseJSON(localStorage.getItem(order));
 		loadedBill = orderData;
-		//console.log(loadedBill);
+		
 		if(orderData){
-			//localStorage.removeItem(order);			
 			var productNewList = new Object();
 			$.each(productArray, function(index, data){
 				var category = index;
@@ -71,7 +70,7 @@ $(document).ready(function(){
 		}
 	}
 
-	//console.log();
+	
 	//---START--- Initial Configurations on Load Of Page
 
 
@@ -99,7 +98,6 @@ $(document).ready(function(){
 			if(!$(this).hasClass("btn-primary")){
 				$(".category-selection").removeClass('btn-primary');
 				$(this).addClass('btn-primary');
-				//console.log(productArray[$(this).data('category')]);
 				$buttonList = "";
 				selectedCat = $(this).data('category');
 				$.each(productArray[selectedCat],function(key,value){
@@ -114,7 +112,6 @@ $(document).ready(function(){
 		$("#saletbl").on("click",".del_row",function(){ 
 			var tableTR = $(this).closest('tr');
 			var pID = tableTR.attr('billing-product');
-			//alert(pID);
 			$('.category-product').each(function(){
 				if($(this).prop('value')==pID){
 					$(this).removeClass('active-btn');
@@ -125,19 +122,16 @@ $(document).ready(function(){
 			generateSalesTable();
 		});
 
-		$("#saletbl")
-		.on("change",".bill_qty_input",function(event){
+		$("#saletbl").on("change",".bill_qty_input",function(event){
 			var newQty = parseInt($(this).val());
 			newQty = isNaN(newQty) ? 0 : newQty;
 			var pID = $(this).closest('tr').attr('billing-product');
-
-			//if(newQty != 0){
-				generateSalesTable(pID, newQty);
-			//}
+			generateSalesTable(pID, newQty);
 			event.preventDefault();
 		});
 
 		//---END--- Event For Product Selection
+		
 		/* Function For Re-Print */
 		$('#print-can').on('click', function(event){
 			event.preventDefault();
@@ -147,8 +141,7 @@ $(document).ready(function(){
 						type: 'POST',
 						url: "index.php?dispatch=billing.rePrint",
 						data : {request_type:'print_bill', doc:doc},
-						}).done(function(response) {
-							//alert(response);return false;
+					}).done(function(response) {
 						response = $.parseJSON(response);
 						if(response.error){
 							bootbox.alert(response.message);
@@ -166,6 +159,7 @@ $(document).ready(function(){
 			}
 
 		});
+
 		//onCancel Of Bill
 		$("#cancel").click(function(){
 			if(modifyBill){
@@ -233,6 +227,7 @@ $(document).ready(function(){
 					}
 				});
 		});
+
 		//---START--- Payment Event After Products selection  or Without Product Selection
 		$(".payment-type-bt").click(function(){
 			var type = $(this).data('value');//alert(type);
@@ -273,8 +268,7 @@ $(document).ready(function(){
                }).done(function(response){
                	  console.log(response);
                	  $("span#loading_image").addClass('hide');
-               	 // alert(response);
-               	  result = $.parseJSON(response.trim());
+               	 	result = $.parseJSON(response.trim());
                	 if(result.error){
 				 	$('.ppc_balance').hide();
 					bootbox.alert(result.message);
@@ -313,11 +307,8 @@ $(document).ready(function(){
 			}else{
 				$("#balance").text(0);
 				$('#payModal').modal();
-				//$("#paid_by").val('');
-				//$(".payment-type-bt").removeClass('btn-success').addClass('btn-primary');
 				$("#phone_number").val('');
 				$("#is_cod").val('N');
-				//setTimeout('setFocus("phone_number")',100);
 				$("#delivery_channel").val(62);
 				$("#delivery_channel_name").val(config_data.delivery_channel[62]);
 				$("#booking_channel").val(53);
@@ -425,7 +416,6 @@ $(document).ready(function(){
 					$('#customer_name').removeClass('hide');
 				break;
 			}
-			//$("#customer_type").prop('disabled',true);
 		});
 		//---END--- Payment Event After Products selection  or Without Product Selection
 
@@ -436,7 +426,7 @@ $(document).ready(function(){
 					type: 'POST',
 					url: "index.php?dispatch=billing.getRetailCustomer",
 			  		data : {request_type:'getRetailCustomer','customer_id':customer_id},
-				}).done(function(response) { //alert(response);
+				}).done(function(response) { 
 					console.log(response);
 					$result = $.parseJSON(response);
 					$('#phone_number').val($result.data['phone']);
@@ -479,7 +469,6 @@ $(document).ready(function(){
 				return false;				
 			}
 			if($("#paid_by").val() == 'ppc' ){
-             	//bootbox.alert('Please Select Valid Payment Method');
              	return false;
 			}
 			if($('#customer_type').val()=='caw' && $('#customer_name').val()==''){
@@ -568,8 +557,7 @@ $(document).ready(function(){
 					}else{
 						window.location='index.php?dispatch=billing.index';
 					}
-					//bootbox.alert('Bill Successfully Saved');
-					//<a class="label label-primary print-bill-today" href="billprint.php?bill_no='+result.data.bill_no+'" target="_blank">Print</a>
+					
 					resetBill(true);	
 					$intDiscount = 0;
 				}

@@ -109,15 +109,17 @@ $(document).ready(function(){
 
 
 		$(document).ajaxSuccess(function() {
- 		  $('.btn').attr('disabled', false);
+ 		  	$('.btn').attr('disabled', false);
+ 		  	$('.payment-type-bt').attr('disabled',true);
+			$('.payment-type-bt[data-value="credit"]').attr('disabled',false);
 		});
 
 		$(document).ajaxError(function() {
- 		  bootbox.alert('Error In Ajax Request!Please Contact Admin');
+ 		  	bootbox.alert('Error In Ajax Request!Please Contact Admin');
 		});
 
 		$(document).ajaxSend(function() { 
- 		  $('.btn').attr('disabled', true);
+ 		  	$('.btn').attr('disabled', true);
 		});
 });
 
