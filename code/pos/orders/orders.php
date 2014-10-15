@@ -6,13 +6,17 @@
 			$this->getDBConnection($this->cDB);
 		}
 
+		/* Function That Call After Every 3 Minute To Check New COC Order */
 		function getCocOrder(){
         	$return = array('error'=>false,'message'=>'','count'=>false,'data'=>array());
 	        	if(array_key_exists('user', $_SESSION)){
-		        	if(array_key_exists('request_type', $_REQUEST) && $_REQUEST['request_type']=='getCOCOrder'){
-	    	    		
-		        		if(getType($this->db->getInstance()) == 'resource'){
-		    	    		$getOrder = 'SELECT id FROM cp_orders WHERE store_id = "'.$_SESSION['user']['store']['id'].'"  AND DATE(created_date) = CURDATE() AND status = "New"';
+		        	if(array_key_exists('request_type', $_REQUEST) && $_REQUEST['request_type']==GET_COC_ORDER){
+						if(getType($this->db->getInstance()) == RESOURCE){
+		    	    		$getOrder = 'SELECT id FROM cp_orders 
+		    	    					 WHERE store_id = "'.$_SESSION['user']['store']['id'].'"  
+		    	    					 AND DATE(created_date) = CURDATE() 
+		    	    					 AND status = "New"';
+		    	    		$this->log->trace("GET COC ORDER \r\n".$getOrder);
 		        			$result = $this->db->func_query($getOrder);
 		        			if(is_array($result) && count($result)>0){
 		        				$return['message'] = 'New Order Placed';
@@ -26,13 +30,12 @@
         	return $return;
         }
         
+        /* Function To Change COC Order Status */
 		function updateOrderStatus(){
-			//print_r($_POST);
-			//die();
-		    $dir =  dirname(__FILE__).'/../lib/msg_api/sms.php';
+			$dir =  dirname(__FILE__).'/../lib/api/sms_api.php';
             require_once $dir; 
-            if(getType($this->db->getInstance()) != 'resource'){
-				return json_endcode(array('error' => true, 'message' => 'Server Down! Please Contact Admin', 'data' => array()));					
+            if(getType($this->db->getInstance()) != RESOURCE){
+				return json_encode(array('error' => true, 'message' => SERVER_DOWN_ERROR, 'data' => array()));					
 			}
             $details = $this->getConfig($this->cDB,'sms_api');
 			$return = array('error' => false, 'message' => '', 'data' => array());
@@ -42,7 +45,7 @@
 				if(array_key_exists('order', $_POST) && is_numeric($_POST['order'])){
 					$order = $_POST['order'];
 					if($_POST['new_status']=='Dispatched'){
-						$orderNO = $this->cDB->getDesign('billing')->getView('bill_by_order')->setParam(array('key'=> '"'.$_POST['order'].'"' ))->execute();
+						$orderNO = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getView(BILLING_DESIGN_DOCUMENT_VIEW_BILL_BY_ORDER)->setParam(array('key'=> '"'.$_POST['order'].'"' ))->execute();
 						if(!array_key_exists(0, $orderNO['rows'])){
 								$return['error'] = true;
 								$return['message'] = "No Bill Exists, Please Make Bill.";
@@ -51,10 +54,10 @@
 								return $re;							
 						}
 					}else if($_POST['new_status']=='Paid' || $_POST['new_status']=='Cancelled'){
-						$getDoc = $this->cDB->getDesign('billing')->getView('bill_by_order')->setParam(array('key'=> '"'.$_POST['order'].'"','include_docs'=>'true'))->execute();
+						$getDoc = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getView(BILLING_DESIGN_DOCUMENT_VIEW_BILL_BY_ORDER)->setParam(array('key'=> '"'.$_POST['order'].'"','include_docs'=>'true'))->execute();
 						if(array_key_exists(0, $getDoc['rows'])){
 							$doc = $getDoc['rows'][0]['doc']['_id'];
-						   	$_POST['request_type'] = 'update_bill';
+						   	$_POST['request_type'] = UPDATE_BILL;
 							$_POST['doc'] = $doc;
 							if($_POST['new_status']=='Paid'){
 								$_POST['bill_status_id'] = 68;
@@ -72,7 +75,7 @@
 							$response = json_decode($result,true); 
 							if($response['error']=='true'){
 								$return['error'] = true;
-								$return['message'] = "Some Error! Please Contact Admin";
+								$return['message'] = ERROR;
 								$re = json_encode($return);
 								$this->log->trace("RESPONSE \r\n".$re);
 								return $re;		
@@ -81,26 +84,27 @@
 					} 
 					
 						$updateStatus = "UPDATE cp_orders SET ".(array_key_exists('staff_id', $_POST) ? " delivery_boy = '".mysql_real_escape_string($_POST['staff_id'])."', " : '')." ".(array_key_exists('reason', $_POST) ? " cancel_reason = '".mysql_real_escape_string($_POST['reason'])."', " : '')." status = '".$new."', updated_by = ".$_SESSION['user']['mysql_id'].", updated_date = '".$this->getCDTime()."' where id = ".$order." and status = '".$current."'";
+						$this->log->trace("UPDATE COC ORDER STATUS \r\n".$updateStatus);
 						$this->db->db_query($updateStatus);
 						if( ! $this->db->db_affected_rows()){
-							$selectStatus = "SELECT status FROM cp_orders Where id = ".$order;
+							$selectStatus = "SELECT status FROM cp_orders 
+											 Where id = ".$order;
 							$result = $this->db->func_query_first($selectStatus);
+							
 							$return = array('error' => true, 'message' => 'Status Already Changed to <b>'.$result['status'].'</b>', 'data' => array('status'=>$result['status']));
-						}else if($_POST['new_status']=='Confirmed'){
-							$msgBody = "Dear ".ucfirst($_POST['customer_name']).", Your Chai-On-Call Order #".$order." Is Confirmed. Thank you!";
-							$data = array( 'From'   => '8808891988',
+						}else if($_POST['new_status']=='Confirmed'){ 
+							$data = array( 'From'   => PROVIDER_NUMBER,
 										   'To'    => $_POST['customer_phone'],
-						                   'Body'  => $msgBody
+						                   'Body'  => CONFIRMED_MESSAGE
 				                         );
-				           call_api($data,'send',$details);
+				           call_api($data,$details);
 
 						}else if ($_POST['new_status']=='Dispatched') {
-							$msgBody = "Dear ".ucfirst($_POST['customer_name']).", Your Chai-On-Call Order #".$order." has been Dispatched From '".$_POST['store_name']."' Store. Your bill amount is Rs '".$_POST['net_amount']."'. Thank you!";
-                            $data = array( 'From'   => '8808891988',
+							$data = array( 'From'   => PROVIDER_NUMBER,
 										   'To'    => $_POST['customer_phone'],
-						                   'Body'  => $msgBody
+						                   'Body'  => DISPATCHED_MESSAGE
 				                         );
-				            call_api($data,'send',$details);
+				            call_api($data,$details);
 						}
 				}else{
 					$return['error'] = true;
@@ -112,15 +116,15 @@
 			}
 			return json_encode($return);
 		}
-
+		/* This Function Is Automatically Called When We Come On COC Module */
 		function index(){
+			global $ORDER_STATUS;
 			$db = $this->db;
-			
 			$error = false;
-			if(array_key_exists('message', $db) && $db['message'] == 'server_down'){
+			if(array_key_exists('message', $db) && $db['message'] == SERVER_DOWN_ERROR){
 				$error = true;
 			}else{
-				if(getType($db->getInstance()) != 'resource'){
+				if(getType($db->getInstance()) != RESOURCE){
 					$error = true;
 				}else{
 					$status = 'New';
@@ -175,6 +179,7 @@
 					   LEFT JOIN cp_reference_master crm ON crm.id = co.channel AND crm.active='Y'
 				    where co.status = '".$status."' and date(co.delivery_date) = curdate() and co.customer_id is not null and co.store_id = ".$_SESSION['user']['store']['id']." order by time_passed desc";
 					
+					$this->log->trace("GET COC ORDER DETAIL \r\n".$getList);
 					$orderListDetailed = $db->func_query($getList);
 					$orderList = array();
 
@@ -232,7 +237,7 @@
 		                              AND store_id = ".$_SESSION['user']['store']['id']."
 		                              GROUP BY status";
 					$result = $db->func_query($getOrderCount);
-		    	    $status_type_count = array('New'=>0,'Confirmed'=>0,'Cancelled'=>0,'Dispatched'=>0,'Delivered'=>0,'Paid'=>0,);
+		    	    $status_type_count = $ORDER_STATUS;
 		        	if(is_array($result) && count($result)>0){
 		        		foreach ($result as $key => $value) {
 		        			$status_type_count[$value['status']] = $value['count'];
@@ -241,15 +246,14 @@
 		        }
 	    	}
 	    	$billArray = array();
-	    	//if($status=='Confirmed'){
-	    		$resultGetBill = $this->cDB->getDesign('billing')->getView('handle_updated_bills')->setParam(array("include_docs"=>"true","descending"=>"true","endkey" => '["'.$this->getCDate().'"]',"startkey" => '["'.$this->getCDate().'",{},{},{}]'))->execute();
+	    	$resultGetBill = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getView(BILLING_DESIGN_DOCUMENT_VIEW_HANDLE_UPDATED_BILLS)->setParam(array("include_docs"=>"true","descending"=>"true","endkey" => '["'.$this->getCDate().'"]',"startkey" => '["'.$this->getCDate().'",{},{},{}]'))->execute();
 	    		if(array_key_exists('rows', $resultGetBill) && count($resultGetBill['rows'])>0){
 	    			$docs = $resultGetBill['rows'];
 	    			foreach ($docs as $key => $value) {
 	    			 $billArray[$value['doc']['order_no']] = $value['doc']['bill_no']; 	
 	    			 } 
-	    		} //print_r($billArray);
-	    	//}
+	    		} 
+	    
 			$this->commonView('header_html',array('error'=>$error));
 			$this->commonView('navbar');
 			if(!$error){
