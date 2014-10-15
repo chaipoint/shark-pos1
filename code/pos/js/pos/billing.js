@@ -255,7 +255,7 @@ $(document).ready(function(){
 		
 		/* START -- Payment Using PPC NO  */
         $('#ppc').on('change', function() {
-           var card_no = $(this).val();
+           var card_no = $.trim($(this).val());
            var payment_type = $('#paid_by').val();
            var total_amount = $('#twt').text();
           	if(card_no!='') {
