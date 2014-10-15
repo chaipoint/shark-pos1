@@ -58,12 +58,13 @@
 
 		/* Function To Get Todays sale */
 		public function getTodaysSale($date = ''){
+			global $PAYMENT_MODE;
 			$return = array('error'=>false,'message'=>'','data'=>array());
 
 			if(empty($date)){
 				$date = $this->getCDate();
 			}
-			//$paymentMode = $this->getConfig($this->cDB, 'payment_mode');
+			$paymentMode = $this->getConfig($this->cDB, 'payment_mode');
 			//print_r($paymentMode);
 			$bills = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getList(BILLING_DESIGN_DOCUMENT_LIST_TODAYS_SALE, BILLING_DESIGN_DOCUMENT_VIEW_HANDLE_UPDATED_BILLS)->setParam(array("descending"=>"true","include_docs"=>"true","endkey"=>'["'.$date.'"]'))->execute();
 			$this->log->trace("TODAYS SALE DETAILS \r\n".json_encode($bills));
@@ -71,7 +72,7 @@
 				$return['error'] = true;
 				$return['message'] = ERROR.' '.($bills['error']);
 			}else{
-	            $payment_type = array('cash'=>0,'ppc'=>0,'credit'=>0,'ppa'=>0);
+	            $payment_type = $PAYMENT_MODE;
 				$return['data']['summary'] = $bills;
 				$return['data']['payment_type'] = $payment_type;
 			}
