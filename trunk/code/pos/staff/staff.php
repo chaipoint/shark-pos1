@@ -11,7 +11,7 @@
 			return $staffList;
 		}
 
-		/* Function To Get Delivery Boy */
+		/* Function To Get Delivery Boy For COC Order*/
 		function getDeliveryBoy(){ 
 			$token = $_REQUEST['token'];
 			$getStaff = "SELECT name label, id FROM staff_master 
