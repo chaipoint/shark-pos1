@@ -5,17 +5,23 @@ define ('STORE_DESIGN_DOCUMENT', 'store');
 define ('DESIGN_HO_DESIGN_DOCUMENT', 'design_ho');
 define ('CUSTOMERS_DESIGN_DOCUMENT', 'customers');
 define ('PETTY_EXPENSE_DESIGN_DOCUMENT', 'petty_expense');
+define ('STAFF_DESIGN_DOCUMENT', 'staff');
 
 /* Constant For Design Document View */
 define ('BILLING_DESIGN_DOCUMENT_VIEW_HANDLE_UPDATED_BILLS', 'handle_updated_bills');
 define ('BILLING_DESIGN_DOCUMENT_VIEW_BILL_BY_ORDER', 'bill_by_order');
 define ('STORE_DESIGN_DOCUMENT_VIEW_STORE_MYSQL_ID', 'store_mysql_id');
+define ('STORE_DESIGN_DOCUMENT_VIEW_STORE_SHIFT', 'store_shift');
 define ('DESIGN_HO_DESIGN_DOCUMENT_VIEW_RETAIL_CUSTOMER_LIST', 'retail_customer_list');
 define ('CUSTOMERS_DESIGN_DOCUMENT_VIEW_RETAIL_CUSTOMER_LIST', 'retail_customer_list');
 define ('PETTY_EXPENSE_DESIGN_DOCUMENT_VIEW_GET_EXPENSE', 'get_expense');
+define ('PETTY_EXPENSE_DESIGN_DOCUMENT_VIEW_GET_INWARD', 'get_inward');
+define ('STAFF_DESIGN_DOCUMENT_VIEW_STAFF_USERNAME', 'staff_username');
 
 /* Constant For Design Document Update */
 define ('BILLING_DESIGN_DOCUMENT_UPDATE_GET_BILL_NO', 'getbillno');
+define ('STORE_DESIGN_DOCUMENT_UPDATE_STORE_SHIFT', 'store_shift');
+
 
 /* Constant For Design Document List */
 define ('BILLING_DESIGN_DOCUMENT_LIST_TODAYS_SALE', 'todays_sale');
@@ -25,6 +31,7 @@ define ('BILLING_DESIGN_DOCUMENT_LIST_SALES_REGISTER', 'sales_register');
 define ('BILLING_DOC_TYPE', 'store_bill');
 define ('PETTY_EXPENSE_DOC_TYPE', 'petty_expense');
 define ('PETTY_INWARD_DOC_TYPE', 'petty_inward');
+define ('STORE_SHIFT_DOC_TYPE', 'store_shift');
 
 
 /* Constant For Request Type */
@@ -40,6 +47,10 @@ define ('REQUEST_METHOD_NOT_ALLOWED', 'Request Method Not Allowed');
 /* Other Constant */
 
 define ('ERROR', 'Some Error! Please Contact Admin');
+define ('START_DAY_ERROR', 'Can not Start Store Day Again');
+define ('START_DAY_SUCCESS', 'Welcome, Shift has been started, Please Start Sales. <a href="index.php?dispatch=billing" class="btn btn-sm btn-primary">Start Billing</a>');
+define ('STORE_SHIFT_ENDED', 'Store Shift Ended');
+define ('STORE_DAY_ENDED', 'Store Day Ended');
 define ('SERVER_DOWN_ERROR', 'server_down');
 define ('SUCCESS', 'Saved Successfully');
 define ('HOME', 'home');
