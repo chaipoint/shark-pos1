@@ -50,4 +50,8 @@ define ('BILL_DATA_MISSING', 'Bill_Data_Missing');
 define ('PRINT_UTILITY_NOT_EXISTS', 'PRINT_UTILITY_NOT_EXISTS');
 
 
+global $PAYMENT_MODE;
+$PAYMENT_MODE = array('cash'=>0,'ppc'=>0,'credit'=>0,'ppa'=>0);
+
+
 ?>
