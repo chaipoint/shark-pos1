@@ -149,7 +149,7 @@
 							<td><?php if(is_array($config_data['payment_mode']) && count($config_data['payment_mode'])>0){
 										foreach ($config_data['payment_mode'] as $key => $value) { ?>
 										
-									<a class="btn btn-sm btn-primary payment-type-bt <?php echo ($value=='Cash' ? 'btn-success' : ''); ?>" data-value="<?php echo strtolower($value); ?>" data-id="<?php echo $key; ?>"><?php echo $value; ?></a>
+									<a class="btn btn-sm btn-primary payment-type-bt <?php echo ($value=='cash' ? 'btn-success' : ''); ?>" data-value="<?php echo strtolower($value); ?>" data-id="<?php echo $key; ?>"><?php echo strtoupper($value); ?></a>
 								<?php }} ?>
 								<input type="hidden" name="paid_by" id="paid_by" value="cash">
 							</td>
