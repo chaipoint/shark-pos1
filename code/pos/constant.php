@@ -31,6 +31,7 @@ define ('PETTY_INWARD_DOC_TYPE', 'petty_inward');
 define ('GET_RETAIL_CUSTOMER', 'getRetailCustomer');
 define ('SAVE_BILL', 'save_bill');
 define ('UPDATE_BILL', 'update_bill');
+define ('GET_COC_ORDER', 'getCOCOrder');
 
 /* Constant For Request Type Error */
 define ('REQUEST_TYPE_NOT_ALLOWED', 'Request Type Not Found');
@@ -39,6 +40,7 @@ define ('REQUEST_METHOD_NOT_ALLOWED', 'Request Method Not Allowed');
 /* Other Constant */
 
 define ('ERROR', 'Some Error! Please Contact Admin');
+define ('SERVER_DOWN_ERROR', 'server_down');
 define ('SUCCESS', 'Saved Successfully');
 define ('HOME', 'home');
 define ('NA', 'NA');
@@ -48,10 +50,16 @@ define ('COMPANY_DETAIL_TXT_PATH', 'D:\utility\company.txt');
 define ('BILL_DETAIL_TXT_PATH', 'D:\utility\bill.txt');
 define ('BILL_DATA_MISSING', 'Bill_Data_Missing');
 define ('PRINT_UTILITY_NOT_EXISTS', 'PRINT_UTILITY_NOT_EXISTS');
+define ('RESOURCE', 'resource');
+define ('CONFIRMED_MESSAGE', "Dear ".ucfirst(!empty($_POST['customer_name']) ? $_POST['customer_name'] : '').", Your Chai-On-Call Order # ".(!empty($_POST['order']) ? $_POST['order'] : '')." Is Confirmed. Thank you!");
+define ('PROVIDER_NUMBER', '8808891988');
+define ('DISPATCHED_MESSAGE', "Dear ".ucfirst(!empty($_POST['customer_name']) ? $_POST['customer_name'] : '').", Your Chai-On-Call Order # ".(!empty($_POST['order']) ? $_POST['order'] : '')." has been Dispatched From ".(!empty($_POST['store_name']) ? $_POST['store_name'] : '')." Store. Your bill amount is Rs ".(!empty($_POST['net_amount']) ? $_POST['net_amount'] : '').". Thank you!");
 
 
-global $PAYMENT_MODE;
+
+global $PAYMENT_MODE, $ORDER_STATUS;
 $PAYMENT_MODE = array('cash'=>0,'ppc'=>0,'credit'=>0,'ppa'=>0);
+$ORDER_STATUS = array('New'=>0,'Confirmed'=>0,'Cancelled'=>0,'Dispatched'=>0,'Delivered'=>0,'Paid'=>0)
 
 
 ?>
