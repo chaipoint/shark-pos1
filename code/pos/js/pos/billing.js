@@ -668,6 +668,7 @@ function generateSalesTable(productId, qty, productData){
 			$billingItems[productID].qty = newqty;
 		}
 	}
+//	alert(JSON.stringify($billingItems));
 //	console.log($billingItems);
 	var tableRows = '';
 
@@ -676,7 +677,8 @@ function generateSalesTable(productId, qty, productData){
 			$billingItems[index].subTotal = $billingItems[index].qty * $billingItems[index].priceBT;
 			$billingItems[index].discountAmount = $billingItems[index].subTotal * $billingItems[index].discount/100;
 			$billingItems[index].priceAD = $billingItems[index].subTotal - $billingItems[index].discountAmount;
-			$billingItems[index].taxAmount = ( $billingItems[index].price - $billingItems[index].taxAbleAmount ) * $billingItems[index].qty;
+			//$billingItems[index].taxAmount = ( $billingItems[index].price - $billingItems[index].taxAbleAmount ) * $billingItems[index].qty;
+			$billingItems[index].taxAmount = (($billingItems[index].price * ($billingItems[index].tax)*100)/100) - ((($billingItems[index].price * ($billingItems[index].tax)*100)/100) * $billingItems[index].discount /100); 
 			$billingItems[index].netAmount = $billingItems[index].priceAD + $billingItems[index].taxAmount;
 		if(productID != index){
 			tableRows +='<tr billing-product="'+index+'">'+
