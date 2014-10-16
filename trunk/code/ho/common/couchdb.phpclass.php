@@ -1,10 +1,6 @@
 <?php
-
-/*$cd = new couchPHP();
-echo "<pre>";
-print_r($cd->fn);
-echo "</pre>";/**/
-
+$dir = dirname(dirname(__FILE__));
+include_once $dir.'/config.php';
 class CouchPHP{
 	private $url;
 	private $port;
@@ -17,14 +13,15 @@ class CouchPHP{
 	private $allowContentType = false;
 	private $remote;
 	private $isDelete = false;
+	
 	function __construct(){
-		$this->port = "5984";
-		//$this->url = 'http://pos:pos@54.249.247.15:'.$this->port."/";
-		$this->url = 'http://pos:pos@127.0.0.1:'.$this->port."/";
-		$this->db = 'sharkho';
+		global $config;
+		$this->port = $config['ho_port'];
+		$this->url = $config['ho_url'];
+		$this->db = $config['ho_db'];
 		$this->userName = '';
 		$this->password = '';
-		//$this->remote = 'http://pos:pos@54.249.247.15:5984/rakesh_cpos_ho';
+		
 	}
 
 
