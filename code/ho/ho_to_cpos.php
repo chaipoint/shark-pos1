@@ -3,9 +3,10 @@
     include_once 'common/connection.php' ;
 	require_once 'common/couchdb.phpclass.php';
 	require_once 'common/logger.php';
+	require_once 'constant.php';
     
-    $logger = Logger::getLogger("HO_TO_CPOS API");
-    $logger->trace("Calling HO_TO_CPOS API");
+    $logger = Logger::getLogger("CP-HO|HO-TO-CPOS-API");
+    $logger->trace("HO-TO-CPOS-API");
    
     $action = @$_REQUEST['action'];
    
@@ -33,16 +34,17 @@
 }
 
 /* Function To Upload Shift Data On CPOS*/
-
 function uploadShiftData(){
 	global $logger, $db;
 	$logger->debug("Shift Data From HO to CPOS");
 	$couch = new CouchPHP();
-	$shift_data = $couch->getDesign('design_ho')->getView('store_shift')->setParam(array('startkey' => '"'.date("Y-m-d",(time()-(24*60*60))).'"', 'endkey' => '"'.date('Y-m-d').'"','include_docs'=>'true'))->execute();//,'key'=>'"'.date('Y-m-d').'"'
+	$shift_data = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_STORE_SHIFT)->setParam(array('startkey' => '"'.date("Y-m-d",(time()-(24*60*60))).'"', 'endkey' => '"'.date('Y-m-d').'"','include_docs'=>'true'))->execute();//,'key'=>'"'.date('Y-m-d').'"'
 	$logger->debug("URL to sccess data ".$couch->getLastUrl());
-	//echo $couch->getLastUrl();
+	
 	if(array_key_exists('rows', $shift_data) && count($shift_data['rows']) > 0){
-		$selectFromDB = "SELECT id, if(end_time is null or end_time = '0000-00-00 00:00:00', 'N', 'Y') is_day_ended, _id, _rev, last_shift from cp_pos_day_data where date(start_time) = curdate() or date(start_time) = date(curdate()-1)";
+		$selectFromDB = "SELECT id, if(end_time is null or end_time = '0000-00-00 00:00:00', 'N', 'Y') is_day_ended, _id, _rev, last_shift 
+						 FROM cp_pos_day_data 
+						 WHERE date(start_time) = curdate() or date(start_time) = date(curdate()-1)";
 		$logger->debug("Query To get 2 days data  ".$selectFromDB);
 		$resultDay = $db->func_query($selectFromDB);
 		$dbList = array();
@@ -57,25 +59,21 @@ function uploadShiftData(){
 
 		$rows = $shift_data['rows'];
 		foreach($rows as $key => $value){ 
-			//echo $value['id'].'<br>';
-			//print_r($dbList);
 			if(array_key_exists($value['id'], $dbList)){ 
 				if($dbList[$value['id']]['_rev'] !== $value['doc']['_rev']){ 
 					$updateQuery = "UPDATE cp_pos_day_data 
-								SET end_time = '".$value['doc']['day']['end_time']."', 
-								end_staff_id = '".$value['doc']['day']['end_login_id']."',
-								end_full_cash = '".$value['doc']['day']['end_fullcash']."', 
-								opening_petty_cash = '".$value['doc']['day']['petty_cash_balance']['opening_petty_cash']."', 
-								petty_expense = '".$value['doc']['day']['petty_cash_balance']['petty_expense']."', 
-								closing_petty_cash = '".$value['doc']['day']['petty_cash_balance']['closing_petty_cash']."', 
-								inward_petty_cash = '".$value['doc']['day']['petty_cash_balance']['inward_petty_cash']."', last_shift  = '".count($value['doc']['shift'])."'
-								where _id = '".$value['id']."'";
+									SET end_time = '".$value['doc']['day']['end_time']."', 
+									end_staff_id = '".$value['doc']['day']['end_login_id']."',
+									end_full_cash = '".$value['doc']['day']['end_fullcash']."', 
+									opening_petty_cash = '".$value['doc']['day']['petty_cash_balance']['opening_petty_cash']."', 
+									petty_expense = '".$value['doc']['day']['petty_cash_balance']['petty_expense']."', 
+									closing_petty_cash = '".$value['doc']['day']['petty_cash_balance']['closing_petty_cash']."', 
+									inward_petty_cash = '".$value['doc']['day']['petty_cash_balance']['inward_petty_cash']."', last_shift  = '".count($value['doc']['shift'])."'
+									where _id = '".$value['id']."'";
 								
 					$db->db_query($updateQuery);
-					
 					$logger->debug("Day Id Updated  ".$value['id']." on ".$value['id']." with total shifts ".count($value['doc']['shift']));
-
-					$selectShiftData = "select id, shift_no from cp_pos_shift_data where pos_day_id = ".$dbList[$value['id']]['id'];
+					$selectShiftData = "SELECT id, shift_no FROM cp_pos_shift_data WHERE pos_day_id = ".$dbList[$value['id']]['id'];
 					$resultSelectData = $db->func_query($selectShiftData);
 					$shiftList = array();
 					foreach($resultSelectData as $sKey => $sValue){
@@ -85,10 +83,17 @@ function uploadShiftData(){
 						foreach($value['doc']['shift'] as $shKey => $shValue){
 							if(array_key_exists($shValue['shift_no'], $shiftList)){
 								$upsQuery = "UPDATE cp_pos_shift_data 
-									SET end_time = '".$shValue['end_time']."', end_petty_cash = '".$shValue['end_petty_cash']."', end_cash_inbox = '".$shValue['end_cash_inbox']."',opening_petty_cash='".$shValue['petty_cash_balance']['opening_petty_cash']."', petty_expense='".$shValue['petty_cash_balance']['petty_expense']."',closing_petty_cash='".$shValue['petty_cash_balance']['closing_petty_cash']."',inward_petty_cash='".$shValue['petty_cash_balance']['inward_petty_cash']."' where id=".$shiftList[$shValue['shift_no']];
+											 SET end_time = '".$shValue['end_time']."', 
+											 end_petty_cash = '".$shValue['end_petty_cash']."', 
+											 end_cash_inbox = '".$shValue['end_cash_inbox']."',
+											 opening_petty_cash='".$shValue['petty_cash_balance']['opening_petty_cash']."', 
+											 petty_expense='".$shValue['petty_cash_balance']['petty_expense']."',
+											 closing_petty_cash='".$shValue['petty_cash_balance']['closing_petty_cash']."',
+											 inward_petty_cash='".$shValue['petty_cash_balance']['inward_petty_cash']."' 
+											 WHERE id=".$shiftList[$shValue['shift_no']];
 								$db->db_query($upsQuery);
 							}else{
-								$insertQuery = "insert into cp_pos_shift_data (pos_day_id, start_time, end_time, staff_id, end_petty_cash, end_cash_inbox, counter_no, shift_no, opening_petty_cash, petty_expense, closing_petty_cash, inward_petty_cash) values ";
+								$insertQuery = "INSERT INTO cp_pos_shift_data (pos_day_id, start_time, end_time, staff_id, end_petty_cash, end_cash_inbox, counter_no, shift_no, opening_petty_cash, petty_expense, closing_petty_cash, inward_petty_cash) values ";
 								$insertQuery .= "(".$dbList[$value['id']]['id'].",'".$shValue['start_time']."','".$shValue['end_time']."',".$shValue['start_login_id'].",'".$shValue['end_petty_cash']."','".$shValue['end_cash_inbox']."',".$shValue['counter_no'].",".$shValue['shift_no'].",'".$shValue['petty_cash_balance']['opening_petty_cash']."', '".$shValue['petty_cash_balance']['petty_expense']."','".$shValue['petty_cash_balance']['closing_petty_cash']."',inward_petty_cash='".$shValue['petty_cash_balance']['inward_petty_cash']."')";								
 								$db->db_query($insertQuery);
 							}
@@ -112,9 +117,8 @@ function uploadShiftData(){
 						'inward_petty_cash' => $value['doc']['day']['petty_cash_balance']['inward_petty_cash'],
 						'last_shift' => count($value['doc']['shift'])
 				);
-				//print_r($insretArray);
-				$db->func_array2insert("cp_pos_day_data", $insretArray);
 				
+				$db->func_array2insert("cp_pos_day_data", $insretArray);
 				$insertId = $db->db_insert_id();
 				$logger->debug("Day Id Inserted  ".$value['doc']['_id']." on ".$insertId." with total shifts ".count($value['doc']['shift']));
 				$shiftInsert = array();
@@ -122,7 +126,7 @@ function uploadShiftData(){
 						$shiftInsert[] = "(".$insertId.",'".$sValue['start_time']."','".$sValue['end_time']."',".$sValue['start_login_id'].",'".$sValue['end_petty_cash']."','".$sValue['end_cash_inbox']."',".$sValue['counter_no'].",".$sValue['shift_no'].",'".$sValue['petty_cash_balance']['opening_petty_cash']."', '".$sValue['petty_cash_balance']['petty_expense']."','".$sValue['petty_cash_balance']['closing_petty_cash']."',inward_petty_cash='".$sValue['petty_cash_balance']['inward_petty_cash']."')";
 				}
 				if(count($shiftInsert)>0){
-					$insertQuery = "insert into cp_pos_shift_data (pos_day_id, start_time, end_time, staff_id, end_petty_cash, end_cash_inbox, counter_no, shift_no, opening_petty_cash, petty_expense, closing_petty_cash, inward_petty_cash) values ".implode(",", $shiftInsert);
+					$insertQuery = "INSERT INTO cp_pos_shift_data (pos_day_id, start_time, end_time, staff_id, end_petty_cash, end_cash_inbox, counter_no, shift_no, opening_petty_cash, petty_expense, closing_petty_cash, inward_petty_cash) values ".implode(",", $shiftInsert);
 					$db->db_query($insertQuery);
 				}		
 			}
@@ -132,7 +136,7 @@ function uploadShiftData(){
 		$logger->debug("ERROR: NO Data To Be Upload");
   		$html['error'] = true;
 		$html['update'] = false;
-		$html['msg'] = 'Sorry! No Shift Data Available';
+		$html['msg'] = NO_DATA_AVAILABLE_ERROR;
 		$result = json_encode($html,true);
 		$logger->debug("End Of Uplaod Shift Data Function");
 		return $result;
@@ -141,21 +145,22 @@ function uploadShiftData(){
 		$logger->debug("SUCCESS: Data Uploaded Successfully");
   		$html['error'] = false;
 		$html['update'] = true;
-		$html['msg'] = 'Data Uploaded Successfully';
+		$html['msg'] = DATA_UPLOADED;
 		$result = json_encode($html,true);
 		$logger->debug("End Of Uplaod Shift Data Function");
 		return $result;
 }
 
 /* Function To Upload Bill On CPOS*/
-
 function uploadBill(){
 	global $logger, $db;
 	$logger->debug("Calling Upload Bill Function");
 	$couch = new CouchPHP();
 	$html = array();
 	$no_bill = $unsuccessful = $successful = $counter = 0;
-	$billData = $couch->getDesign('design_ho')->getView('no_mysql_id')->setParam(array('include_docs'=>'true'))->execute();
+	$billData = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_NO_MYSQL_ID)->setParam(array('include_docs'=>'true'))->execute();
+ 	$logger->debug("URL to sccess data ".$couch->getLastUrl());
+
  	if(array_key_exists('rows', $billData)){
  		foreach($billData['rows'] as $key => $value){
  			$doc = $value['doc'];
@@ -192,7 +197,6 @@ function uploadBill(){
 								"is_prepaid" => $doc['is_prepaid'],
 								"is_credit" => $doc['is_credit'],
 								"payment_type" => $doc['payment_type'],
-			            		
 			            		"order_no" => $doc['order_no'],
 			            		"coupon_id" => 1,
 			            		"coupon_code" => $doc['coupon_code'],
@@ -208,7 +212,7 @@ function uploadBill(){
 			            		"bill_status" => $doc['bill_status'],
 			            		"reprint" => $doc['reprint']
 			            );
-
+			$logger->debug("INSERT ORDER ARRAY ".json_encode($docsData));
 			$db->func_array2insert("cp_pos_storeorders", $docsData);
 			$insertId = $db->db_insert_id();	
 			$productsArray = array();
@@ -216,12 +220,12 @@ function uploadBill(){
 				foreach ($doc['items'] as $itemKey => $itemVvalue) {
 					$pValue = $itemVvalue;
 					$productsArray[] = "('".$insertId."','".$pValue['id']."','".$pValue['name']."','".$pValue['category_id']."','".$pValue['category_name']."','".$pValue['qty']."','".$pValue['price']."','".$pValue['tax']."','".$pValue['priceBT']."','".$pValue['discount']."','".$pValue['discountAmount']."','".$pValue['taxAbleAmount']."','".$pValue['taxAmount']."','".$pValue['netAmount']."','".$pValue['priceAD']."','".$pValue['subTotal']."')";
-				}		
+				}
+				$logger->debug("INSERT ORDER PRODUCT ARRAY ".json_encode($productsArray));		
 				if(count($productsArray) > 0){
-					$insertProducst = 'insert into cp_pos_storeorders_products (order_id, product_id, product_name, category_id, category_name, qty, price, tax, priceBT, discount, discount_amount, taxable_amount, tax_amount, net_amount, priceAD, subTotal) values '.implode(',',$productsArray);
+					$insertProducst = 'INSERT INTO cp_pos_storeorders_products (order_id, product_id, product_name, category_id, category_name, qty, price, tax, priceBT, discount, discount_amount, taxable_amount, tax_amount, net_amount, priceAD, subTotal) values '.implode(',',$productsArray);
 					$res = $db->db_query($insertProducst);	
 				    $returnResult = $couch->getDesign('design_ho')->getUpdate('insert_mysql_id', $docsData['_id'])->setParam(array('mysql_id'=>$insertId))->execute();				
-				    //print_r($returnResult);
 				    if($res){				    	
 					    $logger->trace("Bill No ".$docsData['bill_no']." \tBill Id".$docsData['_id']." \tStore".$docsData['store_id']." \tBill Time".$docsData['bill_time']." \tMySQL ID".$insertId);
 				        $successful = 1;
@@ -240,37 +244,37 @@ function uploadBill(){
   		
   		$html['error'] = false;
 		$html['update'] = true;
-		$html['msg'] = "$counter Bill Uplaoded Successfully";
+		$html['msg'] = "$counter Bill ".DATA_UPLOADED."";
     } else if($unsuccessful==1){
 
     	$logger->debug("ERROR: Some Error! Please Contact Admin");
   		$html['error'] = true;
 		$html['update'] = false;
-		$html['msg'] = 'Some Error Please Contact Admin';
+		$html['msg'] = ERROR;
 
     }else{
 
     	$logger->debug("ERROR: NO Bill To Be Upload");
   		$html['error'] = true;
 		$html['update'] = false;
-		$html['msg'] = 'Sorry! No Bill To Be Upload';
+		$html['msg'] = NO_DATA_AVAILABLE_ERROR;
     }
 	
-$result = json_encode($html,true);
-$logger->debug("End OF Uplaod Bill Function");
-return $result;
+	$result = json_encode($html,true);
+	$logger->debug("End OF Uplaod Bill Function");
+	return $result;
 }
 
 /* Function To Upload Updated Bill On CPOS*/
-
 function uploadUpdatedBill(){
 	global $logger, $db;
 	$logger->debug("Calling Upload Updated Bill Function");
 	$couch = new CouchPHP();
 	$html = array();
     $counter = $unsuccessful = $successful = 0;
-	$billData = $couch->getDesign('design_ho')->getView('handle_updated_bills')->setParam(array('descending'=>'true'))->execute();
-	//print_r($billData);
+	$billData = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_HANDLE_UPDATED_BILLS)->setParam(array('descending'=>'true'))->execute();
+	$logger->debug("URL TO ACCESS DATA ".$couch->getLastUrl());
+
  	if(array_key_exists('rows', $billData)){
  		$billList = array();
  		foreach($billData['rows'] as $key => $value){
@@ -279,13 +283,18 @@ function uploadUpdatedBill(){
  			if(!array_key_exists($bill_no, $billList)){
 	 			$billList[$bill_no] = '';
  				if($data['mysql'] == 0){
-	 				$updateBill = "update cp_pos_storeorders set bill_status = '".$data['bill_status']."', cancel_reason = '".$data['cancel_reason']."', reprint = '".$data['reprint']."' where _id = '".$data['parent']."'";
+	 				$updateBill = "UPDATE cp_pos_storeorders SET 
+	 							   bill_status = '".$data['bill_status']."', 
+	 							   cancel_reason = '".$data['cancel_reason']."', 
+	 							   reprint = '".$data['reprint']."' 
+	 							   WHERE _id = '".$data['parent']."'";
+
 	 				$logger->trace("Update Query: ".$updateBill);
 	 				$db->db_query($updateBill);	
 	 				if($db->db_affected_rows() > 0){
 	 					$select = "SELECT id from cp_pos_storeorders where _id = '".$data['parent']."'";
 	 					$selectData = $db->func_query($select);
-	 					$returnResult = $couch->getDesign('design_ho')->getUpdate('insert_mysql_id', $value['id'])->setParam(array('mysql_id'=>$selectData[0]['id']))->execute();				
+	 					$returnResult = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getUpdate(DESIGN_HO_DESIGN_DOCUMENT_UPDATE_INSERT_MYSQL_ID, $value['id'])->setParam(array('mysql_id'=>$selectData[0]['id']))->execute();				
 	 					$successful = 1;
 	 				} else {
 	 					$unsuccessful = 1;
@@ -296,30 +305,30 @@ function uploadUpdatedBill(){
 
 		$counter++;}
 	}
-if($successful==1){
+	if($successful==1){
 		$logger->debug("Success: Bill Updated Successfully");
   		
   		$html['error'] = false;
 		$html['update'] = true;
-		$html['msg'] = "Bill Updated Successfully";
+		$html['msg'] = "Bill ".DATA_UPLOADED."";
     } else if($unsuccessful==1){
 
     	$logger->debug("ERROR: Some Error! Please Contact Admin");
   		$html['error'] = true;
 		$html['update'] = false;
-		$html['msg'] = 'Some Error Please Contact Admin';
+		$html['msg'] = ERROR;
 
     }else{
 
     	$logger->debug("ERROR: NO Bill To Be Upload");
   		$html['error'] = true;
 		$html['update'] = false;
-		$html['msg'] = 'Sorry! No Bill To Be Updated';
+		$html['msg'] = NO_DATA_AVAILABLE_ERROR;
     }
 	
-$result = json_encode($html,true);
-$logger->debug("End OF Uplaod Bill Function");
-return $result;
+	$result = json_encode($html,true);
+	$logger->debug("End OF Uplaod Bill Function");
+	return $result;
 
 }
 
@@ -329,8 +338,9 @@ function uploadPettyExpense(){
 	$logger->debug("Calling Upload Petty Expense Function");
 	$couch = new CouchPHP();
 	$html = array();
-	$expenseData = $couch->getDesign('petty_expense')->getView('expense_no_mysql_id')->setParam(array('include_docs'=>'true'))->execute();
-	//print_r($expenseData);
+	$expenseData = $couch->getDesign(PETTY_EXPENSE_DESIGN_DOCUMENT)->getView(PETTY_EXPENSE_DESIGN_DOCUMENT_VIEW_EXPENSE_NO_MYSQL_ID)->setParam(array('include_docs'=>'true'))->execute();
+	$logger->debug("URL TO ACCESS DATA ".$couch->getLastUrl());
+
 	$success = $counter = 0;
 	if(array_key_exists('rows', $expenseData) && count($expenseData['rows'])>0){
  		foreach($expenseData['rows'] as $key => $value){
@@ -351,17 +361,18 @@ function uploadPettyExpense(){
 								"created_date" => date('Y-m-d H:i:s'),
 								"created_by" => '' 
 							);
+			$logger->debug("INSERT PETTY EXPENSE ARRAY ".json_encode($docsData));
 			$db->func_array2insert("cp_pos_petty_expense", $docsData);
 			$insertId = $db->db_insert_id();
 			if($insertId > 0){
-				$returnResult = $couch->getDesign('design_ho')->getUpdate('insert_mysql_id', $docsData['_id'])->setParam(array('mysql_id'=>$insertId))->execute();
+				$returnResult = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getUpdate(DESIGN_HO_DESIGN_DOCUMENT_UPDATE_INSERT_MYSQL_ID, $docsData['_id'])->setParam(array('mysql_id'=>$insertId))->execute();
 				$counter++;
 				$success = 1;
 			}else{
 				$logger->debug("ERROR: SOME ERROR");
   				$html['error'] = true;
 				$html['update'] = false;
-				$html['msg'] = 'Sorry! Some Error While Upload Petty Expense Please Contact Admin';
+				$html['msg'] = ERROR;
 				$result = json_encode($html,true);
 				$logger->debug("End OF Petty Expense Function");
 				return $result;
@@ -373,7 +384,7 @@ function uploadPettyExpense(){
 		$logger->debug("End OF Petty Expense Function");
 		return $result;
 	}
-	//echo $success;
+	
 	if($success==1){
 		$logger->debug("Success: Petty Expense Uploaded Successfully");
   		$result = uploadPettyInward();
@@ -389,8 +400,9 @@ function uploadPettyInward(){
 	$logger->debug("Calling Upload Petty Inward Function");
 	$couch = new CouchPHP();
 	$html = array();
-	$expenseData = $couch->getDesign('petty_expense')->getView('inward_no_mysql_id')->setParam(array('include_docs'=>'true'))->execute();
-	//print_r($expenseData);
+	$expenseData = $couch->getDesign(PETTY_EXPENSE_DESIGN_DOCUMENT)->getView(PETTY_EXPENSE_DESIGN_DOCUMENT_VIEW_INWARD_NO_MYSQL_ID)->setParam(array('include_docs'=>'true'))->execute();
+	$logger->debug("URL TO ACCESS DATA ".$couch->getLastUrl());
+
 	$success = $counter = 0;
 	if(array_key_exists('rows', $expenseData) && count($expenseData['rows'])>0){
  		foreach($expenseData['rows'] as $key => $value){
@@ -408,17 +420,18 @@ function uploadPettyInward(){
 								"created_date" => date('Y-m-d H:i:s'),
 								"created_by" => '' 
 							);
+			$logger->debug("INSERT PETTY INWARD ARRAY ".json_encode($docsData));
 			$db->func_array2insert("cp_pos_petty_inward", $docsData);
 			$insertId = $db->db_insert_id();
 			if($insertId > 0){
-				$returnResult = $couch->getDesign('design_ho')->getUpdate('insert_mysql_id', $docsData['_id'])->setParam(array('mysql_id'=>$insertId))->execute();
+				$returnResult = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getUpdate(DESIGN_HO_DESIGN_DOCUMENT_UPDATE_INSERT_MYSQL_ID, $docsData['_id'])->setParam(array('mysql_id'=>$insertId))->execute();
 				$counter++;
 				$success = 1;
 			}else{
 				$logger->debug("ERROR: SOME ERROR");
   				$html['error'] = true;
 				$html['update'] = false;
-				$html['msg'] = 'Sorry! Some Error While Upload Petty Inward Please Contact Admin';
+				$html['msg'] = ERROR;
 				$result = json_encode($html,true);
 				$logger->debug("End OF Petty Inward Function");
 				return $result;
@@ -428,17 +441,16 @@ function uploadPettyInward(){
 		$logger->debug("ERROR: NO Inward To Be Upload");
   		$html['error'] = true;
 		$html['update'] = false;
-		$html['msg'] = 'Sorry! No Data To Be Upload';
+		$html['msg'] = NO_DATA_AVAILABLE_ERROR;
 		$result = json_encode($html,true);
 		$logger->debug("End OF Petty Inward Function");
 		return $result;
 	}
-	//echo $success;
 	if($success==1){
 		$logger->debug("Success: Petty Inward Uploaded Successfully");
   		$html['error'] = false;
 		$html['update'] = true;
-		$html['msg'] = "Data Uplaoded Successfully";
+		$html['msg'] = DATA_UPLOADED;
 		$result = json_encode($html,true);
 		$logger->debug("End OF Petty Inward Function");
 		return $result;
@@ -452,8 +464,9 @@ function uploadLoginHistory(){
 	$logger->debug("Calling Upload Login History Function");
 	$couch = new CouchPHP();
 	$html = array();
-	$loginData = $couch->getDesign('login')->getView('login_no_mysql_id')->setParam(array('include_docs'=>'true'))->execute();
-	//print_r($expenseData);
+	$loginData = $couch->getDesign(LOGIN_DESIGN_DOCUMENT)->getView(LOGIN_DESIGN_DOCUMENT_VIEW_LOGIN_NO_MYSQL_ID)->setParam(array('include_docs'=>'true'))->execute();
+	$logger->debug("URL TO ACCESS DATA ".$couch->getLastUrl());
+
 	$success = $counter = 0;
 	if(array_key_exists('rows', $loginData) && count($loginData['rows'])>0){
  		foreach($loginData['rows'] as $key => $value){
@@ -470,17 +483,18 @@ function uploadLoginHistory(){
 								"created_date" => date('Y-m-d H:i:s'),
 								"created_by" => '' 
 							);
+			$logger->debug("INSERT LOGIN HISTORY ARRAY ".json_encode($docsData));
 			$db->func_array2insert("cp_pos_login_history", $docsData);
 			$insertId = $db->db_insert_id();
 			if($insertId > 0){
-				$returnResult = $couch->getDesign('design_ho')->getUpdate('insert_mysql_id', $docsData['_id'])->setParam(array('mysql_id'=>$insertId))->execute();
+				$returnResult = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getUpdate(DESIGN_HO_DESIGN_DOCUMENT_UPDATE_INSERT_MYSQL_ID, $docsData['_id'])->setParam(array('mysql_id'=>$insertId))->execute();
 				$counter++;
 				$success = 1;
 			}else{
 				$logger->debug("ERROR: SOME ERROR");
   				$html['error'] = true;
 				$html['update'] = false;
-				$html['msg'] = 'Sorry! Some Error Please Contact Admin';
+				$html['msg'] = ERROR;
 				$result = json_encode($html,true);
 				$logger->debug("End OF Login History Function");
 				return $result;
@@ -490,17 +504,17 @@ function uploadLoginHistory(){
 		$logger->debug("ERROR: NO Login History To Be Upload");
   		$html['error'] = true;
 		$html['update'] = false;
-		$html['msg'] = 'Sorry! No Login History To Be Upload';
+		$html['msg'] = NO_DATA_AVAILABLE_ERROR;
 		$result = json_encode($html,true);
 		$logger->debug("End OF Login History Function");
 		return $result;
 	}
-	//echo $success;
+	
 	if($success==1){
 		$logger->debug("Success: Login History Uploaded Successfully");
   		$html['error'] = false;
 		$html['update'] = true;
-		$html['msg'] = "$counter Login History Uplaoded Successfully";
+		$html['msg'] = "$counter Login History ".DATA_UPLOADED."";
 		$result = json_encode($html,true);
 		$logger->debug("End OF Login History Function");
 		return $result;
