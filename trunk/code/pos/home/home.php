@@ -4,13 +4,12 @@
 			parent::__construct();
 		}
 		public function index(){
-			$result = $this->cDB->getDesign('store')->getView('store_shift')->setParam(array('key'=>'"'.$this->getCDate().'"','include_docs'=>'true'))->execute();
+			$result = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_SHIFT)->setParam(array('key'=>'"'.$this->getCDate().'"','include_docs'=>'true'))->execute();
 			if(!array_key_exists('rows', $result)){
 				header("LOCATION:index.php?error=true");
 				die;
 			}			
 			$data = array();
-			
 			require_once DIR.'/sales_register/sales_register.php';
 			require_once DIR.'/billing/billing.php';
 			$sr = new sales_register();
@@ -57,6 +56,7 @@
 			$this->commonView('footer_inner');
 			$this->commonView('footer_html');
 		} 
+		/* Function To Get Shift Data And Cash Reconciliation */
 		function getShiftAndCashRe(){
 			$date = $this->getCDate();
 			if(array_key_exists('date', $_POST)){
@@ -76,7 +76,7 @@
 			$shift_inward = 0;
 			$shift_expense = 0;
 			if(array_key_exists('shift', $_SESSION['user'])){
-				$resultInward = $this->cDB->getDesign('petty_expense')->getView('get_inward')->setParam(array('key'=>'"'.$date.'"','include_docs'=>'true'))->execute();
+				$resultInward = $this->cDB->getDesign(PETTY_EXPENSE_DESIGN_DOCUMENT)->getView(PETTY_EXPENSE_DESIGN_DOCUMENT_VIEW_GET_INWARD)->setParam(array('key'=>'"'.$date.'"','include_docs'=>'true'))->execute();
 				if(count($resultInward['rows'])>0){
 					foreach($resultInward['rows'] as $key => $value){
 						if($value['doc']['shift_no'] == $_SESSION['user']['shift']){
@@ -86,7 +86,7 @@
 					}
 				}
 
-				$resultExpense = $this->cDB->getDesign('petty_expense')->getView('get_expense')->setParam(array('key'=>'"'.$date.'"','include_docs'=>'true'))->execute();
+				$resultExpense = $this->cDB->getDesign(PETTY_EXPENSE_DESIGN_DOCUMENT)->getView(PETTY_EXPENSE_DESIGN_DOCUMENT_VIEW_GET_EXPENSE)->setParam(array('key'=>'"'.$date.'"','include_docs'=>'true'))->execute();
 				if(count($resultExpense['rows'])>0){
 					foreach($resultExpense['rows'] as $key => $value){
 						if($value['doc']['shift_no'] == $_SESSION['user']['shift']){
@@ -97,7 +97,7 @@
 				}
 			}
 
-			$shift_data = $this->cDB->getDesign('store')->getView('store_shift')->setParam(array('key'=>'"'.$date.'"','include_docs'=>'true'))->execute();
+			$shift_data = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_SHIFT)->setParam(array('key'=>'"'.$date.'"','include_docs'=>'true'))->execute();
 			$excess = "";
 			$tablesShiftData = '<div class="panel panel-success">
 									<div class="panel-heading">
@@ -136,7 +136,7 @@
 			    	<td class="text-center"></td>
 			    	<td class="text-center"></td>
 					<td class="text-center"></td>
-			    	</tr>';//last  4 .$shift_end_cash. last 3(-$shift_end_cash) 
+			    	</tr>'; 
 			    	$shift_in = 0;
 			    	$shift_ex = 0;
 			   		$cashSum = 0;
@@ -194,7 +194,7 @@
     		$cash_reconciliation_table .= $excess;
     		$cash_reconciliation_table .= '</tbody><thead><tr><th style="font-size:12px;text-align:left">Total</th><th>'.($total).'</th></tr></thead></table></div></div>';
     		if(!$returnData['error'] && array_key_exists(0, $shift_data['rows']) && !array_key_exists('date', $_POST)){
-				$result = $this->cDB->getDesign('store')->getUpdate('store_shift',$shift_data['rows'][0]['id'])->setParam($cash_reconciliation_insert)->execute();
+				$result = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getUpdate(STORE_DESIGN_DOCUMENT_UPDATE_STORE_SHIFT,$shift_data['rows'][0]['id'])->setParam($cash_reconciliation_insert)->execute();
     		}
 			$returnData['data']['cash_reconciliation_table'] = $cash_reconciliation_table;
 			return $returnData;
