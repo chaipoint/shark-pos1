@@ -82,8 +82,8 @@
 							}
 						}
 					} 
-					
-						$updateStatus = "UPDATE cp_orders SET ".(array_key_exists('staff_id', $_POST) ? " delivery_boy = '".mysql_real_escape_string($_POST['staff_id'])."', " : '')." ".(array_key_exists('reason', $_POST) ? " cancel_reason = '".mysql_real_escape_string($_POST['reason'])."', " : '')." status = '".$new."', updated_by = ".$_SESSION['user']['mysql_id'].", updated_date = '".$this->getCDTime()."' where id = ".$order." and status = '".$current."'";
+						
+						$updateStatus = "UPDATE cp_orders SET ".($_POST['new_status']=='Confirmed' ? " confirm_time = '".date('Y-m-d H:i:s')."', " : ($_POST['new_status']=='Dispatched' ? " dispatch_time = '".date('Y-m-d H:i:s')."', " : ''))." ".(array_key_exists('staff_id', $_POST) ? " delivery_boy = '".mysql_real_escape_string($_POST['staff_id'])."', " : '')." ".(array_key_exists('reason', $_POST) ? " cancel_reason = '".mysql_real_escape_string($_POST['reason'])."', cancel_time = '".date('Y-m-d H:i:s')."', " : '')." status = '".$new."', updated_by = ".$_SESSION['user']['mysql_id'].", updated_date = '".$this->getCDTime()."' where id = ".$order." and status = '".$current."'";
 						$this->log->trace("UPDATE COC ORDER STATUS \r\n".$updateStatus);
 						$this->db->db_query($updateStatus);
 						if( ! $this->db->db_affected_rows()){
