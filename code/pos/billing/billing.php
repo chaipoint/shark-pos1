@@ -170,7 +170,7 @@
 
 					if( $_POST['order_no'] > 0 ){
 						$orderNO = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getView(BILLING_DESIGN_DOCUMENT_VIEW_BILL_BY_ORDER)->setParam(array('key'=> '"'.$_POST['order_no'].'"' ))->execute();
-						$this->log->trace("GET ORDER DETAILS \r\n".$orderNO);
+						$this->log->trace("GET ORDER DETAILS \r\n".json_encode($orderNO));
 						if(array_key_exists('cMessage', $orderNO)){
 								$return['error'] = true;
 								$return['message'] = ERROR.' '.$orderNO['error'];
@@ -255,7 +255,8 @@
 			if($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$balance_check = array();
 				$balance_deduction = array();	
-				$balance_check = balanceINQ($_POST);
+				$balance_check = redeem($_POST);
+				print_r($balance_check);die();
 				$this->log->trace("PPC BILL BALANACE INQ \r\n".json_encode($balance_check));
 				if(is_array($balance_check) && $balance_check['error']==true) {
                 	$return['error'] = true;
