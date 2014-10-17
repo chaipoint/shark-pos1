@@ -484,10 +484,10 @@ $(document).ready(function(){
 			billDetails.sub_total = $totalAmountWOT.toFixed(2);
 			billDetails.total_tax = ($totalTaxAmount).toFixed(2);
 			billDetails.discount = $intDiscount;
-			billDetails.total_discount = $totalDiscountAmount;
-			billDetails.total_amount = $totalAmountWT;
-			billDetails.round_off = Math.ceil(billDetails.total_amount) - billDetails.total_amount;
-			billDetails.due_amount = billDetails.total_amount + billDetails.round_off;
+			billDetails.total_discount = ($totalDiscountAmount).toFixed(2);
+			billDetails.total_amount = ($totalAmountWT).toFixed(2);
+			billDetails.round_off = (Math.ceil(billDetails.total_amount) - billDetails.total_amount).toFixed(2);
+			billDetails.due_amount = parseFloat(billDetails.total_amount) + parseFloat(billDetails.round_off);
 			billDetails.paid_amount = $('#paid-amount').val();
 			
 
@@ -664,12 +664,11 @@ function generateSalesTable(productId, qty, productData){
 			$billingItems[productID].qty = newqty;
 			$billingItems[productID].tax = productData.tax.rate;
 
-		}else{//menu price - taxable amount *
+		}else{
 			$billingItems[productID].qty = newqty;
 		}
 	}
-//	alert(JSON.stringify($billingItems));
-//	console.log($billingItems);
+
 	var tableRows = '';
 
 	for(var index in $billingItems){
