@@ -9,6 +9,8 @@ window.addEventListener("offline", function(e) { window.location.reload(true);})
 window.addEventListener("online", function(e) { window.location.reload(true);})
 //setTimeout(,2000);
 var url = $.url();
+var module = JSON.stringify(url.data.attr.query);
+
 $(document).ready(function(){
 	if(! navigator.onLine){
 		$('#data_sync').addClass('btn-danger').attr('id','');
@@ -41,7 +43,7 @@ $(document).ready(function(){
 						$('#notification').addClass('hide');
 					}
 				})
-			},300000);
+			},3000);
 		});
 	}
 
@@ -109,9 +111,11 @@ $(document).ready(function(){
 
 
 		$(document).ajaxSuccess(function() {
- 		  	$('.btn').attr('disabled', false);
- 		  	$('.payment-type-bt').attr('disabled',true);
-			$('.payment-type-bt[data-value="credit"]').attr('disabled',false);
+ 		  	if(module!='"dispatch=billing.index"'){ 
+ 		  		$('.btn').attr('disabled', false);
+ 		  	}
+ 		  	//$('.payment-type-bt').attr('disabled',true);
+			//$('.payment-type-bt[data-value="credit"]').attr('disabled',false);
 		});
 
 		$(document).ajaxError(function() {
@@ -119,7 +123,9 @@ $(document).ready(function(){
 		});
 
 		$(document).ajaxSend(function() { 
- 		  	$('.btn').attr('disabled', true);
+			if(module!='"dispatch=billing.index"'){
+ 		  		$('.btn').attr('disabled', true);
+ 		  	}
 		});
 });
 
