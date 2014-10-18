@@ -78,9 +78,9 @@
 				$resultJSON = $this->cDB->getDesign(STAFF_DESIGN_DOCUMENT)->getList(STAFF_DESIGN_DOCUMENT_LIST_GET_USER, STAFF_DESIGN_DOCUMENT_VIEW_STAFF_USERNAME)->execute($_POST);			
 
 				$result = $resultJSON;
-				if(!array_key_exists('for', $result)){
+				if(!array_key_exists('for', $result)){ // To Check Which form to be validate
 					if(!$result['error']){
-						if($_POST['validateFor'] == SALE_REGISTER_VALIDATEFOR || $_POST['validateFor'] == SHIFT_DATA_VALIDATEFOR || $_POST['validateFor'] == DATA_SYNC_VALIDATEFOR){
+						if($_POST['validateFor'] == SALE_REGISTER_PROTECTED_SCREEN || $_POST['validateFor'] == SHIFT_DATA_PROTECTED_SCREEN || $_POST['validateFor'] == DATA_SYNC_PROTECTED_SCREEN){
 							require_once DIR.'/sales_register/sales_register.php';
 							$sr = new sales_register();
 							$staffList = $sr->getStaffList();
@@ -88,7 +88,7 @@
 								switch($staffList[$result['data']['mysql_id']]['title_id']){
 									case 4:
 									case 6:
-										if($_POST['validateFor'] == SHIFT_DATA_VALIDATEFOR){
+										if($_POST['validateFor'] == SHIFT_DATA_PROTECTED_SCREEN){
 											require_once DIR.'/home/home.php';
 											$hm = new home();
 											$returnData = $hm->getShiftAndCashRe();
@@ -144,7 +144,7 @@
 							$this->log->trace('LOGIN HISTORY '."\r\n".json_encode($loginHistory));
 							$this->log->trace('SESSION DATA '."\r\n".json_encode($userData));
 
-							if($_POST['validateFor'] != LOGIN_VALIDATEFOR){
+							if($_POST['validateFor'] != LOGIN){
 								require_once DIR.'/staff/staff.php';
 								$staff = new Staff();
 								$returnData = json_decode($staff->save_petty(),true);
@@ -183,6 +183,7 @@
 			return $re;
 		}
 
+		/* Function To Login For Senior Parter to Access(Shift Data, Sale Register, Data Sync)  */
 		function form_login(){
 			if(array_key_exists('user', $_SESSION)){
 				require_once DIR.'/store/store.php';
