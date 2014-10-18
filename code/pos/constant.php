@@ -83,9 +83,10 @@ define ('DISPATCHED_MESSAGE', "Dear ".ucfirst(!empty($_POST['customer_name']) ? 
 
 
 
-global $PAYMENT_MODE, $ORDER_STATUS;
+global $PAYMENT_MODE, $ORDER_STATUS, $CARD_RESPONSE_ARRAY;
 $PAYMENT_MODE = array('cash'=>0,'ppc'=>0,'credit'=>0,'ppa'=>0);
-$ORDER_STATUS = array('New'=>0,'Confirmed'=>0,'Cancelled'=>0,'Dispatched'=>0,'Delivered'=>0,'Paid'=>0)
+$ORDER_STATUS = array('New'=>0,'Confirmed'=>0,'Cancelled'=>0,'Dispatched'=>0,'Delivered'=>0,'Paid'=>0);
+$CARD_RESPONSE_ARRAY = array('success'=>'', 'message'=>'', 'balance'=>'', 'card_number'=>'', 'txn_no'=>'');
 
 
 ?>
