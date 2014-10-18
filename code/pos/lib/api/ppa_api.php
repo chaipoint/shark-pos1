@@ -1,7 +1,6 @@
 <?php 
 		function ppa_api($details,$data){
-			//print_r($data);
-    		$return = array('error'=>false,'message'=>'','data'=>array());
+			$return = array('error'=>false,'message'=>'','data'=>array());
     		$username = $details["username"];
     		$password = $details['password'];
     		$authorization = 'Basic '.base64_encode("$username:$password");
@@ -26,11 +25,16 @@
     			$tuData = curl_exec($tuCurl); 
     			curl_close($tuCurl); 
     			$return['error'] = false;
-    			$return['data'] = json_decode($tuData,true);
-    
-   			} 
-    		$res = json_encode($return,true);
-    		return $res;  
+                $responseArray = array('success'=>'', 'message'=>'', 'balance'=>'', 'card_number'=>'', 'txn_no'=>'');
+                $result = json_decode($tuData,true);
+                $responseArray['success'] = $result['success'];
+                $responseArray['message'] = $result['message'];
+                $responseArray['balance'] = $result['balance'];
+                $responseArray['card_number'] = $result['card_number'];
+                $responseArray['txn_no'] = $result['approval_code'];
+                $return['data'] = $responseArray;
+            } 
+    		return $return;  
     	}
 
 
