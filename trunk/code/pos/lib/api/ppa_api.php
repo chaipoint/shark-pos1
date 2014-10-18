@@ -1,5 +1,6 @@
 <?php 
 		function ppa_api($details,$data){
+            global $CARD_RESPONSE_ARRAY;
 			$return = array('error'=>false,'message'=>'','data'=>array());
     		$username = $details["username"];
     		$password = $details['password'];
@@ -25,7 +26,7 @@
     			$tuData = curl_exec($tuCurl); 
     			curl_close($tuCurl); 
     			$return['error'] = false;
-                $responseArray = array('success'=>'', 'message'=>'', 'balance'=>'', 'card_number'=>'', 'txn_no'=>'');
+                $responseArray = $CARD_RESPONSE_ARRAY;
                 $result = json_decode($tuData,true);
                 $responseArray['success'] = $result['success'];
                 $responseArray['message'] = $result['message'];
