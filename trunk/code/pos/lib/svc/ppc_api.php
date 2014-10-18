@@ -39,10 +39,10 @@ function balanceINQ($details){
 		$return['msg'] = $configDetails->getErrorMessage();
 		return $return;
 	}
-	$cardNo = '1999990020000033';//$details['card_number'];
-	$pin = '';//$details['ppc_no'];
+	$cardNo = $details['card_number'];
+	$pin = '';
 	$notes = 'ChaiPoint Order Transcation On '.Date("d/m/Y H:i:s");
-	$trackData = '';//$details['data'];
+	$trackData = '';
 	$microTime = microtime();
 	$microTimeArr = explode(" ", $microTime);
 	$txnId = substr($microTimeArr[1],5).round($microTimeArr[0] * 1000) ;
@@ -59,6 +59,7 @@ function balanceINQ($details){
 }
 
 function redeem($details){ 
+	global $CARD_RESPONSE_ARRAY;
 	$return = array();
 	$return['error'] = false;
 	if(!is_array($details) || count($details) == 0){
@@ -89,7 +90,7 @@ function redeem($details){
 	$svRequest = GCWebPos::redeem($configDetails, $cardNumber, $cardPin, $transactionId, $invoiceNumber, $amount, $trackData, $notes, $billAmount);
 	//$svRequest = GCWebPos::activate($configDetails, $cardNumber, $invoiceNumber, $transactionId, $amount, 'alam', 'tanveer', '7417529600', $trackData, '', '');
 	$svResponse = $svRequest->execute();
-	$responseArray = array('success'=>'', 'message'=>'', 'balance'=>'', 'card_number'=>'', 'txn_no'=>'');
+	$responseArray = $CARD_RESPONSE_ARRAY;
 	
 	if($svResponse->errorCode != 0){
 		$responseArray['success'] = 'False';
