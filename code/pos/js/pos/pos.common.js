@@ -108,15 +108,11 @@ $(document).ready(function(){
 
 		});		
 
-
-
 		$(document).ajaxSuccess(function() {
  		  	if(module!='"dispatch=billing.index"'){ 
  		  		$('.btn').attr('disabled', false);
  		  	}
- 		  	//$('.payment-type-bt').attr('disabled',true);
-			//$('.payment-type-bt[data-value="credit"]').attr('disabled',false);
-		});
+ 		});
 
 		$(document).ajaxError(function() {
  		  	bootbox.alert('Error In Ajax Request!Please Contact Admin');

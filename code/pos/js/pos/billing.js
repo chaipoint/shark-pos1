@@ -230,17 +230,15 @@ $(document).ready(function(){
 
 		//---START--- Payment Event After Products selection  or Without Product Selection
 		$(".payment-type-bt").click(function(){
-			var type = $(this).data('value');//alert(type);
+			var type = $(this).data('value');
 			$("#paid_by").val(type);
 			$('.payment-type-bt').removeClass('btn-success').addClass('btn-primary');
 			$(this).removeClass('btn-primary').addClass('btn-success');
 			if(type == 'ppc' || type == 'ppa'){ 
 				$(".ppc").show();
 				$('#balance').closest('tr').hide();
-					//$("#ppc").cKeyboard();
 				bootbox.alert('Please Swipe The Card', function() { 
 					setTimeout(function(){
-						//$("#ppc").cKeyboard();
 						$("#ppc").focus();
 					},600);	
 				});
@@ -255,48 +253,49 @@ $(document).ready(function(){
 		
 		/* START -- Payment Using PPC NO  */
         $('#ppc').on('change', function() {
-           var card_no = $.trim($(this).val());
-           var payment_type = $('#paid_by').val();
-           var total_amount = $('#twt').text();
-          	if(card_no!='') {
-              if(navigator.onLine === true) {
-                $("span#loading_image").removeClass('hide');
-                $.ajax({
-                  type: 'POST',
-                  url:  (payment_type=='ppc') ? 'index.php?dispatch=billing.ppcBill' : 'index.php?dispatch=billing.ppaBill',
-                  data:  {'card_number':card_no,'amount':total_amount},
-               }).done(function(response){
-               	  console.log(response);
-               	  $("span#loading_image").addClass('hide');
-               	 	result = $.parseJSON(response.trim());
-               	 if(result.error){
-				 	$('.ppc_balance').hide();
-					bootbox.alert(result.message);
-				}else if(result.data['success']=='False'){
-					$('.ppc_balance').hide();
-					bootbox.alert(result.data['message']);
-				}else{
-					$('.ppc_balance').show();
-					$('#ac_balance').text(result.data['balance']);
-					$('#card_number').val(result.data['card_number']);
-					$('#card_type').val(payment_type);
-					$('#card_company').val('urbanPiper');
-					$('#card_redeem_amount').val(total_amount);
-					$('#card_txn_no').val(result.data['approval_code']);
-					$('#card_balance').val(result.data['balance']);
-					$('#submit-sale').trigger('click');
-
-				}
-              });
-              }else {
-               bootbox.alert("Sorry,No Internet Available");
-               return false;
-               }
-          }else {
-          	   bootbox.alert("Please Enter Valid Card No");;
-			   return false;
-			} 
-        });
+        	var card_no = $.trim($(this).val());
+           	var payment_type = $('#paid_by').val();
+           	var total_amount = $('#twt').text();
+          		if(card_no!='') {
+              		if(navigator.onLine === true) {
+                		$("span#loading_image").removeClass('hide');
+                		$('#submit-sale').attr('disabled',true);
+                		$.ajax({
+                  			type: 'POST',
+                  			url:  (payment_type=='ppc') ? 'index.php?dispatch=billing.ppcBill' : 'index.php?dispatch=billing.ppaBill',
+                  			data:  {'card_number':card_no,'amount':total_amount},
+               			}).done(function(response){ 
+               	  			console.log(response);
+               	  			$("span#loading_image").addClass('hide');
+               	  			$('#submit-sale').attr('disabled',false);
+               	 			result = $.parseJSON($.trim(response));
+               	 			if(result.error){
+				 				$('.ppc_balance').hide();
+								bootbox.alert(result.message);
+							}else if(result.data['success']=='False'){
+								$('.ppc_balance').hide();
+								bootbox.alert(result.data['message']);
+							}else{ 
+								$('.ppc_balance').show();
+								$('#ac_balance').text(result.data['balance']);
+								$('#card_number').val(result.data['card_number']);
+								$('#card_type').val(payment_type);
+								$('#card_company').val(payment_type == 'ppa' ? 'urbanPiper' : 'qwikcilver');
+								$('#card_redeem_amount').val(total_amount);
+								$('#card_txn_no').val(result.data['txn_no']);
+								$('#card_balance').val(result.data['balance']);
+								$('#submit-sale').trigger('click');
+							}
+              			});
+             		}else{
+               			bootbox.alert("Sorry,No Internet Available");
+               			return false;
+              		}
+          		}else{
+          	   		bootbox.alert("Please Enter Valid Card No");;
+			   		return false;
+				} 
+        	});
 
 		/* END -- Payment Using PPC NO  */
 
@@ -440,7 +439,7 @@ $(document).ready(function(){
 		});
 
 		//---START--- SUbmit Payment Bill
-		$("#submit-sale").click(function(event){
+		$("#submit-sale").click(function(event){ 
 			event.preventDefault();
 
 			$("#phone_number").on('keypress',function (e){ 
@@ -468,9 +467,7 @@ $(document).ready(function(){
 				bootbox.alert("Please Select Paid By");
 				return false;				
 			}
-			if($("#paid_by").val() == 'ppc' ){
-             	return false;
-			}
+			
 			if($('#customer_type').val()=='caw' && $('#customer_name').val()==''){
 				bootbox.alert('Please Select Customer Name');
 				return false;	
