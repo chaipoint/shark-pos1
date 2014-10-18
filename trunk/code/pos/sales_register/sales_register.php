@@ -64,7 +64,7 @@
 			if(empty($date)){
 				$date = $this->getCDate();
 			}
-			$paymentMode = $this->getConfig($this->cDB, 'payment_mode');
+			//$paymentMode = $this->getConfig($this->cDB, 'payment_mode');
 			//print_r($paymentMode);
 			$bills = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getList(BILLING_DESIGN_DOCUMENT_LIST_TODAYS_SALE, BILLING_DESIGN_DOCUMENT_VIEW_HANDLE_UPDATED_BILLS)->setParam(array("descending"=>"true","include_docs"=>"true","endkey"=>'["'.$date.'"]'))->execute();
 			$this->log->trace("TODAYS SALE DETAILS \r\n".json_encode($bills));
