@@ -249,41 +249,33 @@
 		/* Function To Bill Through PPC METHOD  */
         public function ppcBill(){
 			$return = array('error'=>false,'message'=>'','data'=>array());
-
 			$dir =  dirname(__FILE__).'/../lib/svc/ppc_api.php';
             require_once $dir;
+			
 			if($_SERVER['REQUEST_METHOD'] == 'POST') {
-				$balance_check = array();
-				$balance_deduction = array();	
-				$balance_check = redeem($_POST);
-				print_r($balance_check);die();
-				$this->log->trace("PPC BILL BALANACE INQ \r\n".json_encode($balance_check));
-				if(is_array($balance_check) && $balance_check['error']==true) {
-                	$return['error'] = true;
-					$return['message'] = $balance_check['msg'];
-					return json_encode($return);
-			  	}else {
-					$return['error'] = false;
-					$return['message'] = 'Your Balance';
-					$return['data']['balance'] = $balance_check['balance'];
-					return json_encode($return); 
-				} 
+				$balanceCheck = array();
+				$balanceDeduction = array();	
+				$balanceDeduction = redeem($_POST);
+				$this->log->trace("PPC REDEEMING METHOD RESPONSE \r\n".json_encode($balanceDeduction));
+				$res = json_encode($balanceDeduction,true);
+				return $res;
 			}
-
 		}
 
 		/* Function To Bill Through PPA METHOD  */
 		public function ppaBill(){
 			$return = array('error'=>false,'message'=>'','data'=>array());
-
 			$dir =  dirname(__FILE__).'/../lib/api/ppa_api.php';
             require_once $dir;
+            
             $config_data = $this->configData['ppa_api'];
             if($_SERVER['REQUEST_METHOD'] == 'POST') {
-				echo ppa_api($config_data,$_POST);
+            	$balanceDeduction = array();
+				$balanceDeduction = ppa_api($config_data,$_POST);
+				$res = json_encode($balanceDeduction,true);
+				return $res;
 			}
-            
-		}
+        }
         
         /* Function To Print Out Bill  */
         function printBill($data){ 
