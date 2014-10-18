@@ -43,7 +43,7 @@ $(document).ready(function(){
 						$('#notification').addClass('hide');
 					}
 				})
-			},3000);
+			},30000);
 		});
 	}
 
