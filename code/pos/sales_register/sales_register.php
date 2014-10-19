@@ -37,8 +37,11 @@
 				if(array_key_exists('error', $resultBillList) || array_key_exists('error', $resultExpenseList) ){
 					echo ERROR.' '.(array_key_exists('error', $resultBillList) ? $resultBillList['error'] : $resultExpenseList['error']);
 				}else{
+					require_once DIR.'/staff/staff.php';
+					$st = new Staff();
+
 					$resultBillList['head_data'] = $configHead['data']['head'];
-					$resultBillList['staff_list'] = $this->getStaffList();
+					$resultBillList['staff_list'] = $st->getStaffList();
 					$resultBillList['expense_data'] = $resultExpenseList;
 					$this->view($resultBillList);
 
@@ -85,22 +88,7 @@
 				return $resultExpenseList;
 		}
 
-		/* Function To Get Store Staff */
-		function getStaffList(){
-				$staffList = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_MYSQL_ID)->setParam(array("include_docs"=>"true"))->execute();
-				$rows = $staffList['rows'][0]['doc']['store_staff'];
-				$staffList = array();
-				foreach($rows as $key => $value){
-					$staffList[$value['mysql_id']]['mysql_id'] = $value['mysql_id'] ;
-					$staffList[$value['mysql_id']]['code'] = @$value['code'] ;
-					$staffList[$value['mysql_id']]['name'] = $value['name'] ;
-					$staffList[$value['mysql_id']]['title_id'] = $value['title_id'] ;
-					$staffList[$value['mysql_id']]['title_name'] = @$value['title_name'] ;
-				}
-				ksort($staffList);
-				return $staffList;
-		}
-
+		
 		/* Function To Get Todays Bill For Login Store */
 		function getBills($date){
 				$resultBillList = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getList(BILLING_DESIGN_DOCUMENT_LIST_SALES_REGISTER, BILLING_DESIGN_DOCUMENT_VIEW_HANDLE_UPDATED_BILLS)->setParam(array("include_docs"=>"true","descending"=>"true","endkey" => '["'.$date.'"]',"startkey" => '["'.$date.'",{},{},{}]'))->execute();
