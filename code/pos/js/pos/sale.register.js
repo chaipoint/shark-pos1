@@ -165,7 +165,7 @@ $("#search_button").click(function(){
                             console.log(sumPaymenyTypes);
 							trh += '<tr><th></th>';
 							$.each(result.data.payment_type,function(index,details){
-								trh += '<th>'+index+'</th>';
+								trh += '<th>'+index.toUpperCase()+'</th>';
 								tfs += '<th class="text-right">'+(sumPaymenyTypes[index] ? sumPaymenyTypes[index].toFixed(2) : 0)+'</th>';
 							});
 							trh += '<th class="text-right">Total</th></tr>';
