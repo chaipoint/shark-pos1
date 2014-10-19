@@ -82,7 +82,7 @@
         <div class="smallstat box col-lg-2 col-sm-4" style="width:110px;margin-left:8px;">
           <i class="glyphicon glyphicon-usd fa orange"></i>
           <span class="title">Total Sale</span>
-          <span class="value"><?php echo ($cash_sale + $cash_indelivery + $ppcSale + $ppaSale) ;?></span>
+          <span class="value"><?php echo ($cash_sale + $cash_indelivery + $ppcSale + $ppaSale + $creditSale) ;?></span>
         </div>
       
 
@@ -94,12 +94,10 @@
   <div class="panel-group" id="accordion">
     <div class="col-sm-6">
   <div class="panel panel-success">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a class="col" data-value="sale_summary" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Sale Summary
+    <div class="panel-heading col" data-value="sale_summary" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
+      <a class="col" >Sale Summary
         <i class="glyphicon glyphicon-chevron-up pull-right"></i>
-        </a>
-      </h4>
+      </a>
     </div>
      <div id="collapseOne" class="panel-collapse collapse">
       <div class="panel-body">
@@ -111,7 +109,7 @@
                 $total += ($key == 'Cancelled') ? 0 : $bill_status['amount'][$key];;
                ?>
               <tr>
-                <td class="text-center"><?php echo $key;?></td>
+                <td class="text-center"><?php echo strtoupper($key);?></td>
                 <td class="text-center"><?php echo $value;?></td>
                 <td class="text-center"><?php echo $bill_status['amount'][$key];?></td>
               </tr>
@@ -126,7 +124,7 @@
             <tbody>
                 <?php $total = 0; foreach($payment_type['amount'] as $key => $value){ $total += $value;?>
               <tr>
-                <td class="text-center"><?php echo $key;?></td>
+                <td class="text-center"><?php echo strtoupper($key);?></td>
                 <td class="text-center"><?php echo $payment_type['count'][$key];?></td>
                 <td class="text-center"><?php echo $value;?></td>
               </tr>
@@ -142,12 +140,10 @@
 
 <div class="col-sm-6">
   <div class="panel panel-success">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-        <a class="col" id="todays_sale" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Item Summary
+    <div class="panel-heading col" id="todays_sale" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" >
+      <a>Item Summary
         <i class="glyphicon glyphicon-chevron-up pull-right"></i>
-        </a>
-      </h4>
+      </a>
     </div>
     <div id="collapseThree" class="panel-collapse collapse">
       <div class="panel-body">
