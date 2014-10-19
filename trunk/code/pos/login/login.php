@@ -81,9 +81,9 @@
 				if(!array_key_exists('for', $result)){ // To Check Which form to be validate
 					if(!$result['error']){
 						if($_POST['validateFor'] == SALE_REGISTER_PROTECTED_SCREEN || $_POST['validateFor'] == SHIFT_DATA_PROTECTED_SCREEN || $_POST['validateFor'] == DATA_SYNC_PROTECTED_SCREEN){
-							require_once DIR.'/sales_register/sales_register.php';
-							$sr = new sales_register();
-							$staffList = $sr->getStaffList();
+							require_once DIR.'/staff/staff.php';
+							$st = new Staff();
+							$staffList = $st->getStaffList();
 							if(array_key_exists($result['data']['mysql_id'], $staffList)){
 								switch($staffList[$result['data']['mysql_id']]['title_id']){
 									case 4:
@@ -145,9 +145,9 @@
 							$this->log->trace('SESSION DATA '."\r\n".json_encode($userData));
 
 							if($_POST['validateFor'] != LOGIN){
-								require_once DIR.'/staff/staff.php';
-								$staff = new Staff();
-								$returnData = json_decode($staff->save_petty(),true);
+								require_once DIR.'/store/store.php';
+								$store = new Store();
+								$returnData = json_decode($store->storeFunction(),true);
 							}else{
 								require_once DIR.'/utils/utils.php';
 								$design = new utils();
