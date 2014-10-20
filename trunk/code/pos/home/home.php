@@ -125,7 +125,7 @@
 		   	$total = 0;
     		if(count($shift_data['rows'])){
 				$shifts = $shift_data['rows'][0]['doc']['shift'];
-				$total = count($shifts);
+				//$total = count($shifts);
 				$day = $shift_data['rows'][0]['doc']['day'];
 				$shift_end_cash = ($day['start_cash']+$day['petty_cash_balance']['inward_petty_cash']-$day['petty_cash_balance']['petty_expense']);
 				$tablesShiftData .='<tr><td style="font-size:9px">DAY START</td>
@@ -188,14 +188,22 @@
 			$tablesShiftData .='</tbody></table></div></div>';
 			$returnData['data']['shift_table'] = $tablesShiftData;
 			$cash_reconciliation_table = '<div class="panel panel-success"><div class="panel-heading"><h4 class="panel-title">Cash Reconciliation</h4></div><div class="panel-body"><table class="table table-condensed table-bordered"><thead><tr><th style="font-size:12px;text-align:left;">Description</th><th style="font-size:12px">Value</th></tr></thead><tbody>';
+    		//print_r($cash_reconciliation_insert);
+    		
     		foreach($sales_reg['payment_type']['amount'] as $pKey => $pValue){
 				$cash_reconciliation_insert[$pKey] = $pValue;
 	    		$cash_reconciliation_table .= '<tr><td style="font-size:9px">'.strtoupper($pKey).'</td><td class="text-center">'.$pValue.'</td></tr>';
 	    		$total += $pValue;
     		}
+    		$cash_in_box = $total;
+    		foreach ($sales_reg['payment_type']['amount'] as $pKey => $pValue) {
+    			$cash_in_box = ($pKey=='caw' ? $cash_in_box - $pValue : ($pKey=='ppc' ? $cash_in_box - $pValue : ($pKey=='ppa' ? $cash_in_box - $pValue : $cash_in_box)));
+    		}
+    		$cash_reconciliation_insert['cash_in_box'] = $cash_in_box;
     		$cash_reconciliation_table .= $excess;
-    		$cash_reconciliation_table .= '</tbody><thead><tr><th style="font-size:12px;text-align:left">Total</th><th>'.($total).'</th></tr></thead></table></div></div>';
-    		if(!$returnData['error'] && array_key_exists(0, $shift_data['rows']) && !array_key_exists('date', $_POST)){
+    		$cash_reconciliation_table .= '</tbody><thead><tr><th style="font-size:12px;text-align:left">Total Sale</th><th>'.($total).'</th></tr></thead><thead><tr><th style="font-size:12px;text-align:left">Cash In Box</th><th>'.($cash_in_box).'</th></tr></thead></table></div></div>';
+    		
+    		if(!$returnData['error'] && array_key_exists(0, $shift_data['rows']) && array_key_exists('date', $_POST)){ 
 				$result = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getUpdate(STORE_DESIGN_DOCUMENT_UPDATE_STORE_SHIFT,$shift_data['rows'][0]['id'])->setParam($cash_reconciliation_insert)->execute();
     		}
 			$returnData['data']['cash_reconciliation_table'] = $cash_reconciliation_table;
