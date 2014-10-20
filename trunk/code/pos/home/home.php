@@ -67,6 +67,9 @@
 			$returnData = array('error'=>false,'message'=>'','data'=>array());
 			$cash_reconciliation_insert = array();
 			$cash_reconciliation_insert['type'] = 'cash_reconciliation';
+			$cash_in_box = 0;
+			$excess_in_box = 0;
+			$minus = 0;
 			require_once DIR.'/billing/billing.php';
 			$bl = new billing();
 			require_once DIR.'/sales_register/sales_register.php';
@@ -169,7 +172,7 @@
 						$cashSum += (array_key_exists($values['shift_no'], $sales_reg['shift_cash']) ? $sales_reg['shift_cash'][$values['shift_no']] : 0);
 						$excess .= '<tr><td style="font-size:9px">SHIFT '.$values['shift_no'].' EXCESS CASH</td><td class="text-center">'.(($saleCashVeriance > 0 ? $saleCashVeriance : 0)+($pettyCashVeriance >0 ? $pettyCashVeriance :0 )).'</td></tr>';
 						$cash_reconciliation_insert['shift_'.$values['shift_no'].'_excess_cash'] = (($saleCashVeriance > 0 ? $saleCashVeriance : 0)+($pettyCashVeriance >0 ? $pettyCashVeriance : 0 ));
-						$total	+= $cash_reconciliation_insert['shift_'.$values['shift_no'].'_excess_cash'];
+						$excess_in_box	+= $cash_reconciliation_insert['shift_'.$values['shift_no'].'_excess_cash'];
 				}
 				if(!empty($shift_data['rows'][0]['doc']['day']['end_time'])){
 					$tablesShiftData .='<tr><td style="font-size:9px">DAY END</td>
@@ -187,18 +190,17 @@
     		}
 			$tablesShiftData .='</tbody></table></div></div>';
 			$returnData['data']['shift_table'] = $tablesShiftData;
+			
 			$cash_reconciliation_table = '<div class="panel panel-success"><div class="panel-heading"><h4 class="panel-title">Cash Reconciliation</h4></div><div class="panel-body"><table class="table table-condensed table-bordered"><thead><tr><th style="font-size:12px;text-align:left;">Description</th><th style="font-size:12px">Value</th></tr></thead><tbody>';
-    		//print_r($cash_reconciliation_insert);
-    		
     		foreach($sales_reg['payment_type']['amount'] as $pKey => $pValue){
 				$cash_reconciliation_insert[$pKey] = $pValue;
 	    		$cash_reconciliation_table .= '<tr><td style="font-size:9px">'.strtoupper($pKey).'</td><td class="text-center">'.$pValue.'</td></tr>';
-	    		$total += $pValue;
-    		}
-    		$cash_in_box = $total;
-    		foreach ($sales_reg['payment_type']['amount'] as $pKey => $pValue) {
-    			$cash_in_box = ($pKey=='caw' ? $cash_in_box - $pValue : ($pKey=='ppc' ? $cash_in_box - $pValue : ($pKey=='ppa' ? $cash_in_box - $pValue : $cash_in_box)));
-    		}
+				$total += $pValue;
+				$minus = ($pKey=='ppa' ? $minus + $pValue :
+	    					      ($pKey=='ppc' ? $minus + $pValue :
+	    						    ($pKey=='caw' ? $minus + $pValue : $minus)));
+	    	}
+	    	$cash_in_box = $total - $minus + $excess_in_box; // To Calculate Cash IN BOX 
     		$cash_reconciliation_insert['cash_in_box'] = $cash_in_box;
     		$cash_reconciliation_table .= $excess;
     		$cash_reconciliation_table .= '</tbody><thead><tr><th style="font-size:12px;text-align:left">Total Sale</th><th>'.($total).'</th></tr></thead><thead><tr><th style="font-size:12px;text-align:left">Cash In Box</th><th>'.($cash_in_box).'</th></tr></thead></table></div></div>';
