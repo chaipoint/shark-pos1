@@ -7,6 +7,7 @@ define ('CUSTOMERS_DESIGN_DOCUMENT', 'customers');
 define ('PETTY_EXPENSE_DESIGN_DOCUMENT', 'petty_expense');
 define ('STAFF_DESIGN_DOCUMENT', 'staff');
 define ('LOGIN_DESIGN_DOCUMENT', 'login');
+define ('CARD_SALE_DESIGN_DOCUMENT', 'card_sale');
 
 /* Constant For Design Document View */
 define ('BILLING_DESIGN_DOCUMENT_VIEW_HANDLE_UPDATED_BILLS', 'handle_updated_bills');
@@ -18,6 +19,7 @@ define ('CUSTOMERS_DESIGN_DOCUMENT_VIEW_RETAIL_CUSTOMER_LIST', 'retail_customer_
 define ('PETTY_EXPENSE_DESIGN_DOCUMENT_VIEW_GET_EXPENSE', 'get_expense');
 define ('PETTY_EXPENSE_DESIGN_DOCUMENT_VIEW_GET_INWARD', 'get_inward');
 define ('STAFF_DESIGN_DOCUMENT_VIEW_STAFF_USERNAME', 'staff_username');
+define ('CARD_SALE_DESIGN_DOCUMENT_VIEW_GET_SALE', 'get_sale');
 
 /* Constant For Design Document Update */
 define ('BILLING_DESIGN_DOCUMENT_UPDATE_GET_BILL_NO', 'getbillno');
@@ -29,6 +31,7 @@ define ('LOGIN_DESIGN_DOCUMENT_UPDATE_LOGIN_HISTORY', 'login_history');
 define ('BILLING_DESIGN_DOCUMENT_LIST_TODAYS_SALE', 'todays_sale');
 define ('BILLING_DESIGN_DOCUMENT_LIST_SALES_REGISTER', 'sales_register');
 define ('STAFF_DESIGN_DOCUMENT_LIST_GET_USER', 'getuser');
+define ('CARD_SALE_DESIGN_DOCUMENT_LIST_TODAYS_SALE', 'todays_sale');
 
 /* Constant For CD Doc Type */
 define ('BILLING_DOC_TYPE', 'store_bill');
@@ -36,6 +39,7 @@ define ('PETTY_EXPENSE_DOC_TYPE', 'petty_expense');
 define ('PETTY_INWARD_DOC_TYPE', 'petty_inward');
 define ('STORE_SHIFT_DOC_TYPE', 'store_shift');
 define ('LOGIN_HISTORY_DOC_TYPE', 'login_history');
+define ('CARD_SALE_DOC_TYPE', 'card_sale');
 
 
 /* Constant For Request Type */
@@ -43,6 +47,8 @@ define ('GET_RETAIL_CUSTOMER', 'getRetailCustomer');
 define ('SAVE_BILL', 'save_bill');
 define ('UPDATE_BILL', 'update_bill');
 define ('GET_COC_ORDER', 'getCOCOrder');
+define ('LOAD_PPA_CARD', 'load_ppa_card');
+define ('LOAD_PPC_CARD', 'load_ppc_card');
 
 /* Constant For Request Type Error */
 define ('REQUEST_TYPE_NOT_ALLOWED', 'Request Type Not Found');
@@ -79,12 +85,19 @@ define ('RESOURCE', 'resource');
 define ('CONFIRMED_MESSAGE', "Dear ".ucfirst(!empty($_POST['customer_name']) ? $_POST['customer_name'] : '').", Your Chai-On-Call Order # ".(!empty($_POST['order']) ? $_POST['order'] : '')." Is Confirmed. Thank you!");
 define ('PROVIDER_NUMBER', '8808891988');
 define ('DISPATCHED_MESSAGE', "Dear ".ucfirst(!empty($_POST['customer_name']) ? $_POST['customer_name'] : '').", Your Chai-On-Call Order # ".(!empty($_POST['order']) ? $_POST['order'] : '')." has been Dispatched From ".(!empty($_POST['store_name']) ? $_POST['store_name'] : '')." Store. Your bill amount is Rs ".(!empty($_POST['net_amount']) ? $_POST['net_amount'] : '').". Thank you!");
-
+define ('PPA_REDEEM', 'redeem');
+define ('PPA_LOAD', 'load');
+define ('PPC_REDEEM', 'redeem');
+define ('PPC_LOAD', 'load');
+define ('PPA', 'ppa');
+define ('PPC', 'ppc');
+define('LOAD', 'load');
+define('ACTIVE', 'active');
 
 
 
 global $PAYMENT_MODE, $ORDER_STATUS, $CARD_RESPONSE_ARRAY;
-$PAYMENT_MODE = array('cash'=>0,'ppc'=>0,'credit'=>0,'ppa'=>0,'caw'=>0);
+$PAYMENT_MODE = array('cash'=>0,'ppc'=>0,'ppa'=>0,'caw'=>0);
 $ORDER_STATUS = array('New'=>0,'Confirmed'=>0,'Cancelled'=>0,'Dispatched'=>0,'Delivered'=>0,'Paid'=>0);
 $CARD_RESPONSE_ARRAY = array('success'=>'', 'message'=>'', 'balance'=>'', 'card_number'=>'', 'txn_no'=>'');
 
