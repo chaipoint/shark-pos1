@@ -18,7 +18,7 @@ $config['test_cd_local_db'] = 'sharkpos';
 $config['test_cd_local_username'] = 'pos';
 $config['test_cd_local_password'] = 'pos';
 /*
-	Operation Mode test Remote Details
+	Operation Mode test HO Details
 */
 $config['test_cd_remote_protocol'] = 'http';
 $config['test_cd_remote_url'] = '54.249.247.15';
@@ -36,11 +36,11 @@ $config['production_cd_local_db'] = 'sharkpos';
 $config['production_cd_local_username'] = 'pos';
 $config['production_cd_local_password'] = 'pos';
 /*
-	Operation Mode Production Remote Details
+	Operation Mode Production HO Details
 */
 $config['production_cd_remote_protocol'] = 'http';
-$config['production_cd_remote_url'] = '54.249.247.15';
+$config['production_cd_remote_url'] = '54.178.189.25';
 $config['production_cd_remote_port'] = '5984';
 $config['production_cd_remote_db'] = 'sharkho';
-$config['production_cd_remote_username'] = 'pos';
-$config['production_cd_remote_password'] = 'pos';
+$config['production_cd_remote_username'] = 'shark';
+$config['production_cd_remote_password'] = 'shark789';
