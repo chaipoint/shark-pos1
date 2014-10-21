@@ -58,7 +58,7 @@ function balanceINQ($details){
 	return $return;
 }
 
-function redeem($details){ 
+function redeem($details, $request_type){ 
 	global $CARD_RESPONSE_ARRAY;
 	$return = array();
 	$return['error'] = false;
@@ -75,32 +75,38 @@ function redeem($details){
 		return $return;
 	}
 	
-	$cardNumber = $details['card_number'];
-	$cardPin = '190976';
+	list($first, $second) = explode('=', $details['card_number']);
+	$card_no = str_replace(';', '', $first);
+	$cardNumber = $card_no;//$details['card_number'];
+	$cardPin = '';//'134784';
 	$notes = 'ChaiPoint Order Transcation On '.Date("d/m/Y H:i:s");
-	$trackData = '';
+	$trackData = $details['card_number'];
 	$invoiceNumber = '1';
 	$amount = $details['amount'];
-	$approvalCode = '111';
+	$approvalCode = '120';
 	$billAmount = $details['amount'];
 	$microTime = microtime();
 	$microTimeArr = explode(" ", $microTime);
 	$transactionId = substr($microTimeArr[1],5).round($microTimeArr[0] * 1000) ;
-
-	$svRequest = GCWebPos::redeem($configDetails, $cardNumber, $cardPin, $transactionId, $invoiceNumber, $amount, $trackData, $notes, $billAmount);
-	//$svRequest = GCWebPos::activate($configDetails, $cardNumber, $invoiceNumber, $transactionId, $amount, 'alam', 'tanveer', '7417529600', $trackData, '', '');
+	if($request_type==PPC_REDEEM){
+		$svRequest = GCWebPos::redeem($configDetails, $cardNumber, $cardPin, $transactionId, $invoiceNumber, $amount, $trackData, $notes, $billAmount);
+	}elseif($request_type==PPC_LOAD) {
+		$svRequest = GCWebPos::load($configDetails, $cardNumber, $transactionId, $amount, $invoiceNumber, $cardPin, $trackData, $notes, '');
+	}
+	//$svRequest = GCWebPos::activate($configDetails, $cardNumber, $invoiceNumber, $transactionId, $amount, 'alam', 'tanveer', '8882355910', $trackData, '', '');
 	$svResponse = $svRequest->execute();
 	$responseArray = $CARD_RESPONSE_ARRAY;
 	
 	if($svResponse->errorCode != 0){
 		$responseArray['success'] = 'False';
 		$responseArray['message'] = $svResponse->errorMessage;
+		$responseArray['balance'] = ($svResponse->params['ResponseMessage']=="Balance is insufficient." ? '0' : '');
 		$return['data'] = $responseArray; 
 		
 	}else{
 		$responseArray['success'] = 'True';
 		$responseArray['message'] = $svResponse->params['ResponseMessage'];
-		$responseArray['balance'] = $svResponse->params['Amount'];
+		$responseArray['balance'] = ($svResponse->params['ResponseMessage']=="Balance is insufficient." ? '0' : $svResponse->params['Amount']);
 		$responseArray['card_number'] = $cardNumber;
 		$responseArray['txn_no'] = $svResponse->params['TransactionId'];
 		$return['data'] = $responseArray;
