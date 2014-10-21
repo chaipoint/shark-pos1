@@ -400,14 +400,14 @@ $.fn.cKeyboard = function(){
 						if(accepted){
 							var paid = keyboard.$preview[0].value;
 							paid = isNaN(paid) ? 0 : paid;
-							if(paid < Math.ceil($totalAmountWT)){
+							if(paid < Math.ceil($totalAmountWT.toFixed(0))){
 								bootbox.alert('Paid amount is less than payable amount',function(){
 									popupKeyboard['#paid-amount'].reveal();
 								});
 								$("#balance").text('')
 								return false;
 							}else{
-								var balance = paid - Math.ceil($totalAmountWT);
+								var balance = paid - Math.ceil($totalAmountWT.toFixed(0));
 								$("#balance").text( isNaN(balance) ? 0 : balance );
 							}
 						}
