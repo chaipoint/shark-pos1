@@ -1,5 +1,5 @@
 <?php 
-		function ppa_api($details,$data){
+		function ppa_api($details,$data,$request_type){
             global $CARD_RESPONSE_ARRAY;
 			$return = array('error'=>false,'message'=>'','data'=>array());
     		$username = $details["username"];
@@ -15,7 +15,7 @@
          		$return['message'] = 'Please Provide Amount';
     		}else{
     			$card_number = $data['card_number'];
-    			$amount = '-'.$data['amount'];
+    			$amount = ($request_type==PPA_REDEEM ? '-'.$data['amount'] : $data['amount']);
     			$url = $details['url']."?format=json&card_number=$card_number&amount=$amount";
     			
     			curl_setopt($tuCurl, CURLOPT_SSL_VERIFYPEER , 0);
