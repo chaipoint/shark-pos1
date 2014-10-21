@@ -2,7 +2,7 @@
 global $config;
 /* CPOS DATABASE CONFIGRATION */
 //$config['cpos_host'] = '54.249.247.15'; --test
-$config['cpos_host'] = '54.178.189.25';
+$config['cpos_host'] = '127.0.0.1';
 $config['cpos_username'] = 'root';
 //$config['cpos_password'] = 'root'; --test
 $config['cpos_password'] = 'mtf@9081';
