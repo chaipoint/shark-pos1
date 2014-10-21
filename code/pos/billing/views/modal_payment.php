@@ -166,6 +166,15 @@
 								<td>
 									<input type="text" id="ppc" class="form-control"/>
 									<span id="loading_image" class="hide"><img class="text-center" src="<?php echo IMG;?>loader.gif"/></span>
+									<div id='error-div' class='hide'>
+										<span id='error_message' style="color:red;"></span> 
+										<button class="btn btn-sm btn-success load" data-value='yes' id="load-yes">Yes</button>
+										<button class="btn btn-sm btn-danger load" data-value='no' id="load-no">No</button>
+									</div>
+									<div id='load-amount-div' class='hide'>
+										<input type='text' name='load-amount' id='load-amount' style='width:22%'/>
+										<button class="btn btn-sm btn-success load" id="load-balance">Load</button>
+									</div>
 								</td>
 						</tr>
                         <tr class="ppc_balance row" style="display:none;">
