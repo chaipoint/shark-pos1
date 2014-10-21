@@ -23,7 +23,7 @@ $(document).ready(function(){
                     var d={};
 					$.ajax({
 				  		type: 'POST',
-				  		url: "http://54.178.189.25/cpos/api/mobilePOSLogin.php",
+				  		url: "http://cp-os.com/cpos/api/mobilePOSLogin.php",
 				  		data : {'data':JSON.stringify(tempdata),'action':"get_store_list"},
 				  		dataTypr:'JSON'
 
