@@ -61,10 +61,11 @@ $(document).ready(function(){
 					productNewList[pData.mysql_id].seq = pIndex;
 				});
 			});
-
+			
 			$.each(orderData.products, function (index, data){
 				var productData = productArray[productNewList[data['id']].cat] [productNewList[data['id']].seq];
-				$('#proajax button[category-product-sequence="'+productNewList[data['id']].seq+'"]').addClass('active-btn');
+				//$('#proajax button[category-product-sequence="'+productNewList[data['id']].seq+'"]').addClass('active-btn');
+				$('#proajax button[value="'+data['id']+'"]').addClass('active-btn');
 				generateSalesTable(data['id'], parseInt(data['qty']), productData);
 			});
 		}
@@ -99,7 +100,7 @@ $(document).ready(function(){
 				$(".category-selection").removeClass('btn-primary');
 				$(this).addClass('btn-primary');
 				$buttonList = "";
-				selectedCat = $(this).data('category');
+				selectedCat = $(this).data('category'); 
 				$.each(productArray[selectedCat],function(key,value){
 					$buttonList += '<button type="button" class="btn btn-success btn-lg btn3d btn25 category-product '+(value.mysql_id in $billingItems ? 'active-btn' : '')+'" value="'+value.mysql_id+'" category-product-sequence="'+key+'">'+value.name+'</button>';
 				});
@@ -234,7 +235,8 @@ $(document).ready(function(){
 			$("#paid_by").val(type);
 			$('.payment-type-bt').removeClass('btn-success').addClass('btn-primary');
 			$(this).removeClass('btn-primary').addClass('btn-success');
-			if(type == 'ppc' || type == 'ppa'){ 
+			if(type == 'ppc' || type == 'ppa'){
+				$('#error-div').addClass('hide');
 				$(".ppc").show();
 				$('#balance').closest('tr').hide();
 				bootbox.alert('Please Swipe The Card', function() { 
@@ -256,6 +258,7 @@ $(document).ready(function(){
         	var card_no = $.trim($(this).val());
            	var payment_type = $('#paid_by').val();
            	var total_amount = $('#twt').text();
+           	$('#error_message').text();
           		if(card_no!='') {
               		if(navigator.onLine === true) {
                 		$("span#loading_image").removeClass('hide');
@@ -274,7 +277,13 @@ $(document).ready(function(){
 								bootbox.alert(result.message);
 							}else if(result.data['success']=='False'){
 								$('.ppc_balance').hide();
-								bootbox.alert(result.data['message']);
+								if(result.data['balance']=='' || result.data['balance']==null){
+									bootbox.alert(result.data['message']);
+								}else{
+									$('#load-amount-div').addClass('hide');
+									$('#error_message').text('Balance is Insufficient. Do You Want To Load It?');
+								    $('#error-div').removeClass('hide');
+								}
 							}else{ 
 								$('.ppc_balance').show();
 								$('#ac_balance').text(result.data['balance']);
@@ -297,7 +306,42 @@ $(document).ready(function(){
 				} 
         	});
 
-		/* END -- Payment Using PPC NO  */
+		/* function to load card amount  */
+		$('.load').on('click', function(event){
+			event.preventDefault();
+			if($(this).data('value')=='no'){
+			$('#error-div').addClass('hide');
+			}else if($(this).data('value')=='yes'){
+				$('#error-div').addClass('hide');
+				$('#load-amount-div').removeClass('hide');
+			}else{
+				var card_no = $.trim($('#ppc').val());
+           		var payment_type = $('#paid_by').val();
+           		var total_amount = $('#load-amount').val();
+           		var request_type = (payment_type=='ppa') ? 'load_ppa_card' : 'load_ppc_card';
+           		$("span#loading_image").removeClass('hide');
+           		$.ajax({
+					type: 'POST',
+					url: "index.php?dispatch=billing.loadCard",
+			  		data : {'request_type':request_type,'amount':total_amount,'card_number':card_no},
+				}).done(function(response) { 
+					console.log(response);
+					$result = $.parseJSON($.trim(response));
+					if($result.error){
+				 		$('.ppc_balance').hide();
+						bootbox.alert($result.message);
+					}else if($result.data['success']=='False'){
+						$('.ppc_balance').hide();
+						$('#load-amount-div').addClass('hide');
+						bootbox.alert($result.data['message']);
+					}else{ 
+						$('#load-amount-div').addClass('hide');
+						$('#ppc').trigger('change');
+					} 
+					
+				});
+			}
+		});
 
 		$("#payment").click(function(){ 
 			$("#twt").text(Math.ceil($totalAmountWT.toFixed(0)));
@@ -322,7 +366,7 @@ $(document).ready(function(){
 				$("#customer_type").trigger('change');
 				$("#customer_type").prop('disabled',false);
 
-				var amountoBePaid = Math.ceil($totalAmountWT.toFixed(2));
+				var amountoBePaid = Math.ceil($totalAmountWT.toFixed(0));
 				if(amountoBePaid%50 != 0){
 					var divder = Math.floor(amountoBePaid/50);
 					amountoBePaid = 50 * (divder + 1);
@@ -333,11 +377,11 @@ $(document).ready(function(){
 					$("#customer_type").append('<option  value="coc">COC</option>');
 					$('.payment-type-bt[data-value="'+loadedBill.payment_method+'"]').trigger('click');
 					$("#paid-amount").val(Math.ceil($totalAmountWT.toFixed(2)));
+					$("#balance").text(0);
 					$("#delivery_channel").val(63);
 					$("#delivery_channel_name").val(config_data.delivery_channel[63]);
 					$("#booking_channel").val(loadedBill.channel_id);
 					$("#booking_channel_name").val(loadedBill.channel_name);
-
 					$("#billing_customer").val(loadedBill.name).css('display','none');
 					$('span#customer').removeClass('hide').text(loadedBill.name);
 					$("#phone_number").val(loadedBill.phone).css('display','none');
@@ -458,7 +502,7 @@ $(document).ready(function(){
 				bootbox.alert("Please Enter Payment Amount");
 				return false;
 			}
-			if(parseInt($('#paid-amount').val()) < Math.ceil($totalAmountWT)){
+			if(parseInt($('#paid-amount').val()) < Math.ceil($totalAmountWT.toFixed(0))){
 				console.log(Math.ceil($totalAmountWT));
 				bootbox.alert("Paid Amount is Less");
 				return false;
@@ -699,9 +743,7 @@ function generateSalesTable(productId, qty, productData){
 				'</tr>';
 	}
 	$('#saletbl tbody').html(tableRows);
-
 	$('.bill_qty_input').cKeyboard();
-
 	$("#count").text($totalBillQty);	
 	$("#total").text($totalAmountWOT.toFixed(2));
 	$("#ts_con").text($totalTaxAmount.toFixed(2));
@@ -712,7 +754,10 @@ function resetBill(refresh){
 	if(refresh){
 		$billingItems = new Object();
 		delete $billingItems;
+		$('#discount_input_box').val('');
+		$intDiscount = 0;	
 		$('button',proajax).removeClass('active-btn');
+		$('.category-selection[data-category="1"]').trigger('click');
 	}
 	$totalBillItems = 0;
 	$totalBillQty = 0;
@@ -720,7 +765,6 @@ function resetBill(refresh){
 	$totalAmountWT = 0.0;
 	$totalTaxAmount = 0.0;
 	$totalDiscountAmount = 0.0;
-	//$intDiscount = 0;
 	$("#count").text($totalBillQty);		
 	$("#total").text($totalAmountWOT);
 	$("#total-payable").text($totalAmountWT);	
