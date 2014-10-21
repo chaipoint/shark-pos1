@@ -386,6 +386,19 @@
 		              "petty_expense" => "function(head, req) {var sum=0;while(row=getRow()){if(row.doc){sum+=(1*row.doc.expense_amount);}} return sum.toString();}"
 		            )
 		      );
+				
+				 $designDocs[] = array(
+        		'_id'=>'_design/card_sale',
+        		'language' => 'javascript', 
+        		'views' => array(
+          			"get_sale"=>array(
+              			"map"=>"function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'card_sale'){ var created_date = (doc.time).split(' '); emit(created_date[0], null); } }",
+            		)
+          		),
+        		'lists' => array( 
+              		'todays_sale' =>  "function(head, req) { var saleList = new Object(); var ppcLoad = 0; var ppcActive = 0; var ppaLoad = 0; var ppaActive = 0;   while(row = getRow()){ if(row.doc) { if(row.doc.card_type=='ppa' && row.doc.txn_type=='load'){ ppaLoad += (1 * row.doc.amount);} if(row.doc.card_type=='ppa' && row.doc.txn_type=='active'){ppaActive += (1 * row.doc.amount);} if(row.doc.card_type=='ppc' && row.doc.txn_type=='load'){ppcLoad += (1 * row.doc.amount);} if(row.doc.card_type=='ppc' && row.doc.txn_type=='active'){ppcActive += (1 * row.doc.amount);}}}  if(ppcLoad!=0){saleList.ppcLoad = ppcLoad;} if(ppcActive!=0){saleList.ppcActive = ppcActive;} if(ppaLoad!=0){saleList.ppaLoad = ppaLoad;} if(ppaActive!=0){saleList.ppaActive = ppaActive;} return JSON.stringify(saleList);}"
+          		)
+      			);
 
 		      $designDocs[] = array(
 		        "_id" => "_design/petty_expense",
@@ -402,6 +415,7 @@
 		                )
 		            )
 		      );
+
              $designDocs[] = array(
 		        "_id" => "_design/customers",
         		"language" => "javascript",
