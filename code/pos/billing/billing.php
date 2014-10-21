@@ -255,7 +255,7 @@
 			if($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$balanceCheck = array();
 				$balanceDeduction = array();	
-				$balanceDeduction = redeem($_POST);
+				$balanceDeduction = redeem($_POST, PPC_REDEEM);
 				$this->log->trace("PPC REDEEMING METHOD RESPONSE \r\n".json_encode($balanceDeduction));
 				$res = json_encode($balanceDeduction,true);
 				return $res;
@@ -271,12 +271,48 @@
             $config_data = $this->configData['ppa_api'];
             if($_SERVER['REQUEST_METHOD'] == 'POST') {
             	$balanceDeduction = array();
-				$balanceDeduction = ppa_api($config_data,$_POST);
+				$balanceDeduction = ppa_api($config_data, $_POST, PPA_REDEEM);
 				$res = json_encode($balanceDeduction,true);
 				return $res;
 			}
         }
         
+
+        /* Function To Load Or Activate Card */
+        function loadCard(){
+        	$return = array('error'=>false,'message'=>'','data'=>array());
+        	$loadResponse = array();
+        	if(array_key_exists('request_type', $_POST) && $_POST['request_type'] == LOAD_PPA_CARD){
+        		$dir =  dirname(__FILE__).'/../lib/api/ppa_api.php';
+            	require_once $dir;
+            	$config_data = $this->configData['ppa_api'];
+            	$loadResponse = ppa_api($config_data, $_POST, PPA_LOAD);
+            
+            }else if(array_key_exists('request_type', $_POST) && $_POST['request_type'] == LOAD_PPC_CARD){
+            	$dir =  dirname(__FILE__).'/../lib/svc/ppc_api.php';
+                require_once $dir;
+                $loadResponse = redeem($_POST, PPC_LOAD);
+			}
+				if($loadResponse['data']['success']=='True'){
+					$saveData = array();
+					$saveData['cd_doc_type'] = CARD_SALE_DOC_TYPE;
+					$saveData['card_no'] = $loadResponse['data']['card_number'];
+					$saveData['card_type'] = ($_POST['request_type'] == LOAD_PPA_CARD ? PPA : PPC);
+					$saveData['txn_no']	= $loadResponse['data']['txn_no'];
+					$saveData['amount'] = $_POST['amount'];
+					$saveData['balance'] = $loadResponse['data']['balance'];
+					$saveData['txn_type'] = LOAD;
+					$saveData['time'] = date('Y-m-d H:i:s');
+					$saveData['store_id'] = $_SESSION['user']['store']['id'];
+					$saveData['store_name'] = $_SESSION['user']['store']['name'];
+					$saveData['staff_id'] = $_SESSION['user']['mysql_id'];
+					$saveData['staff_name'] = $_SESSION['user']['name'];
+					$result = $this->cDB->saveDocument()->execute($saveData);
+				}
+				$res = json_encode($loadResponse,true);
+				return $res;
+			}
+
         /* Function To Print Out Bill  */
         function printBill($data){ 
         	$return = array('error'=>false,'message'=>'','data'=>array());
@@ -292,6 +328,7 @@
 			}
 			return $return;
         }
+
 
         function print_bill(){
 			if(array_key_exists('bill', $_GET) && is_numeric($_GET['bill']) && $_GET['bill'] > 0){
