@@ -200,6 +200,16 @@
 	    					      ($pKey=='ppc' ? $minus + $pValue :
 	    						    ($pKey=='caw' ? $minus + $pValue : $minus)));
 	    	}
+	    	$card_sale = $this->cDB->getDesign(CARD_SALE_DESIGN_DOCUMENT)->getList(CARD_SALE_DESIGN_DOCUMENT_LIST_TODAYS_SALE, CARD_SALE_DESIGN_DOCUMENT_VIEW_GET_SALE)->setParam(array('key'=>'"'.$date.'"','include_docs'=>'true'))->execute();
+	    	if(is_array($card_sale) && count($card_sale)>0){ 
+	    		foreach ($card_sale as $key => $value) {
+	    			$cash_reconciliation_insert[$key] = $value;
+	    		    $cash_reconciliation_table .= '<tr><td style="font-size:9px">'.strtoupper($key).'</td><td class="text-center">'.$value.'</td></tr>';
+	    			$total += $value;
+	    			$minus = ($key=='ppaActive' ? $minus + $value :
+	    					      ($key=='ppcActive' ? $minus + $value : $minus));
+	    		}
+	    	}
 	    	$cash_in_box = $total - $minus + $excess_in_box; // To Calculate Cash IN BOX 
     		$cash_reconciliation_insert['cash_in_box'] = $cash_in_box;
     		$cash_reconciliation_table .= $excess;
