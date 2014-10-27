@@ -6,7 +6,7 @@
 		values:- test|production
 */
 global $config;
-$config['operating_mode'] = 'test';
+$config['operating_mode'] = 'production';
 
 /*
 	Operation Mode test Local Details
@@ -42,5 +42,5 @@ $config['production_cd_remote_protocol'] = 'http';
 $config['production_cd_remote_url'] = '54.178.189.25';
 $config['production_cd_remote_port'] = '5984';
 $config['production_cd_remote_db'] = 'sharkho';
-$config['production_cd_remote_username'] = 'shark';
-$config['production_cd_remote_password'] = 'shark789';
+$config['production_cd_remote_username'] = 'pos';
+$config['production_cd_remote_password'] = 'pos';
