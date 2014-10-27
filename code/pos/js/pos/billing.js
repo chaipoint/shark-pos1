@@ -183,7 +183,7 @@ $(document).ready(function(){
 											$.ajax({
 												type: 'POST',
 												url: "index.php?dispatch=billing.save",
-										  		data : {request_type:'update_bill', doc:doc, cancel_reason:reason, bill_status_id: 79,bill_status_name:config_data.bill_status[67], due_amount:due_amount},
+										  		data : {request_type:'update_bill', doc:doc, cancel_reason:reason, bill_status_id: 79,bill_status_name:config_data.bill_status[79], due_amount:due_amount},
 											}).done(function(response) {
 												response = $.parseJSON(response);
 												if(response.error){
