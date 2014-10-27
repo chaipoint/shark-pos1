@@ -6,7 +6,7 @@
 		values:- test|production
 */
 global $config;
-$config['operating_mode'] = 'production';
+$config['operating_mode'] = 'test';
 
 /*
 	Operation Mode test Local Details
