@@ -17,7 +17,7 @@
 					header("LOCATION:index.php");
 				}
 			}
-			//Block to get Configs and need to have a generic methode for that
+			//Block sto get Configs and need to have a generic methode for that
 			$data = array('error' => false,'catList'=>array(),'productList'=>array(),'firstCat'=>0, 'config_data'=>array(),'bill'=>array(),'lastBillNo'=>'','lastBillTime'=>'');
 			$resultStoreMenu = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_MYSQL_ID)->setParam(array('include_docs'=>'true',"key"=>'"'.$_SESSION['user']['store']['id'].'"'))->execute();
 			$this->log->trace('LOGIN STORE DETAIL'."\r\n".json_encode($resultStoreMenu));
