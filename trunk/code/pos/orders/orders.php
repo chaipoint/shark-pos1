@@ -60,10 +60,10 @@
 						   	$_POST['request_type'] = UPDATE_BILL;
 							$_POST['doc'] = $doc;
 							if($_POST['new_status']=='Paid'){
-								$_POST['bill_status_id'] = 68;
+								$_POST['bill_status_id'] = 80;
 								$_POST['bill_status_name'] = 'Paid';
 							}else if($_POST['new_status']=='Cancelled'){
-								$_POST['bill_status_id'] = 67;
+								$_POST['bill_status_id'] = 79;
 								$_POST['bill_status_name'] = 'Cancelled';
 								$_POST['cancel_reason'] = $_POST['reason'];
 								$_POST['due_amount'] = $_POST['net_amount'];
