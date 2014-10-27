@@ -65,7 +65,7 @@ $("#search_button").click(function(){
 			$.ajax({
 						type: 'POST',
 						url: "index.php?dispatch=billing.save",
-			  			data : {request_type:'update_bill', doc:$billno, bill_status_id: 68,bill_status_name:'Paid'},
+			  			data : {request_type:'update_bill', doc:$billno, bill_status_id: 80,bill_status_name:'Paid'},
 					}).done(function(response) {
 						response = $.parseJSON(response);
 						if(response.error){
