@@ -21,7 +21,7 @@ $(document).ready(function(){
 	if(Object.keys($billingItems).length > 0){
 
 		/*Load Bill IF provided with doc_id*/
-		var button = '<button class="btn btn-primary" id="print-can">Save</button>&nbsp;' + ((bill_status_id != 68) ? '<button id="paid_button" class="btn btn-primary">Paid</button>' : '');
+		var button = '<button class="btn btn-primary" id="print-can">Save</button>&nbsp;' + ((bill_status_id != 80) ? '<button id="paid_button" class="btn btn-primary">Paid</button>' : '');
 		$('#botbuttons').append(button);
 		$('#payment').prop('disabled',true).addClass('hide');
 		for (var keys in $billingItems) {
@@ -183,7 +183,7 @@ $(document).ready(function(){
 											$.ajax({
 												type: 'POST',
 												url: "index.php?dispatch=billing.save",
-										  		data : {request_type:'update_bill', doc:doc, cancel_reason:reason, bill_status_id: 67,bill_status_name:config_data.bill_status[67], due_amount:due_amount},
+										  		data : {request_type:'update_bill', doc:doc, cancel_reason:reason, bill_status_id: 79,bill_status_name:config_data.bill_status[67], due_amount:due_amount},
 											}).done(function(response) {
 												response = $.parseJSON(response);
 												if(response.error){
@@ -212,11 +212,12 @@ $(document).ready(function(){
 			}
 			resetBill(true);
 		});
+
 		$("#content").on('click','#paid_button',function(){
 			$.ajax({
 					type: 'POST',
 					url: "index.php?dispatch=billing.save",
-			  		data : {request_type:'update_bill', doc:doc, bill_status_id: 68,bill_status_name:config_data.bill_status[68]},
+			  		data : {request_type:'update_bill', doc:doc, bill_status_id: 80,bill_status_name:config_data.bill_status[80]},
 				}).done(function(response) {
 					response = $.parseJSON(response);
 					if(response.error){
@@ -352,15 +353,15 @@ $(document).ready(function(){
 				$('#payModal').modal();
 				$("#phone_number").val('');
 				$("#is_cod").val('N');
-				$("#delivery_channel").val(62);
-				$("#delivery_channel_name").val(config_data.delivery_channel[62]);
+				$("#delivery_channel").val(74);
+				$("#delivery_channel_name").val(config_data.delivery_channel[74]);
 				$("#booking_channel").val(53);
 				$("#booking_channel_name").val(config_data.channel[53]);
 				$("#is_cod").val('N');
 				$("#is_prepaid").val('Y');
 				$("#is_credit").val('N');
-				$("#bill_status_id").val(68);
-				$("#bill_status").val(config_data.bill_status[68]);
+				$("#bill_status_id").val(80);
+				$("#bill_status").val(config_data.bill_status[80]);
 				$("#customer_type").prop('disabled',false);
 				$("#customer_type option:first").prop('selected',true);
 				$("#customer_type").trigger('change');
@@ -378,8 +379,8 @@ $(document).ready(function(){
 					$('.payment-type-bt[data-value="'+loadedBill.payment_method+'"]').trigger('click');
 					$("#paid-amount").val(Math.ceil($totalAmountWT.toFixed(2)));
 					$("#balance").text(0);
-					$("#delivery_channel").val(63);
-					$("#delivery_channel_name").val(config_data.delivery_channel[63]);
+					$("#delivery_channel").val(75);
+					$("#delivery_channel_name").val(config_data.delivery_channel[75]);
 					$("#booking_channel").val(loadedBill.channel_id);
 					$("#booking_channel_name").val(loadedBill.channel_name);
 					$("#billing_customer").val(loadedBill.name).css('display','none');
@@ -404,8 +405,8 @@ $(document).ready(function(){
 					$("#is_cod").val('Y');
 					$("#is_prepaid").val('N');
 					$("#is_credit").val('N');
-					$("#bill_status").val(config_data.bill_status[65]);
-					$("#bill_status_id").val(65);
+					$("#bill_status").val(config_data.bill_status[77]);
+					$("#bill_status_id").val(77);
 					$("#customer_type").val('coc');
 					$("#customer_type").prop('disabled',true);
 			}
