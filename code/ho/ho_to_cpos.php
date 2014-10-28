@@ -133,7 +133,7 @@ function uploadShiftData(){
 				//	if(count($value['doc']['cash_reconciliation'])>0){ 
 						echo 'hello';
 						for ($i=1;$i<=count($shiftInsert);$i++) {
-							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'shift_'".$i."'_excess_cash','".$value['doc']['cash_reconciliation']['shift_"'.$i.'"_excess_cash']."','Y')";
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'shift_".$i."_excess_cash','".$value['doc']['cash_reconciliation']['shift_'.$i.'_excess_cash']."','Y')";
 						}
 						if(array_key_exists('cash', $value['doc']['cash_reconciliation'])){
 							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'cash','".$value['doc']['cash_reconciliation']['cash']."','Y')";
