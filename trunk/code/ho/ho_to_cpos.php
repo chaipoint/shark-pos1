@@ -81,24 +81,24 @@ function uploadShiftData(){
 					$db->db_query($deleteCashReconciliation);
 					if(count($value['doc']['day']['cash_reconciliation'])>0){
 						for ($i=1;$i<=count($value['doc']['shift']);$i++) {
-							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$dayId.",'shift_".$i."_excess_cash','".$value['doc']['day']['cash_reconciliation']["shift_".$i."_excess_cash"]."','Y')";
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$dayId.",'shift_".$i."_excess_cash','".$value['doc']['day']['cash_reconciliation']["shift_".$i."_excess_cash"]."','".date('Y-m-d',strtotime($value['doc']['login_time']))."','Y')";
 						}
 						if(array_key_exists('cash', $value['doc']['day']['cash_reconciliation'])){
-							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$dayId.",'cash','".$value['doc']['day']['cash_reconciliation']['cash']."','Y')";
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$dayId.",'cash','".$value['doc']['day']['cash_reconciliation']['cash']."','".date('Y-m-d',strtotime($value['doc']['login_time']))."','Y')";
 						}
 						if(array_key_exists('caw', $value['doc']['day']['cash_reconciliation'])){
-							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$dayId.",'caw','".$value['doc']['day']['cash_reconciliation']['caw']."','Y')";
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$dayId.",'caw','".$value['doc']['day']['cash_reconciliation']['caw']."','".date('Y-m-d',strtotime($value['doc']['login_time']))."','Y')";
 						}
 						if(array_key_exists('ppa', $value['doc']['day']['cash_reconciliation'])){
-							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$dayId.",'ppa','".$value['doc']['day']['cash_reconciliation']['ppa']."','Y')";
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$dayId.",'ppa','".$value['doc']['day']['cash_reconciliation']['ppa']."','".date('Y-m-d',strtotime($value['doc']['login_time']))."','Y')";
 						}
 						if(array_key_exists('ppc', $value['doc']['day']['cash_reconciliation'])){
-							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$dayId.",'ppc','".$value['doc']['day']['cash_reconciliation']['ppc']."','Y')";
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$dayId.",'ppc','".$value['doc']['day']['cash_reconciliation']['ppc']."','".date('Y-m-d',strtotime($value['doc']['login_time']))."','Y')";
 						}
 						if(array_key_exists('credit', $value['doc']['day']['cash_reconciliation'])){
-							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$dayId.",'credit','".$value['doc']['day']['cash_reconciliation']['credit']."','Y')";
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$dayId.",'credit','".$value['doc']['day']['cash_reconciliation']['credit']."','".date('Y-m-d',strtotime($value['doc']['login_time']))."','Y')";
 						}
-						$insertReconciliation = "INSERT INTO cp_pos_cash_reconciliation(store_id, day_id, head, amount, active) values ".implode(",", $reconciliationInsert); 
+						$insertReconciliation = "INSERT INTO cp_pos_cash_reconciliation(store_id, day_id, head, amount, created_date, active) values ".implode(",", $reconciliationInsert); 
 						$db->db_query($insertReconciliation);
 					}
 					
@@ -160,24 +160,24 @@ function uploadShiftData(){
 					$db->db_query($insertQuery);
 					if(count($value['doc']['day']['cash_reconciliation'])>0){
 						for ($i=1;$i<=count($shiftInsert);$i++) {
-							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'shift_".$i."_excess_cash','".$value['doc']['day']['cash_reconciliation']["shift_".$i."_excess_cash"]."','Y')";
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'shift_".$i."_excess_cash','".$value['doc']['day']['cash_reconciliation']["shift_".$i."_excess_cash"]."','".date('Y-m-d',strtotime($value['doc']['login_time']))."','Y')";
 						}
 						if(array_key_exists('cash', $value['doc']['day']['cash_reconciliation'])){
-							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'cash','".$value['doc']['day']['cash_reconciliation']['cash']."','Y')";
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'cash','".$value['doc']['day']['cash_reconciliation']['cash']."','".date('Y-m-d',strtotime($value['doc']['login_time']))."','Y')";
 						}
 						if(array_key_exists('caw', $value['doc']['day']['cash_reconciliation'])){
-							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'caw','".$value['doc']['day']['cash_reconciliation']['caw']."','Y')";
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'caw','".$value['doc']['day']['cash_reconciliation']['caw']."','".date('Y-m-d',strtotime($value['doc']['login_time']))."','Y')";
 						}
 						if(array_key_exists('ppa', $value['doc']['day']['cash_reconciliation'])){
-							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'ppa','".$value['doc']['day']['cash_reconciliation']['ppa']."','Y')";
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'ppa','".$value['doc']['day']['cash_reconciliation']['ppa']."','".date('Y-m-d',strtotime($value['doc']['login_time']))."','Y')";
 						}
 						if(array_key_exists('ppc', $value['doc']['day']['cash_reconciliation'])){
-							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'ppc','".$value['doc']['day']['cash_reconciliation']['ppc']."','Y')";
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'ppc','".$value['doc']['day']['cash_reconciliation']['ppc']."','".date('Y-m-d',strtotime($value['doc']['login_time']))."','Y')";
 						}
 						if(array_key_exists('credit', $value['doc']['day']['cash_reconciliation'])){
-							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'credit','".$value['doc']['day']['cash_reconciliation']['credit']."','Y')";
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'credit','".$value['doc']['day']['cash_reconciliation']['credit']."','".date('Y-m-d',strtotime($value['doc']['login_time']))."','Y')";
 						}
-						$insertReconciliation = "INSERT INTO cp_pos_cash_reconciliation(store_id, day_id, head, amount, active) values ".implode(",", $reconciliationInsert); 
+						$insertReconciliation = "INSERT INTO cp_pos_cash_reconciliation(store_id, day_id, head, amount, created_date, active) values ".implode(",", $reconciliationInsert); 
 						$db->db_query($insertReconciliation);
 					}
 				}		
