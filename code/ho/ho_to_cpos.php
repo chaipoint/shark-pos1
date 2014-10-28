@@ -132,6 +132,7 @@ function uploadShiftData(){
 					//echo 'hi';
 				//	if(count($value['doc']['cash_reconciliation'])>0){ 
 					//	echo 'hello';
+					print_r($value['doc']['day']['cash_reconciliation']);
 					echo $value['doc']['day']['cash_reconciliation']['shift_1_excess_cash'];
 					echo $value['doc']['day']['cash_reconciliation']['cash'];
 						for ($i=1;$i<=count($shiftInsert);$i++) {
