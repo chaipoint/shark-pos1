@@ -75,10 +75,10 @@ function redeem($details, $request_type){
 		return $return;
 	}
 	
-	//list($first, $second) = explode('=', $details['card_number']);
-	//$card_no = str_replace(';', '', $first);
-	$cardNumber = $details['card_number'];//$card_no;//
-	$cardPin = '134784';
+	list($first, $second) = explode('=', $details['card_number']);
+	$card_no = str_replace(';', '', $first);
+	$cardNumber = $card_no;
+	$cardPin = '';//'134784';
 	$notes = 'ChaiPoint Order Transcation On '.Date("d/m/Y H:i:s");
 	$trackData = $details['card_number'];
 	$invoiceNumber = '1';
