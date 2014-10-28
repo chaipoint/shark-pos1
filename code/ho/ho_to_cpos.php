@@ -129,12 +129,7 @@ function uploadShiftData(){
 				if(count($shiftInsert)>0){
 					$insertQuery = "INSERT INTO cp_pos_shift_data (pos_day_id, start_time, end_time, staff_id, end_petty_cash, end_cash_inbox, counter_no, shift_no, opening_petty_cash, petty_expense, closing_petty_cash, inward_petty_cash) values ".implode(",", $shiftInsert);
 					$db->db_query($insertQuery);
-					//echo 'hi';
-				//	if(count($value['doc']['cash_reconciliation'])>0){ 
-					//	echo 'hello';
-					print_r($value['doc']['day']['cash_reconciliation']);
-					echo $value['doc']['day']['cash_reconciliation']['shift_1_excess_cash'];
-					echo $value['doc']['day']['cash_reconciliation']['cash'];
+					if(count($value['doc']['day']['cash_reconciliation'])>0){
 						for ($i=1;$i<=count($shiftInsert);$i++) {
 							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'shift_".$i."_excess_cash','".$value['doc']['day']['cash_reconciliation']["shift_".$i."_excess_cash"]."','Y')";
 						}
@@ -150,11 +145,12 @@ function uploadShiftData(){
 						if(array_key_exists('ppc', $value['doc']['day']['cash_reconciliation'])){
 							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'ppc','".$value['doc']['day']['cash_reconciliation']['ppc']."','Y')";
 						}
-						print_r($reconciliationInsert);
-						echo $insertReconciliation = "INSERT INTO cp_pos_cash_reconciliation(store_id, day_id, head, amount, active) values ".implode(",", $reconciliationInsert); 
+						if(array_key_exists('credit', $value['doc']['day']['cash_reconciliation'])){
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'credit','".$value['doc']['day']['cash_reconciliation']['credit']."','Y')";
+						}
+						$insertReconciliation = "INSERT INTO cp_pos_cash_reconciliation(store_id, day_id, head, amount, active) values ".implode(",", $reconciliationInsert); 
 						$db->db_query($insertReconciliation);
-					//}
-
+					}
 				}		
 			}
 		}
