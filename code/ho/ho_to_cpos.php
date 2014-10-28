@@ -138,16 +138,16 @@ function uploadShiftData(){
 						for ($i=1;$i<=count($shiftInsert);$i++) {
 							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'shift_".$i."_excess_cash','".$value['doc']['day']['cash_reconciliation']["shift_".$i."_excess_cash"]."','Y')";
 						}
-						if(array_key_exists('cash', $value['doc']['cash_reconciliation'])){
+						if(array_key_exists('cash', $value['doc']['day']['cash_reconciliation'])){
 							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'cash','".$value['doc']['day']['cash_reconciliation']['cash']."','Y')";
 						}
-						if(array_key_exists('caw', $value['doc']['cash_reconciliation'])){
+						if(array_key_exists('caw', $value['doc']['day']['cash_reconciliation'])){
 							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'caw','".$value['doc']['day']['cash_reconciliation']['caw']."','Y')";
 						}
-						if(array_key_exists('ppa', $value['doc']['cash_reconciliation'])){
+						if(array_key_exists('ppa', $value['doc']['day']['cash_reconciliation'])){
 							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'ppa','".$value['doc']['day']['cash_reconciliation']['ppa']."','Y')";
 						}
-						if(array_key_exists('ppc', $value['doc']['cash_reconciliation'])){
+						if(array_key_exists('ppc', $value['doc']['day']['cash_reconciliation'])){
 							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'ppc','".$value['doc']['day']['cash_reconciliation']['ppc']."','Y')";
 						}
 						print_r($reconciliationInsert);
