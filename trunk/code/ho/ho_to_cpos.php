@@ -98,7 +98,7 @@ function uploadShiftData(){
 						if(array_key_exists('credit', $value['doc']['day']['cash_reconciliation'])){
 							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$dayId.",'credit','".$value['doc']['day']['cash_reconciliation']['credit']."','Y')";
 						}
-						$insertReconciliation = "INSERT INTO cp_pos_cash_reconciliation(store_id, day_id, head, amount, active) values ".implode(",", $reconciliationInsert); 
+					echo	$insertReconciliation = "INSERT INTO cp_pos_cash_reconciliation(store_id, day_id, head, amount, active) values ".implode(",", $reconciliationInsert); 
 						$db->db_query($insertReconciliation);
 					}
 					
