@@ -122,12 +122,33 @@ function uploadShiftData(){
 				$insertId = $db->db_insert_id();
 				$logger->debug("Day Id Inserted  ".$value['doc']['_id']." on ".$insertId." with total shifts ".count($value['doc']['shift']));
 				$shiftInsert = array();
+				$reconciliationInsert = array();
 				foreach($value['doc']['shift'] as $sKey => $sValue){
 						$shiftInsert[] = "(".$insertId.",'".$sValue['start_time']."','".$sValue['end_time']."',".$sValue['start_login_id'].",'".$sValue['end_petty_cash']."','".$sValue['end_cash_inbox']."',".$sValue['counter_no'].",".$sValue['shift_no'].",'".$sValue['petty_cash_balance']['opening_petty_cash']."', '".$sValue['petty_cash_balance']['petty_expense']."','".$sValue['petty_cash_balance']['closing_petty_cash']."',inward_petty_cash='".$sValue['petty_cash_balance']['inward_petty_cash']."')";
 				}
 				if(count($shiftInsert)>0){
 					$insertQuery = "INSERT INTO cp_pos_shift_data (pos_day_id, start_time, end_time, staff_id, end_petty_cash, end_cash_inbox, counter_no, shift_no, opening_petty_cash, petty_expense, closing_petty_cash, inward_petty_cash) values ".implode(",", $shiftInsert);
 					$db->db_query($insertQuery);
+					if(count($value['doc']['cash_reconciliation'])>0){
+						for ($i=1;$i<=count($shiftInsert);$i++) {
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'shift_'".$i."'_excess_cash','".$value['doc']['cash_reconciliation']['shift_"'.$i.'"_excess_cash']."','Y')";
+						}
+						if(array_key_exists('cash', $value['doc']['cash_reconciliation'])){
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'cash','".$value['doc']['cash_reconciliation']['cash']."','Y')";
+						}
+						if(array_key_exists('caw', $value['doc']['cash_reconciliation'])){
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'caw','".$value['doc']['cash_reconciliation']['caw']."','Y')";
+						}
+						if(array_key_exists('ppa', $value['doc']['cash_reconciliation'])){
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'ppa','".$value['doc']['cash_reconciliation']['ppa']."','Y')";
+						}
+						if(array_key_exists('ppc', $value['doc']['cash_reconciliation'])){
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'ppc','".$value['doc']['cash_reconciliation']['ppc']."','Y')";
+						}
+						$insertReconciliation = "INSERT INTO cp_pos_cash_reconciliation(store_id, day_id, head, amount, active) values ".implode(",", $reconciliationInsert); 
+						$db->db_query($insertReconciliation);
+					}
+
 				}		
 			}
 		}
