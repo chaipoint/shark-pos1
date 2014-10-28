@@ -73,6 +73,35 @@ function uploadShiftData(){
 								
 					$db->db_query($updateQuery);
 					$logger->debug("Day Id Updated  ".$value['id']." on ".$value['id']." with total shifts ".count($value['doc']['shift']));
+					
+					$getDayId = "SELECT id FROM cp_pos_day_data WHERE _id = '".$value['id']."'";
+					$resultDayId = $db->func_query($getDayId);
+					$dayId = $resultDayId[0]['id'];
+					$deleteCashReconciliation = "DELETE cp_pos_cash_reconciliation WHERE day_id = '".$dayId."'";
+					$db->db_query($deleteCashReconciliation);
+					if(count($value['doc']['day']['cash_reconciliation'])>0){
+						for ($i=1;$i<=count($value['doc']['shift']);$i++) {
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$dayId.",'shift_".$i."_excess_cash','".$value['doc']['day']['cash_reconciliation']["shift_".$i."_excess_cash"]."','Y')";
+						}
+						if(array_key_exists('cash', $value['doc']['day']['cash_reconciliation'])){
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$dayId.",'cash','".$value['doc']['day']['cash_reconciliation']['cash']."','Y')";
+						}
+						if(array_key_exists('caw', $value['doc']['day']['cash_reconciliation'])){
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$dayId.",'caw','".$value['doc']['day']['cash_reconciliation']['caw']."','Y')";
+						}
+						if(array_key_exists('ppa', $value['doc']['day']['cash_reconciliation'])){
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$dayId.",'ppa','".$value['doc']['day']['cash_reconciliation']['ppa']."','Y')";
+						}
+						if(array_key_exists('ppc', $value['doc']['day']['cash_reconciliation'])){
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$dayId.",'ppc','".$value['doc']['day']['cash_reconciliation']['ppc']."','Y')";
+						}
+						if(array_key_exists('credit', $value['doc']['day']['cash_reconciliation'])){
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$dayId.",'credit','".$value['doc']['day']['cash_reconciliation']['credit']."','Y')";
+						}
+						$insertReconciliation = "INSERT INTO cp_pos_cash_reconciliation(store_id, day_id, head, amount, active) values ".implode(",", $reconciliationInsert); 
+						$db->db_query($insertReconciliation);
+					}
+					
 					$selectShiftData = "SELECT id, shift_no FROM cp_pos_shift_data WHERE pos_day_id = ".$dbList[$value['id']]['id'];
 					$resultSelectData = $db->func_query($selectShiftData);
 					$shiftList = array();
