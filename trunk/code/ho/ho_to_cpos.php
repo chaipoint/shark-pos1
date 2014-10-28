@@ -77,7 +77,7 @@ function uploadShiftData(){
 					$getDayId = "SELECT id FROM cp_pos_day_data WHERE _id = '".$value['id']."'";
 					$resultDayId = $db->func_query($getDayId);
 					$dayId = $resultDayId[0]['id'];
-					$deleteCashReconciliation = "DELETE cp_pos_cash_reconciliation WHERE day_id = '".$dayId."'";
+					echo $deleteCashReconciliation = "DELETE cp_pos_cash_reconciliation WHERE day_id = '".$dayId."'";
 					$db->db_query($deleteCashReconciliation);
 					if(count($value['doc']['day']['cash_reconciliation'])>0){
 						for ($i=1;$i<=count($value['doc']['shift']);$i++) {
@@ -98,7 +98,7 @@ function uploadShiftData(){
 						if(array_key_exists('credit', $value['doc']['day']['cash_reconciliation'])){
 							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$dayId.",'credit','".$value['doc']['day']['cash_reconciliation']['credit']."','Y')";
 						}
-					echo	$insertReconciliation = "INSERT INTO cp_pos_cash_reconciliation(store_id, day_id, head, amount, active) values ".implode(",", $reconciliationInsert); 
+						$insertReconciliation = "INSERT INTO cp_pos_cash_reconciliation(store_id, day_id, head, amount, active) values ".implode(",", $reconciliationInsert); 
 						$db->db_query($insertReconciliation);
 					}
 					
