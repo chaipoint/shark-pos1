@@ -136,19 +136,19 @@ function uploadShiftData(){
 					echo $value['doc']['day']['cash_reconciliation']['shift_1_excess_cash'];
 					echo $value['doc']['day']['cash_reconciliation']['cash'];
 						for ($i=1;$i<=count($shiftInsert);$i++) {
-							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'shift_".$i."_excess_cash','".$value['doc']['cash_reconciliation']["shift_".$i."_excess_cash"]."','Y')";
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'shift_".$i."_excess_cash','".$value['doc']['day']['cash_reconciliation']["shift_".$i."_excess_cash"]."','Y')";
 						}
 						if(array_key_exists('cash', $value['doc']['cash_reconciliation'])){
-							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'cash','".$value['doc']['cash_reconciliation']['cash']."','Y')";
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'cash','".$value['doc']['day']['cash_reconciliation']['cash']."','Y')";
 						}
 						if(array_key_exists('caw', $value['doc']['cash_reconciliation'])){
-							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'caw','".$value['doc']['cash_reconciliation']['caw']."','Y')";
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'caw','".$value['doc']['day']['cash_reconciliation']['caw']."','Y')";
 						}
 						if(array_key_exists('ppa', $value['doc']['cash_reconciliation'])){
-							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'ppa','".$value['doc']['cash_reconciliation']['ppa']."','Y')";
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'ppa','".$value['doc']['day']['cash_reconciliation']['ppa']."','Y')";
 						}
 						if(array_key_exists('ppc', $value['doc']['cash_reconciliation'])){
-							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'ppc','".$value['doc']['cash_reconciliation']['ppc']."','Y')";
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'ppc','".$value['doc']['day']['cash_reconciliation']['ppc']."','Y')";
 						}
 						print_r($reconciliationInsert);
 						echo $insertReconciliation = "INSERT INTO cp_pos_cash_reconciliation(store_id, day_id, head, amount, active) values ".implode(",", $reconciliationInsert); 
