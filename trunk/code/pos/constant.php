@@ -33,6 +33,14 @@ define ('BILLING_DESIGN_DOCUMENT_LIST_SALES_REGISTER', 'sales_register');
 define ('STAFF_DESIGN_DOCUMENT_LIST_GET_USER', 'getuser');
 define ('CARD_SALE_DESIGN_DOCUMENT_LIST_TODAYS_SALE', 'todays_sale');
 
+/* Constant For Replicate Design Document */
+define ('STORE_REPLICATE', "doc_replication/store_replication");
+define ('STAFF_REPLICATE', "doc_replication/staff_replication");
+define ('CONFIGURATION_REPLICATE', "doc_replication/config_replication");
+define ('RETAIL_CUSTOMER_REPLICATE', "doc_replication/retail_customer_replication");
+define ('DESIGN_REPLICATE', "doc_replication/design_replication");
+define ('BILL_REPLICATE', "doc_replication/bill_replication");
+
 /* Constant For CD Doc Type */
 define ('BILLING_DOC_TYPE', 'store_bill');
 define ('PETTY_EXPENSE_DOC_TYPE', 'petty_expense');
@@ -93,7 +101,23 @@ define ('PPA', 'ppa');
 define ('PPC', 'ppc');
 define('LOAD', 'load');
 define('ACTIVE', 'active');
-
+define('STAFF_LOCATION_NOT_FOUND', 'Provide Staff Location to replicate');
+define('DATA_NOT_FOUND', 'No Data Found With Associated Store');
+define('STAFF_DOWNLOADED', 'Staff Downloaded SuccessFully');
+define('STORE_DOWNLOADED', 'Store Downloaded SuccessFully');
+define('CONFIGURATION_DOWNLOADED', 'Configuration Downloaded SuccessFully');
+define('CUSTOMER_DOWNLOADED', 'Customer Downloaded SuccessFully');
+define('DESIGN_DOCUMENT_DOWNLOADED', 'Design Document Downloaded SuccessFully');
+define('PROCESS_START', 'Process Start SuccessFully');
+define('PROCESS_STOP', 'Process Stop SuccessFully');
+define('ACTION_NOT_ALLOWED', 'Not allowed to follow this action');
+define('SOURCE', 'source');
+define('TARGET', 'target');
+define('FILTER', 'filter');
+define('QUERY_PARAMS', "'query_params'");
+define('CONTINUOUS', "continuous");
+define('CANCEL', "cancel");
+define('OK', "ok");
 
 
 global $PAYMENT_MODE, $ORDER_STATUS, $CARD_RESPONSE_ARRAY;
