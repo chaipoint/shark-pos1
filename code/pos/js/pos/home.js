@@ -146,7 +146,7 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 		}
 		if(msg){
 			$("#"+errorHolder).show();$("#"+errorHolder+" ul").html(msg);
-		}else{ alert(JSON.stringify(formData)); 
+		}else{  
 			$.ajax({
 				type: 'POST',
 				url: "index.php?dispatch=billing.loadCard",
@@ -161,7 +161,6 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 					bootbox.alert($res.data['message']);
 				}else{
 					bootbox.alert($res.data['message']+'.Your Balance is:'+$res.data['balance']);
-
 
 				}
 			})
