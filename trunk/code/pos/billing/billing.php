@@ -282,26 +282,28 @@
         function loadCard(){
         	$return = array('error'=>false,'message'=>'','data'=>array());
         	$loadResponse = array();
-        	if(array_key_exists('request_type', $_POST) && $_POST['request_type'] == LOAD_PPA_CARD){
+        	if(array_key_exists('request_type', $_POST) && ($_POST['request_type'] == LOAD_PPA_CARD || $_POST['request_type'] == ACTIVATE_PPA_CARD || $_POST['request_type'] == BALANCE_CHECK_PPA_CARD )){
         		$dir =  dirname(__FILE__).'/../lib/api/ppa_api.php';
             	require_once $dir;
             	$config_data = $this->configData['ppa_api'];
-            	$loadResponse = ppa_api($config_data, $_POST, PPA_LOAD);
+            	$card_type = PPA;
+            	$loadResponse = ppa_api($config_data, $_POST, $_POST['request_type']);
             
-            }else if(array_key_exists('request_type', $_POST) && $_POST['request_type'] == LOAD_PPC_CARD){
+            }else if(array_key_exists('request_type', $_POST) && ($_POST['request_type'] == LOAD_PPC_CARD || $_POST['request_type'] == ACTIVATE_PPC_CARD || $_POST['request_type'] == BALANCE_CHECK_PPC_CARD )){
             	$dir =  dirname(__FILE__).'/../lib/svc/ppc_api.php';
                 require_once $dir;
-                $loadResponse = redeem($_POST, PPC_LOAD);
+                $card_type = PPC;
+				$loadResponse = redeem($_POST, $_POST['request_type']);
 			}
-				if($loadResponse['data']['success']=='True'){
+				if($loadResponse['data']['success']=='True' && $loadResponse['data']['txn_type']!=BALANCE_CHECK){
 					$saveData = array();
 					$saveData['cd_doc_type'] = CARD_SALE_DOC_TYPE;
 					$saveData['card_no'] = $loadResponse['data']['card_number'];
-					$saveData['card_type'] = ($_POST['request_type'] == LOAD_PPA_CARD ? PPA : PPC);
+					$saveData['card_type'] = $card_type;
 					$saveData['txn_no']	= $loadResponse['data']['txn_no'];
 					$saveData['amount'] = $_POST['amount'];
 					$saveData['balance'] = $loadResponse['data']['balance'];
-					$saveData['txn_type'] = LOAD;
+					$saveData['txn_type'] = $loadResponse['data']['txn_type'];
 					$saveData['time'] = date('Y-m-d H:i:s');
 					$saveData['store_id'] = $_SESSION['user']['store']['id'];
 					$saveData['store_name'] = $_SESSION['user']['store']['name'];
