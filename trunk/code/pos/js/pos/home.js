@@ -35,11 +35,6 @@ $(document).ready(function(){
 	keyboard.push($('input[name="username1"],input[name="password"],#petty_cash, #counter_no, #petty_cash_end, #box_cash, #box_cash_end').cKeyboard());
 	
 
-
-
-
-
-
 $('#tab_selection_menu').on('click','.home_tabs',function(){
 	var active = $('li.active',$(this).closest('ul'));
 	active.removeClass('active');
@@ -143,7 +138,18 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 				formData.request_type = 'balance_check_ppc_card';
 				if((formData.card_number).trim() == ""){msg += "<li>Provide Currect Card No</li>";}
 				break;
-		}
+
+			case 'store_ppa_card_load_form':
+				formData.request_type = 'load_ppa_card';
+				if((formData.card_number).trim() == ""){msg += "<li>Provide Currect Card No</li>";}
+				else if((formData.amount).trim() == ""){msg += "<li>Provide Amount</li>";}
+				break;
+
+			case 'store_ppa_card_balance_check_form':
+				formData.request_type = 'balance_check_ppa_card';
+				if((formData.card_number).trim() == ""){msg += "<li>Provide Currect Card No</li>";}
+				break;
+		} //alert(JSON.stringify(formData));
 		if(msg){
 			$("#"+errorHolder).show();$("#"+errorHolder+" ul").html(msg);
 		}else{  
