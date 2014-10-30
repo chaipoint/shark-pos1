@@ -278,23 +278,27 @@
 								</span> 
 								<input type="text" name="amount" value="" id="amount" class="input-sm form-control" placeholder="Amount" autocomplete="off"/>
 							</div>
-							
+
 							<div class="input-group padded">
 								<span class="input-group-addon">
 									<i class="glyphicon glyphicon-usd"></i> 
 								</span> 
-								<input type="text" name="card_number" value="" id="card_no" class="input-sm form-control" placeholder="Card No" autocomplete="off"/>
+								<input type="text" name="card_number" value="" id="card_number" class="input-sm form-control" placeholder="Card No" autocomplete="off"/>
 							</div>
 
-							
-
 							<div class="row padded">
-								
 								<div class="col-md-5">
 									<button type="button" class="btn btn-danger btn-sm btn-block btn-lg cancel-btn">Cancel 
 										<i class="glyphicon glyphicon-home"></i>
 									</button>
 								</div>
+
+								<div class="col-md-7">
+									<button type="submit" style="display:none" class="btn btn-success btn-sm btn-block btn-lg">Activate Card 
+										<i class="glyphicon glyphicon-log-in"></i>
+									</button>
+								</div>
+								
 							
 							</div>
 						</form>
@@ -307,24 +311,27 @@
 								</span> 
 								<input type="text" name="amount" value="" id="amount" class="input-sm form-control" placeholder="Amount" autocomplete="off"/>
 							</div>
-							
-							
+
 							<div class="input-group padded">
 								<span class="input-group-addon">
 									<i class="glyphicon glyphicon-usd"></i> 
 								</span> 
-								<input type="text" name="card_number" value="" id="card_no" class="input-sm form-control" placeholder="Card No" autocomplete="off"/>
+								<input type="text" name="card_number" value="" id="card_number" class="input-sm form-control" placeholder="Card No" autocomplete="off"/>
 							</div>
 
-						
-
 							<div class="row padded">
-								
 								<div class="col-md-5">
 									<button type="button" class="btn btn-danger btn-sm btn-block btn-lg cancel-btn">Cancel 
 										<i class="glyphicon glyphicon-home"></i>
 									</button>
 								</div>
+
+								<div class="col-md-7">
+									<button type="submit" style="display:none" class="btn btn-success btn-sm btn-block btn-lg">Load Card 
+										<i class="glyphicon glyphicon-log-in"></i>
+									</button>
+								</div>
+								
 							
 							</div>
 						</form>
@@ -336,7 +343,7 @@
 								<span class="input-group-addon">
 									<i class="glyphicon glyphicon-usd"></i> 
 								</span> 
-								<input type="text" name="card_number" value="" id="card_no" class="input-sm form-control" placeholder="Card No" autocomplete="off"/>
+								<input type="text" name="card_number" value="" id="card_number" class="input-sm form-control" placeholder="Card No" autocomplete="off"/>
 								<input type='hidden' name='amount' value=''/>
 							</div>
 
@@ -347,6 +354,13 @@
 										<i class="glyphicon glyphicon-home"></i>
 									</button>
 								</div>
+
+								<div class="col-md-7">
+									<button type="submit" style="display:none" class="btn btn-success btn-sm btn-block btn-lg hides">Check Balance 
+										<i class="glyphicon glyphicon-log-in"></i>
+									</button>
+								</div>
+								
 							
 							</div>
 						</form>
