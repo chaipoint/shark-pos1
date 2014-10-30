@@ -267,7 +267,7 @@
 							</div>
 							<div class="input-group padded">
 								<span class="input-group-addon"> 
-									<i class="glyphicon glyphicon-user"></i>
+									<i class="glyphicon glyphicon-phone"></i>
 								</span> 
 								<input type="text" name="mobile_no" id="mobile_no" class="input-sm form-control" placeholder="Mobile No" autocomplete="off" autofocus="true"/>
 							</div>
@@ -281,15 +281,15 @@
 
 							<div class="input-group padded">
 								<span class="input-group-addon">
-									<i class="glyphicon glyphicon-usd"></i> 
+									<i class="glyphicon glyphicon-credit-card"></i> 
 								</span> 
 								<input type="text" name="card_number" value="" id="card_number" class="input-sm form-control" placeholder="Card No" autocomplete="off"/>
 							</div>
 
 							<div class="row padded">
 								<div class="col-md-5">
-									<button type="button" class="btn btn-danger btn-sm btn-block btn-lg cancel-btn">Cancel 
-										<i class="glyphicon glyphicon-home"></i>
+									<button type="reset" class="btn btn-danger btn-sm btn-block btn-lg">Reset 
+										<i class="glyphicon glyphicon-refresh"></i>
 									</button>
 								</div>
 
@@ -314,15 +314,15 @@
 
 							<div class="input-group padded">
 								<span class="input-group-addon">
-									<i class="glyphicon glyphicon-usd"></i> 
+									<i class="glyphicon glyphicon-credit-card"></i> 
 								</span> 
 								<input type="text" name="card_number" value="" id="card_number" class="input-sm form-control" placeholder="Card No" autocomplete="off"/>
 							</div>
 
 							<div class="row padded">
 								<div class="col-md-5">
-									<button type="button" class="btn btn-danger btn-sm btn-block btn-lg cancel-btn">Cancel 
-										<i class="glyphicon glyphicon-home"></i>
+									<button type="reset" class="btn btn-danger btn-sm btn-block btn-lg">Reset 
+										<i class="glyphicon glyphicon-refresh"></i>
 									</button>
 								</div>
 
@@ -341,7 +341,7 @@
 							
 							<div class="input-group padded">
 								<span class="input-group-addon">
-									<i class="glyphicon glyphicon-usd"></i> 
+									<i class="glyphicon glyphicon-credit-card"></i> 
 								</span> 
 								<input type="text" name="card_number" value="" id="card_number" class="input-sm form-control" placeholder="Card No" autocomplete="off"/>
 								<input type='hidden' name='amount' value=''/>
@@ -350,8 +350,8 @@
 							<div class="row padded">
 								
 								<div class="col-md-5">
-									<button type="button" class="btn btn-danger btn-sm btn-block btn-lg cancel-btn">Cancel 
-										<i class="glyphicon glyphicon-home"></i>
+									<button type="reset" class="btn btn-danger btn-sm btn-block btn-lg">Reset
+										<i class="glyphicon glyphicon-refresh"></i>
 									</button>
 								</div>
 
