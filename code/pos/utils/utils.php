@@ -3,12 +3,9 @@
 		function __construct(){
 			parent::__construct();
 		}
-
-		/*Function To Switch Data Sync Action */
 		function sync(){
 			$return = array('error'=>false, 'message'=>'');
 			$result = array('error'=>false, 'message'=>'');
-			
 			if(array_key_exists('mode', $_GET) && !empty($_GET['mode']))	{
 				switch($_GET['mode']){
 					case 'staff_sync_bt':
@@ -16,7 +13,8 @@
 						$result = $this->getStaff($location,true);
 						break;
 					case 'store_sync_bt':
-						$store = $_SESSION['user']['store']['id'];
+						//$store_data = $this->getInstallationConfig();
+						$store = $_SESSION['user']['store']['id'];//= $store_data['data']['store_config']['store_id'];
 						$_GET['store'] = $store;
 						$_GET['only_store'] = true;
 						$result = $this->getStore(true);
@@ -34,15 +32,17 @@
 							$result = $this->repRetailCustomers();
 					break;
 					case 'billing_stop_sync_bt':
-							$rep = $this->cDB->getActiveTask();
+							$rep = $this->cDB->getActiveTask();//json_decode('[{"pid":"<0.19819.0>","checkpoint_interval":5000,"checkpointed_source_seq":259,"continuous":true,"doc_id":null,"doc_write_failures":0,"docs_read":1,"docs_written":1,"missing_revisions_found":1,"progress":100,"replication_id":"21b9ee56f33d6ec7e12c737f46f4a7b6+continuous","revisions_checked":1,"source":"http://127.0.0.1:5984/testing/","source_seq":259,"started_on":1408442813,"target":"http://pos:*****@54.249.247.15:5984/vente_ho_db/","type":"replication","updated_on":1408443075},{"pid":"<0.20189.0>","checkpoint_interval":5000,"checkpointed_source_seq":259,"continuous":true,"doc_id":null,"doc_write_failures":0,"docs_read":256,"docs_written":256,"missing_revisions_found":256,"progress":100,"replication_id":"cee10645c91448e7e411aff39d56a9f1+continuous","revisions_checked":257,"source":"testing","source_seq":259,"started_on":1408443071,"target":"rk","type":"replication","updated_on":1408443076}]',true);
+							//print_r($rep);
 							if(array_key_exists(0, $rep)){
 								foreach($rep as $key => $value){
-									$result = $this->cDB->replicate()->execute(array('replication_id'=>$value['replication_id'], CANCEL=>true));
+									$result = $this->cDB->replicate()->execute(array('replication_id'=>$value['replication_id'], 'cancel'=>true));
 								}
-								if(array_key_exists(OK, $result) && $result[OK]){
-									$result = array('error'=>false, 'message'=>PROCESS_STOP);
+								//print_r($result);
+								if(array_key_exists('ok', $result) && $result['ok']){
+									$result = array('error'=>false, 'message'=>'Process Stop SuccessFully');
 								}else{
-									$result = array('error'=>true, 'message'=>ERROR);
+									$result = array('error'=>true, 'message'=>'OOPS! Some Problem Contact Admin');
 								}
 								return $result;
 							}
@@ -50,46 +50,45 @@
 				}
 			}else{
 				$return['error'] = true;
-				$return['message'] = ACTION_NOT_ALLOWED;
+				$return['message'] = "Not allowed to follow this action";
 			}
-			
+			//print_r($result);
 			if(is_array($result)){
 				$return['error'] = $result['error'];
 				$return['message'] = $result['message'];								
 			}
 			return  json_encode($return);
 		}
-
-		/*Function To Sync Retail Customer From HO*/
 		function repRetailCustomers(){
+			//echo $_SESSION['user']['store']['location']['id'];
+			//echo '<pre>';
+			//print_r($_SESSION['user']);
+			//echo '</pre>';
 			$return = array('error'=>false, 'message'=>'');
 			$source = $this->cDB->getRemote();
 			$target = $this->cDB->getUrl().$this->cDB->getDB();
-			$result = $this->cDB->replicate()->execute(array(SOURCE=>$source, TARGET=>$target, FILTER=>RETAIL_CUSTOMER_REPLICATE, QUERY_PARAMS=>array("location"=>$_SESSION['user']['location']['id'])));
-			if(array_key_exists(OK, $result) && $result[OK]){
-				$return['message'] = CUSTOMER_DOWNLOADED;
+			$result = $this->cDB->replicate()->execute(array('source'=>$source, 'target'=>$target, 'filter'=>'doc_replication/retail_customer_replication', 'query_params'=>array("location"=>$_SESSION['user']['location']['id'])));
+			if(array_key_exists('ok', $result) && $result['ok']){
+				$return['message'] = 'Customers Downloaded SuccessFully';
 
 			}else{
-				$return = array('error'=>true, 'message'=>ERROR);
+				$return = array('error'=>true, 'message'=>'OOPS! Some Problem Contact Admin');
 			}			
 			return $return;
 		}
-
-		/*Function To Sync Configuration From HO*/
 		function repConfig(){
 			$return = array('error'=>false, 'message'=>'');
 			$source = $this->cDB->getRemote();
 			$target = $this->cDB->getUrl().$this->cDB->getDB();
-			$result = $this->cDB->replicate()->execute(array(SOURCE=>$source, TARGET=>$target, FILTER=>CONFIGURATION_REPLICATE, CONTINUOUS => true));
-			if(array_key_exists(OK, $result) && $result[OK]){
-				$return['message'] = CONFIGURATION_DOWNLOADED;
+			$result = $this->cDB->replicate()->execute(array('source'=>$source, 'target'=>$target, 'filter'=>'doc_replication/config_replication', "continuous" => true));
+			if(array_key_exists('ok', $result) && $result['ok']){
+				$return['message'] = 'Configuration Downloaded SuccessFully';
 
 			}else{
-				$return = array('error'=>true, 'message'=>ERROR);
+				$return = array('error'=>true, 'message'=>'OOPS! Some Problem Contact Admin');
 			}			
 			return $return;
 		}
-
 		function initial(){
 			$return = array('error'=>false, 'message'=>'');
 			if(array_key_exists('store', $_GET) && is_numeric($_GET['store']) && $_GET['store'] > 0){
@@ -116,66 +115,66 @@
 			}
 			return json_encode($return); 
 		}
-
-		/*Function To Upload Bill On HO*/
 		function billing(){
 			$return = array('error'=>false,'message'=>'');
 			$source = $this->cDB->getUrl().$this->cDB->getDB();
-			$result = $this->cDB->replicate()->execute(array(SOURCE=>$source, TARGET=>$this->cDB->getRemote(), FILTER=>BILL_REPLICATE, CONTINUOUS => true));
-			if(array_key_exists(OK, is_null($result) ? array() : $result)){
-				$return['message'] = PROCESS_START;
+			$result = $this->cDB->replicate()->execute(array('source'=>$source, 'target'=>$this->cDB->getRemote(), 'filter'=>'doc_replication/bill_replication', "continuous" => true));
+			if(array_key_exists('ok', is_null($result) ? array() : $result)){
+				$return['message'] = 'Process Start SuccessFully';
+				//echo "Billing Replication Started SuccessFully";
 			}else{
-				$return = array('error'=>true,'message'=>ERROR);
+				$return = array('error'=>true,'message'=>'OOPS! Some Problem Contact Admin');
+//				echo "Opps! Some Problem Try Later";				
 			}
 			return $return; 
+
 		}
 
-		/* Function To Sync Staff From HO */
 		function getStaff($location, $rep){
 			$return = array('error'=>false,'message'=>'');
 			if(empty($location)){
-				$return = array('error'=>true,'message'=>STAFF_LOCATION_NOT_FOUND);
+				$return = array('error'=>true,'message'=>'Provide Staff Location to replicate');
 			}else{
 				if($rep){
 					$source = $this->cDB->getRemote();
 					$target = $this->cDB->getUrl().$this->cDB->getDB();
-					$result = $this->cDB->replicate()->execute(array(SOURCE=>$source, TARGET=>$target, FILTER=>STAFF_REPLICATE, QUERY_PARAMS=>array("location"=>$location)));
-					if(array_key_exists(OK, $result) && $result[OK]){
-						$return['message'] = STAFF_DOWNLOADED;
+					$result = $this->cDB->replicate()->execute(array('source'=>$source, 'target'=>$target, 'filter'=>'doc_replication/staff_replication', 'query_params'=>array("location"=>$location)));
+					if(array_key_exists('ok', $result) && $result['ok']){
+						$return['message'] = 'Staff Downloaded SuccessFully';
 					}else{
-						$return = array('error'=>true, 'message'=>ERROR);
+						$return = array('error'=>true, 'message'=>'OOPS! Some Problem Contact Admin');
 					}	
 				}else{
 					$result = $this->cDB->executeRemote('_design/staff/_view/staff_location?include_docs=true&key="'.$location.'"');
 					if(count($result['rows'])>0){
+					//	print_r($result['rows']);
 						$latArray = array();
 						foreach($result['rows'] as $key => $value){
 							$latArray[] = $value['doc'];
 						}
+
+	//					$staffData = $result['rows'];					
 						$newResult = $this->cDB->saveDocument('true')->execute(array('docs'=>$latArray));
 					}else{
-						echo DATA_NOT_FOUND;
+						echo "No Staff Data Found With Associated Store";
 					}
 				}							
 			}
-
+//			http://54.249.247.15:5984/rakesh_cpos_ho/_design/staff/_view/staff_location?key=%222%22
 			return $return;
 		}
-
-		/* Function To Sync Store From HO */
 		function getStore($rep = false){
 			$return = array('error'=>false, 'message'=>'');
-			
 			if($rep){
 				$store = $_GET['store'];
 				$source = $this->cDB->getRemote();
 				$target = $this->cDB->getUrl().$this->cDB->getDB();
-				$result = $this->cDB->replicate()->execute(array(SOURCE=>$source, TARGET=>$target, FILTER=>STORE_REPLICATE, QUERY_PARAMS=>array("mysql_id"=>$store)));
-				if(array_key_exists(OK, $result) && $result[OK]){
-					$return['message'] = STORE_DOWNLOADED;
+				$result = $this->cDB->replicate()->execute(array('source'=>$source, 'target'=>$target, 'filter'=>'doc_replication/store_replication', 'query_params'=>array("mysql_id"=>$store)));
+				if(array_key_exists('ok', $result) && $result['ok']){
+					$return['message'] = 'Store Downloaded SuccessFully';
 					if(array_key_exists('only_store', $_GET) && $_GET['only_store']){
 					}else{
-						$resultJSON = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_MYSQL_ID)->setParam(array('include_docs'=>'true',"key"=>'"'.$store.'"'))->execute();
+						$resultJSON = $this->cDB->getDesign('store')->getView('store_mysql_id')->setParam(array('include_docs'=>'true',"key"=>'"'.$store.'"'))->execute();
 						$result = $resultJSON['rows'][0]['doc'];
 						$resultFromStaff = $this->getStaff($result['location']['id'],true);
 						if($resultFromStaff['error']){
@@ -183,10 +182,11 @@
 						}
 					}
 				}else{
-					$return = array('error'=>true, 'message'=>ERROR);
+					$return = array('error'=>true, 'message'=>'OOPS! Some Problem Contact Admin');
 				}	
 			}else{
-			
+			//	$target = $this->cDB->getUrl().$this->cDB->getDB();
+			//	$result = $this->cDB->replicate()->execute(array('source'=>"http://54.249.247.15:5984/rakesh_cpos_ho", 'target'=>$target, 'filter'=>'doc_replication/store_replication', 'query_params'=>array("mysql_id"=>"1")));
 				$result = $this->cDB->executeRemote('_design/store/_view/store_mysql_id?include_docs=true&key="1"');
 				if(count($result['rows'])>0){
 					$storeData = $result['rows'][0]['doc'];
@@ -198,27 +198,29 @@
 					print_r($newResult);
 					echo "</pre>";
 				}else{
-					echo DATA_NOT_FOUND;
+					echo "No Data Found With Associated Store";
 				}
 			}
 			return $return;
 		}
-
-		/*Function To Sync Design Document From HO*/
 		function repDesign($rev = false){
 			$return = array('error'=>false, 'message'=>'');
-			$source = $this->cDB->getRemote();
-			$target = $this->cDB->getUrl().$this->cDB->getDB();
-			$result = $this->cDB->replicate()->execute(array(SOURCE=>$source, TARGET=>$target, FILTER=>DESIGN_REPLICATE));
-			if(array_key_exists(OK, $result) && $result[OK]){
-				$return['message'] = DESIGN_DOCUMENT_DOWNLOADED;
+			//if($rev){
+				$source = $this->cDB->getRemote();
+				$target = $this->cDB->getUrl().$this->cDB->getDB();
+		//	}else{
+				//$source = $this->cDB->getUrl().$this->cDB->getDB();
+				//$target = $this->cDB->getRemote();
+		//	}
+			$result = $this->cDB->replicate()->execute(array('source'=>$source, 'target'=>$target, 'filter'=>'doc_replication/design_replication'));
+			if(array_key_exists('ok', $result) && $result['ok']){
+				$return['message'] = 'Design Document Downloaded SuccessFully';
 
 			}else{
-				$return = array('error'=>true, 'message'=>ERROR);
+				$return = array('error'=>true, 'message'=>'OOPS! Some Problem Contact Admin');
 			}			
 			return $return;
 		}
-
 		function init(){
 			$designDocs = array();
 			$designList = $this->cDB->getDocs()->setParam(array('startkey'=>'"_design/"','endkey'=>'"_design0"'))->execute();
@@ -283,7 +285,14 @@
 		        )
 		      );
 
-		     
+		      /*"store_shift": {
+		           "map": "function(doc) { if(doc.cd_doc_type == 'store_shift'){ emit(doc.date, null); } }"
+		       }
+		   },
+		   "updates": {
+		       "store_shift": "function(doc,req){ if(doc) { if(req.query.type == 'day_end') { doc.time.end = req.query.time; doc.time.end_cash = req.query.cash; doc.time.end_staff = req.query.end_staff;  doc.end_staff = req.query.end_staff; } else if(req.query.type == 'shift_start') { doc.shift.push({start:req.query.time, end:'' , start_cash: req.query.cash, end_cash: '', start_staff:req.query.start_staff, end_staff:'' }) }else if(req.query.type == 'shift_end') { req.query.shift_no = doc.shift.length-1; doc.shift[req.query.shift_no].end = req.query.time; doc.shift[req.query.shift_no].end_cash = req.query.cash; doc.shift[req.query.shift_no].end_staff = req.query.end_staff; }  return [doc,JSON.stringify(req)];}}"
+		   }
+		}*/
 		      $designDocs[] = array(
 		        '_id'=>'_design/login',
 		        'language' => 'javascript', 
@@ -426,14 +435,20 @@
 		        }
 		      }
 
+
+
 			$arrayBulk = array("docs"=>$designDocs);
 			$result = $this->cDB->saveDocument(true)->execute($arrayBulk);
+
+
+//			$bulkDocs = $array();
+			//$result = $this->cDB->saveDocument()->execute(array('_id'=>'generateBill','cd_doc_type' => 'bill_counter', 'current' => 0, 'current_month' => 0));
 			echo "<pre>";
+//			$result = $this->cDB->saveDocument()->execute($replication);
 			print_r($result);			
 			echo "</pre>";
 
-		}
-
+		}/**/
 		function generate_rep_running_flag(){
 			$activeTask = $this->cDB->getActiveTask();
 			echo '<script>var is_rep_running = '.(array_key_exists(0, $activeTask) ? 'true' : 'false').'; $(document).ready(function(){toggleRepBT ();});</script>';
