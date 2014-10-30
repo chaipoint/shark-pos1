@@ -11,10 +11,16 @@
       <h4 class="panel-title">Home</h4>
   	</div>
   	<div class="panel-body tabbable">
-        <ul id="tab_selection_menu"class="nav nav-pills" role="tablist">
+        <ul id="tab_selection_menu" class="nav nav-pills" role="tablist">
         	<li class='active'><a id='home_tab' class="home_tabs" href="javascript:void(0)">Home</a></li>
         	<li><a id='sales_tab' class="home_tabs" href="javascript:void(0)">Sales</a></li>
 			<li><a id='shift_data_tab' class="home_tabs require_valid_user" href="javascript:void(0)">Shift Data</a></li>
+			<li class='dropdown'><a id='card__tab' class="dropdown-toggle home_tabs require_valid_user" data-toggle="dropdown" href="javascript:void(0)">Card Transaction <span class="caret"></span></a>
+				<ul class="dropdown-menu" role="menu">
+      				<li><a id='ppa_card_tab' class="home_tabs" href="javascript:void(0)">PPA CARD</a></li>
+      				<li><a id='ppc_card_tab' class="home_tabs" href="javascript:void(0)">PPC CARD</a></li>
+    			</ul>
+    		</li>
         </ul>
         <div class="hidden" id="shift_data_tab_holder">
 		   	<form class="form-inline alert" id="shift_search_form" action="#"> 
@@ -34,15 +40,13 @@
     			?> 
 			</div>
 		</div>
-
-    		<div id="home_tab_data" class="tabs_data">
-    			
-    		<div class="col-lg-12">
+		<div id="home_tab_data" class="tabs_data">
+			<div class="col-lg-12">
 				<ul class="list-unstyled list-inline" role="tablist" id="shift_nav">
-				  <li><a class="btn btn-default btn-lg btn3d" id="day_start">Day Start</a></li>
-				  <li><a class="btn btn-default btn-lg btn3d" id="shift_start">Shift Start</a></li>
-				  <li><a class="btn btn-default btn-lg btn3d" id="shift_end">Shift End</a></li>
-				  <li><a class="btn btn-default btn-lg btn3d" id="day_end">Day End</a></li>
+					<li><a class="btn btn-default btn-lg btn3d" id="day_start">Day Start</a></li>
+				  	<li><a class="btn btn-default btn-lg btn3d" id="shift_start">Shift Start</a></li>
+				  	<li><a class="btn btn-default btn-lg btn3d" id="shift_end">Shift End</a></li>
+				  	<li><a class="btn btn-default btn-lg btn3d" id="day_end">Day End</a></li>
 			    </ul>
 			</div>
 		<div class="col-lg-12 padded">
@@ -236,6 +240,127 @@
 		<?php require_once DIR.'/sales_register/views/modal_expense.php';?>
 		<?php require_once DIR.'/sales_register/views/paid_bills_table.php';?>
 	</div>
+	<div id="ppc_card_tab_data" class="tabs_data hidden">
+			<div class="col-lg-12">
+				<ul class="list-inline" role="tablist" id="shift_nav">
+					<li><a class="btn btn-primary btn-lg btn3d" id="ppc_card_activate">Activate Card</a></li>
+				  	<li><a class="btn btn-primary btn-lg btn3d" id="ppc_card_load">Load Card</a></li>
+				  	<li><a class="btn btn-primary btn-lg btn3d" id="ppc_card_balance_check">Balance Check</a></li>
+				</ul>
+			</div>
+			<div class="col-lg-12 padded">
+				<div class="col-lg-3 col-md-5 col-sm-5">
+					<div class="alert alert-danger" id="error_message_card"><ul></ul></div>
+						<form id="store_ppc_card_activate_form"  class="card_form hide" action="" method="post" accept-charset="utf-8" class="separate-sections form-horizontal" autocomplete="off">
+							<input type="hidden" name="validateFor" value="card">
+							<div class="input-group padded">
+								<span class="input-group-addon"> 
+									<i class="glyphicon glyphicon-user"></i>
+								</span> 
+								<input type="text" name="first_name" id="first_name" class="input-sm form-control" placeholder="First Name" autocomplete="off" autofocus="true"/>
+							</div>
+							<div class="input-group padded">
+								<span class="input-group-addon"> 
+									<i class="glyphicon glyphicon-user"></i>
+								</span> 
+								<input type="text" name="last_name" id="last_name" class="input-sm form-control" placeholder="Last Name" autocomplete="off" autofocus="true"/>
+							</div>
+							<div class="input-group padded">
+								<span class="input-group-addon"> 
+									<i class="glyphicon glyphicon-user"></i>
+								</span> 
+								<input type="text" name="mobile_no" id="mobile_no" class="input-sm form-control" placeholder="Mobile No" autocomplete="off" autofocus="true"/>
+							</div>
+							
+							<div class="input-group padded">
+								<span class="input-group-addon">
+									<i class="glyphicon glyphicon-usd"></i> 
+								</span> 
+								<input type="text" name="card_number" value="" id="card_no" class="input-sm form-control" placeholder="Card No" autocomplete="off"/>
+							</div>
+
+							<div class="input-group padded">
+								<span class="input-group-addon">
+									<i class="glyphicon glyphicon-usd"></i> 
+								</span> 
+								<input type="text" name="amount" value="" id="amount" class="input-sm form-control" placeholder="Amount" autocomplete="off"/>
+							</div>
+
+							<div class="row padded">
+								<div class="col-md-7">
+									<button type="submit" class="btn btn-success btn-sm btn-block btn-lg">Activate Card 
+										<i class="glyphicon glyphicon-log-in"></i>
+									</button>
+								</div>
+								<div class="col-md-5">
+									<button type="button" class="btn btn-danger btn-sm btn-block btn-lg cancel-btn">Cancel 
+										<i class="glyphicon glyphicon-home"></i>
+									</button>
+								</div>
+							
+							</div>
+						</form>
+						<form id="store_ppc_card_load_form"  class="card_form hide" action="" method="post" accept-charset="utf-8" class="separate-sections form-horizontal" autocomplete="off">
+							<input type="hidden" name="validateFor" value="card">
+							
+							
+							<div class="input-group padded">
+								<span class="input-group-addon">
+									<i class="glyphicon glyphicon-usd"></i> 
+								</span> 
+								<input type="text" name="card_number" value="" id="card_no" class="input-sm form-control" placeholder="Card No" autocomplete="off"/>
+							</div>
+
+							<div class="input-group padded">
+								<span class="input-group-addon">
+									<i class="glyphicon glyphicon-usd"></i> 
+								</span> 
+								<input type="text" name="amount" value="" id="amount" class="input-sm form-control" placeholder="Amount" autocomplete="off"/>
+							</div>
+
+							<div class="row padded">
+								<div class="col-md-7">
+									<button type="submit" class="btn btn-success btn-sm btn-block btn-lg">Load Card 
+										<i class="glyphicon glyphicon-log-in"></i>
+									</button>
+								</div>
+								<div class="col-md-5">
+									<button type="button" class="btn btn-danger btn-sm btn-block btn-lg cancel-btn">Cancel 
+										<i class="glyphicon glyphicon-home"></i>
+									</button>
+								</div>
+							
+							</div>
+						</form>
+						<form id="store_ppc_card_balance_check_form"  class="card_form hide" action="" method="post" accept-charset="utf-8" class="separate-sections form-horizontal" autocomplete="off">
+							<input type="hidden" name="validateFor" value="card">
+							
+							
+							<div class="input-group padded">
+								<span class="input-group-addon">
+									<i class="glyphicon glyphicon-usd"></i> 
+								</span> 
+								<input type="text" name="card_number" value="" id="card_no" class="input-sm form-control" placeholder="Card No" autocomplete="off"/>
+								<input type='hidden' name='amount' value=''/>
+							</div>
+
+							<div class="row padded">
+								<div class="col-md-7">
+									<button type="submit" class="btn btn-success btn-sm btn-block btn-lg">Check Balance 
+										<i class="glyphicon glyphicon-log-in"></i>
+									</button>
+								</div>
+								<div class="col-md-5">
+									<button type="button" class="btn btn-danger btn-sm btn-block btn-lg cancel-btn">Cancel 
+										<i class="glyphicon glyphicon-home"></i>
+									</button>
+								</div>
+							
+							</div>
+						</form>
+					</div>
+				</div>
+		</div>
   </div>
 </div>
 <?php require_once 'modal_inward.php';?>
