@@ -57,6 +57,10 @@ define ('UPDATE_BILL', 'update_bill');
 define ('GET_COC_ORDER', 'getCOCOrder');
 define ('LOAD_PPA_CARD', 'load_ppa_card');
 define ('LOAD_PPC_CARD', 'load_ppc_card');
+define ('ACTIVATE_PPA_CARD', 'activate_ppa_card');
+define ('ACTIVATE_PPC_CARD', 'activate_ppc_card');
+define ('BALANCE_CHECK_PPC_CARD', 'balance_check_ppc_card');
+define ('BALANCE_CHECK_PPA_CARD', 'balance_check_ppa_card');
 
 /* Constant For Request Type Error */
 define ('REQUEST_TYPE_NOT_ALLOWED', 'Request Type Not Found');
@@ -94,13 +98,17 @@ define ('CONFIRMED_MESSAGE', "Dear ".ucfirst(!empty($_POST['customer_name']) ? $
 define ('PROVIDER_NUMBER', '8808891988');
 define ('DISPATCHED_MESSAGE', "Dear ".ucfirst(!empty($_POST['customer_name']) ? $_POST['customer_name'] : '').", Your Chai-On-Call Order # ".(!empty($_POST['order']) ? $_POST['order'] : '')." has been Dispatched From ".(!empty($_POST['store_name']) ? $_POST['store_name'] : '')." Store. Your bill amount is Rs ".(!empty($_POST['net_amount']) ? $_POST['net_amount'] : '').". Thank you!");
 define ('PPA_REDEEM', 'redeem');
-define ('PPA_LOAD', 'load');
 define ('PPC_REDEEM', 'redeem');
+define ('PPA_LOAD', 'load');
 define ('PPC_LOAD', 'load');
+define ('PPA_ACTIVATE', 'activate');
+define ('PPC_ACTIVATE', 'activate');
+
 define ('PPA', 'ppa');
 define ('PPC', 'ppc');
 define('LOAD', 'load');
-define('ACTIVE', 'active');
+define('ACTIVATE', 'activate');
+define('BALANCE_CHECK', 'balance_check');
 define('STAFF_LOCATION_NOT_FOUND', 'Provide Staff Location to replicate');
 define('DATA_NOT_FOUND', 'No Data Found With Associated Store');
 define('STAFF_DOWNLOADED', 'Staff Downloaded SuccessFully');
@@ -123,7 +131,7 @@ define('OK', "ok");
 global $PAYMENT_MODE, $ORDER_STATUS, $CARD_RESPONSE_ARRAY;
 $PAYMENT_MODE = array('cash'=>0,'ppc'=>0,'ppa'=>0,'caw'=>0);
 $ORDER_STATUS = array('New'=>0,'Confirmed'=>0,'Cancelled'=>0,'Dispatched'=>0,'Delivered'=>0,'Paid'=>0);
-$CARD_RESPONSE_ARRAY = array('success'=>'', 'message'=>'', 'balance'=>'', 'card_number'=>'', 'txn_no'=>'');
+$CARD_RESPONSE_ARRAY = array('success'=>'', 'message'=>'', 'balance'=>'', 'card_number'=>'', 'txn_no'=>'', 'txn_type'=>'');
 
 
 ?>
