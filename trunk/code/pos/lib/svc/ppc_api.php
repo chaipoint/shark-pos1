@@ -78,7 +78,7 @@ function redeem($details, $request_type){
 	list($first, $second) = explode('=', $details['card_number']);
 	$card_no = str_replace(';', '', $first);
 	$cardNumber = $card_no;
-	$cardPin = '';//'134784';
+	$cardPin = '';
 	$notes = 'ChaiPoint Order Transcation On '.Date("d/m/Y H:i:s");
 	$trackData = $details['card_number'];
 	$invoiceNumber = '1';
@@ -88,12 +88,27 @@ function redeem($details, $request_type){
 	$microTime = microtime();
 	$microTimeArr = explode(" ", $microTime);
 	$transactionId = substr($microTimeArr[1],5).round($microTimeArr[0] * 1000) ;
-	if($request_type==PPC_REDEEM){
-		$svRequest = GCWebPos::redeem($configDetails, $cardNumber, $cardPin, $transactionId, $invoiceNumber, $amount, $trackData, $notes, $billAmount);
-	}elseif($request_type==PPC_LOAD) {
+	$txn_type = '';
+	
+	if($request_type==PPC_REDEEM){ 
+		 $svRequest = GCWebPos::redeem($configDetails, $cardNumber, $cardPin, $transactionId, $invoiceNumber, $amount, $trackData, $notes, $billAmount);
+	
+	}elseif($request_type==LOAD_PPC_CARD) { 
 		$svRequest = GCWebPos::load($configDetails, $cardNumber, $transactionId, $amount, $invoiceNumber, $cardPin, $trackData, $notes, '');
+		$txn_type = LOAD;
+	
+	}elseif($request_type==ACTIVATE_PPC_CARD){  
+		$first_name = $details['first_name'];
+		$last_name = $details['last_name'];
+		$mobile = $details['mobile_no'];
+		$svRequest = GCWebPos::activate($configDetails, $cardNumber, $invoiceNumber, $transactionId, $amount, $first_name, $last_name, $mobile, $trackData, '', '');
+		$txn_type = ACTIVATE;
+	
+	}elseif($request_type==BALANCE_CHECK_PPC_CARD){
+		$svRequest = GCWebPos::balanceEnquiry($configDetails, $cardNumber, $cardPin, $transactionId, $trackData, $notes);
+		$txn_type = BALANCE_CHECK;
 	}
-	//$svRequest = GCWebPos::activate($configDetails, $cardNumber, $invoiceNumber, $transactionId, $amount, 'alam', 'tanveer', '8882355910', $trackData, '', '');
+
 	$svResponse = $svRequest->execute();
 	$responseArray = $CARD_RESPONSE_ARRAY;
 	
@@ -109,6 +124,7 @@ function redeem($details, $request_type){
 		$responseArray['balance'] = ($svResponse->params['ResponseMessage']=="Balance is insufficient." ? '0' : $svResponse->params['Amount']);
 		$responseArray['card_number'] = $cardNumber;
 		$responseArray['txn_no'] = $svResponse->params['TransactionId'];
+		$responseArray['txn_type'] = $txn_type;
 		$return['data'] = $responseArray;
 	}
 	
