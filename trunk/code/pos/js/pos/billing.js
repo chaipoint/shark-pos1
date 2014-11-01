@@ -273,6 +273,7 @@ $(document).ready(function(){
                	  			$("span#loading_image").addClass('hide');
                	  			$('#submit-sale').attr('disabled',false);
                	 			result = $.parseJSON($.trim(response));
+               	 			
                	 			if(result.error){
 				 				$('.ppc_balance').hide();
 								bootbox.alert(result.message);
@@ -293,6 +294,7 @@ $(document).ready(function(){
 								$('#card_company').val(payment_type == 'ppa' ? 'urbanPiper' : 'qwikcilver');
 								$('#card_redeem_amount').val(total_amount);
 								$('#card_txn_no').val(result.data['txn_no']);
+								$('#card_approval_code').val(result.data['approval_code']);
 								$('#card_balance').val(result.data['balance']);
 								$('#submit-sale').trigger('click');
 							}
@@ -307,6 +309,7 @@ $(document).ready(function(){
 				} 
         	});
 
+		
 		/* function to load card amount  */
 		$('.load').on('click', function(event){
 			event.preventDefault();
@@ -570,6 +573,7 @@ $(document).ready(function(){
 			billDetails.card.company = $('#card_company').val();;
 			billDetails.card.redeem_amount = $('#card_redeem_amount').val();;
 			billDetails.card.txn_no = $('#card_txn_no').val();;
+			billDetails.card.approval_code = $('#card_approval_code').val();;
 			billDetails.card.balance = $('#card_balance').val();;
 			billDetails.reprint = 1;
 			billDetails.request_type = 'save_bill';
