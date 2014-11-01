@@ -92,7 +92,7 @@ function redeem($details, $request_type){
 	
 	if($request_type==PPC_REDEEM){ 
 		 $svRequest = GCWebPos::redeem($configDetails, $cardNumber, $cardPin, $transactionId, $invoiceNumber, $amount, $trackData, $notes, $billAmount);
-	
+		//$svRequest = GCWebPos::cancelRedeem($configDetails, $cardNumber, '1', '71194446', '132',  '1440', $transactionId, $cardPin, '907246', $trackData, $notes);
 	}elseif($request_type==LOAD_PPC_CARD) { 
 		$svRequest = GCWebPos::load($configDetails, $cardNumber, $transactionId, $amount, $invoiceNumber, $cardPin, $trackData, $notes, '');
 		$txn_type = LOAD;
@@ -110,6 +110,7 @@ function redeem($details, $request_type){
 	}
 
 	$svResponse = $svRequest->execute();
+	//print_r($svResponse);
 	$responseArray = $CARD_RESPONSE_ARRAY;
 	
 	if($svResponse->errorCode != 0){
@@ -124,6 +125,7 @@ function redeem($details, $request_type){
 		$responseArray['balance'] = ($svResponse->params['ResponseMessage']=="Balance is insufficient." ? '0' : $svResponse->params['Amount']);
 		$responseArray['card_number'] = $cardNumber;
 		$responseArray['txn_no'] = $svResponse->params['TransactionId'];
+		$responseArray['approval_code'] = $svResponse->params['ApprovalCode'];
 		$responseArray['txn_type'] = $txn_type;
 		$return['data'] = $responseArray;
 	}
