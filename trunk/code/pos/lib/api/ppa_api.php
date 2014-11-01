@@ -6,6 +6,7 @@
     		$password = $details['password'];
     		$authorization = 'Basic '.base64_encode("$username:$password");
     		$tuCurl = curl_init();
+            $txn_type = '';
     		if(empty($data['card_number'])){
         		$return['error'] = true;
         		$return['message'] = 'Please Provide Card No';
@@ -15,9 +16,14 @@
          		$return['message'] = 'Please Provide Amount';
     		}else{
     			$card_number = $data['card_number'];
-    			$amount = ($request_type==PPA_REDEEM ? '-'.$data['amount'] : $data['amount']);
-    			$url = $details['url']."?format=json&card_number=$card_number&amount=$amount";
+                if($request_type==PPA_REDEEM){
+                  $amount = '-'.$data['amount'];
+                }elseif($request_type==LOAD_PPA_CARD){
+                  $amount = $data['amount']; 
+                  $txn_type = LOAD; 
+                }
     			
+    			$url = $details['url']."?format=json&card_number=$card_number&amount=$amount";
     			curl_setopt($tuCurl, CURLOPT_SSL_VERIFYPEER , 0);
     			curl_setopt($tuCurl, CURLOPT_HEADER, 0);
     			curl_setopt($tuCurl, CURLOPT_URL, "$url");
@@ -28,11 +34,14 @@
     			$return['error'] = false;
                 $responseArray = $CARD_RESPONSE_ARRAY;
                 $result = json_decode($tuData,true);
+               // print_r($result);
                 $responseArray['success'] = $result['success'];
                 $responseArray['message'] = $result['message'];
                 $responseArray['balance'] = $result['balance'];
                 $responseArray['card_number'] = $result['card_number'];
                 $responseArray['txn_no'] = $result['approval_code'];
+                $responseArray['approval_code'] = $result['approval_code'];
+                $responseArray['txn_type'] = $txn_type;
                 $return['data'] = $responseArray;
             } 
     		return $return;  
