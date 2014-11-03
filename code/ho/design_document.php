@@ -44,6 +44,16 @@ function init(){
           )
       );
       $designDocs[] = array(
+        '_id'=>'_design/ppc_detail',
+        'language' => 'javascript', 
+        'views' => array(
+          "initialize_detail"=>array(
+              "map"=>"function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'last_initialize'){ var date = doc.time.split(' '); emit(date[0], null); } }",
+            )
+          )
+        
+      );
+      $designDocs[] = array(
         '_id'=>'_design/billing',
         'language' => 'javascript', 
         'views' => array(
