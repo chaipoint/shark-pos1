@@ -239,10 +239,12 @@
 		</div>
 		<?php require_once DIR.'/sales_register/views/modal_expense.php';?>
 		<?php require_once DIR.'/sales_register/views/paid_bills_table.php';?>
+		<?php require_once DIR.'/sales_register/views/load_card_table.php';?>
 	</div>
 	<div id="ppc_card_tab_data" class="tabs_data hidden">
 			<div class="col-lg-12">
 				<ul class="list-inline" role="tablist" id="shift_nav">
+					<li><a class="btn btn-primary btn-lg btn3d" id="ppc_card_issue">Issue Card</a></li>
 					<li><a class="btn btn-primary btn-lg btn3d" id="ppc_card_activate">Activate Card</a></li>
 				  	<li><a class="btn btn-primary btn-lg btn3d" id="ppc_card_load">Load Card</a></li>
 				  	<li><a class="btn btn-primary btn-lg btn3d" id="ppc_card_balance_check">Balance Check</a></li>
@@ -251,6 +253,82 @@
 			<div class="col-lg-12 padded">
 				<div class="col-lg-3 col-md-5 col-sm-5">
 					<div class="alert alert-danger" id="error_message_card"><ul></ul></div>
+						<form id="store_ppc_card_issue_form"  class="card_form hide" action="" method="post" accept-charset="utf-8" class="separate-sections form-horizontal" autocomplete="off">
+							<input type="hidden" name="validateFor" value="card">
+							<div class="input-group padded">
+								<span class="input-group-addon"> 
+									<i class="glyphicon glyphicon-user"></i>
+								</span> 
+								<input type="text" name="card_group_name" id="card_group_name" class="input-sm form-control" placeholder="Card Group Name" autocomplete="off" autofocus="true"/>
+							</div>
+							<div class="input-group padded">
+								<span class="input-group-addon"> 
+									<i class="glyphicon glyphicon-user"></i>
+								</span> 
+								<input type="text" name="corporate_name" id="corporate_name" class="input-sm form-control" placeholder="Corporate Name" autocomplete="off" autofocus="true"/>
+							</div>
+							<div class="input-group padded">
+								<span class="input-group-addon"> 
+									<i class="glyphicon glyphicon-user"></i>
+								</span> 
+								<input type="text" name="empolye_id" id="empolye_id" class="input-sm form-control" placeholder="Empolyee Id" autocomplete="off" autofocus="true"/>
+							</div>
+							<div class="input-group padded">
+								<span class="input-group-addon"> 
+									<i class="glyphicon glyphicon-user"></i>
+								</span> 
+								<input type="text" name="first_name" id="first_name" class="input-sm form-control" placeholder="First Name" autocomplete="off" autofocus="true"/>
+							</div>
+							<div class="input-group padded">
+								<span class="input-group-addon"> 
+									<i class="glyphicon glyphicon-user"></i>
+								</span> 
+								<input type="text" name="last_name" id="last_name" class="input-sm form-control" placeholder="Last Name" autocomplete="off" autofocus="true"/>
+							</div>
+							<div class="input-group padded">
+								<span class="input-group-addon"> 
+									<i class="glyphicon glyphicon-user"></i>
+								</span> 
+								<input type="text" name="address" id="address" class="input-sm form-control" placeholder="Address" autocomplete="off" autofocus="true"/>
+							</div>
+							<div class="input-group padded">
+								<span class="input-group-addon"> 
+									<i class="glyphicon glyphicon-phone"></i>
+								</span> 
+								<input type="text" name="mobile_no" id="mobile_no" class="input-sm form-control" placeholder="Phone No" autocomplete="off" autofocus="true"/>
+							</div>
+							
+							<div class="input-group padded">
+								<span class="input-group-addon">
+									<i class="glyphicon glyphicon-credit-card"></i> 
+								</span> 
+								<input type="text" name="email" value="" id="email" class="input-sm form-control" placeholder="Email" autocomplete="off"/>
+							</div>
+
+							<div class="input-group padded">
+								<span class="input-group-addon">
+									<i class="glyphicon glyphicon-usd"></i> 
+								</span> 
+								<input type="text" name="amount" value="" id="amount" class="input-sm form-control" placeholder="Amount" autocomplete="off"/>
+							</div>
+
+							
+
+							<div class="row padded">
+								<div class="col-md-7">
+									<button type="submit" style="" class="btn btn-success btn-sm btn-block btn-lg">Issue Card 
+										<i class="glyphicon glyphicon-log-in"></i>
+									</button>
+								</div>
+
+								<div class="col-md-5">
+									<button type="reset" class="btn btn-danger btn-sm btn-block btn-lg">Reset 
+										<i class="glyphicon glyphicon-refresh"></i>
+									</button>
+								</div>
+							</div>
+						</form>
+
 						<form id="store_ppc_card_activate_form"  class="card_form hide" action="" method="post" accept-charset="utf-8" class="separate-sections form-horizontal" autocomplete="off">
 							<input type="hidden" name="validateFor" value="card">
 							<div class="input-group padded">
