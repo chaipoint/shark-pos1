@@ -8,6 +8,8 @@ define ('PETTY_EXPENSE_DESIGN_DOCUMENT', 'petty_expense');
 define ('STAFF_DESIGN_DOCUMENT', 'staff');
 define ('LOGIN_DESIGN_DOCUMENT', 'login');
 define ('CARD_SALE_DESIGN_DOCUMENT', 'card_sale');
+define ('PPC_DETAIL_DESIGN_DOCUMENT', 'ppc_detail');
+
 
 /* Constant For Design Document View */
 define ('BILLING_DESIGN_DOCUMENT_VIEW_HANDLE_UPDATED_BILLS', 'handle_updated_bills');
@@ -20,6 +22,7 @@ define ('PETTY_EXPENSE_DESIGN_DOCUMENT_VIEW_GET_EXPENSE', 'get_expense');
 define ('PETTY_EXPENSE_DESIGN_DOCUMENT_VIEW_GET_INWARD', 'get_inward');
 define ('STAFF_DESIGN_DOCUMENT_VIEW_STAFF_USERNAME', 'staff_username');
 define ('CARD_SALE_DESIGN_DOCUMENT_VIEW_GET_SALE', 'get_sale');
+define ('PPC_DETAIL_DESIGN_DOCUMENT_VIEW_INITIALIZE_DETAIL', 'initialize_detail');
 
 /* Constant For Design Document Update */
 define ('BILLING_DESIGN_DOCUMENT_UPDATE_GET_BILL_NO', 'getbillno');
@@ -48,6 +51,7 @@ define ('PETTY_INWARD_DOC_TYPE', 'petty_inward');
 define ('STORE_SHIFT_DOC_TYPE', 'store_shift');
 define ('LOGIN_HISTORY_DOC_TYPE', 'login_history');
 define ('CARD_SALE_DOC_TYPE', 'card_sale');
+define ('LAST_INITIALIZE_DOC_TYPE', 'last_initialize');
 
 
 /* Constant For Request Type */
@@ -59,8 +63,12 @@ define ('LOAD_PPA_CARD', 'load_ppa_card');
 define ('LOAD_PPC_CARD', 'load_ppc_card');
 define ('ACTIVATE_PPA_CARD', 'activate_ppa_card');
 define ('ACTIVATE_PPC_CARD', 'activate_ppc_card');
+define ('ISSUE_PPA_CARD', 'issue_ppa_card');
+define ('ISSUE_PPC_CARD', 'issue_ppc_card');
 define ('BALANCE_CHECK_PPC_CARD', 'balance_check_ppc_card');
 define ('BALANCE_CHECK_PPA_CARD', 'balance_check_ppa_card');
+define('CANCEL_REDEEM', 'cancel_redeem');
+define('CANCEL_LOAD', 'cancel_load');
 
 /* Constant For Request Type Error */
 define ('REQUEST_TYPE_NOT_ALLOWED', 'Request Type Not Found');
@@ -108,6 +116,7 @@ define ('PPA', 'ppa');
 define ('PPC', 'ppc');
 define('LOAD', 'load');
 define('ACTIVATE', 'activate');
+
 define('BALANCE_CHECK', 'balance_check');
 define('STAFF_LOCATION_NOT_FOUND', 'Provide Staff Location to replicate');
 define('DATA_NOT_FOUND', 'No Data Found With Associated Store');
