@@ -169,7 +169,7 @@ function cancel($details, $request_type){
 	
 	if($request_type==CANCEL_REDEEM){
 		$svRequest = GCWebPos::cancelRedeem($configDetails, $cardNumber, '1', $txnCode, $batchNo,  $amount, $transactionId, $cardPin, $approvalCode, '', $notes);
-	}else if($request_type==CANCEL_LOAD){
+	}else if($request_type==CANCEL_LOAD){ 
 		$svRequest = GCWebPos::cancelLoad($configDetails, $cardNumber, $amount, '1', $txnCode, $batchNo, $transactionId, $cardPin, $approvalCode, '', $notes);
 	}
 	$svResponse = $svRequest->execute();
