@@ -41,6 +41,7 @@
 			$configHead = $this->getConfig($this->cDB, 'head');
 			$data['head_data'] = $configHead['data']['head'];
 			$data['expense_data'] = $sr->getExpenseData($this->getCDate());
+			$data['card_load_data'] = $sr->getCardLoadSale($this->getCDate());
 			$data['shift'] = '';
 			$data['reconcilation'] = '';
 			$this->commonView('header_html');
