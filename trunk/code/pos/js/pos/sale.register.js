@@ -80,6 +80,33 @@ $("#search_button").click(function(){
         });
 	});
 
+/* Function To Cancel Card Load Transaction */
+	$('.cancel-transaction').on('click', function(){
+        var txn_no = $(this).closest('tr').data('txn_no');
+        var approval_code = $(this).closest('tr').data('approval_code');
+        var amount = $(this).closest('tr').data('amount');
+        var card = $(this).closest('tr').data('card_no');
+        alert(card);
+		bootbox.confirm("Do You Want To Cancel This Transaction?", function(result) {
+		if(result==true){
+			$.ajax({
+				type: 'POST',
+				url: "index.php?dispatch=billing.cancelLoad",
+			  	data : {request_type:'cancel_load', 'txn_no':txn-no, 'approval_code':approval-code, 'amount':amount, 'card_number':card},
+				}).done(function(response) {
+					response = $.parseJSON(response);
+					if(response.error){
+						bootbox.alert(response.message);
+					}else{
+						bootbox.alert(response.message,function(){
+							window.location = "?dispatch=sales_register";													
+						});
+					}
+				});
+            }
+        });
+	});
+
 
 /* Function To Save Petty Expense */
 	$('#add-expense-form').on('submit', function(event){

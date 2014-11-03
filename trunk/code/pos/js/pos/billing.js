@@ -185,7 +185,7 @@ $(document).ready(function(){
 												url: "index.php?dispatch=billing.save",
 										  		data : {request_type:'update_bill', doc:doc, cancel_reason:reason, bill_status_id: 79,bill_status_name:config_data.bill_status[79], due_amount:due_amount},
 											}).done(function(response) {
-												response = $.parseJSON(response);
+												response = $.parseJSON($.trim(response));
 												if(response.error){
 													bootbox.alert(response.message);
 												}else{
@@ -273,7 +273,6 @@ $(document).ready(function(){
                	  			$("span#loading_image").addClass('hide');
                	  			$('#submit-sale').attr('disabled',false);
                	 			result = $.parseJSON($.trim(response));
-               	 			
                	 			if(result.error){
 				 				$('.ppc_balance').hide();
 								bootbox.alert(result.message);
@@ -586,7 +585,7 @@ $(document).ready(function(){
 		  		data : billDetails,
 			}).done(function(response) {
 				console.log(response);
-				result = $.parseJSON(response);
+				result = $.parseJSON($.trim(response));
 				$('#submit-sale').attr('disabled',false);
 				if(result.error){
 					bootbox.alert(result.message);
