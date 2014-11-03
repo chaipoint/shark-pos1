@@ -20,6 +20,7 @@
 				}	
 				$resultBillList = $this->getBills($date);
 				$resultExpenseList = $this->getExpenseData($date);
+				$resultCardLoadSale = $this->getCardLoadSale($date);
 				
 				$pettyExpence = 0;
 				if(count($resultExpenseList['rows'])>0){
@@ -43,6 +44,7 @@
 					$resultBillList['head_data'] = $configHead['data']['head'];
 					$resultBillList['staff_list'] = $st->getStaffList();
 					$resultBillList['expense_data'] = $resultExpenseList;
+					$resultBillList['card_load_data'] = $resultCardLoadSale;
 					$this->view($resultBillList);
 
 					require_once DIR.'/login/login.php';
@@ -80,6 +82,12 @@
 				$return['data']['payment_type'] = $payment_type;
 			}
 			return json_encode($return);
+		}
+
+		/* Function To Get Card Load Sale */
+		function getCardLoadSale($date){
+				$resultSale = $this->cDB->getDesign(CARD_SALE_DESIGN_DOCUMENT)->getView(CARD_SALE_DESIGN_DOCUMENT_VIEW_GET_SALE)->setParam(array("include_docs"=>"true","startkey"=>'"'.$date.'"',"endkey"=>'"'.$date.'"'))->execute();
+				return $resultSale;
 		}
 
 		/* Function To Get Petty Expense */
