@@ -86,15 +86,15 @@ $("#search_button").click(function(){
         var approval_code = $(this).closest('tr').data('approval_code');
         var amount = $(this).closest('tr').data('amount');
         var card = $(this).closest('tr').data('card_no');
-        alert(card);
+        //alert(card);
 		bootbox.confirm("Do You Want To Cancel This Transaction?", function(result) {
 		if(result==true){
 			$.ajax({
 				type: 'POST',
 				url: "index.php?dispatch=billing.cancelLoad",
-			  	data : {request_type:'cancel_load', 'txn_no':txn-no, 'approval_code':approval-code, 'amount':amount, 'card_number':card},
+			  	data : {request_type:'cancel_load', 'txn_no':txn_no, 'approval_code':approval_code, 'amount':amount, 'card_number':card},
 				}).done(function(response) {
-					response = $.parseJSON(response);
+					response = $.parseJSON($.trim(response));
 					if(response.error){
 						bootbox.alert(response.message);
 					}else{
