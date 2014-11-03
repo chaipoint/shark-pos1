@@ -221,6 +221,30 @@
 							$billDataReturned['data']['bill_status_id'] = $_POST['bill_status_id'];
 							$billDataReturned['data']['time']['updated'] = $this->getCDTime();
 							$billDataReturned['data']['cancel_reason'] = array_key_exists('cancel_reason', $_POST) ? $_POST['cancel_reason'] : '';
+							if($billDataReturned['data']['payment_type']==PPC){
+								$data = array();
+								$data['amount'] = $billDataReturned['data']['card']['redeem_amount'];
+								$data['txn_no'] = $billDataReturned['data']['card']['txn_no'];
+								$data['approval_code'] = $billDataReturned['data']['card']['approval_code'];
+								$data['card_number'] = $billDataReturned['data']['card']['no'];
+								$dir =  dirname(__FILE__).'/../lib/svc/ppc_api.php';
+               					require_once $dir;
+                				$ppc = new PpcAPI();
+                				$cancelResponse = $ppc->cancel($data, CANCEL_REDEEM);
+                				if($cancelResponse['data']['success']=='False'){
+                					$return['error'] = true;
+                					$return['message'] = $cancelResponse['data']['message'];
+                					$res= json_encode($return);
+                					return $res;
+                				}else{
+                					$billDataReturned['data']['card_cancel_detail']['no'] = $cancelResponse['data']['card_number'];
+                					$billDataReturned['data']['card_cancel_detail']['type'] = PPC;
+                					$billDataReturned['data']['card_cancel_detail']['refund_amount'] = $billDataReturned['data']['card']['redeem_amount'];
+                					$billDataReturned['data']['card_cancel_detail']['txn_no'] = $cancelResponse['data']['txn_no'];
+                					$billDataReturned['data']['card_cancel_detail']['approval_code'] = $cancelResponse['data']['approval_code'];
+                					$billDataReturned['data']['card_cancel_detail']['balance'] = $cancelResponse['data']['balance'];
+                				}
+							}
 							$billSaveResult = $this->cDB->saveDocument()->execute($billDataReturned['data']);
 							$this->log->trace("SAVE BILL RESULT \r\n".json_encode($billSaveResult));
 							$return['message'] = 'Bill <b>'.$_POST['bill_status_name']."</b> Successfully".(strlen($billDataReturned['data']['cancel_reason'])>0 ? '<br/>Change Return is <b>'.$_POST['due_amount'].'</b>' : '');
@@ -251,11 +275,11 @@
 			$return = array('error'=>false,'message'=>'','data'=>array());
 			$dir =  dirname(__FILE__).'/../lib/svc/ppc_api.php';
             require_once $dir;
-			
+			$ppc = new PpcAPI();
 			if($_SERVER['REQUEST_METHOD'] == 'POST') {
 				$balanceCheck = array();
 				$balanceDeduction = array();	
-				$balanceDeduction = redeem($_POST, PPC_REDEEM);
+				$balanceDeduction = $ppc->redeem($_POST, PPC_REDEEM);
 				$this->log->trace("PPC REDEEMING METHOD RESPONSE \r\n".json_encode($balanceDeduction));
 				$res = json_encode($balanceDeduction,true);
 				return $res;
@@ -282,18 +306,19 @@
         function loadCard(){
         	$return = array('error'=>false,'message'=>'','data'=>array());
         	$loadResponse = array();
-        	if(array_key_exists('request_type', $_POST) && ($_POST['request_type'] == LOAD_PPA_CARD || $_POST['request_type'] == ACTIVATE_PPA_CARD || $_POST['request_type'] == BALANCE_CHECK_PPA_CARD )){
+        	if(array_key_exists('request_type', $_POST) && ($_POST['request_type'] == LOAD_PPA_CARD || $_POST['request_type'] == ACTIVATE_PPA_CARD || $_POST['request_type'] == ISSUE_PPA_CARD || $_POST['request_type'] == BALANCE_CHECK_PPA_CARD )){
         		$dir =  dirname(__FILE__).'/../lib/api/ppa_api.php';
             	require_once $dir;
             	$config_data = $this->configData['ppa_api'];
             	$card_type = PPA;
             	$loadResponse = ppa_api($config_data, $_POST, $_POST['request_type']);
             
-            }else if(array_key_exists('request_type', $_POST) && ($_POST['request_type'] == LOAD_PPC_CARD || $_POST['request_type'] == ACTIVATE_PPC_CARD || $_POST['request_type'] == BALANCE_CHECK_PPC_CARD )){
+            }else if(array_key_exists('request_type', $_POST) && ($_POST['request_type'] == LOAD_PPC_CARD || $_POST['request_type'] == ACTIVATE_PPC_CARD || $_POST['request_type'] == ISSUE_PPC_CARD || $_POST['request_type'] == BALANCE_CHECK_PPC_CARD )){
             	$dir =  dirname(__FILE__).'/../lib/svc/ppc_api.php';
                 require_once $dir;
+                $ppc = new PpcAPI();
                 $card_type = PPC;
-				$loadResponse = redeem($_POST, $_POST['request_type']);
+				$loadResponse = $ppc->redeem($_POST, $_POST['request_type']);
 			}
 				if($loadResponse['data']['success']=='True' && $loadResponse['data']['txn_type']!=BALANCE_CHECK){
 					$saveData = array();
@@ -301,6 +326,7 @@
 					$saveData['card_no'] = $loadResponse['data']['card_number'];
 					$saveData['card_type'] = $card_type;
 					$saveData['txn_no']	= $loadResponse['data']['txn_no'];
+					$saveData['approval_code']	= $loadResponse['data']['approval_code'];
 					$saveData['amount'] = $_POST['amount'];
 					$saveData['balance'] = $loadResponse['data']['balance'];
 					$saveData['txn_type'] = $loadResponse['data']['txn_type'];
@@ -314,6 +340,27 @@
 				$res = json_encode($loadResponse,true);
 				return $res;
 			}
+
+		/* Function To Cancel Card Load Transaction */
+		function cancelLoad(){
+			$return = array('error'=>false,'message'=>'','data'=>array());
+			if(array_key_exists('request_type', $_POST) && ($_POST['request_type'] == CANCEL_LOAD)){
+				$dir =  dirname(__FILE__).'/../lib/svc/ppc_api.php';
+                require_once $dir;
+                $ppc = new PpcAPI();
+                $cancelResponse = $ppc->cancel($_POST, $_POST['request_type']);
+                if($cancelResponse['data']['success']=='False'){
+					$return['error'] = true;
+                	$return['message'] = $cancelResponse['data']['message'];
+                }else{
+                	$return['error'] = false;
+                	$return['message'] = $cancelResponse['data']['message'].' Your Balance Is: '.$cancelResponse['data']['balance'];
+				}
+
+			} 
+			$res = json_encode($return);
+			return $res;
+		}
 
         /* Function To Print Out Bill  */
         function printBill($data){ 
