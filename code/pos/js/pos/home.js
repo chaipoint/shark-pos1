@@ -32,7 +32,7 @@ $(document).ready(function(){
 		$('#store_shift_logic form').addClass('hide');
 		$('#store_'+$(this).attr('id')+"_form").removeClass('hide');	
 	});
-	keyboard.push($('input[name="username1"],input[name="password"],#petty_cash, #counter_no, #petty_cash_end, #box_cash, #box_cash_end').cKeyboard());
+	keyboard.push($('input[name="username1"],input[name="password"],input[name="first_name"],input[name="last_name"],input[name="mobile_no"],input[name="amount"],#petty_cash, #counter_no, #petty_cash_end, #box_cash, #box_cash_end').cKeyboard());
 	
 
 $('#tab_selection_menu').on('click','.home_tabs',function(){
@@ -117,11 +117,20 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 		$("#"+errorHolder).hide();
 		var msg = "";
 		var formData = form.serializeObject(); 
-		switch(formID){ 
+		switch(formID){
+
+			case 'store_ppc_card_issue_form':
+				formData.request_type = 'issue_ppc_card';
+				if((formData.card_group_name).trim() == ""){msg += "<li>Provide Card Group Name</li>";}
+				else if((formData.first_name).trim() == ""){msg += "<li>Provide First Name</li>";}
+				else if((formData.last_name).trim() == ""){msg += "<li>Provide Last Name</li>";}
+				else if((formData.mobile_no).trim() == ""){msg += "<li>Provide Mobile NUmber</li>";}
+				else if((formData.amount).trim() == ""){msg += "<li>Provide Amount</li>";}
+				break;
+
 			case 'store_ppc_card_activate_form':
 				formData.request_type = 'activate_ppc_card';
 				if((formData.first_name).trim() == ""){msg += "<li>Provide First Name</li>";}
-				else if((formData.last_name).trim() == ""){msg += "<li>Provide Last Name</li>";}
 				else if((formData.last_name).trim() == ""){msg += "<li>Provide Last Name</li>";}
 				else if((formData.mobile_no).trim() == ""){msg += "<li>Provide Mobile NUmber</li>";}
 				else if((formData.card_number).trim() == ""){msg += "<li>Provide Currect Card No</li>";}
@@ -149,7 +158,7 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 				formData.request_type = 'balance_check_ppa_card';
 				if((formData.card_number).trim() == ""){msg += "<li>Provide Currect Card No</li>";}
 				break;
-		} //alert(JSON.stringify(formData));
+		} alert(JSON.stringify(formData)); //return false;
 		if(msg){
 			$("#"+errorHolder).show();$("#"+errorHolder+" ul").html(msg);
 		}else{  
@@ -157,7 +166,7 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 				type: 'POST',
 				url: "index.php?dispatch=billing.loadCard",
 				data : formData
-			}).done(function(response) {
+			}).done(function(response) { alert(response);
 				$("form#"+formID+":input").val('');
 				var $res =  $.parseJSON($.trim(response));
 				console.log($res); 
