@@ -164,6 +164,10 @@
 </div>
 
 <div class="col-sm-12" style="margin-top:10px;">
+          <?php require_once 'load_card_table.php';?>
+</div>
+
+<div class="col-sm-12" style="margin-top:10px;">
     <div class="panel panel-info"> 
       <div class="panel-heading col" data-toggle="collapse" data-parent="#accordion" href="#collapseCancel"><a>Cancelled Bill Details
       <i class="glyphicon glyphicon-chevron-up pull-right"></i></a></div>
