@@ -230,7 +230,7 @@ session_start();
 				if(array_key_exists('cMessage', $result)){
 					$arr['error'] = true;
 					$arr['message'] = 'server_down';
-				}else{
+				}elseif(array_key_exists('rows',$result) && count($result['rows'])>0){
 					foreach($result['rows'] as $key => $value){
 						$arr['data'][$value['key']] = $value['value'];
 					}
