@@ -15,6 +15,7 @@ function init(){
       }
       
       $designDocs[] = array('_id'=>'generateBill','cd_doc_type' => 'bill_counter', 'current' => 0, 'current_month' => 0);
+      $designDocs[] = array('_id'=>'generateppcBill','cd_doc_type' => 'ppc_bill_counter', 'current' => 0, 'current_date' => 0);
 
       $designDocs[] = array(
         '_id'=>'_design/staff',
