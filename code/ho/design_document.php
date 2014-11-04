@@ -49,7 +49,11 @@ function init(){
         'views' => array(
           "initialize_detail"=>array(
               "map"=>"function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'last_initialize'){ var date = doc.time.split(' '); emit(date[0], null); } }",
+            ),
+          "last_bill"=>array(
+              "map"=>"function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'last_ppc_bill'){ var date = doc.time.split(' '); emit(date[0], null); } }",
             )
+
           )
         
       );
