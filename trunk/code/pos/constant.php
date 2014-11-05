@@ -28,6 +28,7 @@ define ('PPC_DETAIL_DESIGN_DOCUMENT_VIEW_LAST_BILL', 'last_bill');
 /* Constant For Design Document Update */
 define ('BILLING_DESIGN_DOCUMENT_UPDATE_GET_BILL_NO', 'getbillno');
 define ('PPC_DETAIL_DESIGN_DOCUMENT_UPDATE_GET_BILL_NO', 'getbillno');
+define ('PPC_DETAIL_DESIGN_DOCUMENT_UPDATE_CHANGE_STATUS', 'change_status');
 define ('STORE_DESIGN_DOCUMENT_UPDATE_STORE_SHIFT', 'store_shift');
 define ('LOGIN_DESIGN_DOCUMENT_UPDATE_LOGIN_HISTORY', 'login_history');
 
@@ -139,6 +140,7 @@ define('QUERY_PARAMS', "'query_params'");
 define('CONTINUOUS', "continuous");
 define('CANCEL', "cancel");
 define('OK', "ok");
+define('PAID', "paid");
 
 
 global $PAYMENT_MODE, $ORDER_STATUS, $CARD_RESPONSE_ARRAY;
