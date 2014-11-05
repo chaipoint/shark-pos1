@@ -23,9 +23,11 @@ define ('PETTY_EXPENSE_DESIGN_DOCUMENT_VIEW_GET_INWARD', 'get_inward');
 define ('STAFF_DESIGN_DOCUMENT_VIEW_STAFF_USERNAME', 'staff_username');
 define ('CARD_SALE_DESIGN_DOCUMENT_VIEW_GET_SALE', 'get_sale');
 define ('PPC_DETAIL_DESIGN_DOCUMENT_VIEW_INITIALIZE_DETAIL', 'initialize_detail');
+define ('PPC_DETAIL_DESIGN_DOCUMENT_VIEW_LAST_BILL', 'last_bill');
 
 /* Constant For Design Document Update */
 define ('BILLING_DESIGN_DOCUMENT_UPDATE_GET_BILL_NO', 'getbillno');
+define ('PPC_DETAIL_DESIGN_DOCUMENT_UPDATE_GET_BILL_NO', 'getbillno');
 define ('STORE_DESIGN_DOCUMENT_UPDATE_STORE_SHIFT', 'store_shift');
 define ('LOGIN_DESIGN_DOCUMENT_UPDATE_LOGIN_HISTORY', 'login_history');
 
@@ -52,6 +54,7 @@ define ('STORE_SHIFT_DOC_TYPE', 'store_shift');
 define ('LOGIN_HISTORY_DOC_TYPE', 'login_history');
 define ('CARD_SALE_DOC_TYPE', 'card_sale');
 define ('LAST_INITIALIZE_DOC_TYPE', 'last_initialize');
+define ('LAST_PPC__BILL_DOC_TYPE', 'last_ppc_bill');
 
 
 /* Constant For Request Type */
@@ -115,6 +118,7 @@ define ('PPC_ACTIVATE', 'activate');
 define ('PPA', 'ppa');
 define ('PPC', 'ppc');
 define('LOAD', 'load');
+define('REDEEM', 'redeem');
 define('ACTIVATE', 'activate');
 
 define('BALANCE_CHECK', 'balance_check');
