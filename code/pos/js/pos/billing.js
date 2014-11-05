@@ -295,6 +295,7 @@ $(document).ready(function(){
 								$('#card_txn_no').val(result.data['txn_no']);
 								$('#card_approval_code').val(result.data['approval_code']);
 								$('#card_balance').val(result.data['balance']);
+								$('#card_invoice_no').val(result.data['invoice_number']);
 								$('#submit-sale').trigger('click');
 							}
               			});
@@ -574,6 +575,7 @@ $(document).ready(function(){
 			billDetails.card.txn_no = $('#card_txn_no').val();;
 			billDetails.card.approval_code = $('#card_approval_code').val();;
 			billDetails.card.balance = $('#card_balance').val();;
+			billDetails.card.invoice_number = $('#card_invoice_no').val();;
 			billDetails.reprint = 1;
 			billDetails.request_type = 'save_bill';
 			billDetails.utility_check = printUtility;
