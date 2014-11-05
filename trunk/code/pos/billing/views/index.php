@@ -45,7 +45,7 @@
 
 		if(!empty($lastBillNo) && !empty($lastBillTime)){
 			//echo $lastBillNo." ".$lastBillTime;
-			echo '&nbsp;&nbsp;<button class="btn btn-sm btn-info" type="button"><b>Last Bill No:</b>&nbsp;<strong>'.$lastBillNo.'</strong>&nbsp;&nbsp;&nbsp;&nbsp;<b>Time:</b>&nbsp;<strong>'.date('H:i:s',strtotime($lastBillTime)).'</strong></button>';
+			echo '&nbsp;&nbsp;<button class="btn btn-sm btn-info" type="button"><b>Last Bill No:</b>&nbsp;<span id="last_bill_no"><strong>'.$lastBillNo.'</strong></span>&nbsp;&nbsp;&nbsp;&nbsp;<b>Time:</b>&nbsp;<strong>'.date('H:i:s',strtotime($lastBillTime)).'</strong></button>';
 		}
 		?>
 		
