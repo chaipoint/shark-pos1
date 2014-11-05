@@ -1,5 +1,5 @@
 <?php 
-		function ppa_api($details,$data,$request_type){
+		function ppa_api($details,$data,$request_type,$invoiceNumber){
             global $CARD_RESPONSE_ARRAY;
 			$return = array('error'=>false,'message'=>'','data'=>array());
     		$username = $details["username"];
@@ -41,6 +41,7 @@
                 $responseArray['card_number'] = $result['card_number'];
                 $responseArray['txn_no'] = $result['approval_code'];
                 $responseArray['approval_code'] = $result['approval_code'];
+                $responseArray['invoice_number'] = $invoiceNumber;
                 $responseArray['txn_type'] = $txn_type;
                 $return['data'] = $responseArray;
             } 
