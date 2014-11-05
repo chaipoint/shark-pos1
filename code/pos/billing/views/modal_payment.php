@@ -46,6 +46,7 @@
 				<input type="hidden" name="card_txn_no" id="card_txn_no">
 				<input type="hidden" name="card_approval_code" id="card_approval_code">
 				<input type="hidden" name="card_balance" id="card_balance">
+				<input type="hidden" name="card_invoice_no" id="card_invoice_no">
 
 			<div class="modal-body">
 				<table class="table table-striped" style="font-size:12px;">
