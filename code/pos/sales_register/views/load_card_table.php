@@ -1,11 +1,10 @@
 <div class="panel panel-info"> 
-      <div class="panel-heading col" data-toggle="collapse" data-parent="#accordion" href="#collapseCard"><a>Card Load Details
-        <i class="glyphicon glyphicon-chevron-up pull-right"></i></a></div>
-        <div id="collapseCard" class="panel-collapse collapse">
-          <div class="panel-body">
-
-            <table id="load_card_table" class="table table-striped table-bordered table-condensed table-hover" style="margin-bottom:5px;">
-	           <thead>
+  <div class="panel-heading col" data-toggle="collapse" data-parent="#accordion" href="#collapseCard"><a>Card Load Details
+    <i class="glyphicon glyphicon-chevron-up pull-right"></i></a></div>
+    <div id="collapseCard" class="panel-collapse collapse">
+      <div class="panel-body">
+        <table id="load_card_table" class="table table-striped table-bordered table-condensed table-hover" style="margin-bottom:5px;">
+	         <thead>
                 <tr id="filter_active">
                   <th></th>
                   <th></th>
@@ -21,15 +20,13 @@
                   <th>Action</th>
                 </tr>
               </thead>
-            
-	       <tbody>
+            <tbody>
 
 <?php   
 if(array_key_exists('rows', $card_load_data) && count($card_load_data['rows'])>0) { 
-  $data = $card_load_data['rows'];
-    foreach ($data as $key => $value) { ?>
-	      
-        <tr class="text-center" data-txn_no="<?php echo $value['doc']['txn_no']; ?>" data-approval_code="<?php echo $value['doc']['approval_code']; ?>" data-amount="<?php echo $value['doc']['amount']; ?>" data-card_no="<?php echo $value['doc']['card_no']; ?>" data-invoice_number="<?php echo $value['doc']['invoice_number']; ?>">
+    $data = $card_load_data['rows'];
+    foreach ($data as $key => $value) { if($value['doc']['status']!='cancel'){ ?>
+	      <tr class="text-center" data-doc_id="<?php echo $value['doc']['_id']; ?>" data-txn_no="<?php echo $value['doc']['txn_no']; ?>" data-approval_code="<?php echo $value['doc']['approval_code']; ?>" data-amount="<?php echo $value['doc']['amount']; ?>" data-card_no="<?php echo $value['doc']['card_no']; ?>" data-invoice_number="<?php echo $value['doc']['invoice_number']; ?>">
 		        <td style="text-align:center"><?php echo DATE('H:i:s',strtotime($value['doc']['time'])); ?></td>
 		        <td style="text-align:center"><?php echo $value['doc']['card_type']; ?></td>
             <td style="text-align:center"><?php echo $value['doc']['txn_type']; ?></td>
@@ -43,7 +40,7 @@ if(array_key_exists('rows', $card_load_data) && count($card_load_data['rows'])>0
 		          
 		        </td>
         </tr>
-    <?php	  } } ?>		
+    <?php	  } } } ?>		
       
       </tbody>
    
