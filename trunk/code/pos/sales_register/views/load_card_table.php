@@ -29,7 +29,7 @@ if(array_key_exists('rows', $card_load_data) && count($card_load_data['rows'])>0
   $data = $card_load_data['rows'];
     foreach ($data as $key => $value) { ?>
 	      
-        <tr class="text-center" data-txn_no="<?php echo $value['doc']['txn_no']; ?>" data-approval_code="<?php echo $value['doc']['approval_code']; ?>" data-amount="<?php echo $value['doc']['amount']; ?>" data-card_no="<?php echo $value['doc']['card_no']; ?>">
+        <tr class="text-center" data-txn_no="<?php echo $value['doc']['txn_no']; ?>" data-approval_code="<?php echo $value['doc']['approval_code']; ?>" data-amount="<?php echo $value['doc']['amount']; ?>" data-card_no="<?php echo $value['doc']['card_no']; ?>" data-invoice_number="<?php echo $value['doc']['invoice_number']; ?>">
 		        <td style="text-align:center"><?php echo DATE('H:i:s',strtotime($value['doc']['time'])); ?></td>
 		        <td style="text-align:center"><?php echo $value['doc']['card_type']; ?></td>
             <td style="text-align:center"><?php echo $value['doc']['txn_type']; ?></td>
