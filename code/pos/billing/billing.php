@@ -10,13 +10,14 @@
 		}
 
 		/* This Function Is Automatically Called When We Come On Billing Module */
-		function index(){
+		function index(){ 
 			if(array_key_exists('referer',$_GET) && $_GET['referer'] == HOME){
 			}else{
 				if(!array_key_exists('shift', $_SESSION['user'])){
 					header("LOCATION:index.php");
 				}
 			}
+			
 			//Block sto get Configs and need to have a generic methode for that
 			$data = array('error' => false,'catList'=>array(),'productList'=>array(),'firstCat'=>0, 'config_data'=>array(),'bill'=>array(),'lastBillNo'=>'','lastBillTime'=>'');
 			$resultStoreMenu = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_MYSQL_ID)->setParam(array('include_docs'=>'true',"key"=>'"'.$_SESSION['user']['store']['id'].'"'))->execute();
@@ -226,6 +227,7 @@
 								$data['amount'] = $billDataReturned['data']['card']['redeem_amount'];
 								$data['txn_no'] = $billDataReturned['data']['card']['txn_no'];
 								$data['approval_code'] = $billDataReturned['data']['card']['approval_code'];
+								$data['invoice_number'] = $billDataReturned['data']['card']['invoice_number'];
 								$data['card_number'] = $billDataReturned['data']['card']['no'];
 								$dir =  dirname(__FILE__).'/../lib/svc/ppc_api.php';
                					require_once $dir;
@@ -295,7 +297,8 @@
             $config_data = $this->configData['ppa_api'];
             if($_SERVER['REQUEST_METHOD'] == 'POST') {
             	$balanceDeduction = array();
-				$balanceDeduction = ppa_api($config_data, $_POST, PPA_REDEEM);
+            	$invoiceNumber = $this->cDB->getDesign(PPC_DETAIL_DESIGN_DOCUMENT)->getUpdate(PPC_DETAIL_DESIGN_DOCUMENT_UPDATE_GET_BILL_NO,'generateppcBill')->setParam(array('date'=>$this->getCDate()))->execute();;
+				$balanceDeduction = ppa_api($config_data, $_POST, PPA_REDEEM,$invoiceNumber);
 				$res = json_encode($balanceDeduction,true);
 				return $res;
 			}
@@ -311,7 +314,8 @@
             	require_once $dir;
             	$config_data = $this->configData['ppa_api'];
             	$card_type = PPA;
-            	$loadResponse = ppa_api($config_data, $_POST, $_POST['request_type']);
+            	$invoiceNumber = $this->cDB->getDesign(PPC_DETAIL_DESIGN_DOCUMENT)->getUpdate(PPC_DETAIL_DESIGN_DOCUMENT_UPDATE_GET_BILL_NO,'generateppcBill')->setParam(array('date'=>$this->getCDate()))->execute();;
+            	$loadResponse = ppa_api($config_data, $_POST, $_POST['request_type'],$invoiceNumber);
             
             }else if(array_key_exists('request_type', $_POST) && ($_POST['request_type'] == LOAD_PPC_CARD || $_POST['request_type'] == ACTIVATE_PPC_CARD || $_POST['request_type'] == ISSUE_PPC_CARD || $_POST['request_type'] == BALANCE_CHECK_PPC_CARD )){
             	$dir =  dirname(__FILE__).'/../lib/svc/ppc_api.php';
@@ -331,10 +335,12 @@
 					$saveData['balance'] = $loadResponse['data']['balance'];
 					$saveData['txn_type'] = $loadResponse['data']['txn_type'];
 					$saveData['time'] = date('Y-m-d H:i:s');
+					$saveData['status'] = PAID;
 					$saveData['store_id'] = $_SESSION['user']['store']['id'];
 					$saveData['store_name'] = $_SESSION['user']['store']['name'];
 					$saveData['staff_id'] = $_SESSION['user']['mysql_id'];
 					$saveData['staff_name'] = $_SESSION['user']['name'];
+					$saveData['invoice_number'] = $loadResponse['data']['invoice_number'];
 					$result = $this->cDB->saveDocument()->execute($saveData);
 				}
 				$res = json_encode($loadResponse,true);
@@ -355,6 +361,7 @@
                 }else{
                 	$return['error'] = false;
                 	$return['message'] = $cancelResponse['data']['message'].' Your Balance Is: '.$cancelResponse['data']['balance'];
+                	$this->cDB->getDesign(PPC_DETAIL_DESIGN_DOCUMENT)->getUpdate(PPC_DETAIL_DESIGN_DOCUMENT_UPDATE_CHANGE_STATUS, $_POST['doc_id'])->setParam(array('status'=>CANCEL,'txn_no'=>$cancelResponse['data']['txn_no'],'approval_code'=>$cancelResponse['data']['approval_code'],'balance'=>$cancelResponse['data']['balance']))->execute();
 				}
 
 			} 
