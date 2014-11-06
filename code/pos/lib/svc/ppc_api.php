@@ -23,14 +23,14 @@ class PpcAPI extends App_config {
 		}
 
 /*Function To Perform Redeem, Load, Activate, Card Issue, Balance Check Operation  */
-function redeem($details, $request_type){ 
+function ppcOperation($details, $request_type){ 
 	global $CARD_RESPONSE_ARRAY;
 	$responseArray = $CARD_RESPONSE_ARRAY;
-	$return = array();
-	$return['error'] = false;
+	$return = array('error'=>false, 'message'=>'');
+	
 	if(!is_array($details) || count($details) == 0){
 		$return['error'] = true;
-		$return['msg'] = "Incorrect Parameter Supplied";
+		$return['message'] = "Incorrect Parameter Supplied";
 		return $return;
 	}
 
@@ -48,10 +48,9 @@ function redeem($details, $request_type){
 		$configDetails = $this->initialize();
 		if( $configDetails->getErrorCode() != SVStatus::SUCCESS){
 			$return['error'] = true;
-			$return['msg'] = $configDetails->getErrorMessage();
+			$return['message'] = $configDetails->getErrorMessage();
 			return $return;
 		}else{
-			
 			$data = array();
 			$data['cd_doc_type'] = LAST_INITIALIZE_DOC_TYPE ;
 			$data['time'] = $this->getCDTime();
@@ -61,12 +60,11 @@ function redeem($details, $request_type){
 		} 
 	}
 
-	list($first, $second) = explode('=', $details['card_number']);
-	$card_no = str_replace(';', '', $first);
-	$cardNumber = $card_no;
-	$cardPin = '';
-	$notes = 'SHARK POS Transcation On '.Date("d/m/Y H:i:s");
 	$trackData = $details['card_number'];
+	list($first, $second) = explode('=', $trackData); // To Get Card Number
+	$cardNumber = str_replace(';', '', $first);
+	$cardPin = '';
+	$notes = 'SHARK POS Transaction On '.Date("d/m/Y H:i:s");
 	$invoiceNumber = '';
 	if($request_type!=BALANCE_CHECK_PPC_CARD){
 		$invoiceNumber = $this->cDB->getDesign(PPC_DETAIL_DESIGN_DOCUMENT)->getUpdate(PPC_DETAIL_DESIGN_DOCUMENT_UPDATE_GET_BILL_NO,'generateppcBill')->setParam(array('date'=>$this->getCDate()))->execute();;
@@ -118,7 +116,7 @@ function redeem($details, $request_type){
 	$svResponse = $svRequest->execute();
 	
 	if($request_type!=BALANCE_CHECK_PPC_CARD){
-		$this->createBillDoc($cardNumber,$amount,$invoiceNumber,$txn_type);	
+		$this->createLastBillDoc($cardNumber, $amount, $invoiceNumber, $transactionId, $txn_type);	
 	}
 
 	if($svResponse->errorCode != 0){
@@ -127,7 +125,7 @@ function redeem($details, $request_type){
 		$responseArray['balance'] = ($svResponse->params['ResponseMessage']=="Balance is insufficient." ? '0' : '');
 		$return['data'] = $responseArray;
 		if($request_type!=BALANCE_CHECK_PPC_CARD){
-			$this->updateBillDoc($svResponse->params['TransactionId'],'',$cardNumber,$amount,$invoiceNumber,$txn_type);	
+			$this->updateLastBillDoc($svResponse->params['TransactionId'], '', $cardNumber, $amount, $invoiceNumber, $txn_type);	
 		}
 	}else{
 		$responseArray['success'] = 'True';
@@ -140,7 +138,7 @@ function redeem($details, $request_type){
 		$responseArray['invoice_number'] = $invoiceNumber;
 		$return['data'] = $responseArray;
 		if($request_type!=BALANCE_CHECK_PPC_CARD){
-			$this->updateBillDoc($svResponse->params['TransactionId'],$svResponse->params['ApprovalCode'],$cardNumber,$amount,$invoiceNumber,$txn_type);	
+			$this->updateLastBillDoc($svResponse->params['TransactionId'], $svResponse->params['ApprovalCode'], $cardNumber, $amount, $invoiceNumber, $txn_type);	
 		}
 
 	}
@@ -149,21 +147,22 @@ function redeem($details, $request_type){
 }
 
 /*Function To Create Last PPC BIll Doc*/
-function createBillDoc($card_number,$amount,$invoice,$txn_type){
+function createLastBillDoc($cardNumber, $amount, $invoiceNumber, $transactionId, $txn_type){
 	$bill_data = array();
 	if(!empty($_SESSION['user']['ppc_bill'])){
 		$bill_data['_id'] = $_SESSION['user']['ppc_bill']['_id'];
 	}
 	$bill_data['status'] = 'False';
 	$bill_data['cd_doc_type'] = LAST_PPC__BILL_DOC_TYPE;
-	$bill_data['card_no'] = $card_number;
+	$bill_data['card_no'] = $cardNumber;
 	$bill_data['amount'] = $amount;
-	$bill_data['invoice_number'] = $invoice;
+	$bill_data['invoice_number'] = $invoiceNumber;
 	$bill_data['txn_type'] = $txn_type;
+	$bill_data['txn_no'] = $transactionId;
 	$bill_data['time'] = date('Y-m-d H:i:s');
 	$res = $this->cDB->saveDocument()->execute($bill_data);
 	
-	if(array_key_exists('ok', $res)){
+	if(array_key_exists(OK, $res)){
 		$_SESSION['user']['ppc_bill']['_id'] = $res['id'];
 		$_SESSION['user']['ppc_bill']['_rev'] = $res['rev'];
 	}
@@ -171,7 +170,7 @@ function createBillDoc($card_number,$amount,$invoice,$txn_type){
 }
 
 /*Function To Update Last PPC BIll Doc IF Response Is come From QuickSliver*/
-function updateBillDoc($txn_no,$approval_code,$card_number,$amount,$invoice,$txn_type){
+function updateLastBillDoc($transactionId, $approval_code, $cardNumber, $amount, $invoiceNumber, $txn_type){
 	$bill_data = array();
 	if(!empty($_SESSION['user']['ppc_bill'])){
 		$bill_data['_id'] = $_SESSION['user']['ppc_bill']['_id'];
@@ -179,16 +178,16 @@ function updateBillDoc($txn_no,$approval_code,$card_number,$amount,$invoice,$txn
 	}
 	$bill_data['status'] = 'True';
 	$bill_data['cd_doc_type'] = LAST_PPC__BILL_DOC_TYPE;
-	$bill_data['card_no'] = $card_number;
+	$bill_data['card_no'] = $cardNumber;
 	$bill_data['amount'] = $amount;
-	$bill_data['invoice_number'] = $invoice;
+	$bill_data['invoice_number'] = $invoiceNumber;
 	$bill_data['txn_type'] = $txn_type;
-	$bill_data['txn_no'] = $txn_no;
+	$bill_data['txn_no'] = $transactionId;
 	$bill_data['approval_code'] = $approval_code;
-	
 	$bill_data['time'] = date('Y-m-d H:i:s');
+	
 	$res = $this->cDB->saveDocument()->execute($bill_data);
-	if(array_key_exists('ok', $res)){
+	if(array_key_exists(OK, $res)){
 		$_SESSION['user']['ppc_bill']['_id'] = $res['id'];
 		$_SESSION['user']['ppc_bill']['_rev'] = $res['rev'];
 	}
@@ -222,16 +221,16 @@ function timeOutCancellation(){
 /*Function To Perform ppc redeem cancel, ppc load cancel, ppc activate cancel*/
 function cancel($details, $request_type){ 
 	global $CARD_RESPONSE_ARRAY;
-	$return = array();
-	$return['error'] = false;
+	$responseArray = $CARD_RESPONSE_ARRAY;
+	$return = array('error'=>false, 'message'=>'');
+	
 	if(!is_array($details) || count($details) == 0){
 		$return['error'] = true;
-		$return['msg'] = "Incorrect Parameter Supplied";
+		$return['message'] = "Incorrect Parameter Supplied";
 		return $return;
 	}
 
 	$getConfigDetails = $this->cDB->getDesign(PPC_DETAIL_DESIGN_DOCUMENT)->getView(PPC_DETAIL_DESIGN_DOCUMENT_VIEW_INITIALIZE_DETAIL)->setParam(array('include_docs'=>'true','key'=>'"'.date('Y-m-d').'"'))->execute();
-	
 	if(array_key_exists('rows', $getConfigDetails) && count($getConfigDetails['rows'])>0){ 
 		$config = $getConfigDetails['rows'][0]['doc']['details']['params'];
 		$batchNo = $getConfigDetails['rows'][0]['doc']['details']['params']['CurrentBatchNumber'];
@@ -242,7 +241,7 @@ function cancel($details, $request_type){
 	
 	$cardNumber = $details['card_number'];
 	$cardPin = '';
-	$notes = 'ChaiPoint Order Transcation On '.Date("d/m/Y H:i:s");
+	$notes = 'SHARK POS Transaction On '.Date("d/m/Y H:i:s");
 	$trackData = $details['card_number'];
 	$invoiceNumber = $details['invoice_number'];
 	$amount = $details['amount'];
@@ -255,11 +254,12 @@ function cancel($details, $request_type){
 	
 	if($request_type==CANCEL_REDEEM){
 		$svRequest = GCWebPos::cancelRedeem($configDetails, $cardNumber, $invoiceNumber, $txnCode, $batchNo,  $amount, $transactionId, $cardPin, $approvalCode, '', $notes);
+	
 	}else if($request_type==CANCEL_LOAD){ 
 		$svRequest = GCWebPos::cancelLoad($configDetails, $cardNumber, $amount, $invoiceNumber, $txnCode, $batchNo, $transactionId, $cardPin, $approvalCode, '', $notes);
 	}
+	
 	$svResponse = $svRequest->execute();
-	$responseArray = $CARD_RESPONSE_ARRAY;
 	
 	if($svResponse->errorCode != 0){
 		$responseArray['success'] = 'False';
@@ -281,13 +281,14 @@ function cancel($details, $request_type){
 }
 
 /*Function To REISSUE PPC CARD*/
-function reissue($details, $request_type){ 
+function reIssue($details, $request_type){ 
 	global $CARD_RESPONSE_ARRAY;
-	$return = array();
-	$return['error'] = false;
+	$responseArray = $CARD_RESPONSE_ARRAY;
+	$return = array('error'=>false, 'message'=>'');
+	
 	if(!is_array($details) || count($details) == 0){
 		$return['error'] = true;
-		$return['msg'] = "Incorrect Parameter Supplied";
+		$return['message'] = "Incorrect Parameter Supplied";
 		return $return;
 	}
 
@@ -303,7 +304,7 @@ function reissue($details, $request_type){
 		$configDetails = $this->initialize();
 		if( $configDetails->getErrorCode() != SVStatus::SUCCESS){
 			$return['error'] = true;
-			$return['msg'] = $configDetails->getErrorMessage();
+			$return['message'] = $configDetails->getErrorMessage();
 			return $return;
 		}else{
 			
@@ -316,15 +317,12 @@ function reissue($details, $request_type){
 		} 
 	}
 	
-	list($first, $second) = explode('=', $details['card_number']);
-	$card_no = str_replace(';', '', $first);
-	$cardNumber = $card_no;
-	$cardPin = '';
-	$notes = 'ChaiPoint Order Transcation On '.Date("d/m/Y H:i:s");
 	$trackData = $details['card_number'];
+	list($first, $second) = explode('=', $trackData); // to get card number
+	$cardNumber = str_replace(';', '', $first);
+	$cardPin = '';
+	$notes = 'SHARK POS Transaction On '.Date("d/m/Y H:i:s");
 	$invoiceNumber = '';
-	$approvalCode = '';
-	$billAmount = $details['amount'];
 	$microTime = microtime();
 	$microTimeArr = explode(" ", $microTime);
 	$transactionId = substr($microTimeArr[1],5).round($microTimeArr[0] * 1000) ;
@@ -336,45 +334,43 @@ function reissue($details, $request_type){
 		$phoneNumber = $details['mobile_no'];
 		$svRequest = GCWebPos::getCustomerInfoFromCardNumber($configDetails, $originalCardNo, $firstName, $lastName, $phoneNumber);
 		$txn_type = GET_CUSTOMER_INFO;
-		
-	}elseif($request_type==REISSUE_PPC_CARD){ 
-		$originalCardNo = $details['original_card_no'];
-		$invoiceNumber = $this->cDB->getDesign(PPC_DETAIL_DESIGN_DOCUMENT)->getUpdate(PPC_DETAIL_DESIGN_DOCUMENT_UPDATE_GET_BILL_NO,'generateppcBill')->setParam(array('date'=>$this->getCDate()))->execute() ;
-		$svRequest = GCWebPos::reissue($configDetails, $cardNumber, $originalCardNo, $transactionId, $cardPin, $trackData, $invoiceNumber, $notes);
-		//$svRequest = GCWebPos::deactivate($configDetails, $cardNumber, $transactionId, $approvalCode, $notes);
-		$txn_type = REISSUE_PPC_CARD;
-	}
+		$svResponse = $svRequest->execute();
 
-	$svResponse = $svRequest->execute();
-	//echo '<pre>';
-	//print_r($svResponse);
-	//echo '</pre>';
-	
-	$responseArray = $CARD_RESPONSE_ARRAY;
-	
-	if($svResponse->errorCode != 0){
-		$responseArray['success'] = 'False';
-		$responseArray['message'] = $svResponse->errorMessage;
-		$responseArray['balance'] = ($svResponse->params['ResponseMessage']=="Balance is insufficient." ? '0' : '');
-		$return['data'] = $responseArray; 
-		
-	}else{
-		if($request_type==GET_CUSTOMER_INFO){
-			$details['original_card_no'] = $svResponse->params['CardNumber'];
-			$res = $this->reissue($details, REISSUE_PPC_CARD);
-			return $res;
+		if($svResponse->errorCode != 0){
+			$responseArray['success'] = 'False';
+			$responseArray['message'] = $svResponse->errorMessage;
+			$responseArray['balance'] = ($svResponse->params['ResponseMessage']=="Balance is insufficient." ? '0' : '');
+			$responseArray['txn_type'] = $txn_type;
+			$return['data'] = $responseArray; 
+		}else {
+			$microTime = microtime();
+			$microTimeArr = explode(" ", $microTime);
+			$transactionId = substr($microTimeArr[1],5).round($microTimeArr[0] * 1000) ;
+			$originalCardNo = $svResponse->params['CardNumber'];
+			$invoiceNumber = $this->cDB->getDesign(PPC_DETAIL_DESIGN_DOCUMENT)->getUpdate(PPC_DETAIL_DESIGN_DOCUMENT_UPDATE_GET_BILL_NO,'generateppcBill')->setParam(array('date'=>$this->getCDate()))->execute() ;
+			$svRequest = GCWebPos::reissue($configDetails, $cardNumber, $originalCardNo, $transactionId, $cardPin, $trackData, $invoiceNumber, $notes);
+			//$svRequest = GCWebPos::deactivate($configDetails, $cardNumber, $transactionId, $approvalCode, $notes);
+			$txn_type = REISSUE_PPC_CARD;
+			$svResponse = $svRequest->execute();
+			if($svResponse->errorCode != 0){
+				$responseArray['success'] = 'False';
+				$responseArray['message'] = $svResponse->errorMessage;
+				$responseArray['balance'] = ($svResponse->params['ResponseMessage']=="Balance is insufficient." ? '0' : '');
+				$responseArray['txn_type'] = $txn_type;
+				$return['data'] = $responseArray; 
+			}else{
+				$responseArray['success'] = 'True';
+				$responseArray['message'] = $svResponse->params['ResponseMessage'];
+				$responseArray['balance'] = ($svResponse->params['ResponseMessage']=="Balance is insufficient." ? '0' : $svResponse->params['OutstandingBalance']);
+				$responseArray['card_number'] = $cardNumber;
+				$responseArray['txn_no'] = $svResponse->params['TransactionId'];
+				$responseArray['txn_type'] = $txn_type;
+				$return['data'] = $responseArray;
+			}
+
 		}
-		$responseArray['success'] = 'True';
-		$responseArray['message'] = $svResponse->params['ResponseMessage'];
-		$responseArray['balance'] = ($svResponse->params['ResponseMessage']=="Balance is insufficient." ? '0' : $svResponse->params['OutstandingBalance']);
-		$responseArray['card_number'] = $cardNumber;
-		$responseArray['txn_no'] = $svResponse->params['TransactionId'];
-		$responseArray['txn_type'] = $txn_type;
-		$return['data'] = $responseArray;
 	}
-	
 	return $return;
 }
-
 }
 ?>
