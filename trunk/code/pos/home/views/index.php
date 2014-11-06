@@ -245,6 +245,7 @@
 			<div class="col-lg-12">
 				<ul class="list-inline" role="tablist" id="shift_nav">
 					<li><a class="btn btn-primary btn-lg btn3d" id="ppc_card_issue">Issue Card</a></li>
+					<li><a class="btn btn-primary btn-lg btn3d" id="ppc_card_reissue">Reissue Card</a></li>
 					<li><a class="btn btn-primary btn-lg btn3d" id="ppc_card_activate">Activate Card</a></li>
 				  	<li><a class="btn btn-primary btn-lg btn3d" id="ppc_card_load">Load Card</a></li>
 				  	<li><a class="btn btn-primary btn-lg btn3d" id="ppc_card_balance_check">Balance Check</a></li>
@@ -326,6 +327,64 @@
 										<i class="glyphicon glyphicon-refresh"></i>
 									</button>
 								</div>
+							</div>
+						</form>
+
+						<form id="store_ppc_card_reissue_form"  class="card_form hide" action="" method="post" accept-charset="utf-8" class="separate-sections form-horizontal" autocomplete="off">
+							<input type="hidden" name="validateFor" value="card">
+							
+							<div class="input-group padded">
+								<span class="input-group-addon"> 
+									<i class="glyphicon glyphicon-user"></i>
+								</span> 
+								<input type="text" name="first_name" id="first_name" class="input-sm form-control" placeholder="First Name" autocomplete="off" autofocus="true"/>
+							</div>
+
+							<div class="input-group padded">
+								<span class="input-group-addon"> 
+									<i class="glyphicon glyphicon-user"></i>
+								</span> 
+								<input type="text" name="last_name" id="last_name" class="input-sm form-control" placeholder="Last Name" autocomplete="off" autofocus="true"/>
+							</div>
+
+							<div class="input-group padded">
+								<span class="input-group-addon"> 
+									<i class="glyphicon glyphicon-phone"></i>
+								</span> 
+								<input type="text" name="mobile_no" id="mobile_no" class="input-sm form-control" placeholder="Mobile No" autocomplete="off" autofocus="true"/>
+							</div>
+
+							<div class="input-group padded">
+								<span class="input-group-addon">
+									<i class="glyphicon glyphicon-credit-card"></i> 
+								</span> 
+								<input type="text" name="original_card_no" value="" id="original_card_no" class="input-sm form-control" placeholder="Original Card No" autocomplete="off"/>
+								<input type='hidden' name='amount' value=''/>
+							</div>
+
+							<div class="input-group padded">
+								<span class="input-group-addon">
+									<i class="glyphicon glyphicon-credit-card"></i> 
+								</span> 
+								<input type="text" name="card_number" value="" id="card_number" class="input-sm form-control" placeholder="New Card No" autocomplete="off"/>
+								
+							</div>
+
+							<div class="row padded">
+								
+								<div class="col-md-5">
+									<button type="reset" class="btn btn-danger btn-sm btn-block btn-lg">Reset
+										<i class="glyphicon glyphicon-refresh"></i>
+									</button>
+								</div>
+
+								<div class="col-md-7">
+									<button type="submit" style="" class="btn btn-success btn-sm btn-block btn-lg hides">REISSUE CARD 
+										<i class="glyphicon glyphicon-log-in"></i>
+									</button>
+								</div>
+								
+							
 							</div>
 						</form>
 
@@ -434,7 +493,7 @@
 								</div>
 
 								<div class="col-md-7">
-									<button type="submit" style="display:none" class="btn btn-success btn-sm btn-block btn-lg hides">Check Balance 
+									<button type="submit" style="" class="btn btn-success btn-sm btn-block btn-lg hides">Check Balance 
 										<i class="glyphicon glyphicon-log-in"></i>
 									</button>
 								</div>
