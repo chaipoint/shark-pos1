@@ -54,8 +54,7 @@ function init(){
           "last_bill"=>array(
               "map"=>"function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'last_ppc_bill'){ var date = doc.time.split(' '); emit(date[0], null); } }",
             )
-
-          ),
+            ),
         'updates' => array( 
               'getbillno' =>  "function(doc,req){ if(req.query.date) { if(doc.current_date != req.query.date){doc.current = 0; doc.current_date = req.query.date;} var newCurrent =  doc.current+1; doc.current = newCurrent; return [doc,newCurrent.toString()];}}",
               'change_status' => "function(doc,req){ if(doc) {  doc.status = req.query.status; doc.balance = req.query.balance; doc.txn_no = req.query.txn_no; doc.approval_code = req.query.approval_code; return [doc,req.query.status];  } }",
