@@ -69,6 +69,8 @@ define ('ACTIVATE_PPA_CARD', 'activate_ppa_card');
 define ('ACTIVATE_PPC_CARD', 'activate_ppc_card');
 define ('ISSUE_PPA_CARD', 'issue_ppa_card');
 define ('ISSUE_PPC_CARD', 'issue_ppc_card');
+define ('GET_CUSTOMER_INFO', 'get_customer_info');
+define ('REISSUE_PPC_CARD', 'reissue_ppc_card');
 define ('BALANCE_CHECK_PPC_CARD', 'balance_check_ppc_card');
 define ('BALANCE_CHECK_PPA_CARD', 'balance_check_ppa_card');
 define('CANCEL_REDEEM', 'cancel_redeem');
