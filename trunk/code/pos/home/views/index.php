@@ -15,7 +15,7 @@
         	<li class='active'><a id='home_tab' class="home_tabs" href="javascript:void(0)">Home</a></li>
         	<li><a id='sales_tab' class="home_tabs" href="javascript:void(0)">Sales</a></li>
 			<li><a id='shift_data_tab' class="home_tabs require_valid_user" href="javascript:void(0)">Shift Data</a></li>
-			<li class='dropdown'><a id='card__tab' class="dropdown-toggle home_tabs require_valid_user" data-toggle="dropdown" href="javascript:void(0)">Card Transaction <span class="caret"></span></a>
+			<li class='dropdown'><a id='card__tab' class="dropdown-toggle home_tabs" data-toggle="dropdown" href="javascript:void(0)">Card Transaction <span class="caret"></span></a>
 				<ul class="dropdown-menu" role="menu">
       				<li><a id='ppa_card_tab' class="home_tabs" href="javascript:void(0)">PPA CARD</a></li>
       				<li><a id='ppc_card_tab' class="home_tabs" href="javascript:void(0)">PPC CARD</a></li>
