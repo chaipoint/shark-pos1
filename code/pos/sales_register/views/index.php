@@ -164,7 +164,7 @@
 </div>
 
 <div class="col-sm-12" style="margin-top:10px;">
-          <?php require_once 'load_card_table.php';?>
+          <?php //require_once 'load_card_table.php';?>
 </div>
 
 <div class="col-sm-12" style="margin-top:10px;">
