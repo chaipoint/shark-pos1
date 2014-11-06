@@ -317,14 +317,18 @@
             	$invoiceNumber = $this->cDB->getDesign(PPC_DETAIL_DESIGN_DOCUMENT)->getUpdate(PPC_DETAIL_DESIGN_DOCUMENT_UPDATE_GET_BILL_NO,'generateppcBill')->setParam(array('date'=>$this->getCDate()))->execute();;
             	$loadResponse = ppa_api($config_data, $_POST, $_POST['request_type'],$invoiceNumber);
             
-            }else if(array_key_exists('request_type', $_POST) && ($_POST['request_type'] == LOAD_PPC_CARD || $_POST['request_type'] == ACTIVATE_PPC_CARD || $_POST['request_type'] == ISSUE_PPC_CARD || $_POST['request_type'] == BALANCE_CHECK_PPC_CARD )){
+            }else if(array_key_exists('request_type', $_POST) && ($_POST['request_type'] == LOAD_PPC_CARD || $_POST['request_type'] == ACTIVATE_PPC_CARD || $_POST['request_type'] == ISSUE_PPC_CARD || $_POST['request_type'] == GET_CUSTOMER_INFO || $_POST['request_type'] == BALANCE_CHECK_PPC_CARD )){
             	$dir =  dirname(__FILE__).'/../lib/svc/ppc_api.php';
                 require_once $dir;
                 $ppc = new PpcAPI();
                 $card_type = PPC;
-				$loadResponse = $ppc->redeem($_POST, $_POST['request_type']);
+                if($_POST['request_type'] == GET_CUSTOMER_INFO){
+                	$loadResponse = $ppc->reissue($_POST, $_POST['request_type']);
+                }else{
+					$loadResponse = $ppc->redeem($_POST, $_POST['request_type']);
+				}
 			}
-				if($loadResponse['data']['success']=='True' && $loadResponse['data']['txn_type']!=BALANCE_CHECK){
+				if($loadResponse['data']['success']=='True' && $loadResponse['data']['txn_type']!=BALANCE_CHECK && $loadResponse['data']['txn_type']!=REISSUE_PPC_CARD){
 					$saveData = array();
 					$saveData['cd_doc_type'] = CARD_SALE_DOC_TYPE;
 					$saveData['card_no'] = $loadResponse['data']['card_number'];
