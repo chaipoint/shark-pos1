@@ -34,7 +34,7 @@ function ppcOperation($details, $request_type){
 		return $return;
 	}
 
-	//$res = $this->timeOutCancellation();
+	//$res = $this->timeOutCancellation(); print_r($res);die();
 
 	$getConfigDetails = $this->cDB->getDesign(PPC_DETAIL_DESIGN_DOCUMENT)->getView(PPC_DETAIL_DESIGN_DOCUMENT_VIEW_INITIALIZE_DETAIL)->setParam(array('include_docs'=>'true','key'=>'"'.date('Y-m-d').'"'))->execute();
 	if(array_key_exists('rows', $getConfigDetails) && count($getConfigDetails['rows'])>0){ 
@@ -125,7 +125,7 @@ function ppcOperation($details, $request_type){
 		$responseArray['balance'] = ($svResponse->params['ResponseMessage']=="Balance is insufficient." ? '0' : '');
 		$return['data'] = $responseArray;
 		if($request_type!=BALANCE_CHECK_PPC_CARD){
-			$this->updateLastBillDoc($svResponse->params['TransactionId'], '', $cardNumber, $amount, $invoiceNumber, $txn_type);	
+			//$this->updateLastBillDoc($svResponse->params['TransactionId'], '', $cardNumber, $amount, $invoiceNumber, $txn_type);	
 		}
 	}else{
 		$responseArray['success'] = 'True';
@@ -138,7 +138,7 @@ function ppcOperation($details, $request_type){
 		$responseArray['invoice_number'] = $invoiceNumber;
 		$return['data'] = $responseArray;
 		if($request_type!=BALANCE_CHECK_PPC_CARD){
-			$this->updateLastBillDoc($svResponse->params['TransactionId'], $svResponse->params['ApprovalCode'], $cardNumber, $amount, $invoiceNumber, $txn_type);	
+			//$this->updateLastBillDoc($svResponse->params['TransactionId'], $svResponse->params['ApprovalCode'], $cardNumber, $amount, $invoiceNumber, $txn_type);	
 		}
 
 	}
@@ -196,26 +196,23 @@ function updateLastBillDoc($transactionId, $approval_code, $cardNumber, $amount,
 
 /*Function To Cancel Last PPC transaction*/
 function timeOutCancellation(){
-	$return = array('error'=>false, 'message'=>'');
+	$return = array('error'=>false, 'message'=>'', 'data'=>array('success'=>'True'));
 	
 	$resultLastBill = $this->cDB->getDesign(PPC_DETAIL_DESIGN_DOCUMENT)->getView(PPC_DETAIL_DESIGN_DOCUMENT_VIEW_LAST_BILL)->setParam(array("descending"=>"true","limit"=>"1","include_docs"=>"true"))->execute();
 	if(array_key_exists('rows', $resultLastBill) && count($resultLastBill['rows'])>0){
 		$data = $resultLastBill['rows'][0]['doc'];
 		if($data['status']!='True'){
 			$data['card_number'] = $data['card_no'];
-			
 			if($data['txn_type'] == REDEEM){
 				$request_type = CANCEL_REDEEM;
 			}else if($data['txn_type'] == LOAD){
 				$request_type = CANCEL_LOAD;
 			}
-			print_r($data);
-			$res = $this->cancel($data,$request_type);
-			print_r($res);
+			$res = $this->cancel($data, $request_type);
+			return $res;
 		}
-	}else{
-		return $return;
 	}
+	return $return;
 }
 
 /*Function To Perform ppc redeem cancel, ppc load cancel, ppc activate cancel*/
@@ -245,7 +242,7 @@ function cancel($details, $request_type){
 	$trackData = $details['card_number'];
 	$invoiceNumber = $details['invoice_number'];
 	$amount = $details['amount'];
-	$approvalCode = $details['approval_code'];
+	$approvalCode = (!empty($details['approval_code']) ? $details['approval_code'] : '');
 	$txnCode = $details['txn_no'];
 	$billAmount = $details['amount'];
 	$microTime = microtime();
