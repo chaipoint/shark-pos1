@@ -8,7 +8,7 @@
     $logger = Logger::getLogger("CP-HO|HO-TO-CPOS-API");
     $logger->trace("HO-TO-CPOS-API");
    
-    $action = @$_REQUEST['action'];
+    $action = (!empty($_REQUEST['action']) ? $_REQUEST['action'] : $argv[1]);
    
    switch ($action){
         
