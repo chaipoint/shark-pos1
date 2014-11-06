@@ -117,7 +117,6 @@ define ('PPA_LOAD', 'load');
 define ('PPC_LOAD', 'load');
 define ('PPA_ACTIVATE', 'activate');
 define ('PPC_ACTIVATE', 'activate');
-
 define ('PPA', 'ppa');
 define ('PPC', 'ppc');
 define('LOAD', 'load');
