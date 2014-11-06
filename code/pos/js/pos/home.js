@@ -128,6 +128,11 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 				else if((formData.amount).trim() == ""){msg += "<li>Provide Amount</li>";}
 				break;
 
+			case 'store_ppc_card_reissue_form':
+				formData.request_type = 'get_customer_info';
+				if((formData.card_number).trim() == ""){msg += "<li>Provide New Card No</li>";}
+				break;
+
 			case 'store_ppc_card_activate_form':
 				formData.request_type = 'activate_ppc_card';
 				if((formData.first_name).trim() == ""){msg += "<li>Provide First Name</li>";}
