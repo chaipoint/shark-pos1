@@ -98,6 +98,12 @@ function uploadShiftData(){
 						if(array_key_exists('credit', $value['doc']['day']['cash_reconciliation'])){
 							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$dayId.",'credit','".$value['doc']['day']['cash_reconciliation']['credit']."','".$value['doc']['login_time']."','Y')";
 						}
+						if(array_key_exists('ppcLoad', $value['doc']['day']['cash_reconciliation'])){
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$dayId.",'ppcLoad','".$value['doc']['day']['cash_reconciliation']['ppcLoad']."','".$value['doc']['login_time']."','Y')";
+						}
+						if(array_key_exists('ppaLoad', $value['doc']['day']['cash_reconciliation'])){
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$dayId.",'ppaLoad','".$value['doc']['day']['cash_reconciliation']['ppaLoad']."','".$value['doc']['login_time']."','Y')";
+						}
 						$insertReconciliation = "INSERT INTO cp_pos_cash_reconciliation(store_id, day_id, head, amount, created_date, active) values ".implode(",", $reconciliationInsert); 
 						$db->db_query($insertReconciliation);
 					}
@@ -176,6 +182,12 @@ function uploadShiftData(){
 						}
 						if(array_key_exists('credit', $value['doc']['day']['cash_reconciliation'])){
 							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'credit','".$value['doc']['day']['cash_reconciliation']['credit']."','".$value['doc']['login_time']."','Y')";
+						}
+						if(array_key_exists('ppcLoad', $value['doc']['day']['cash_reconciliation'])){
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'ppcLoad','".$value['doc']['day']['cash_reconciliation']['ppcLoad']."','".$value['doc']['login_time']."','Y')";
+						}
+						if(array_key_exists('ppaLoad', $value['doc']['day']['cash_reconciliation'])){
+							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$insertId.",'ppaLoad','".$value['doc']['day']['cash_reconciliation']['ppaLoad']."','".$value['doc']['login_time']."','Y')";
 						}
 						$insertReconciliation = "INSERT INTO cp_pos_cash_reconciliation(store_id, day_id, head, amount, created_date, active) values ".implode(",", $reconciliationInsert); 
 						$db->db_query($insertReconciliation);
