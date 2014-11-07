@@ -238,7 +238,7 @@ $(document).ready(function(){
 			$(this).removeClass('btn-primary').addClass('btn-success');
 			if(type == 'ppc' || type == 'ppa'){
 				$('#error_div').addClass('hide');
-				$('#load_amount_div').addClass('hide');
+				$('#load_amount_div').css('display','none');
 				$(".ppc").show();
 				$("#ppc").val('');
 				$('#balance').closest('tr').hide();
@@ -283,7 +283,7 @@ $(document).ready(function(){
 								if(result.data['balance']=='' || result.data['balance']==null){
 									bootbox.alert(result.data['message']);
 								}else{
-									$('#load_amount_div').addClass('hide');
+									$('#load_amount_div').css('display','none');
 									$('#error_message').text('Balance is Insufficient. Do You Want To Load It?');
 								    $('#error_div').removeClass('hide');
 								}
@@ -319,7 +319,7 @@ $(document).ready(function(){
 			$('#error_div').addClass('hide');
 			}else if($(this).data('value')=='yes'){
 				$('#error_div').addClass('hide');
-				$('#load_amount_div').removeClass('hide');
+				$('#load_amount_div').css('display','block');
 			}else{
 				var card_no = $.trim($('#ppc').val());
            		var payment_type = $('#paid_by').val();
@@ -338,10 +338,10 @@ $(document).ready(function(){
 						bootbox.alert($result.message);
 					}else if($result.data['success']=='False'){
 						$('.ppc_balance').hide();
-						$('#load_amount_div').addClass('hide');
+						$('#load_amount_div').css('display','none');
 						bootbox.alert($result.data['message']);
 					}else{ 
-						$('#load_amount_div').addClass('hide');
+						$('#load_amount_div').css('display','none');
 						$('#ppc').trigger('change');
 					} 
 					
