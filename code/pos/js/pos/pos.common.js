@@ -420,6 +420,9 @@ $.fn.cKeyboard = function(){
 						};					
 					break;
 				case '#phone_number':
+				case 'input[name="mobile_no"]':
+				case 'input[name="amount"]':
+				case 'input[name="original_card_no"]':
 				case '#petty_cash':
 				case '.bill_qty_input':
 				case '#ppc' :
