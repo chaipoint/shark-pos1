@@ -125,7 +125,7 @@ function ppcOperation($details, $request_type){
 		$responseArray['balance'] = ($svResponse->params['ResponseMessage']=="Balance is insufficient." ? '0' : '');
 		$return['data'] = $responseArray;
 		if($request_type!=BALANCE_CHECK_PPC_CARD){
-			//$this->updateLastBillDoc($svResponse->params['TransactionId'], '', $cardNumber, $amount, $invoiceNumber, $txn_type);	
+			$this->updateLastBillDoc($svResponse->params['TransactionId'], '', $cardNumber, $amount, $invoiceNumber, $txn_type);	
 		}
 	}else{
 		$responseArray['success'] = 'True';
@@ -138,7 +138,7 @@ function ppcOperation($details, $request_type){
 		$responseArray['invoice_number'] = $invoiceNumber;
 		$return['data'] = $responseArray;
 		if($request_type!=BALANCE_CHECK_PPC_CARD){
-			//$this->updateLastBillDoc($svResponse->params['TransactionId'], $svResponse->params['ApprovalCode'], $cardNumber, $amount, $invoiceNumber, $txn_type);	
+			$this->updateLastBillDoc($svResponse->params['TransactionId'], $svResponse->params['ApprovalCode'], $cardNumber, $amount, $invoiceNumber, $txn_type);	
 		}
 
 	}
