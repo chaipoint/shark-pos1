@@ -211,7 +211,8 @@
 	    					      ($key=='ppcActive' ? $minus + $value : $minus));
 	    		}
 	    	}
-	    	$cash_in_box = $total - $minus + $excess_in_box; // To Calculate Cash IN BOX 
+	    	$total += $excess_in_box;
+	    	$cash_in_box = $total - $minus; // To Calculate Cash IN BOX 
     		$cash_reconciliation_insert['cash_in_box'] = $cash_in_box;
     		$cash_reconciliation_table .= $excess;
     		$cash_reconciliation_table .= '</tbody><thead><tr><th style="font-size:12px;text-align:left">Total Sale</th><th>'.($total).'</th></tr></thead><thead><tr><th style="font-size:12px;text-align:left">Cash In Box</th><th>'.($cash_in_box).'</th></tr></thead></table></div></div>';
