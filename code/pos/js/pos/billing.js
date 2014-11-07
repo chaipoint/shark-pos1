@@ -237,8 +237,10 @@ $(document).ready(function(){
 			$('.payment-type-bt').removeClass('btn-success').addClass('btn-primary');
 			$(this).removeClass('btn-primary').addClass('btn-success');
 			if(type == 'ppc' || type == 'ppa'){
-				$('#error-div').addClass('hide');
+				$('#error_div').addClass('hide');
+				$('#load_amount_div').addClass('hide');
 				$(".ppc").show();
+				$("#ppc").val('');
 				$('#balance').closest('tr').hide();
 				bootbox.alert('Please Swipe The Card', function() { 
 					setTimeout(function(){
@@ -281,9 +283,9 @@ $(document).ready(function(){
 								if(result.data['balance']=='' || result.data['balance']==null){
 									bootbox.alert(result.data['message']);
 								}else{
-									$('#load-amount-div').addClass('hide');
+									$('#load_amount_div').addClass('hide');
 									$('#error_message').text('Balance is Insufficient. Do You Want To Load It?');
-								    $('#error-div').removeClass('hide');
+								    $('#error_div').removeClass('hide');
 								}
 							}else{ 
 								$('.ppc_balance').show();
@@ -314,14 +316,14 @@ $(document).ready(function(){
 		$('.load').on('click', function(event){
 			event.preventDefault();
 			if($(this).data('value')=='no'){
-			$('#error-div').addClass('hide');
+			$('#error_div').addClass('hide');
 			}else if($(this).data('value')=='yes'){
-				$('#error-div').addClass('hide');
-				$('#load-amount-div').removeClass('hide');
+				$('#error_div').addClass('hide');
+				$('#load_amount_div').removeClass('hide');
 			}else{
 				var card_no = $.trim($('#ppc').val());
            		var payment_type = $('#paid_by').val();
-           		var total_amount = $('#load-amount').val();
+           		var total_amount = $('#load_amount').val();
            		var request_type = (payment_type=='ppa') ? 'load_ppa_card' : 'load_ppc_card';
            		$("span#loading_image").removeClass('hide');
            		$.ajax({
@@ -336,10 +338,10 @@ $(document).ready(function(){
 						bootbox.alert($result.message);
 					}else if($result.data['success']=='False'){
 						$('.ppc_balance').hide();
-						$('#load-amount-div').addClass('hide');
+						$('#load_amount_div').addClass('hide');
 						bootbox.alert($result.data['message']);
 					}else{ 
-						$('#load-amount-div').addClass('hide');
+						$('#load_amount_div').addClass('hide');
 						$('#ppc').trigger('change');
 					} 
 					
