@@ -173,7 +173,7 @@
 										<button class="btn btn-sm btn-success load" data-value='yes' id="load-yes">Yes</button>
 										<button class="btn btn-sm btn-danger load" data-value='no' id="load-no">No</button>
 									</div>
-									<div id='load_amount_div' class="hide">
+									<div id='load_amount_div' style="display:none;">
 										<input type='text' name='load_amount' id='load_amount' style='width:22%'/>
 										<button class="btn btn-sm btn-success load" id="load_balance">Load</button>
 									</div>
