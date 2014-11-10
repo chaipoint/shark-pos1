@@ -163,7 +163,7 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 				formData.request_type = 'balance_check_ppa_card';
 				if((formData.card_number).trim() == ""){msg += "<li>Provide Currect Card No</li>";}
 				break;
-		} //alert(JSON.stringify(formData)); //return false;
+		} 
 		if(msg){
 			$("#"+errorHolder).show();$("#"+errorHolder+" ul").html(msg);
 		}else{  
@@ -171,8 +171,8 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 				type: 'POST',
 				url: "index.php?dispatch=billing.loadCard",
 				data : formData
-			}).done(function(response) { //alert(response);
-				$("form#"+formID+":input").val('');
+			}).done(function(response) { 
+				$('#'+formID+'')[0].reset();
 				var $res =  $.parseJSON($.trim(response));
 				console.log($res); 
 				if($res.error){ 
