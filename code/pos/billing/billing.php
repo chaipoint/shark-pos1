@@ -346,6 +346,11 @@
 					$saveData['staff_name'] = $_SESSION['user']['name'];
 					$saveData['invoice_number'] = $loadResponse['data']['invoice_number'];
 					$result = $this->cDB->saveDocument()->execute($saveData);
+					$path = file_exists(EXE_PATH);
+					if(array_key_exists('ok', $result) && $path){ 
+						file_put_contents(CARD_SALE_TXT_PATH, json_encode($saveData,true));
+        				exec($path,$output,$return_value);
+					}
 				}
 				$res = json_encode($loadResponse,true);
 				return $res;
