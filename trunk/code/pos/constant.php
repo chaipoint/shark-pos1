@@ -105,6 +105,7 @@ define ('ORDER_ALREADY_BILLED', 'Order Already Billed');
 define ('EXE_PATH', 'D:\utility\printBill.exe');
 define ('COMPANY_DETAIL_TXT_PATH', 'D:\utility\company.txt');
 define ('BILL_DETAIL_TXT_PATH', 'D:\utility\bill.txt');
+define ('CARD_SALE_TXT_PATH', 'D:\utility\card_sale.txt');
 define ('BILL_DATA_MISSING', 'Bill_Data_Missing');
 define ('PRINT_UTILITY_NOT_EXISTS', 'PRINT_UTILITY_NOT_EXISTS');
 define ('RESOURCE', 'resource');
