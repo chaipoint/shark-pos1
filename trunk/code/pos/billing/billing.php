@@ -386,7 +386,7 @@
 			if(!empty($data)) {
 				file_put_contents(BILL_DETAIL_TXT_PATH, json_encode($data,true));
         		exec($path,$output,$return_value);
-        		$this->log->trace("EXE RESPONCE \r\n".json_encode($return_value));
+        		//$this->log->trace("EXE RESPONCE \r\n".json_encode($return_value));
         		$return['message'] = ($return_value=='1' ? 'Printer Not Found' : ($return_value=='2' ? 'File Missing' : ($return_value=='3' ? 'JSON Not Readable' : '')));
      		}else{
 				$return['message'] = BILL_DATA_MISSING;
