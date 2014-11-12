@@ -32,7 +32,7 @@ $(document).ready(function(){
 		$('#store_shift_logic form').addClass('hide');
 		$('#store_'+$(this).attr('id')+"_form").removeClass('hide');	
 	});
-	keyboard.push($('input[name="username1"],input[name="password"],input[name="first_name"],input[name="last_name"],input[name="mobile_no"],input[name="amount"],input[name="original_card_no"],#petty_cash, #counter_no, #petty_cash_end, #box_cash, #box_cash_end').cKeyboard());
+	keyboard.push($('input[name="username1"],input[name="password"],input[name="first_name"],input[name="last_name"],input[name="mobile_no"],input[name="amount"],input[name="original_card_no"],#petty_cash, #counter_no, #petty_cash_end, #box_cash, #opening_box_cash, #box_cash_end').cKeyboard());
 	
 
 $('#tab_selection_menu').on('click','.home_tabs',function(){
