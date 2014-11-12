@@ -123,6 +123,12 @@
 						</div>
 						<div class="input-group padded">
 							<span class="input-group-addon">
+								<i class="glyphicon glyphicon-briefcase"></i> 
+							</span> 
+							<input type="text" name="opening_box_cash" value="" id="opening_box_cash" class="input-sm form-control" placeholder="Box Cash" autocomplete="off"/>
+						</div>
+						<div class="input-group padded">
+							<span class="input-group-addon">
 								<i class="glyphicon glyphicon-open"></i> 
 							</span> 
 							<input type="text" name="counter_no" value="1" id="counter_no" class="input-sm form-control" placeholder="Counter Number" autocomplete="off"/>
