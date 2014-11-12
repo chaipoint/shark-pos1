@@ -377,7 +377,7 @@ $.fn.cKeyboard = function(){
 					options.beforeClose = function(e,keyboard,el,accepted){
 						if(accepted){
 							var dis = parseFloat(keyboard.$preview[0].value);
-							if(!isNaN(dis) && dis<=100){
+							if(!isNaN(dis) && dis<=100){ 
 								$intDiscount =  dis;
 								generateSalesTable();
 							}else{
@@ -429,6 +429,7 @@ $.fn.cKeyboard = function(){
 				case '#expense_amount' :
 				case '#petty_cash_end':
 				case '#box_cash':
+				case '#opening_box_cash':
 				case '#box_cash_end':
 				case '#inward_amount':
 					options.layout = 'caustom';

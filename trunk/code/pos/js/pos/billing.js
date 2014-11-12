@@ -71,7 +71,105 @@ $(document).ready(function(){
 		}
 	}
 
+	$('#reward_redemption').click(function(event){
+		event.preventDefault();
+		$('#redemption_code').removeClass('hide').focus();
+	});
+
 	
+	$('#redemption_code').on('change', function(){
+		var code = $(this).val();
+		var markused = 'false';
+		var request_type = 'reward_check';
+		$('#image_loading').removeClass('hide');
+		$.ajax({
+			type: 'POST',
+			url: "index.php?dispatch=billing.loadCard",
+			data: {'request_type':request_type, 'code':code, 'markused':markused}
+		}).done(function(response) { 
+			console.log(response);
+			$('#image_loading').addClass('hide');  
+			$result = $.parseJSON($.trim(response));
+			if($result.error){
+				$('#redemption_code').val('').addClass('hide');
+				bootbox.alert($result.message);
+			}else if($result.data['success']=='False'){
+				$('#redemption_code').val('').addClass('hide');
+				bootbox.alert($result.data['message']);
+			}else{ 
+				var productNewList = new Object();
+				$.each(productArray, function(index, data){
+					var category = index;
+					$.each(data, function(pIndex, pData){
+						productNewList[pData.mysql_id]  = new Object();
+						productNewList[pData.mysql_id].cat = category;
+						productNewList[pData.mysql_id].seq = pIndex;
+					});
+				});
+				var productData = productArray[productNewList[$result.data['product_id']].cat] [productNewList[$result.data['product_id']].seq];
+				$('#discount_input_box').val('100').prop('disabled',true);
+				$intDiscount =  100;
+				$('#reward_redemption_code').val(code);
+				$('#card_invoice_no').val($result.data['invoice_number']);
+				$('#claim_reward').removeClass('hide');
+				$('#payment').addClass('hide');
+				generateSalesTable($result.data['product_id'], '1', productData);
+				$('.bill_qty_input').prop('readonly', true);
+				$('.del_row').addClass('hide');
+				$('.category-product').prop('disabled', true);
+				$('#proajax button[value="'+$result.data['product_id']+'"]').addClass('active-btn').prop('disabled', false);
+				$('.category-selection').prop('disabled', true);
+			} 
+					
+		});
+
+	});
+
+	$('#claim_reward').click(function(){
+		var code = $('#reward_redemption_code').val();
+		var markused = 'true';
+		var request_type = 'reward_redemption';
+		$.ajax({
+			type: 'POST',
+			url: "index.php?dispatch=billing.loadCard",
+			data: {'request_type':request_type, 'code':code, 'markused':markused}
+		}).done(function(response) { 
+			console.log(response);  
+			$result = $.parseJSON($.trim(response));
+			if($result.error){
+				$('#redemption_code').val('').addClass('hide');
+				bootbox.alert($result.message);
+			}else if($result.data['success']=='False'){
+				$('#redemption_code').val('').addClass('hide');
+				bootbox.alert($result.data['message']);
+			}else{ 
+				$('#paid_by').val('ppa');
+				$("#phone_number").val('');
+				$("#is_cod").val('N');
+				$("#delivery_channel").val(74);
+				$("#delivery_channel_name").val(config_data.delivery_channel[74]);
+				$("#booking_channel").val(53);
+				$("#booking_channel_name").val(config_data.channel[53]);
+				$("#is_cod").val('N');
+				$("#is_prepaid").val('Y');
+				$("#is_credit").val('N');
+				$("#bill_status_id").val(80);
+				$("#bill_status").val(config_data.bill_status[80]);
+				var amountoBePaid = Math.ceil($totalAmountWT.toFixed(0));
+				if(amountoBePaid%50 != 0){
+					var divder = Math.floor(amountoBePaid/50);
+					amountoBePaid = 50 * (divder + 1);
+				}
+				$("#paid-amount").val(amountoBePaid);
+				$('#card_type').val('ppa');
+				$('#card_company').val('urbanPiper');
+				$('#card_invoice_no').val($result.data['invoice_number']);
+				$('#submit-sale').trigger('click');
+			} 
+					
+		});
+		
+	});
 	//---START--- Initial Configurations on Load Of Page
 
 
@@ -491,7 +589,6 @@ $(document).ready(function(){
 		//---START--- SUbmit Payment Bill
 		$("#submit-sale").click(function(event){ 
 			event.preventDefault();
-
 			$("#phone_number").on('keypress',function (e){ 
      			if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
         		return false;
@@ -571,13 +668,20 @@ $(document).ready(function(){
 
 			billDetails.card = new Object();
 			billDetails.card.no = $('#card_number').val();
-			billDetails.card.type = $('#card_type').val();;
-			billDetails.card.company = $('#card_company').val();;
-			billDetails.card.redeem_amount = $('#card_redeem_amount').val();;
-			billDetails.card.txn_no = $('#card_txn_no').val();;
-			billDetails.card.approval_code = $('#card_approval_code').val();;
-			billDetails.card.balance = $('#card_balance').val();;
-			billDetails.card.invoice_number = $('#card_invoice_no').val();;
+			billDetails.card.type = $('#card_type').val();
+			billDetails.card.company = $('#card_company').val();
+			billDetails.card.redeem_amount = $('#card_redeem_amount').val();
+			billDetails.card.txn_no = $('#card_txn_no').val();
+			billDetails.card.approval_code = $('#card_approval_code').val();
+			billDetails.card.balance = $('#card_balance').val();
+			billDetails.card.invoice_number = $('#card_invoice_no').val();
+			if(!$('#reward_redemption_code').val()){
+				billDetails.card.reward_redemption = 'no';
+				billDetails.card.redemption_code = '';
+			}else{
+				billDetails.card.reward_redemption = 'yes';
+				billDetails.card.redemption_code = $('#reward_redemption_code').val();
+			}
 			billDetails.reprint = 1;
 			billDetails.request_type = 'save_bill';
 			billDetails.utility_check = printUtility;
@@ -762,10 +866,15 @@ function resetBill(refresh){
 	if(refresh){
 		$billingItems = new Object();
 		delete $billingItems;
-		$('#discount_input_box').val('');
+		$('#discount_input_box').val('').prop('disabled',false);
 		$intDiscount = 0;	
 		$('button',proajax).removeClass('active-btn');
 		$('.category-selection[data-category="1"]').trigger('click');
+		$('#redemption_code').val('').addClass('hide');
+		$('#claim_reward').addClass('hide');
+		$('#payment').removeClass('hide');
+		$('.category-product').prop('disabled', false);
+		$('.category-selection').prop('disabled', false);
 	}
 	$totalBillItems = 0;
 	$totalBillQty = 0;
@@ -780,6 +889,7 @@ function resetBill(refresh){
 	$("#saletbl tbody").html("");	
 	$("#ds_con").text($totalDiscountAmount);
 	$("#paid-amount").val('');
+	
 }
 
 var setFocus = function(id) { 
