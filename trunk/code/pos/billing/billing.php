@@ -298,7 +298,7 @@
             if($_SERVER['REQUEST_METHOD'] == 'POST') {
             	$balanceDeduction = array();
             	$invoiceNumber = $this->cDB->getDesign(PPC_DETAIL_DESIGN_DOCUMENT)->getUpdate(PPC_DETAIL_DESIGN_DOCUMENT_UPDATE_GET_BILL_NO,'generateppcBill')->setParam(array('date'=>$this->getCDate()))->execute();;
-				$balanceDeduction = ppa_api($config_data, $_POST, PPA_REDEEM,$invoiceNumber);
+				$balanceDeduction = ppa_api($config_data, $_POST, PPA_REDEEM, $invoiceNumber);
 				$res = json_encode($balanceDeduction,true);
 				return $res;
 			}
@@ -309,12 +309,15 @@
         function loadCard(){
         	$return = array('error'=>false,'message'=>'','data'=>array());
         	$loadResponse = array();
-        	if(array_key_exists('request_type', $_POST) && ($_POST['request_type'] == LOAD_PPA_CARD || $_POST['request_type'] == ACTIVATE_PPA_CARD || $_POST['request_type'] == ISSUE_PPA_CARD || $_POST['request_type'] == BALANCE_CHECK_PPA_CARD )){
+        	if(array_key_exists('request_type', $_POST) && ($_POST['request_type'] == LOAD_PPA_CARD || $_POST['request_type'] == REWARD_REDEMPTION || $_POST['request_type'] == REWARD_CHECK)){
         		$dir =  dirname(__FILE__).'/../lib/api/ppa_api.php';
             	require_once $dir;
             	$config_data = $this->configData['ppa_api'];
             	$card_type = PPA;
-            	$invoiceNumber = $this->cDB->getDesign(PPC_DETAIL_DESIGN_DOCUMENT)->getUpdate(PPC_DETAIL_DESIGN_DOCUMENT_UPDATE_GET_BILL_NO,'generateppcBill')->setParam(array('date'=>$this->getCDate()))->execute();;
+            	$invoiceNumber = '';
+            	if($_POST['request_type'] != REWARD_CHECK){
+            		$invoiceNumber = $this->cDB->getDesign(PPC_DETAIL_DESIGN_DOCUMENT)->getUpdate(PPC_DETAIL_DESIGN_DOCUMENT_UPDATE_GET_BILL_NO,'generateppcBill')->setParam(array('date'=>$this->getCDate()))->execute();;
+            	}
             	$loadResponse = ppa_api($config_data, $_POST, $_POST['request_type'], $invoiceNumber);
             
             }else if(array_key_exists('request_type', $_POST) && ($_POST['request_type'] == LOAD_PPC_CARD || $_POST['request_type'] == ACTIVATE_PPC_CARD || $_POST['request_type'] == ISSUE_PPC_CARD || $_POST['request_type'] == GET_CUSTOMER_INFO || $_POST['request_type'] == BALANCE_CHECK_PPC_CARD )){
