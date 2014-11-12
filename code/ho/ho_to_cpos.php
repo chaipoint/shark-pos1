@@ -120,6 +120,7 @@ function uploadShiftData(){
 								$upsQuery = "UPDATE cp_pos_shift_data 
 											 SET end_time = '".$shValue['end_time']."', 
 											 end_petty_cash = '".$shValue['end_petty_cash']."', 
+											 opening_cash_inbox = '".$shValue['opening_cash_inbox']."',
 											 end_cash_inbox = '".$shValue['end_cash_inbox']."',
 											 opening_petty_cash='".$shValue['petty_cash_balance']['opening_petty_cash']."', 
 											 petty_expense='".$shValue['petty_cash_balance']['petty_expense']."',
@@ -128,8 +129,8 @@ function uploadShiftData(){
 											 WHERE id=".$shiftList[$shValue['shift_no']];
 								$db->db_query($upsQuery);
 							}else{
-								$insertQuery = "INSERT INTO cp_pos_shift_data (pos_day_id, start_time, end_time, staff_id, end_petty_cash, end_cash_inbox, counter_no, shift_no, opening_petty_cash, petty_expense, closing_petty_cash, inward_petty_cash) values ";
-								$insertQuery .= "(".$dbList[$value['id']]['id'].",'".$shValue['start_time']."','".$shValue['end_time']."',".$shValue['start_login_id'].",'".$shValue['end_petty_cash']."','".$shValue['end_cash_inbox']."',".$shValue['counter_no'].",".$shValue['shift_no'].",'".$shValue['petty_cash_balance']['opening_petty_cash']."', '".$shValue['petty_cash_balance']['petty_expense']."','".$shValue['petty_cash_balance']['closing_petty_cash']."',inward_petty_cash='".$shValue['petty_cash_balance']['inward_petty_cash']."')";								
+								$insertQuery = "INSERT INTO cp_pos_shift_data (pos_day_id, start_time, end_time, staff_id, end_petty_cash, opening_cash_inbox, end_cash_inbox, counter_no, shift_no, opening_petty_cash, petty_expense, closing_petty_cash, inward_petty_cash) values ";
+								$insertQuery .= "(".$dbList[$value['id']]['id'].",'".$shValue['start_time']."','".$shValue['end_time']."',".$shValue['start_login_id'].",'".$shValue['end_petty_cash']."','".$shValue['opening_cash_inbox']."','".$shValue['end_cash_inbox']."',".$shValue['counter_no'].",".$shValue['shift_no'].",'".$shValue['petty_cash_balance']['opening_petty_cash']."', '".$shValue['petty_cash_balance']['petty_expense']."','".$shValue['petty_cash_balance']['closing_petty_cash']."',inward_petty_cash='".$shValue['petty_cash_balance']['inward_petty_cash']."')";								
 								$db->db_query($insertQuery);
 							}
 						}
@@ -159,10 +160,10 @@ function uploadShiftData(){
 				$shiftInsert = array();
 				$reconciliationInsert = array();
 				foreach($value['doc']['shift'] as $sKey => $sValue){
-						$shiftInsert[] = "(".$insertId.",'".$sValue['start_time']."','".$sValue['end_time']."',".$sValue['start_login_id'].",'".$sValue['end_petty_cash']."','".$sValue['end_cash_inbox']."',".$sValue['counter_no'].",".$sValue['shift_no'].",'".$sValue['petty_cash_balance']['opening_petty_cash']."', '".$sValue['petty_cash_balance']['petty_expense']."','".$sValue['petty_cash_balance']['closing_petty_cash']."',inward_petty_cash='".$sValue['petty_cash_balance']['inward_petty_cash']."')";
+						$shiftInsert[] = "(".$insertId.",'".$sValue['start_time']."','".$sValue['end_time']."',".$sValue['start_login_id'].",'".$sValue['end_petty_cash']."','".$sValue['opening_cash_inbox']."','".$sValue['end_cash_inbox']."',".$sValue['counter_no'].",".$sValue['shift_no'].",'".$sValue['petty_cash_balance']['opening_petty_cash']."', '".$sValue['petty_cash_balance']['petty_expense']."','".$sValue['petty_cash_balance']['closing_petty_cash']."',inward_petty_cash='".$sValue['petty_cash_balance']['inward_petty_cash']."')";
 				}
 				if(count($shiftInsert)>0){
-					$insertQuery = "INSERT INTO cp_pos_shift_data (pos_day_id, start_time, end_time, staff_id, end_petty_cash, end_cash_inbox, counter_no, shift_no, opening_petty_cash, petty_expense, closing_petty_cash, inward_petty_cash) values ".implode(",", $shiftInsert);
+					$insertQuery = "INSERT INTO cp_pos_shift_data (pos_day_id, start_time, end_time, staff_id, end_petty_cash, opening_cash_inbox ,end_cash_inbox, counter_no, shift_no, opening_petty_cash, petty_expense, closing_petty_cash, inward_petty_cash) values ".implode(",", $shiftInsert);
 					$db->db_query($insertQuery);
 					if(count($value['doc']['day']['cash_reconciliation'])>0){
 						for ($i=1;$i<=count($shiftInsert);$i++) {
