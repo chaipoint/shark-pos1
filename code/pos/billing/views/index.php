@@ -130,6 +130,12 @@
 															<td class="text_right"><span id="ts_con">0</span></td>
 														</tr>
 														<tr class="success">
+															<td width="25%" colspan='2' class="text-left"> <button class='btn btn-sm btn-primary'  id='reward_redemption'>Reward</button> </td>
+															<td width="25%" class="text-left"><input type='text' class="form-control hide" name='redemption_code' placeholder='Code' id='redemption_code' style="width:80px" /></td>
+															<td><span id="image_loading" class="hide"><img class="text-right" src="<?php echo IMG;?>loader.gif"/></span></td>
+														</tr>
+														
+														<tr class="success">
 															<td colspan="2">Total Payable</td>
 															<td class="text_right" colspan="2"><span
 																id="total-payable">0</span></td>
@@ -143,8 +149,8 @@
 												style="width: 90px;"><?php if(!empty($_GET['bill_no'])){ echo 'Cancel';}else {echo 'Reset';}?></button>
 											<!--<button type="button" class="btn btn-info" id="hold"
 												style="width: 90px;">Hold</button>-->
-											<button type="button" class="btn btn-success" id="payment"
-												style="margin-right: 90px; width: 180px;">Payment</button>
+											<button type="button" class="btn btn-success" id="payment" style="margin-right: 90px; width: 180px;">Payment</button>
+											<button type="button" class="btn btn-success hide" id="claim_reward" style="margin-right: 90px; width: 180px;">Claim Reward</button>
 										</div>
 									</div>
 								</form>
