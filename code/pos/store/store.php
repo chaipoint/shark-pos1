@@ -50,7 +50,7 @@
 					$return['error'] = true;
 					$return['message'] = START_DAY_ERROR ;
 				}else{
-					$data = array('type'=>'shift_start','counter_no'=>array_key_exists('counter_no', $_POST) ? $_POST['counter_no'] : '', 'time'=>$this->getCDTime(),'login' =>$_SESSION['user']['mysql_id'],'name' =>$_SESSION['user']['name']);
+					$data = array('type'=>'shift_start','opening_box_cash'=>array_key_exists('opening_box_cash',$_POST) ? $_POST['opening_box_cash'] : '' ,'counter_no'=>array_key_exists('counter_no', $_POST) ? $_POST['counter_no'] : '', 'time'=>$this->getCDTime(),'login' =>$_SESSION['user']['mysql_id'],'name' =>$_SESSION['user']['name']);
 					$return['message'] = START_DAY_SUCCESS;
 
 					if(count($result['rows']) == 1){
