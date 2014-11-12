@@ -75,6 +75,8 @@ define ('BALANCE_CHECK_PPC_CARD', 'balance_check_ppc_card');
 define ('BALANCE_CHECK_PPA_CARD', 'balance_check_ppa_card');
 define('CANCEL_REDEEM', 'cancel_redeem');
 define('CANCEL_LOAD', 'cancel_load');
+define('REWARD_REDEMPTION', 'reward_redemption');
+define('REWARD_CHECK', 'reward_check');
 
 /* Constant For Request Type Error */
 define ('REQUEST_TYPE_NOT_ALLOWED', 'Request Type Not Found');
