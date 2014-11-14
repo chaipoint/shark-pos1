@@ -77,7 +77,7 @@ function uploadShiftData(){
 					$getDayId = "SELECT id FROM cp_pos_day_data WHERE _id = '".$value['id']."'";
 					$resultDayId = $db->func_query($getDayId);
 					$dayId = $resultDayId[0]['id'];
-					$deleteCashReconciliation = "DELETE FROM cp_pos_cash_reconciliation WHERE day_id = '".$dayId."'";
+					echo $deleteCashReconciliation = "DELETE FROM cp_pos_cash_reconciliation WHERE day_id = '".$dayId."'";
 					$logger->debug("Delete Cash Reconciliation WHERE day id :  ".$dayId);
 					$db->db_query($deleteCashReconciliation);
 					if(count($value['doc']['day']['cash_reconciliation'])>0){
