@@ -41,7 +41,7 @@ function init(){
             )
           ),
         'lists' => array( 
-              'todays_sale' =>  "function(head, req) { var saleList = new Object(); var ppcLoad = 0; var ppcActive = 0; var ppaLoad = 0; var ppaActive = 0;   while(row = getRow()){ if(row.doc) { if(row.doc.card_type=='ppa' && row.doc.txn_type=='load'){ ppaLoad += (1 * row.doc.amount);} if(row.doc.card_type=='ppa' && row.doc.txn_type=='active'){ppaActive += (1 * row.doc.amount);} if(row.doc.card_type=='ppc' && row.doc.txn_type=='load'){ppcLoad += (1 * row.doc.amount);} if(row.doc.card_type=='ppc' && row.doc.txn_type=='active'){ppcActive += (1 * row.doc.amount);}}}  if(ppcLoad!=0){saleList.ppcLoad = ppcLoad;} if(ppcActive!=0){saleList.ppcActive = ppcActive;} if(ppaLoad!=0){saleList.ppaLoad = ppaLoad;} if(ppaActive!=0){saleList.ppaActive = ppaActive;} return JSON.stringify(saleList);}"
+              'todays_sale' =>  "function(head, req) { var saleList = new Object(); var ppcLoad = 0; var ppcActive = 0; var ppaLoad = 0; var ppaActive = 0;   while(row = getRow()){ if(row.doc.status!='cancel') { if(row.doc.card_type=='ppa' && row.doc.txn_type=='load'){ ppaLoad += (1 * row.doc.amount);} if(row.doc.card_type=='ppa' && row.doc.txn_type=='active'){ppaActive += (1 * row.doc.amount);} if(row.doc.card_type=='ppc' && row.doc.txn_type=='load'){ppcLoad += (1 * row.doc.amount);} if(row.doc.card_type=='ppc' && row.doc.txn_type=='active'){ppcActive += (1 * row.doc.amount);}}}  if(ppcLoad!=0){saleList.ppcLoad = ppcLoad;} if(ppcActive!=0){saleList.ppcActive = ppcActive;} if(ppaLoad!=0){saleList.ppaLoad = ppaLoad;} if(ppaActive!=0){saleList.ppaActive = ppaActive;} return JSON.stringify(saleList);}"
           )
       );
       $designDocs[] = array(
