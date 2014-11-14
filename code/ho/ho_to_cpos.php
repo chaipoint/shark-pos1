@@ -73,7 +73,7 @@ function uploadShiftData(){
 								
 					$db->db_query($updateQuery);
 					$logger->debug("Day Id Updated  ".$value['id']." on ".$value['id']." with total shifts ".count($value['doc']['shift']));
-					
+					$reconciliationInsert = array();
 					$getDayId = "SELECT id FROM cp_pos_day_data WHERE _id = '".$value['id']."'";
 					$resultDayId = $db->func_query($getDayId);
 					$dayId = $resultDayId[0]['id'];
