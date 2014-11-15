@@ -329,12 +329,13 @@ $(document).ready(function(){
 		});
 
 		//---START--- Payment Event After Products selection  or Without Product Selection
-		$(".payment-type-bt").click(function(){
+		$(".payment-type-bt").click(function(){ 
 			var type = $(this).data('value');
 			$("#paid_by").val(type);
 			$('.payment-type-bt').removeClass('btn-success').addClass('btn-primary');
 			$(this).removeClass('btn-primary').addClass('btn-success');
 			if(type == 'ppc' || type == 'ppa'){
+				$('#submit-sale').prop('disabled', true);
 				$('#error_div').addClass('hide');
 				$('#load_amount_div').css('display','none');
 				$(".ppc").show();
@@ -346,6 +347,7 @@ $(document).ready(function(){
 					},600);	
 				});
 			}else{
+				$('#submit-sale').prop('disabled', false);
 				$('#balance').closest('tr').show();
 				$(".ppc").hide();
 				$('#ac_balance').closest('tr').hide();
