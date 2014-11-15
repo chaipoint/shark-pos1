@@ -348,6 +348,7 @@
 					$saveData['staff_id'] = $_SESSION['user']['mysql_id'];
 					$saveData['staff_name'] = $_SESSION['user']['name'];
 					$saveData['invoice_number'] = $loadResponse['data']['invoice_number'];
+					$saveData['shift'] = $_SESSION['user']['shift'];
 					$result = $this->cDB->saveDocument()->execute($saveData);
 					$path = file_exists(EXE_PATH);
 					if(array_key_exists('ok', $result) && $path){ 
