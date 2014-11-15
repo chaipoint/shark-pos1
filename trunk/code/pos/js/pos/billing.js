@@ -835,7 +835,7 @@ function generateSalesTable(productId, qty, productData){
 			$billingItems[index].netAmount = $billingItems[index].priceAD + $billingItems[index].taxAmount;
 		if(productID != index){
 			tableRows +='<tr billing-product="'+index+'">'+
-				'<td style="width:9%"><span class="glyphicon glyphicon-remove-sign del_row"></span></td>'+
+				'<td style="width:9%"><span class="glyphicon glyphicon-remove-sign del_row" style="font-size:1.4em"></span></td>'+
 				'<td style="width:53%" class="btn-warning">'+$billingItems[index].name+'&nbsp;@&nbsp;'+$billingItems[index].price+'</td>'+
 				'<td style="width:12%"><span class="bill_item_qty"><input type="text" class="keyboard nkb-input bill_qty_input" value="'+$billingItems[index].qty+'"/></span></td>'+
 				'<td style="width:26%" class="text-right"><span class="bill_item_price text-right">'+($billingItems[index].qty * $billingItems[index].taxAbleAmount).toFixed(2)+'</span></td>'+
@@ -850,7 +850,7 @@ function generateSalesTable(productId, qty, productData){
 	}
 	if(productID>0){
 			tableRows +='<tr billing-product="'+productID+'">'+
-				'<td style="width:9%"><span class="glyphicon glyphicon-remove-sign del_row"></span></td>'+
+				'<td style="width:9%"><span class="glyphicon glyphicon-remove-sign del_row" style="font-size:1.4em"></span></td>'+
 				'<td style="width:53%" class="btn-warning">'+$billingItems[productID].name+'&nbsp;@&nbsp;'+$billingItems[productID].price+'</td>'+
 				'<td style="width:12%"><span class="bill_item_qty"><input type="text" class="keyboard nkb-input bill_qty_input" value="'+$billingItems[productID].qty+'"/></span></td>'+
 				'<td style="width:26%" class="text-right"><span class="bill_item_price text-right">'+($billingItems[productID].qty * $billingItems[productID].taxAbleAmount).toFixed(2)+'</span></td>'+
