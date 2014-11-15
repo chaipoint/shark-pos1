@@ -104,6 +104,7 @@
 			}
 
 			$shift_data = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_SHIFT)->setParam(array('key'=>'"'.$date.'"','include_docs'=>'true'))->execute();
+			$card_sale = $this->cDB->getDesign(CARD_SALE_DESIGN_DOCUMENT)->getList(CARD_SALE_DESIGN_DOCUMENT_LIST_TODAYS_SALE, CARD_SALE_DESIGN_DOCUMENT_VIEW_GET_SALE)->setParam(array('key'=>'"'.$date.'"','include_docs'=>'true'))->execute();
 			$excess = "";
 			$tablesShiftData = '<div class="panel panel-success">
 									<div class="panel-heading">
@@ -156,7 +157,7 @@
 
 					
 					$closing_cash = $day['start_cash'] + $shift_in - $shift_ex;
-					$saleCashVeriance = ($values['end_cash_inbox']-(array_key_exists($values['shift_no'], $sales_reg['shift_cash']) ? $sales_reg['shift_cash'][$values['shift_no']] : 0));
+					$saleCashVeriance = ($values['end_cash_inbox']-((array_key_exists($values['shift_no'], $sales_reg['shift_cash']) ? $sales_reg['shift_cash'][$values['shift_no']] : 0)+(array_key_exists($values['shift_no'], $card_sale['shift_cash']) ? $card_sale['shift_cash'][$values['shift_no']] : 0)));
 					$pettyCashVeriance = ($values['end_petty_cash']-$closing_cash);
 					$tablesShiftData .='<tr>
 						<td style="font-size:9px">SHIFT '.$values['shift_no'].'</td>
@@ -167,12 +168,13 @@
 						<td class="text-center">'.$values['end_cash_inbox'].'</td>
 						<td class="text-center" style="background-color:#428BCA">'.$closing_cash.'</td>
 						<td class="text-center" style="background-color:#428BCA">'.$pettyCashVeriance.'</td>
-						<td class="text-center" style="background-color:#428BCA">'.(array_key_exists($values['shift_no'], $sales_reg['shift_cash']) ? $sales_reg['shift_cash'][$values['shift_no']] : 0).'</td>
+						<td class="text-center" style="background-color:#428BCA">'.((array_key_exists($values['shift_no'], $sales_reg['shift_cash']) ? $sales_reg['shift_cash'][$values['shift_no']] : 0) + (array_key_exists($values['shift_no'], $card_sale['shift_cash']) ? $card_sale['shift_cash'][$values['shift_no']] : 0)).'</td>
 						<td class="text-center" style="background-color:#428BCA">'.$saleCashVeriance.'</td>
 						</tr>';
 						$cashSum += (array_key_exists($values['shift_no'], $sales_reg['shift_cash']) ? $sales_reg['shift_cash'][$values['shift_no']] : 0);
-						$excess .= '<tr><td style="font-size:9px">SHIFT '.$values['shift_no'].' EXCESS CASH</td><td class="text-center">'.(($saleCashVeriance > 0 ? $saleCashVeriance : 0)+($pettyCashVeriance >0 ? $pettyCashVeriance :0 )).'</td></tr>';
-						$cash_reconciliation_insert['shift_'.$values['shift_no'].'_excess_cash'] = (($saleCashVeriance > 0 ? $saleCashVeriance : 0)+($pettyCashVeriance >0 ? $pettyCashVeriance : 0 ));
+						$cashSum += (array_key_exists($values['shift_no'], $card_sale['shift_cash']) ? $card_sale['shift_cash'][$values['shift_no']] : 0);
+						$excess .= '<tr><td style="font-size:9px">SHIFT '.$values['shift_no'].' EXCESS CASH</td><td class="text-center">'.($values['end_cash_inbox']!='' ? $saleCashVeriance + $pettyCashVeriance : 0).'</td></tr>';
+						$cash_reconciliation_insert['shift_'.$values['shift_no'].'_excess_cash'] = ($values['end_cash_inbox']!='' ? $saleCashVeriance + $pettyCashVeriance : 0);
 						$excess_in_box	+= $cash_reconciliation_insert['shift_'.$values['shift_no'].'_excess_cash'];
 				}
 				if(!empty($shift_data['rows'][0]['doc']['day']['end_time'])){
@@ -201,14 +203,16 @@
 	    					      ($pKey=='ppc' ? $minus + $pValue :
 	    						    ($pKey=='caw' ? $minus + $pValue : $minus)));
 	    	}
-	    	$card_sale = $this->cDB->getDesign(CARD_SALE_DESIGN_DOCUMENT)->getList(CARD_SALE_DESIGN_DOCUMENT_LIST_TODAYS_SALE, CARD_SALE_DESIGN_DOCUMENT_VIEW_GET_SALE)->setParam(array('key'=>'"'.$date.'"','include_docs'=>'true'))->execute();
+	    	
 	    	if(is_array($card_sale) && count($card_sale)>0){ 
 	    		foreach ($card_sale as $key => $value) {
-	    			$cash_reconciliation_insert[$key] = $value;
-	    		    $cash_reconciliation_table .= '<tr><td style="font-size:9px">'.strtoupper($key).'</td><td class="text-center">'.$value.'</td></tr>';
-	    			$total += $value;
-	    			$minus = ($key=='ppaActive' ? $minus + $value :
-	    					      ($key=='ppcActive' ? $minus + $value : $minus));
+	    			if($key!='shift_cash'){
+	    				$cash_reconciliation_insert[$key] = $value;
+	    		    	$cash_reconciliation_table .= '<tr><td style="font-size:9px">'.strtoupper($key).'</td><td class="text-center">'.$value.'</td></tr>';
+	    				$total += $value;
+	    				$minus = ($key=='ppaActive' ? $minus + $value :
+	    					    	  ($key=='ppcActive' ? $minus + $value : $minus));
+	    			}
 	    		}
 	    	}
 	    	$total += $excess_in_box;
