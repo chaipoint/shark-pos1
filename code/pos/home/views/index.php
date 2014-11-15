@@ -546,7 +546,7 @@
 								</div>
 
 								<div class="col-md-7">
-									<button type="submit" style="display:none" class="btn btn-success btn-sm btn-block btn-lg">Load Card 
+									<button type="submit" style="" class="btn btn-success btn-sm btn-block btn-lg">Load Card 
 										<i class="glyphicon glyphicon-log-in"></i>
 									</button>
 								</div>
@@ -575,7 +575,7 @@
 								</div>
 
 								<div class="col-md-7">
-									<button type="submit" style="display:none" class="btn btn-success btn-sm btn-block btn-lg hides">Check Balance 
+									<button type="submit" style="" class="btn btn-success btn-sm btn-block btn-lg hides">Check Balance 
 										<i class="glyphicon glyphicon-log-in"></i>
 									</button>
 								</div>
