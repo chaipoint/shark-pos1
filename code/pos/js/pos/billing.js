@@ -21,7 +21,7 @@ $(document).ready(function(){
 	if(Object.keys($billingItems).length > 0){
 
 		/*Load Bill IF provided with doc_id*/
-		var button = '<button class="btn btn-primary" id="print-can">Save</button>&nbsp;' + ((bill_status_id != 80) ? '<button id="paid_button" class="btn btn-primary">Paid</button>' : '');
+		var button = (bill_status_id != 80) ? '<button id="paid_button" class="btn btn-primary">Paid</button>' : '' ;
 		$('#botbuttons').append(button);
 		$('#payment').prop('disabled',true).addClass('hide');
 		for (var keys in $billingItems) {

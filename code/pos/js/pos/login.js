@@ -16,6 +16,10 @@ $(document).ready(function(){
 				$("#"+errorHolder).hide();
 				var msg = "";
 				var formData = form.serializeObject();
+				if( formID == 'loginform' && formData.time_check == 'true' ){
+					bootbox.alert('System And Server Time Is Mismatch');
+					return false;
+				}
 				if(formData.username1){
 					formData.username = formData.username1;
 				}
