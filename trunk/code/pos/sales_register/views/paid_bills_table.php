@@ -47,7 +47,7 @@
                 <th>Due Amt</th>
                 <?php }?>
                 
-                <th>Sales Chanl</th>
+                <th>Customer Type</th>
                 <th>Booking Chanl</th>
                 <th>Paid By</th>
                 <th>Status</th>

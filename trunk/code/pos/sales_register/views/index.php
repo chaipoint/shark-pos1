@@ -199,7 +199,7 @@
                 <th>Tax</th>
                 <th>Total Amount</th>
                 <th>Due Amount</th>
-                <th>Sales Channel</th>
+                <th>Customer Type</th>
                 <th>Booking Channel</th>
                 <th>Paid By</th>
                 <th>Status</th>
