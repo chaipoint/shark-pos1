@@ -53,11 +53,42 @@
 											</span> <input type="text" name="username" value=""
 												id="username" class="form-control" autocomplete="off" autofocus="true"/>
 										</div>
+										<?php
+											$timestamp = getGmtOffset('Asia/Kolkata');
+											$current_time = date('d-m-Y H:i:s', $timestamp-19800);
+											$date_a = new DateTime($current_time);
+											$date_b = new DateTime(date('d-m-Y H:i:s'));
+											$interval = date_diff($date_a,$date_b);
+											$status = 'false';
+											$day = $interval->format('%d');
+											$hours = $interval->format('%H');
+											$minute = $interval->format('%i');
+											if($day > 0){
+												$status = 'true';
+											}else if($hours > 0){
+												$status = 'true';
+											}else if($minute > 5){
+												$status = 'true';
+											}
+											function getGmtOffset($zone){
+												$ch = curl_init();
+												curl_setopt($ch, CURLOPT_URL, 'http://api.timezonedb.com/?key=KE5HRDHLJVRW&zone=' . $zone . '&format=json');
+												curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+												$json = curl_exec($ch);
+												curl_close($ch);
+												$data = json_decode($json);
+												return (int)$data->timestamp;
+											}
+										?>
 										<div class="input-group">
 											<span class="input-group-addon"><i
 												class="glyphicon glyphicon-lock"></i> </span> <input
 												type="password" name="password" value="" id="password"
 												class="form-control" autocomplete="off"/>
+												<input
+												type="hidden" name="time_check" value="<?php echo $status;?>" id="time_check"
+												class="form-control" autocomplete="off"/>
+												
 										</div>
 										<div class="row">
 
