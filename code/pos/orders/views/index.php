@@ -1,3 +1,6 @@
+<style>
+.btn {width:83px;}
+</style>
 <script type="text/javascript" src="<?php echo JS?>pos/coc.js"></script>
 <div class="panel panel-info" style="margin-left:20px;margin-right:20px;"> 
   <div class="panel-heading">COC Orders</div>
