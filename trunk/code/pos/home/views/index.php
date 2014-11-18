@@ -22,6 +22,7 @@
     			</ul>
     		</li>
         </ul>
+		<hr>
         <div class="hidden" id="shift_data_tab_holder">
 		   	<form class="form-inline alert" id="shift_search_form" action="#"> 
 		  		<input type="hidden" name="dispatch" value="sales_register"/>
