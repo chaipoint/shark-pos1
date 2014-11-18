@@ -69,10 +69,9 @@
 									class="language-img"> &nbsp;&nbsp; English </a></li>
 						</ul>
 					</li>
-					<li><a href="index.php?dispatch=home.index" class="btn nav-button btn-success btn-sm external <?php echo (MODULE == 'billing' ? 'active-btn' : ''); ?>" style="padding: 5px 8px; margin: 10px 0 5px 5px;" data-placement="right" title="Home">Home</a></li>
+					<li><a href="index.php?dispatch=home.index" class="btn nav-button btn-success btn-sm external <?php echo (MODULE == 'home' ? 'active-btn' : ''); ?>" style="padding: 5px 8px; margin: 10px 0 5px 5px;" data-placement="right" title="Home">Home</a></li>
 				<?php if(array_key_exists('shift', $_SESSION['user'])){?>
-					<li><a href="index.php?dispatch=billing.index" class="btn nav-button btn-success btn-sm external <?php echo (MODULE == 'billing' ? 'active-btn' : ''); ?>" style="padding: 5px 8px; margin: 10px 0 5px 5px;" data-placement="right" title="Sales">Billing<!--<i
-							class="glyphicon glyphicon-list"></i>--> </a></li>
+					<li><a href="index.php?dispatch=billing.index" class="btn nav-button btn-success btn-sm external <?php echo (MODULE == 'billing' ? 'active-btn' : ''); ?>" style="padding: 5px 8px; margin: 10px 0 5px 5px;" data-placement="right" title="Sales">Billing </a></li>
 					<li>
 						<a href="index.php?dispatch=orders" class="btn nav-button btn-success btn-sm external <?php echo (MODULE == 'orders' ? 'active-btn' : ''); ?>" style="padding: 5px 8px; margin: 10px 0 5px 5px;">CoC Orders</a>
 					</li>
@@ -103,13 +102,13 @@
 				<ul class="nav navbar-nav navbar-right">
 					<li>
 						<a>
-							<?php echo $_SESSION['user']['name']." (".$_SESSION['user']['code'].") (".$_SESSION['user']['title']['name']."), ".$_SESSION['user']['store']['name'];?>
+							<?php echo $_SESSION['user']['name']." (".$_SESSION['user']['title']['name']."), ".$_SESSION['user']['store']['name'];?>
 						</a>
 					</li>
 					
 					<li>
-						<a class="tip" data-placement="left" title="Logout" id="logout">
-							<i class="glyphicon glyphicon-log-out"></i> 
+						<a class="tip" data-placement="left" href="javascirpt:void(0)" title="Logout" id="logout">
+							<i class="glyphicon glyphicon-log-out"></i>logout 
 						</a>
 					</li>
 					<li>
