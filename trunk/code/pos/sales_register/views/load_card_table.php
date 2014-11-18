@@ -1,6 +1,6 @@
 <div class="panel panel-info"> 
   <div class="panel-heading col" data-toggle="collapse" data-parent="#accordion" href="#collapseCard"><a>Card Load Details
-    <i class="glyphicon glyphicon-chevron-up pull-right"></i></a></div>
+    <i class="glyphicon glyphicon-chevron-down pull-right"></i></a></div>
     <div id="collapseCard" class="panel-collapse collapse">
       <div class="panel-body">
         <table id="load_card_table" class="table table-striped table-bordered table-condensed table-hover" style="margin-bottom:5px;">

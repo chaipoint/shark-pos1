@@ -96,7 +96,7 @@
   <div class="panel panel-success">
     <div class="panel-heading col" data-value="sale_summary" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
       <a class="col" >Sale Summary
-        <i class="glyphicon glyphicon-chevron-up pull-right"></i>
+        <i class="glyphicon glyphicon-chevron-down pull-right"></i>
       </a>
     </div>
      <div id="collapseOne" class="panel-collapse collapse">
@@ -142,7 +142,7 @@
   <div class="panel panel-success">
     <div class="panel-heading col" id="todays_sale" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" >
       <a>Item Summary
-        <i class="glyphicon glyphicon-chevron-up pull-right"></i>
+        <i class="glyphicon glyphicon-chevron-down pull-right"></i>
       </a>
     </div>
     <div id="collapseThree" class="panel-collapse collapse">
@@ -170,7 +170,7 @@
 <div class="col-sm-12" style="margin-top:10px;">
     <div class="panel panel-info"> 
       <div class="panel-heading col" data-toggle="collapse" data-parent="#accordion" href="#collapseCancel"><a>Cancelled Bill Details
-      <i class="glyphicon glyphicon-chevron-up pull-right"></i></a></div>
+      <i class="glyphicon glyphicon-chevron-down pull-right"></i></a></div>
       <div id="collapseCancel" class="panel-collapse collapse">
         <div class="panel-body">
           <table id="cancel_bill_table" class="table table-striped table-bordered table-condensed table-hover" style="margin-bottom:5px;">
