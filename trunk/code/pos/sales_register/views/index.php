@@ -1,3 +1,6 @@
+<style>
+#footer {margin-top:100px;}
+</style>
 <div class="container-fluid">
 <form class="form-inline" id="search_form" action="?dispatch=sales_register"> 
   <input type="hidden" name="dispatch" value="sales_register"/>
