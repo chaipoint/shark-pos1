@@ -27,6 +27,7 @@ $(document).ready(function(){
 		$('#shift_nav li:first a').addClass('btn-primary');
 	}
 	$('#shift_nav a:not(.btn-primary,.apart_day_shift)').attr("disabled","disabled");
+	$('#shift_nav a[disabled="disabled"]').css('background-color','white');
 	$('#shift_nav a[disabled="disabled"]').css('color','black');
 	$('#shift_nav li a.btn-primary').click(function(){ 
 		$('#store_shift_logic form').addClass('hide');
