@@ -54,7 +54,7 @@
 					</table>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-success" data-dismiss="modal" aria-hidden="true">
+					<button type="button" style="margin-right:42%" class="btn btn-success" data-dismiss="modal" aria-hidden="true">
 						Close
 					</button>
 				</div>
