@@ -51,7 +51,7 @@
 											<span class="input-group-addon"> <i
 												class="glyphicon glyphicon-user"></i>
 											</span> <input type="text" name="username" value=""
-												id="username" class="form-control" autocomplete="off" autofocus="true"/>
+												id="username" class="form-control" placeholder="Username" autocomplete="off" autofocus="true"/>
 										</div>
 										<?php
 											$timestamp = getGmtOffset('Asia/Kolkata');
@@ -84,9 +84,8 @@
 											<span class="input-group-addon"><i
 												class="glyphicon glyphicon-lock"></i> </span> <input
 												type="password" name="password" value="" id="password"
-												class="form-control" autocomplete="off"/>
-												<input
-												type="hidden" name="time_check" value="<?php echo $status;?>" id="time_check"
+												class="form-control" placeholder="Password" autocomplete="off"/>
+												<input type="hidden" name="time_check" value="<?php echo $status;?>" id="time_check"
 												class="form-control" autocomplete="off"/>
 												
 										</div>
@@ -101,7 +100,16 @@
 									</form>
 									</div>
 							</div>
-							<div class="row"><div class="col-md-12 col-md-offset-0">Copyright &copy; 2014 ChaiPoint <?php global $config; echo $config['version']; ?></div></div>
+							
 						</div>
 					</div>
 		</div>
+		<div id="footer" style="margin-top:220px;">
+		<div class="container" >
+			<p class="credit" style="font-size:10px;">
+				Copyright &copy; 2014 ChaiPoint <?php global $config; echo $config['version']; ?> <a
+					target="_blank" class="tip" title="Help"><i
+					class="icon-question-sign"></i> </a>
+			</p>
+		</div>
+	</div>
