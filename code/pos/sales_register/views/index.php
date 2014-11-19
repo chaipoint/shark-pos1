@@ -22,7 +22,7 @@
       
      
         <div class="smallstat box col-lg-2 col-sm-4" style="width:110px;margin-left:14px;">
-          <i class="glyphicon glyphicon-usd fa green"></i>
+          <i class="glyphicon fa gray"></i>
           <span class="title">Cash Sale</span>
           <span class="value"><?php echo $cash_sale;?></span>
         </div>
@@ -30,7 +30,7 @@
 
      
         <div class="smallstat box col-lg-2 col-sm-4" style="width:130px;margin-left:8px;" >
-          <i class="glyphicon glyphicon-usd fa pink"></i>
+          <i class="glyphicon fa gray"></i>
           <span class="title">Pending Cash</span>
           <span class="value"><?php echo $cash_indelivery;?></span>
         </div>
@@ -38,20 +38,20 @@
 
       
         <div class="smallstat box col-lg-2 col-sm-4" style="width:125px;margin-left:8px;">
-          <i class="glyphicon glyphicon-usd fa blue"></i>
+          <i class="glyphicon fa gray"></i>
           <span class="title">PPC Rdmptn</span>
           <span class="value"><?php echo $ppcSale; ?></span>
         </div>
 
         <div class="smallstat box col-lg-2 col-sm-4" style="width:125px;margin-left:8px;">
-          <i class="glyphicon glyphicon-usd fa blue"></i>
+          <i class="glyphicon fa gray"></i>
           <span class="title">PPA Rdmptn</span>
           <span class="value"><?php echo $ppaSale; ?></span>
         </div>
      
       
         <div class="smallstat box col-lg-2 col-sm-4" style="width:115px;margin-left:8px;" >
-          <i class="glyphicon glyphicon-usd fa gray"></i>
+          <i class="glyphicon fa gray"></i>
           <span class="title">Credit Sale</span>
           <span class="value"><?php echo $creditSale; ?></span>
         </div>
@@ -59,7 +59,7 @@
 
       
         <div class="smallstat box col-lg-2 col-sm-4" style="width:150px;margin-left:8px;">
-          <i class="glyphicon glyphicon-usd fa red"></i>
+          <i class="glyphicon fa gray"></i>
           <span class="title">Petty Expense</span>
           <span class="value"><?php echo $p_ex;?> &nbsp;
           <?php if(empty($_GET['sales_reg_search']) || (!empty($_GET['sales_reg_search']) && $_GET['sales_reg_search']==date('d-F-Y'))) { ?>
@@ -75,7 +75,7 @@
 	  
 	 
         <div class="smallstat box col-lg-2 col-sm-4" style="width:130px;margin-left:8px;">
-          <i class="glyphicon glyphicon-usd fa yel"></i>
+          <i class="glyphicon fa gray"></i>
           <span class="title">Cash In Hand</span>
           <span class="value"><?php echo ($cash_sale - ($p_ex)) ;?></span>
         </div>
@@ -83,7 +83,7 @@
 
       
         <div class="smallstat box col-lg-2 col-sm-4" style="width:110px;margin-left:8px;">
-          <i class="glyphicon glyphicon-usd fa orange"></i>
+          <i class="glyphicon fa gray"></i>
           <span class="title">Total Sale</span>
           <span class="value"><?php echo ($cash_sale + $cash_indelivery + $ppcSale + $ppaSale + $creditSale) ;?></span>
         </div>
