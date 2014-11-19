@@ -359,7 +359,7 @@ html, body { height: 100%; }
 	.btn-category .btn-info { border-color: #783C96 !important; }
 	.btn-category .btn-warning { border-color: #DA5800; }
 	.btn-category .btn { float:left; width:114px !important; height:50px; padding:5px; margin:0 !important; border-bottom: 0; border-left:0; border-top:0; position: relative; word-break: break-strict; word-wrap: break-word; white-space: pre-wrap; }
-	.btn-product { display:block; border:1px solid #0061C2; border-bottom:0; margin-top:10px; background:#0061C2;} 
+	.btn-product { display:block; border:1px solid #0061C2; border-bottom:0; margin-top:-1px; background:#0061C2;} 
 	.btn-product .btn-primary { border-color: #0061C2 !important; }
 	.btn-product .btn-success { border-color: #11866F !important; }
 	.btn-product .btn { float:left; width:114px; display:block; overflow:hidden; height: 51px; word-break: break-strict; word-wrap: break-word; white-space: pre-wrap; padding:5px; margin:0 !important; border-bottom: 0; border-left:0; line-height:normal; display:table-cell; vertical-align:middle; }
