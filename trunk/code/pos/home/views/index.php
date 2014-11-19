@@ -12,7 +12,7 @@
   	</div>
   	<div class="panel-body tabbable">
         <ul id="tab_selection_menu" class="nav nav-pills" role="tablist">
-        	<li class='active'><a id='home_tab' class="home_tabs" href="javascript:void(0)">Home</a></li>
+        	<li class='active'><a id='home_tab' class="home_tabs" href="javascript:void(0)">Login</a></li>
         	<li><a id='sales_tab' class="home_tabs" href="javascript:void(0)">Sales</a></li>
 			<li><a id='shift_data_tab' class="home_tabs require_valid_user" href="javascript:void(0)">Shift Data</a></li>
 			<li class='dropdown'><a id='card__tab' class="dropdown-toggle home_tabs" data-toggle="dropdown" href="javascript:void(0)">Card Transaction <span class="caret"></span></a>
@@ -50,27 +50,9 @@
 				  	<li><a class="btn btn-default btn-lg btn3d" id="day_end">Day End</a></li>
 			    </ul>
 			</div>
+			
 		<div class="col-lg-12 padded">
-				<div class="col-lg-6 col-md-5 col-sm-6">
-					<ul class="list-unstyled">
-						<?php if(array_key_exists('rows', $shift_data) && count($shift_data['rows']) > 0) {?>
-						<li><span class="glyphicon glyphicon-ok"></span> &nbsp;POS Login by <?php echo $shift_data['rows'][0]['doc']['login_staff_name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($shift_data['rows'][0]['doc']['login_time']));?></li>
-						<li><span class="glyphicon glyphicon-ok"></span> &nbsp;Day Started by <?php echo $shift_data['rows'][0]['doc']['day']['start_staff_name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($shift_data['rows'][0]['doc']['day']['start_time']));?></li>
-						<?php foreach($shift_data['rows'][0]['doc']['shift'] as $key => $value) {?>
-						<li><span class="glyphicon glyphicon-ok"></span> &nbsp;Shift <?php echo $value['shift_no']; ?> Started by <?php echo $value['start_staff_name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($value['start_time']));?> </li>
-						<?php if(!empty($value['end_time'])) {?>
-						<li><span class="glyphicon glyphicon-ok"></span> &nbsp;Shift <?php echo $value['shift_no']; ?> Closed by <?php echo $value['end_staff_name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($value['end_time']));?> </li>
-						<?php }?>
-						<?php }?>
-						<?php if(!empty($shift_data['rows'][0]['doc']['day']['end_time'])) {?>
-						<li><span class="glyphicon glyphicon-ok"></span> &nbsp;Day Closed by <?php echo $shift_data['rows'][0]['doc']['day']['end_staff_name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($shift_data['rows'][0]['doc']['day']['end_time']));?></li>
-						<?php }?>
-						<?php }else{ ?>
-						<li><span class="glyphicon glyphicon-ok"></span> &nbsp;POS Login by <?php echo $_SESSION['user']['name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($_SESSION['user']['login']['time']));?></li>
-						<?php }?>
-					</ul>
-				</div>
-				<div class="col-lg-3 col-md-5 col-sm-5">
+		<div class="col-lg-3 col-md-5 col-sm-5">
 					<div class="alert alert-danger" id="error_message_shift"><ul></ul></div>
 
 					<form id="store_day_start_form"  class="store_shift hide" action="" method="post" accept-charset="utf-8" class="separate-sections form-horizontal" autocomplete="off">
@@ -224,6 +206,26 @@
 						</div>
 					</form>
 				</div>
+				<div class="col-lg-6 col-md-6 col-sm-6 pull-right">
+					<ul class="list-unstyled">
+						<?php if(array_key_exists('rows', $shift_data) && count($shift_data['rows']) > 0) {?>
+						<li><span class="glyphicon glyphicon-ok"></span> &nbsp;POS Login by <?php echo $shift_data['rows'][0]['doc']['login_staff_name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($shift_data['rows'][0]['doc']['login_time']));?></li>
+						<li><span class="glyphicon glyphicon-ok"></span> &nbsp;Day Started by <?php echo $shift_data['rows'][0]['doc']['day']['start_staff_name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($shift_data['rows'][0]['doc']['day']['start_time']));?></li>
+						<?php foreach($shift_data['rows'][0]['doc']['shift'] as $key => $value) {?>
+						<li><span class="glyphicon glyphicon-ok"></span> &nbsp;Shift <?php echo $value['shift_no']; ?> Started by <?php echo $value['start_staff_name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($value['start_time']));?> </li>
+						<?php if(!empty($value['end_time'])) {?>
+						<li><span class="glyphicon glyphicon-ok"></span> &nbsp;Shift <?php echo $value['shift_no']; ?> Closed by <?php echo $value['end_staff_name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($value['end_time']));?> </li>
+						<?php }?>
+						<?php }?>
+						<?php if(!empty($shift_data['rows'][0]['doc']['day']['end_time'])) {?>
+						<li><span class="glyphicon glyphicon-ok"></span> &nbsp;Day Closed by <?php echo $shift_data['rows'][0]['doc']['day']['end_staff_name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($shift_data['rows'][0]['doc']['day']['end_time']));?></li>
+						<?php }?>
+						<?php }else{ ?>
+						<li><span class="glyphicon glyphicon-ok"></span> &nbsp;POS Login by <?php echo $_SESSION['user']['name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($_SESSION['user']['login']['time']));?></li>
+						<?php }?>
+					</ul>
+				</div>
+				
 		</div>
 	</div>
 	
