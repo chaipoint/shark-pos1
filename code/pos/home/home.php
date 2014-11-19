@@ -120,10 +120,10 @@
 													<th style="font-size:11px">Petty Cash Expense</th>
 													<th style="font-size:11px">Shift End Petty Cash</th>
 													<th style="font-size:11px">Shift End (Cash in the box)</th>
-													<th style="font-size:11px;background-color:#dff0d8">Expected Closing Petty  Cash</th>
-													<th style="font-size:11px;background-color:#dff0d8">Petty Cash  Variance</th>
-													<th style="font-size:11px;background-color:#dff0d8">Expected Cash in the box</th>
-													<th style="font-size:11px;background-color:#dff0d8">Sales Cash Variance</th>
+													<th style="font-size:11px;background-color:#D0D0D0">Expected Closing Petty  Cash</th>
+													<th style="font-size:11px;background-color:#D0D0D0">Petty Cash  Variance</th>
+													<th style="font-size:11px;background-color:#D0D0D0">Expected Cash in the box</th>
+													<th style="font-size:11px;background-color:#D0D0D0">Sales Cash Variance</th>
 												</tr>
 											</thead>
     										<tbody>';
@@ -166,10 +166,10 @@
 						<td class="text-center">'.$exp.'</td>
 						<td class="text-center">'.$values['end_petty_cash'].'</td>
 						<td class="text-center">'.$values['end_cash_inbox'].'</td>
-						<td class="text-center" style="background-color:#dff0d8">'.$closing_cash.'</td>
-						<td class="text-center" style="background-color:#dff0d8">'.$pettyCashVeriance.'</td>
-						<td class="text-center" style="background-color:#dff0d8">'.((array_key_exists($values['shift_no'], $sales_reg['shift_cash']) ? $sales_reg['shift_cash'][$values['shift_no']] : 0) + (array_key_exists($values['shift_no'], $card_sale['shift_cash']) ? $card_sale['shift_cash'][$values['shift_no']] : 0)).'</td>
-						<td class="text-center" style="background-color:#dff0d8">'.$saleCashVeriance.'</td>
+						<td class="text-center" style="background-color:#D0D0D0">'.$closing_cash.'</td>
+						<td class="text-center" style="background-color:#D0D0D0">'.$pettyCashVeriance.'</td>
+						<td class="text-center" style="background-color:#D0D0D0">'.((array_key_exists($values['shift_no'], $sales_reg['shift_cash']) ? $sales_reg['shift_cash'][$values['shift_no']] : 0) + (array_key_exists($values['shift_no'], $card_sale['shift_cash']) ? $card_sale['shift_cash'][$values['shift_no']] : 0)).'</td>
+						<td class="text-center" style="background-color:#D0D0D0">'.$saleCashVeriance.'</td>
 						</tr>';
 						$cashSum += (array_key_exists($values['shift_no'], $sales_reg['shift_cash']) ? $sales_reg['shift_cash'][$values['shift_no']] : 0);
 						$cashSum += (array_key_exists($values['shift_no'], $card_sale['shift_cash']) ? $card_sale['shift_cash'][$values['shift_no']] : 0);
