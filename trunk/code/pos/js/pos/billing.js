@@ -145,7 +145,6 @@ $(document).ready(function(){
 			}else{ 
 				$('#paid_by').val('ppa');
 				$("#phone_number").val('');
-				$("#is_cod").val('N');
 				$("#delivery_channel").val(74);
 				$("#delivery_channel_name").val(config_data.delivery_channel[74]);
 				$("#booking_channel").val(53);
@@ -397,6 +396,7 @@ $(document).ready(function(){
 								$('#card_txn_no').val(result.data['txn_no']);
 								$('#card_approval_code').val(result.data['approval_code']);
 								$('#card_balance').val(result.data['balance']);
+								$('#is_prepaid').val('Y');
 								$('#card_invoice_no').val(result.data['invoice_number']);
 								$('#submit-sale').trigger('click');
 							}
@@ -457,13 +457,12 @@ $(document).ready(function(){
 				$("#balance").text(0);
 				$('#payModal').modal();
 				$("#phone_number").val('');
-				$("#is_cod").val('N');
 				$("#delivery_channel").val(74);
 				$("#delivery_channel_name").val(config_data.delivery_channel[74]);
 				$("#booking_channel").val(53);
 				$("#booking_channel_name").val(config_data.channel[53]);
 				$("#is_cod").val('N');
-				$("#is_prepaid").val('Y');
+				$("#is_prepaid").val('N');
 				$("#is_credit").val('N');
 				$("#bill_status_id").val(80);
 				$("#bill_status").val(config_data.bill_status[80]);
@@ -533,7 +532,7 @@ $(document).ready(function(){
 			switch($(this).val()){
 				case 'walk_in':
 					$("#is_cod").val('N');
-					$("#is_prepaid").val('Y');
+					$("#is_prepaid").val('N');
 					$("#is_credit").val('N');
 					$('#phone_number').val('');
 					$('#billing_customer_address').val('');
