@@ -108,7 +108,7 @@
 					
 					<li>
 						<a class="tip" data-placement="left" href="javascirpt:void(0)" title="Logout" id="logout">
-							<i class="glyphicon glyphicon-log-out"></i>logout 
+							<i class="glyphicon glyphicon-log-out"></i>&nbsp;Logout 
 						</a>
 					</li>
 					<li>
