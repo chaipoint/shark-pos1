@@ -33,7 +33,7 @@ if(array_key_exists('rows', $card_load_data) && count($card_load_data['rows'])>0
             <td style="text-align:center"><?php echo $value['doc']['amount']; ?></td>
             <td>
             <?php if(empty($_GET['sales_reg_search']) || (!empty($_GET['sales_reg_search']) && $_GET['sales_reg_search']==date('d-F-Y'))) { ?>
-                 <a class="tip btn btn-warning btn-xs edit-bill cancel-transaction text-center" style="width:25px;" title="Cancel Transaction" href="javascript:void(0);">
+                 <a class="tip btn btn-warning btn-xs edit-bill cancel-transaction text-center" style="width:17px;height:17px;" title="Cancel Transaction" href="javascript:void(0);">
   		              C
   		           </a>
             <?php } ?>
