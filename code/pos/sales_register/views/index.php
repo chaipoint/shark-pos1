@@ -204,7 +204,7 @@
                 <th>Due Amount</th>
                 <th>Customer Type</th>
                 <th>Booking Channel</th>
-                <th>Paid By</th>
+                <th>Payment Mode</th>
                 <th>Status</th>
                 <th>Is CoD</th>
                 <th>Is PrePaid</th>
