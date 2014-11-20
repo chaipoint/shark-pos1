@@ -1,5 +1,5 @@
 <style>
-#footer {margin-top:100px;}
+#footer {margin-top:110px;}
 </style>
 <div class="container-fluid">
 <form class="form-inline" id="search_form" action="?dispatch=sales_register"> 
