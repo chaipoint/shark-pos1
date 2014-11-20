@@ -181,11 +181,22 @@ td.tborder {border-top: 1px solid #666; font-weight:bold;}
 	word-break: hyphenate;
 }
 
-
+.category-product{
+color:black;
+background-color: #AFFB9C;
+border-color: #AFFB9C;
+}
+.btn-warning {
+color: black;
+background-color: #FFAE00;
+border-color: #FFAE00;
+text-align: left;
+font-size: 12px;
+}
 #pos #leftdiv {
 	width: 390px;
 	float:left;
-	height:534px;
+	height:494px;
 	margin: 10px 0;
 	border: 1px solid #DCE0E1;
 }
@@ -347,6 +358,7 @@ html, body { height: 100%; }
 
 #wrapper { width: 980px; height:590px; margin:0 auto; padding:0; overflow: hidden; }
 #wrap { margin-bottom: -50px !important; }
+#wrap { height: 300px !important; }
 .container { padding-left:0; padding-right:0; width: 970px !important; }
 
 	#cp .btn { border-width: 1px; border-style: solid; }
@@ -359,8 +371,8 @@ html, body { height: 100%; }
 	.btn-category .btn-info { border-color: #783C96 !important; }
 	.btn-category .btn-warning { border-color: #DA5800; }
 	.btn-category .btn { float:left; width:114px !important; height:50px; padding:5px; margin:0 !important; border-bottom: 0; border-left:0; border-top:0; position: relative; word-break: break-strict; word-wrap: break-word; white-space: pre-wrap; }
-	.btn-product { display:block; border:1px solid #0061C2; border-bottom:0; margin-top:-1px; background:#0061C2;} 
-	.btn-product .btn-primary { border-color: #0061C2 !important; }
+	.btn-product { display:block; border:1px solid #9CFBB5; border-bottom:0; margin-top:-1px; background:#9CFBB5;} 
+	.btn-product .btn-primary { border-color: #9CFBB5 !important; }
 	.btn-product .btn-success { border-color: #11866F !important; }
 	.btn-product .btn { float:left; width:114px; display:block; overflow:hidden; height: 51px; word-break: break-strict; word-wrap: break-word; white-space: pre-wrap; padding:5px; margin:0 !important; border-bottom: 0; border-left:0; line-height:normal; display:table-cell; vertical-align:middle; }
 	.btn-product .btn:nth-child(5n+5) { width: 112px; border-right:0; }
@@ -380,11 +392,11 @@ html, body { height: 100%; }
 	background-color: none !important;
 }
 #pos .btn-primary.hov { 
-	background: #0061C2 !important;
+	background: #9CFBB5 !important;
 	background-color: none !important;
 }
 #pos .btn-primary.hov:hover, #pos .btn-primary.hov:active { 
-	background: #0061C2 !important;
+	background: #9CFBB5 !important;
 	background-color: none !important;
 }
 
@@ -467,7 +479,10 @@ html, body { height: 100%; }
 }
 .em { width:600px; height: 600px; background:#FFF; margin: 0 auto; }
 
-.active-btn{background-color: #ff6600; color: white;}
+
+.active-btn{background-color: #FFAE00; color: black;}
+
+
 
 .btn3d {
     transition: all .08s linear;
@@ -478,7 +493,7 @@ html, body { height: 100%; }
     margin-top: 15px;
     top: 0;
     font-size: 13px;
-    font-weight: bold;
+    
 }
 .btn3d:focus {
     outline: medium none;
@@ -494,7 +509,7 @@ html, body { height: 100%; }
     box-shadow: 0 0 0 1px #428bca inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 8px 0 0 #357ebd, 0 8px 0 1px rgba(0, 0, 0, 0.4), 0 8px 8px 1px rgba(0, 0, 0, 0.5);
 }
 .btn3d.btn-success {
-    box-shadow: 0 0 0 1px #5cb85c inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 8px 0 0 #4cae4c, 0 8px 0 1px rgba(0, 0, 0, 0.4), 0 8px 8px 1px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 0 1px #AFFB9C inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 8px 0 0 #AFFB9C, 0 8px 0 1px rgba(0, 0, 0, 0.4), 0 8px 8px 1px rgba(0, 0, 0, 0.5);
 }
 .btn3d.btn-info {
     box-shadow: 0 0 0 1px #5bc0de inset, 0 0 0 2px rgba(255, 255, 255, 0.15) inset, 0 8px 0 0 #46b8da, 0 8px 0 1px rgba(0, 0, 0, 0.4), 0 8px 8px 1px rgba(0, 0, 0, 0.5);
