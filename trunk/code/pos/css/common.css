@@ -1,16 +1,84 @@
 div.DTTT_container {
-position: relative !important;
-float: right !important;
-margin-bottom: 1em !important;
+	position: relative !important;
+	float: right !important;	
+	margin-bottom: 1em !important;
 }
-div.DTTT_container {
-padding-top: 5px !important;
+
+.dataTables_length {
+	float: left;
+	margin-top: 5px;
 }
+
+div.dataTables_wrapper .ui-state-default {
+background: #83bbea;
+}
+
+div.dataTables_wrapper .ui-widget-header {
+font-weight: normal;
+color: #333;
+height: 40px;
+max-height: 40px;
+background-color: gainsboro !important;
+}
+
+.ui-widget-header {
+	line-height: 0px !important;
+}
+
+#dataset_table .classDataTable {
+	font-size: 11px !important;
+	font-family: Arial, Helvetica, sans-serif !important;
+}
+
+.dataTables_paginate {
+border-radius: 0 0 10px 10px;
+height: 25px;
+padding-top: 7px;
+text-align: right;
+}
+
+.dataTables_info {
+border-radius: 0 0 0 10px;
+float: left !important;;
+height: 25px;
+padding-left: 10px;
+padding-top: 13px !important;;
+width: auto;
+}
+
+.dataTables_filter {
+border-radius: 0 10px 0 0;
+float: right;
+height: 32px;
+padding-right: 10px;
+padding-top: 5px;
+text-align: right;
+width: 50%;
+}
+
+.paging_full_numbers .ui-button {
+padding: 2px 6px;
+margin: 0;
+cursor: pointer;
+color: #333 !important;
+}
+
+.dataTables_paginate .ui-button {
+margin-right: -0.1em !important;
+}
+
 button.DTTT_button, div.DTTT_button, a.DTTT_button {
-margin-left: 10px !important;
-height: 22px !important;
-padding: 3px 5px 3px 5px !important;
-color: black !important;
+	margin-left: 10px !important;
+	height: 22px !important;
+	padding: 3px 5px 3px 5px !important;
+	color: black !important;
+	}
+	
+.paging_full_numbers .ui-button {
+padding: 2px 6px;
+margin: 0;
+cursor: pointer;
+color: #333 !important;
 }
 
 table.dataTable th {
@@ -104,4 +172,14 @@ font-weight: bold;
 
 .smallstat .value {
 font-size: 20px;
+}
+hr {
+margin-top:6px;
+margin-bottom:4px;
+}
+.alert{
+margin-bottom:-7px;
+}
+.panel-body{
+margin-bottom:-28px;
 }
