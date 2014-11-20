@@ -253,11 +253,11 @@
 	<div id="ppc_card_tab_data" class="tabs_data hidden">
 			<div class="col-lg-12">
 				<ul class="list-inline" role="tablist" id="shift_nav">
-					<li><a class="btn btn-primary btn-lg btn3d" id="ppc_card_issue">Issue Card</a></li>
-					<li><a class="btn btn-primary btn-lg btn3d" id="ppc_card_reissue">Reissue Card</a></li>
-					<li><a class="btn btn-primary btn-lg btn3d" id="ppc_card_activate">Activate Card</a></li>
-				  	<li><a class="btn btn-primary btn-lg btn3d" id="ppc_card_load">Load Card</a></li>
-				  	<li><a class="btn btn-primary btn-lg btn3d" id="ppc_card_balance_check">Balance Check</a></li>
+					<li><a class="btn btn-primary btn-sm card" id="ppc_card_issue">Issue Card</a></li>
+					<li><a class="btn btn-primary btn-sm card" id="ppc_card_reissue">Reissue Card</a></li>
+					<li><a class="btn btn-primary btn-sm card" id="ppc_card_activate">Activate Card</a></li>
+				  	<li><a class="btn btn-primary btn-sm card" id="ppc_card_load">Load Card</a></li>
+				  	<li><a class="btn btn-primary btn-sm card" id="ppc_card_balance_check">Balance Check</a></li>
 				</ul>
 			</div>
 			<div class="col-lg-12 padded">
@@ -516,8 +516,8 @@
 		<div id="ppa_card_tab_data" class="tabs_data hidden">
 			<div class="col-lg-12">
 				<ul class="list-inline" role="tablist" id="shift_nav">
-					<li><a class="btn btn-primary btn-lg btn3d" id="ppa_card_load">Load Card</a></li>
-				  	<li><a class="btn btn-primary btn-lg btn3d" id="ppa_card_balance_check">Balance Check</a></li>
+					<li><a class="btn btn-primary btn-sm card" id="ppa_card_load">Load Card</a></li>
+				  	<li><a class="btn btn-primary btn-sm card" id="ppa_card_balance_check">Balance Check</a></li>
 				</ul>
 			</div>
 			<div class="col-lg-12 padded">
