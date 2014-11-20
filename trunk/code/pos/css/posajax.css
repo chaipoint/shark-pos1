@@ -363,7 +363,7 @@ html, body { height: 100%; }
 
 	#cp .btn { border-width: 1px; border-style: solid; }
 	/*#slider_con { width: 90%; height:45px;  display:block; position: relative; margin: 20px auto 0 auto; overflow:hidden; }*/
-	#slider { width: 100%; height:52px;  display:block; position: relative; margin: 0; border:1px solid #040404; }
+	#slider { display: inline-block !important; height:52px; position: relative; margin: 0; border:1px solid #040404; }
 	.btn-category { margin: 0; padding: 0; display:block;} 
 	.btn-category .btn-primary { border-color: #8441A5 !important; }
 	.btn-category .btn-default { border-color: #040404 !important; }
@@ -371,7 +371,7 @@ html, body { height: 100%; }
 	.btn-category .btn-info { border-color: #783C96 !important; }
 	.btn-category .btn-warning { border-color: #DA5800; }
 	.btn-category .btn { float:left; width:114px !important; height:50px; padding:5px; margin:0 !important; border-bottom: 0; border-left:0; border-top:0; position: relative; word-break: break-strict; word-wrap: break-word; white-space: pre-wrap; }
-	.btn-product { display:block; border:1px solid #9CFBB5; border-bottom:0; margin-top:-1px; background:#9CFBB5;} 
+	.btn-product { display:block; border:1px solid #9CFBB5; border-bottom:0; margin-top:-5px; background:#9CFBB5;} 
 	.btn-product .btn-primary { border-color: #9CFBB5 !important; }
 	.btn-product .btn-success { border-color: #11866F !important; }
 	.btn-product .btn { float:left; width:114px; display:block; overflow:hidden; height: 51px; word-break: break-strict; word-wrap: break-word; white-space: pre-wrap; padding:5px; margin:0 !important; border-bottom: 0; border-left:0; line-height:normal; display:table-cell; vertical-align:middle; }
