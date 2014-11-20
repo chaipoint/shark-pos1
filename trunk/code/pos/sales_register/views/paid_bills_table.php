@@ -49,7 +49,7 @@
                 
                 <th>Customer Type</th>
                 <th>Booking Chanl</th>
-                <th>Paid By</th>
+                <th>Payment Mode</th>
                 <th>Status</th>
                 <th>Is CoD</th>
                 <th>Is PrePaid</th>
