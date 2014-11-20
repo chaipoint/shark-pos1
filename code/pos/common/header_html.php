@@ -25,25 +25,25 @@
 				</div>
 
 					<table class="table table-condensed">
-						<thead><tr><th>Download</th><th>Upload POS Data</th></tr></thead>
+						<thead><tr><th>Download From CPOS</th><th>Upload POS Data</th></tr></thead>
 						<tbody>
 							<tr>
-								<td class="text-center"><a class="btn btn-success sync-bt btn-sm col-lg-10" id="store_sync_bt">Store</a></td>
+								<td class="text-center"><a class="btn btn-success sync-bt btn-sm col-lg-10" id="store_sync_bt" style="width:115px;">Store</a></td>
 								<td class="text-center">
 									<a class="btn btn-success sync-bt btn-sm col-lg-10 hidden" id="billing_sync_bt">Start Process</a>
 									<a class="btn btn-success sync-bt btn-sm col-lg-10 hidden" id="billing_stop_sync_bt">Stop Process</a>
 								</td>
 							</tr>
 							<tr>
-								<td class="text-center"><a class="btn btn-success sync-bt btn-sm col-lg-10" id="staff_sync_bt">Staff</a></td>
+								<td class="text-center"><a class="btn btn-success sync-bt btn-sm col-lg-10" id="staff_sync_bt" style="width:115px;">Staff</a></td>
 								<td class="text-center"><strong>[Bill Data, Shift Data, Login History]</strong></td>
 							</tr>
 							<tr>
-								<td class="text-center"><a class="btn btn-success sync-bt btn-sm col-lg-10" id="config_sync_bt">Config</a></td>
+								<td class="text-center"><a class="btn btn-success sync-bt btn-sm col-lg-10" id="config_sync_bt" style="width:115px;">Config</a></td>
 								<td class="text-center"></td>
 							</tr>
 							<tr>
-								<td class="text-center"><a class="btn btn-success sync-bt btn-sm col-lg-10" id="design_sync_bt">Design Docs</a></td>
+								<td class="text-center"><a class="btn btn-success sync-bt btn-sm col-lg-10" id="design_sync_bt" style="width:115px;">Design Docs</a></td>
 								<td class="text-center"></td>
 							</tr>
 							<tr>
