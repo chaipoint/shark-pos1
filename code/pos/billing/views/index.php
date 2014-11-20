@@ -6,6 +6,7 @@
 	.navbar {
 		margin-bottom: 1px;
 	}
+	
 </style>
 <script> var printUtility = <?php echo $printUtility; ?>; </script>
 <script type="text/javascript" src="<?php echo JS;?>pos/billing.js"></script>
@@ -69,9 +70,9 @@
 											<table width="100%" border="0" cellpadding="0"
 												cellspacing="0"
 												class="table table-striped table-condensed table-hover miantable"
-												style="margin: 5px 0 0 0;" id="menu-table">
+												style="margin: 5px 0 0 0;background-color:#A9A9A9;" id="menu-table">
 												<thead>
-													<tr class="success">
+													<tr class="">
 														<th style="width: 9%" class="satu">X</th>
 														<th>Product</th>
 														<th style="width: 12%">Qty</th>
@@ -95,19 +96,19 @@
 												</div>
 											</div>
 											<div style="clear: both;"></div>
-											<div id="totaldiv">
+											<div id="totaldiv" style="background-color:#A9A9A9;">
 												<table id="totaltbl"
 													class="table table-striped table-condensed totals"
-													style="margin-bottom: 10px;">
+													style="margin-bottom:10px;color:black;">
 													<tbody>
-														<tr class="success">
+														<tr class="">
 															<td width="25%">Total Items</td>
 															<td><span id="count">0</span></td>
 															<td width="25%">SubTotal</td>
 															<td class="text_right" colspan="2"><span id="total">0</span>
 															</td>
 														</tr>
-														<tr class="success">
+														<tr class="">
 															<td width="25%" rowspan="2">
 																<div class="input-group">
 																			<input type="text" class="form-control input-sm" id="discount_input_box" placeholder="%" name="discount_input_box"/>
@@ -121,36 +122,33 @@
 															<td class="text_right"><span id="ds_con">0</span></td>
 														</tr>
 
-														<tr class="success">
+														<tr class="">
 															<td width="25%"> <a href="#" id="add_tax"
-																style="color: #FFF;">Tax <i
+																style="color:black;">Tax <i
 																	class="glyphicon glyphicon-pencil"></i> 
 																</a> (+)
 															</td>
 															<td class="text_right"><span id="ts_con">0</span></td>
 														</tr>
-														<tr class="success">
-															<td width="25%" colspan='2' class="text-left"> <button class='btn btn-sm btn-primary'  id='reward_redemption'>Reward</button> </td>
-															<td width="25%" class="text-left"><input type='text' class="form-control hide" name='redemption_code' placeholder='Code' id='redemption_code' style="width:80px" /></td>
-															<td><span id="image_loading" class="hide"><img class="text-right" src="<?php echo IMG;?>loader.gif"/></span></td>
+														<tr class="">
+															<td width="25%" class="text-left"> <button class='btn btn-sm btn-primary'  id='reward_redemption'>Reward</button> </td>
+															<td width="25%" class="text-left"><input type='text' class="form-control hide" name='redemption_code' placeholder='Scan Code' id='redemption_code' style="width:101px" /></td>
+															<td width="30%" class="text-left"><strong>Total Payable</strong></td>
+															<td class="text_right"><strong><span id="total-payable">0</span></strong></td>
 														</tr>
 														
-														<tr class="success">
-															<td colspan="2">Total Payable</td>
-															<td class="text_right" colspan="2"><span
-																id="total-payable">0</span></td>
-														</tr>
+														
 													</tbody>
 												</table>
 											</div>
 										</div>
-										<div id="botbuttons" style="text-align: center;">
+										<div id="botbuttons" style="text-align:center;margin-top:-5px;">
 											<button type="button" class="btn btn-danger" id="cancel"
-												style="width: 90px;"><?php if(!empty($_GET['bill_no'])){ echo 'Cancel';}else {echo 'Reset';}?></button>
+												style="width:90px;height:40px"><?php if(!empty($_GET['bill_no'])){ echo 'Cancel';}else {echo 'Reset';}?></button>
 											<!--<button type="button" class="btn btn-info" id="hold"
 												style="width: 90px;">Hold</button>-->
-											<button type="button" class="btn btn-success" id="payment" style="margin-right: 90px; width: 180px;">Payment</button>
-											<button type="button" class="btn btn-success hide" id="claim_reward" style="margin-right: 90px; width: 180px;">Claim Reward</button>
+											<button type="button" class="btn btn-success" id="payment" style="margin-right: 90px; width: 180px;height:40px">Payment</button>
+											<button type="button" class="btn btn-success hide" id="claim_reward" style="margin-right: 90px; width: 180px;height:40px;">Claim Reward</button>
 										</div>
 									</div>
 								</form>
@@ -171,7 +169,7 @@
 									<div style="clear: both;"></div>
 									<div id="ajaxproducts">
 										<div class="btn-product clearfix">
-											<div id="proajax" style="overflow:scroll;height:470px;">
+											<div id="proajax" style="overflow:scroll;height:442px;">
 													<?php
 														if(array_key_exists($firstCat, $productList))
 														foreach($productList[$firstCat] as $pKey => $pValue){
