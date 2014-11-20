@@ -77,6 +77,11 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 	$('.close-model').click(function(){
 		$("div.ui-keyboard").hide();
 	});
+	
+	$('.card').click(function(){
+		$('.card').removeClass('active-btn');
+		$(this).addClass('active-btn');
+	});
 
 	/* Function To Save Petty Inward */
 	$('#add-inward-form').on('submit', function(event){
