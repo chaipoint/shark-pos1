@@ -97,9 +97,9 @@
 <div class="row">
   <div class="panel-group" id="accordion">
     <div class="col-sm-6">
-  <div class="panel panel-success">
+  <div class="panel panel-info">
     <div class="panel-heading col" data-value="sale_summary" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-      <a class="col" >Sale Summary
+      <a class="col" href="javascript:void(0)" >Sale Summary
         <i class="glyphicon glyphicon-chevron-down pull-right"></i>
       </a>
     </div>
@@ -143,9 +143,9 @@
 </div>
 
 <div class="col-sm-6">
-  <div class="panel panel-success">
+  <div class="panel panel-info">
     <div class="panel-heading col" id="todays_sale" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" >
-      <a>Item Summary
+      <a href="javascript:void(0)">Item Summary
         <i class="glyphicon glyphicon-chevron-down pull-right"></i>
       </a>
     </div>
@@ -173,7 +173,7 @@
 
 <div class="col-sm-12" style="margin-top:10px;">
     <div class="panel panel-info"> 
-      <div class="panel-heading col" data-toggle="collapse" data-parent="#accordion" href="#collapseCancel"><a>Cancelled Bill Details
+      <div class="panel-heading col" data-toggle="collapse" data-parent="#accordion" href="#collapseCancel"><a href="javascript:void(0)">Cancelled Bill Details
       <i class="glyphicon glyphicon-chevron-down pull-right"></i></a></div>
       <div id="collapseCancel" class="panel-collapse collapse">
         <div class="panel-body">
