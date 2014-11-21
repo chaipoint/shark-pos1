@@ -87,7 +87,7 @@
 
 							require_once DIR.'/sales_register/sales_register.php';
 							$sr = new sales_register();
-							$resultExpenseList = $sr->getExpenseData($this->getCDate());
+							$resultExpenseList = $sr->getExpenseData($this->getCDate(), $this->getCDate());
 							if(count($resultExpenseList['rows'])>0){
 								$rows = $resultExpenseList['rows'];
 								foreach($rows as $pKey => $pValue){
