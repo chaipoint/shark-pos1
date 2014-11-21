@@ -17,7 +17,7 @@
 			$bl = new billing();
 			$st = new Staff();
 
-			$data = $sr->getBills($this->getCDate());
+			$data = $sr->getBills($this->getCDate(), $this->getCDate());
 			$data['is_store_open'] = 'false';
 			$data['is_shift_running'] = 'false';
 			$totalShifts = 0;
@@ -33,14 +33,14 @@
 					}
 				}
 			}
-			$todaysale = json_decode($sr->getTodaysSale(),true);
-			$data['payment_sum'] = (!$todaysale['error']) ? $todaysale['data'] : array();
+			//$todaysale = json_decode($sr->getTodaysSale(),true);
+			//$data['payment_sum'] = (!$todaysale['error']) ? $todaysale['data'] : array();
 			$data['shift_data'] = $result;
 			$data['staff_list'] = $st->getStaffList();
 			$data['total_shift'] = $totalShifts;
 			$configHead = $this->getConfig($this->cDB, 'head');
 			$data['head_data'] = $configHead['data']['head'];
-			$data['expense_data'] = $sr->getExpenseData($this->getCDate());
+			$data['expense_data'] = $sr->getExpenseData($this->getCDate(), $this->getCDate());
 			$data['card_load_data'] = $sr->getCardLoadSale($this->getCDate());
 			$data['shift'] = '';
 			$data['reconcilation'] = '';
@@ -75,9 +75,8 @@
 			$bl = new billing();
 			require_once DIR.'/sales_register/sales_register.php';
 			$sr = new sales_register();
-
-			$todaysale = json_decode($sr->getTodaysSale($date),true);
-			$sales_reg = $sr->getBills($date);
+			//$todaysale = json_decode($sr->getTodaysSale($date),true);
+			$sales_reg = $sr->getBills($date, $date);
 
 			$shift_inward = 0;
 			$shift_expense = 0;
