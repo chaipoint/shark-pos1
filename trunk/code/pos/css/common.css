@@ -94,64 +94,36 @@ font-size: 10px;
 
 .smallstat {
   background: white;
-  padding: 10px;
+  padding: 6px;
   position: relative;
   text-align: left;
 }
 
 .box{
   border: 1px solid #dbdee0;
-  margin: 0 0 30px 0;
+  margin: -14px 0px 18px 0px;
 }
 
-.smallstat i.green {
-background: #dff0d8 url(ui-lightness/images/inr.png) center center no-repeat;
-height:46px;
 
-}
 
-.smallstat i.red {
-background: #FF5454 url(ui-lightness/images/inr.png) center center no-repeat;
-height:46px;
-}
-
-.smallstat i.orange {
-background: #FF6600 url(ui-lightness/images/inr.png) center center no-repeat;
-height:46px;
-}
-
-.smallstat i.blue {
-background: #0170D0 url(ui-lightness/images/inr.png) center center no-repeat;
-height:46px;
-}
-
-.smallstat i.pink {
-background: #EA488A url(ui-lightness/images/inr.png) center center no-repeat;
-height:46px;
-}
 .smallstat i.gray {
-background: #FF8C00 url(ui-lightness/images/inr.png) center center no-repeat;
+background: white url(ui-lightness/images/inr.png) center center no-repeat;
 height:46px;
 }
-.smallstat i.yel {
-background: #FF1493 url(ui-lightness/images/inr.png) center center no-repeat;
-height:46px;
-}
+
 
 .smallstat i {
 text-align: center;
 display: block;
 color: black;
-width: 28px;
+width: 14px;
 font-size: 22px;
 padding: 14px 0;
 float: left;
 margin-left: 0px;
 }
 
-.green {
-color: #dff0d8;
-}
+
 
 .fa {
 display: inline-block;
@@ -163,10 +135,10 @@ line-height: 1;
 
 .smallstat .title {
 top: 12px;
-color: #b2b8bd;
+color: black;
 display: block;
 font-size: 10px;
-margin-top: 4px;
+margin-top: -4px;
 font-weight: bold;
 }
 
