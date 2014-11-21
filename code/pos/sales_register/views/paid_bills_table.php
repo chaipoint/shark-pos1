@@ -8,7 +8,7 @@
 <script type="text/javascript" src="<?php echo JS; ?>bootstrapValidator.js"></script>
 <script type="text/javascript" src="<?php echo (JS.'pos/sale.register.js');?>" ></script>
     <div class="panel panel-info"> 
-      <div class="panel-heading col" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><a>Paid Bill Details
+      <div class="panel-heading col" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><a href="javascript:void(0)">Paid Bill Details
       <i class="glyphicon glyphicon-chevron-down pull-right"></i></a></div>
       <div id="collapseTwo" class="panel-collapse collapse">
         <div class="panel-body">

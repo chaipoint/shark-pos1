@@ -1,5 +1,5 @@
 <div class="panel panel-info"> 
-  <div class="panel-heading col" data-toggle="collapse" data-parent="#accordion" href="#collapseCard"><a>Card Load Details
+  <div class="panel-heading col" data-toggle="collapse" data-parent="#accordion" href="#collapseCard"><a href="javascript:void(0)">Card Load Details
     <i class="glyphicon glyphicon-chevron-down pull-right"></i></a></div>
     <div id="collapseCard" class="panel-collapse collapse">
       <div class="panel-body">
