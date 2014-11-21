@@ -62,16 +62,16 @@
 		}
 
 		/* Function To Get Todays sale */
-		public function getTodaysSale($date = ''){
+		public function getTodaysSale(){
 			global $PAYMENT_MODE;
 			$return = array('error'=>false,'message'=>'','data'=>array());
 
-			if(empty($date)){
+			if(empty($_POST['date'])){
 				$date = $this->getCDate();
+			}else{
+				$date = date('Y-m-d', strtotime($_POST['date']));
 			}
-			//$paymentMode = $this->getConfig($this->cDB, 'payment_mode');
-			//print_r($paymentMode);
-			$bills = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getList(BILLING_DESIGN_DOCUMENT_LIST_TODAYS_SALE, BILLING_DESIGN_DOCUMENT_VIEW_HANDLE_UPDATED_BILLS)->setParam(array("descending"=>"true","include_docs"=>"true","endkey"=>'["'.$date.'"]'))->execute();
+			$bills = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getList(BILLING_DESIGN_DOCUMENT_LIST_TODAYS_SALE, BILLING_DESIGN_DOCUMENT_VIEW_HANDLE_UPDATED_BILLS)->setParam(array("descending"=>"true","include_docs"=>"true","endkey"=>'["'.$date.'"]',"startkey"=>'["'.$date.'", {},{},{}]'))->execute();
 			$this->log->trace("TODAYS SALE DETAILS \r\n".json_encode($bills));
 			if(array_key_exists('error', $bills)){
 				$return['error'] = true;
