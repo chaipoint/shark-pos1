@@ -157,13 +157,13 @@ $("#search_button").click(function(){
 /* Todays Sale Function */
 	$('#todays_sale').click(function(event){ 
 			event.preventDefault();
+			var date = $('#sales_reg_search').val();
 			$.ajax({
 				type: 'POST',
 				url: "index.php?dispatch=sales_register.getTodaysSale",
-		  		data : {request_type:'todays_bill'},
+		  		data : {request_type:'todays_bill', 'date':date},
 			}).done(function(response) {
 					var result = $.parseJSON(response);
-					//alert(JSON.stringify(result));
 					if(result.error){
 						bootbox.alert(result.message);
 					}else{
@@ -175,7 +175,6 @@ $("#search_button").click(function(){
 							var sumPaymenyTypes = new Object();
 							var sumTotal = 0;
 							$.each(result.data.summary,function(index,details){
-								//console.log(index+"=>"+JSON.stringify(details));
 								trs += '<tr><td>'+index+'</td>';
 								var total = 0;
 										
