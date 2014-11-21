@@ -58,7 +58,7 @@
       
 
       
-        <div class="smallstat box col-lg-2 col-sm-4" style="width:150px;margin-left:8px;">
+        <div class="smallstat box col-lg-2 col-sm-4" style="width:111px;margin-left:8px;">
           <i class="glyphicon fa gray"></i>
           <span class="title">Petty Expense</span>
           <span class="value"><?php echo $p_ex;?> &nbsp;
@@ -74,7 +74,7 @@
       
 	  
 	 
-        <div class="smallstat box col-lg-2 col-sm-4" style="width:130px;margin-left:8px;">
+        <div class="smallstat box col-lg-2 col-sm-4" style="width:107px;margin-left:8px;">
           <i class="glyphicon fa gray"></i>
           <span class="title">Cash In Hand</span>
           <span class="value"><?php echo ($cash_sale - ($p_ex)) ;?></span>
@@ -82,7 +82,7 @@
       
 
       
-        <div class="smallstat box col-lg-2 col-sm-4" style="width:110px;margin-left:8px;">
+        <div class="smallstat box col-lg-2 col-sm-4" style="width:95px;margin-left:8px;">
           <i class="glyphicon fa gray"></i>
           <span class="title">Total Sale</span>
           <span class="value"><?php echo ($cash_sale + $cash_indelivery + $ppcSale + $ppaSale + $creditSale) ;?></span>
