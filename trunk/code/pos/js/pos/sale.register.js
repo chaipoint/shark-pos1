@@ -18,15 +18,17 @@ $(document).ready( function(){
 
     $('#ui-datepicker-div').css('display','none');
     var dateParam = (url.param('sales_reg_search'));
+	var dateParam1 = (url.param('sales_reg_search1'));
 	var date = new Date();
+	var date1 = new Date();
 	if(dateParam){
 		var parmArray = dateParam.split('-');
+		var parmArray1 = dateParam1.split('-');
 		date = new Date(parmArray[2],getMonth(parmArray[1]),parmArray[0]);
+		date1 = new Date(parmArray1[2],getMonth(parmArray1[1]),parmArray1[0]);
 	}
-$('.datepicker').datepicker('update', new Date(date.getFullYear(), date.getMonth(), date.getDate()))
-    .on('changeDate', function(e){
-    	$("#search_button").trigger('click');
-    });
+$('#sales_reg_search').datepicker('update', new Date(date.getFullYear(), date.getMonth(), date.getDate()));
+$('#sales_reg_search1').datepicker('update', new Date(date1.getFullYear(), date1.getMonth(), date1.getDate()));
 
 $("#search_button").click(function(){
 	if((url.param('dispatch').split('.'))[0] == 'sales_register'){
@@ -157,11 +159,12 @@ $("#search_button").click(function(){
 /* Todays Sale Function */
 	$('#todays_sale').click(function(event){ 
 			event.preventDefault();
-			var date = $('#sales_reg_search').val();
+			var date1 = $('#sales_reg_search').val();
+			var date2 = $('#sales_reg_search1').val();
 			$.ajax({
 				type: 'POST',
 				url: "index.php?dispatch=sales_register.getTodaysSale",
-		  		data : {request_type:'todays_bill', 'date':date},
+		  		data : {request_type:'todays_bill', 'date1':date1, 'date2':date2},
 			}).done(function(response) {
 					var result = $.parseJSON(response);
 					if(result.error){
