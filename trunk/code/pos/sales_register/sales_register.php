@@ -14,13 +14,14 @@
 				header("Location:index.php?error=true");
 				die;
 			}else{
-				$date = $this->getCDate();
+				$date1 = $date2 = $this->getCDate();
 				if(array_key_exists('sales_reg_search', $_GET)){
-					$date = date('Y-m-d',strtotime($_GET['sales_reg_search']));
+					$date1 = date('Y-m-d',strtotime($_GET['sales_reg_search']));
+					$date2 = date('Y-m-d',strtotime($_GET['sales_reg_search1']));
 				}	
-				$resultBillList = $this->getBills($date);
-				$resultExpenseList = $this->getExpenseData($date);
-				$resultCardLoadSale = $this->getCardLoadSale($date);
+				$resultBillList = $this->getBills($date1, $date2);
+				$resultExpenseList = $this->getExpenseData($date1, $date2);
+				$resultCardLoadSale = $this->getCardLoadSale($date1);
 				
 				$pettyExpence = 0;
 				if(count($resultExpenseList['rows'])>0){
@@ -65,13 +66,10 @@
 		public function getTodaysSale(){
 			global $PAYMENT_MODE;
 			$return = array('error'=>false,'message'=>'','data'=>array());
-
-			if(empty($_POST['date'])){
-				$date = $this->getCDate();
-			}else{
-				$date = date('Y-m-d', strtotime($_POST['date']));
-			}
-			$bills = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getList(BILLING_DESIGN_DOCUMENT_LIST_TODAYS_SALE, BILLING_DESIGN_DOCUMENT_VIEW_HANDLE_UPDATED_BILLS)->setParam(array("descending"=>"true","include_docs"=>"true","endkey"=>'["'.$date.'"]',"startkey"=>'["'.$date.'", {},{},{}]'))->execute();
+			$date1 = date('Y-m-d', strtotime($_POST['date1']));
+			$date2 = date('Y-m-d', strtotime($_POST['date2']));
+			
+			$bills = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getList(BILLING_DESIGN_DOCUMENT_LIST_TODAYS_SALE, BILLING_DESIGN_DOCUMENT_VIEW_HANDLE_UPDATED_BILLS)->setParam(array("descending"=>"true","include_docs"=>"true","endkey"=>'["'.$date1.'"]',"startkey"=>'["'.$date2.'", {},{},{}]'))->execute();
 			$this->log->trace("TODAYS SALE DETAILS \r\n".json_encode($bills));
 			if(array_key_exists('error', $bills)){
 				$return['error'] = true;
@@ -91,15 +89,15 @@
 		}
 
 		/* Function To Get Petty Expense */
-		function getExpenseData($date){
-				$resultExpenseList = $this->cDB->getDesign(PETTY_EXPENSE_DESIGN_DOCUMENT)->getView(PETTY_EXPENSE_DESIGN_DOCUMENT_VIEW_GET_EXPENSE)->setParam(array("include_docs"=>"true","startkey"=>'"'.$date.'"',"endkey"=>'"'.$date.'"'))->execute();
+		function getExpenseData($date1, $date2){
+				$resultExpenseList = $this->cDB->getDesign(PETTY_EXPENSE_DESIGN_DOCUMENT)->getView(PETTY_EXPENSE_DESIGN_DOCUMENT_VIEW_GET_EXPENSE)->setParam(array("include_docs"=>"true","startkey"=>'"'.$date1.'"',"endkey"=>'"'.$date2.'"'))->execute();
 				return $resultExpenseList;
 		}
 
 		
 		/* Function To Get Todays Bill For Login Store */
-		function getBills($date){
-				$resultBillList = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getList(BILLING_DESIGN_DOCUMENT_LIST_SALES_REGISTER, BILLING_DESIGN_DOCUMENT_VIEW_HANDLE_UPDATED_BILLS)->setParam(array("include_docs"=>"true","descending"=>"true","endkey" => '["'.$date.'"]',"startkey" => '["'.$date.'",{},{},{}]'))->execute();
+		function getBills($date1, $date2){
+				$resultBillList = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getList(BILLING_DESIGN_DOCUMENT_LIST_SALES_REGISTER, BILLING_DESIGN_DOCUMENT_VIEW_HANDLE_UPDATED_BILLS)->setParam(array("include_docs"=>"true","descending"=>"true","endkey" => '["'.$date1.'"]',"startkey" => '["'.$date2.'",{},{},{}]'))->execute();
 				return 	$resultBillList;
 		}
 

@@ -9,9 +9,10 @@
 <div class="form-group">
   <label  class="control-label" for="sales_reg_search">Sales on</label>&nbsp;&nbsp;&nbsp;&nbsp;
 <div class="input-group">
-      <input type="text" name = "sales_reg_search" id="sales_reg_search" class="form-control datepicker" required data-provide="datepicker-inline" data-date-format="dd-MM-yyyy"  data-date-autoclose = "true" data-date-end-date="+0d" name="expense_date" readonly/>      
+      <input type="text" name = "sales_reg_search" id="sales_reg_search" style="width:142px" class="form-control datepicker" required data-provide="datepicker-inline" data-date-format="dd-MM-yyyy"  data-date-autoclose = "true" data-date-end-date="+0d" name="expense_date" readonly/>
+	  <input type="text" name = "sales_reg_search1" id="sales_reg_search1" style="margin-left:10px;width:142px" class="form-control datepicker pull-left" required data-provide="datepicker-inline" data-date-format="dd-MM-yyyy"  data-date-autoclose = "true" data-date-end-date="+0d" name="expense_date" readonly/>      
       <span class="input-group-btn">
-        <button class="btn btn-primary" type="button" style="padding-top:4px; padding-bottom:5px;" id="search_button"><i class="glyphicon glyphicon-search"></i></button>
+        &nbsp;&nbsp;<button class="btn btn-primary" type="button" style="padding-top:4px; margin-left:15px; padding-bottom:5px;" id="search_button"><i class="glyphicon glyphicon-search"></i></button>
       </span>
 </div>
 </div>
