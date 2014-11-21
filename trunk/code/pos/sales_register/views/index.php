@@ -7,7 +7,7 @@
 <ol class="breadcrumb">
 <li>
 <div class="form-group">
-  <label  class="control-label" for="sales_reg_search">Sales ON</label>&nbsp;&nbsp;&nbsp;&nbsp;
+  <label  class="control-label" for="sales_reg_search">Sales on</label>&nbsp;&nbsp;&nbsp;&nbsp;
 <div class="input-group">
       <input type="text" name = "sales_reg_search" id="sales_reg_search" class="form-control datepicker" required data-provide="datepicker-inline" data-date-format="dd-MM-yyyy"  data-date-autoclose = "true" data-date-end-date="+0d" name="expense_date" readonly/>      
       <span class="input-group-btn">
