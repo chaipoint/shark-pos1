@@ -32,6 +32,12 @@ $('#sales_reg_search1').datepicker('update', new Date(date1.getFullYear(), date1
 
 $("#search_button").click(function(){
 	if((url.param('dispatch').split('.'))[0] == 'sales_register'){
+		var date1 = $('#sales_reg_search').datepicker('getDate');
+		var date2 = $('#sales_reg_search1').datepicker('getDate');
+		if (date1 > date2) {
+			bootbox.alert('From Date Should Be Greater');
+			return false;
+		}
 		$("#search_form").submit();
 	}else{
 		searchShiftData();
