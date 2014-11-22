@@ -35,7 +35,7 @@ $("#search_button").click(function(){
 		var date1 = $('#sales_reg_search').datepicker('getDate');
 		var date2 = $('#sales_reg_search1').datepicker('getDate');
 		if (date1 > date2) {
-			bootbox.alert('From Date Should Be Greater');
+			bootbox.alert('End date should be greater than Start');
 			return false;
 		}
 		$("#search_form").submit();
