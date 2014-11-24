@@ -16,9 +16,16 @@ $(document).ready(function(){
 				$("#"+errorHolder).hide();
 				var msg = "";
 				var formData = form.serializeObject();
-				if( formID == 'loginform' && formData.time_check == 'true' ){
-					bootbox.alert('System And Server Time Is Mismatch');
-					return false;
+				//var diffDays = Math.round(diffMs / 86400000); // minutes
+				if( formID == 'loginform'){
+					var curret = new Date();
+					var server = new Date(formData.current_time);
+					var diffMs = (server.getTime() - curret.getTime()); 
+					var diffMins = Math.round(diffMs / 60000); // minutes
+					if(diffMins > 5){
+						bootbox.alert('System And Server Time Is Mismatch');
+						return false;
+					}
 				}
 				if(formData.username1){
 					formData.username = formData.username1;
