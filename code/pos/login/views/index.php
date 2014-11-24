@@ -55,21 +55,7 @@
 										</div>
 										<?php
 											$timestamp = getGmtOffset('Asia/Kolkata');
-											$current_time = date('d-m-Y H:i:s', $timestamp-19800);
-											$date_a = new DateTime($current_time);
-											$date_b = new DateTime(date('d-m-Y H:i:s'));
-											$interval = date_diff($date_a,$date_b);
-											$status = 'false';
-											$day = $interval->format('%d');
-											$hours = $interval->format('%H');
-											$minute = $interval->format('%i');
-											if($day > 0){
-												$status = 'true';
-											}else if($hours > 0){
-												$status = 'true';
-											}else if($minute > 5){
-												$status = 'true';
-											}
+											$current_time = date('Y/m/d H:i:s', $timestamp-19800);
 											function getGmtOffset($zone){
 												$ch = curl_init();
 												curl_setopt($ch, CURLOPT_URL, 'http://api.timezonedb.com/?key=KE5HRDHLJVRW&zone=' . $zone . '&format=json');
@@ -85,7 +71,7 @@
 												class="glyphicon glyphicon-lock"></i> </span> <input
 												type="password" name="password" value="" id="password"
 												class="form-control" placeholder="Password" autocomplete="off"/>
-												<input type="hidden" name="time_check" value="<?php echo $status;?>" id="time_check"
+												<input type="hidden" name="current_time" value="<?php echo $current_time;?>" id="current_time"
 												class="form-control" autocomplete="off"/>
 												
 										</div>
