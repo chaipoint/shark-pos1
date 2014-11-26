@@ -76,18 +76,19 @@ function updateCustomers(){
 		$day = array();
 		$day = explode(',', $value['day']);
 		foreach($day as $inkey => $inValue){
-			echo $getProduct = "SELECT product_id id, cim.name, cim.code, isb.price, isb.tax tax_id,
+			$getProduct = "SELECT product_id id, cim.name, cim.code, isb.price, isb.pro_start_time, 
+							isb.st_leaving_time, isb.onsite_time, isb.tax tax_id,
 							ctm.name tax_name, ctm.rate tax_rate, cim.item_group_code category_id, crm.name as category_name
 							FROM `isb_delivery` isb
-							LEFT JOIN cp_item_master cim ON cim.id = isb.product_id 
-							LEFT JOIN cp_tax_master ctm ON ctm.id = isb.tax
-							LEFT JOIN cp_reference_master crm ON crm.id = cim.item_group_code
-							WHERE isb.active = 'Y' AND cim.active = 'Y' AND crm.active = 'Y' AND ctm.active = 'Y' 
+							LEFT JOIN cp_item_master cim ON cim.id = isb.product_id AND cim.active = 'Y'
+							LEFT JOIN cp_tax_master ctm ON ctm.id = isb.tax AND ctm.active = 'Y'
+							LEFT JOIN cp_reference_master crm ON crm.id = cim.item_group_code AND crm.active = 'Y'
+							WHERE isb.active = 'Y' 
 							AND isb.customer_id = '".$value['mysql_id']."' AND isb.day = '".$inValue."'";
 			$logger->trace("GET PRODUCT DETAILS FOR RETAIL CUSTOMER FROM CPOS: ".$getProduct);
 			$dbResult = $db->func_query($getProduct);
 			$j=0;
-			echo 't22';
+			
 			if(is_array($dbResult) && count($dbResult)>0){
 				foreach($dbResult as $k => $v){ echo 't';
 					$insertArray[$i]['schedule'][$inValue][$j]['mysql_id'] = $v['id'];
@@ -99,6 +100,9 @@ function updateCustomers(){
 					$insertArray[$i]['schedule'][$inValue][$j]['tax']['rate'] = $v['tax_rate'];
 					$insertArray[$i]['schedule'][$inValue][$j]['category']['id'] = $v['category_id'];
 					$insertArray[$i]['schedule'][$inValue][$j]['category']['name'] = $v['category_name'];
+					$insertArray[$i]['schedule'][$inValue][$j]['production_start_time'] = $v['pro_start_time'];
+					$insertArray[$i]['schedule'][$inValue][$j]['store_leaving_time'] = $v['st_leaving_time'];
+					$insertArray[$i]['schedule'][$inValue][$j]['onsite_time'] = $v['onsite_time'];
 					$j++;
 				}
 			}
