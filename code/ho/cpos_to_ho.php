@@ -44,14 +44,21 @@ function updateCustomers(){
 				}
 	}
 
-	$cusQuery = "SELECT id, name, address, phone, contact_person, e_mail, location_id, customer_id, type, note 
-				 FROM customer_master WHERE active = 'Y'";
+	$cusQuery = "SELECT cm.id, cm.name, cm.address, cm.phone, cm.contact_person,
+				cm.e_mail, cm.location_id, cm.customer_id, cm.type, cm.note, GROUP_CONCAT(DISTINCT(isb.day)) day 
+				FROM customer_master cm 
+				LEFT JOIN isb_delivery isb ON isb.customer_id = cm.id AND isb.active = 'Y'
+				WHERE cm.active = 'Y' 
+				GROUP BY isb.customer_id
+				ORDER BY `cm`.`id` ASC";
+				
 	$logger->trace("GET RETAIL CUSTOMER FROM CPOS: ".$cusQuery);
 	$dbResult = $db->func_query($cusQuery);
 	$insertArray = array();
 	$updateCounter = 0;
 	$insertCounter = 0;
 	$deleteCounter = 0;
+	$i = 0;
 	foreach($dbResult as $key => $value){
 		if(array_key_exists($value['id'], $existingRC)){
 			$value['_id'] = $existingRC[$value['id']]['_id'];
@@ -65,7 +72,37 @@ function updateCustomers(){
 		$value['mysql_id'] = $value['id'];
 		$value['address'] = str_replace(array('"',"'"), ' ', $value['address']);
 		unset($value['id']);
-		$insertArray[] = $value;
+		$insertArray[$i] = $value;
+		$day = array();
+		$day = explode(',', $value['day']);
+		foreach($day as $inkey => $inValue){
+			$getProduct = "SELECT product_id id, cim.name, cim.code, isb.price, isb.tax tax_id,
+							ctm.name tax_name, ctm.rate tax_rate, cim.item_group_code category_id, crm.name as category_name
+							FROM `isb_delivery` isb
+							LEFT JOIN cp_item_master cim ON cim.id = isb.product_id 
+							LEFT JOIN cp_tax_master ctm ON ctm.id = isb.tax
+							LEFT JOIN cp_reference_master crm ON crm.id = cim.item_group_code
+							WHERE isb.active = 'Y' AND cim.active = 'Y' AND crm.active = 'Y' AND ctm.active = 'Y' 
+							AND isb.customer_id = '".$value['mysql_id']."' AND isb.day = '".$inValue."'";
+			$logger->trace("GET PRODUCT DETAILS FOR RETAIL CUSTOMER FROM CPOS: ".$getProduct);
+			$dbResult = $db->func_query($getProduct);
+			$j=0;
+			if(is_array($dbResult) && count($dbResult)>0){
+				foreach($dbResult as $k => $v){
+					$insertArray[$i]['schedule'][$inValue][$j]['mysql_id'] = $v['id'];
+					$insertArray[$i]['schedule'][$inValue][$j]['code'] = $v['code'];
+					$insertArray[$i]['schedule'][$inValue][$j]['name'] = $v['name'];
+					$insertArray[$i]['schedule'][$inValue][$j]['price'] = $v['price'];
+					$insertArray[$i]['schedule'][$inValue][$j]['tax']['id'] = $v['tax_id'];
+					$insertArray[$i]['schedule'][$inValue][$j]['tax']['name'] = $v['tax_name'];
+					$insertArray[$i]['schedule'][$inValue][$j]['tax']['rate'] = $v['tax_rate'];
+					$insertArray[$i]['schedule'][$inValue][$j]['category']['id'] = $v['category_id'];
+					$insertArray[$i]['schedule'][$inValue][$j]['category']['name'] = $v['category_name'];
+					$j++;
+				}
+			}
+		}
+		$i++;
 	}
 	if(count($existingRC)>0){
 		foreach($existingRC as $keyR => $valueR){
@@ -73,8 +110,6 @@ function updateCustomers(){
 			$deleteCounter++;
 		}
 	}
-
-
 	$totalInsert = count($insertArray);
 	if($totalInsert > 0){
 		$result=$couch->saveDocument(true)->execute(array("docs"=>$insertArray));
