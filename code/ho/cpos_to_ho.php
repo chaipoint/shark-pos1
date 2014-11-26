@@ -90,7 +90,7 @@ function updateCustomers(){
 			$j=0;
 			
 			if(is_array($dbResult) && count($dbResult)>0){
-				foreach($dbResult as $k => $v){ echo 't';
+				foreach($dbResult as $k => $v){ 
 					$insertArray[$i]['schedule'][$inValue][$j]['mysql_id'] = $v['id'];
 					$insertArray[$i]['schedule'][$inValue][$j]['code'] = $v['code'];
 					$insertArray[$i]['schedule'][$inValue][$j]['name'] = $v['name'];
