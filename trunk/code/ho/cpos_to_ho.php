@@ -75,7 +75,7 @@ function updateCustomers(){
 		$insertArray[$i] = $value;
 		$day = array();
 		$day = explode(',', $value['day']);
-		foreach($day as $inkey => $inValue){echo 'hi';
+		foreach($day as $inkey => $inValue){
 			$getProduct = "SELECT product_id id, cim.name, cim.code, isb.price, isb.tax tax_id,
 							ctm.name tax_name, ctm.rate tax_rate, cim.item_group_code category_id, crm.name as category_name
 							FROM `isb_delivery` isb
@@ -88,7 +88,7 @@ function updateCustomers(){
 			$dbResult = $db->func_query($getProduct);
 			$j=0;
 			if(is_array($dbResult) && count($dbResult)>0){
-				foreach($dbResult as $k => $v){
+				foreach($dbResult as $k => $v){ echo 't';
 					$insertArray[$i]['schedule'][$inValue][$j]['mysql_id'] = $v['id'];
 					$insertArray[$i]['schedule'][$inValue][$j]['code'] = $v['code'];
 					$insertArray[$i]['schedule'][$inValue][$j]['name'] = $v['name'];
