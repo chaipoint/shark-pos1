@@ -75,7 +75,7 @@ function updateCustomers(){
 		$insertArray[$i] = $value;
 		$day = array();
 		$day = explode(',', $value['day']);
-		foreach($day as $inkey => $inValue){
+		foreach($day as $inkey => $inValue){echo 'hi';
 			$getProduct = "SELECT product_id id, cim.name, cim.code, isb.price, isb.tax tax_id,
 							ctm.name tax_name, ctm.rate tax_rate, cim.item_group_code category_id, crm.name as category_name
 							FROM `isb_delivery` isb
