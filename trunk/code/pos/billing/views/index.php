@@ -10,7 +10,7 @@
 </style>
 <script> var printUtility = <?php echo $printUtility; ?>; </script>
 <script type="text/javascript" src="<?php echo JS;?>pos/billing.js"></script>
-<?php
+<?php //echo '<pre>'; print_r($productList);echo '</pre>';
 	$script = "";
 	if(count($bill)>0){
 		$script .= "\n".'var due_amount = '.$bill['due_amount'].'; var doc = \''.$bill['_id']."';\nvar bill_status_id = ".$bill['bill_status_id'].";\n";
