@@ -12,7 +12,9 @@ var loadedBill = null;
 var modifyBill = false;
 var popupKeyboard = null;
 
-$(document).ready(function(){ 
+$(document).ready(function(){ //alert(JSON.stringify(productArray));
+//alert(JSON.stringify(catArray));
+//alert(selectedCat);
 	var url = $.url();
 	$(this).attr("title", "Shark |ChaiPoint POS| Billing"); 
 	/*
@@ -192,16 +194,63 @@ $(document).ready(function(){
 
 	//---START--- Functions Work After Page Load via Events
 		//---START--- Works on Change of Category i.e Change in Products according to Category	
-		$(".category-selection").click(function(){
+		$(".category-selection").click(function(){ 
 			if(!$(this).hasClass("btn-primary")){
 				$(".category-selection").removeClass('btn-primary');
 				$(this).addClass('btn-primary');
 				$buttonList = "";
-				selectedCat = $(this).data('category'); 
-				$.each(productArray[selectedCat],function(key,value){
-					$buttonList += '<button type="button" class="btn btn-success btn-lg btn3d btn25 category-product '+(value.mysql_id in $billingItems ? 'active-btn' : '')+'" value="'+value.mysql_id+'" category-product-sequence="'+key+'">'+value.name+'</button>';
-				});
-				$("#proajax").html($buttonList);
+				selectedCat = $(this).data('category');
+				if(selectedCat == 100){
+					$("#proajax").html('');
+					bootbox.dialog({
+						message:'<div class="form-group"><input type="text" name="customer_name" id="customer_name" class="autocomplete form-control" action="getCawCustomer" strict="true" target="customer_id"/></div>',
+						title:"Select Customer",
+						buttons:{
+							main:{
+								label:"Go",
+								className:"btn-success btn-sm",
+								callback:function(){
+									var customer_name = $('input[name="customer_id"]');
+									var customer_id = $.trim(customer_name.val()); 
+									if(customer_id == '' ){
+										customer_name.closest('.form-group').addClass('has-error');
+										return false;
+									}
+									$.ajax({
+										type: 'POST',
+										url: "index.php?dispatch=billing.getCawProduct",
+										data : {request_type:'getCawProduct', 'customer_id':customer_id},
+									}).done(function(response) {  
+										console.log(response);
+										var $result = $.parseJSON(response);
+										if($result.error){ 
+											bootbox.alert($result.message);
+											return false;
+										}
+										productArray = $.extend(true, productArray ,$.parseJSON($result.data));
+										console.log(productArray);
+										$.each(productArray[selectedCat],function(key,value){
+											$buttonList += '<button type="button" class="btn btn-success btn-lg btn3d btn25 category-product '+(value.mysql_id in $billingItems ? 'active-btn' : '')+'" value="'+value.mysql_id+'" category-product-sequence="'+key+'">'+value.name+'</button>';
+										});
+										$("#proajax").html($buttonList);
+									});
+								}
+							},
+							danger:{
+								label:"Cancel",
+								className:"btn-danger btn-sm"
+							},	
+
+						}
+					});
+					
+				}else{
+					$.each(productArray[selectedCat],function(key,value){
+						$buttonList += '<button type="button" class="btn btn-success btn-lg btn3d btn25 category-product '+(value.mysql_id in $billingItems ? 'active-btn' : '')+'" value="'+value.mysql_id+'" category-product-sequence="'+key+'">'+value.name+'</button>';
+					});
+					$("#proajax").html($buttonList);
+				}
+				
 			}
 		});
 		//---END--- Category SElection Ends
@@ -784,7 +833,7 @@ $(document).ready(function(){
 	});
 
 			//---START--- Event For Product Selection
-		$("#proajax").on("click",".category-product",function(){
+		$("#proajax").on("click",".category-product",function(){ 
 			    $(this).addClass('active-btn');
 				var selectedSequence = $(this).attr('category-product-sequence');
 				var productData = productArray[selectedCat][selectedSequence];
@@ -895,4 +944,8 @@ function resetBill(refresh){
 
 var setFocus = function(id) { 
   $('input[id='+id+']').focus();
+}
+
+function getCawProduct(customer_id){
+ alert(customer_id);
 }
