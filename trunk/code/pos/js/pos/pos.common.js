@@ -238,7 +238,7 @@ function autocomplete(){
 				});				
 			}			
 			xhr = 	$.ajax({
-				url: "index.php?dispatch=staff.getDeliveryBoy",
+				url: "index.php?dispatch=staff."+action,
 				data: data,
 				success: function( data, status ) {
 					if(data){
