@@ -53,6 +53,7 @@
 						$productList[$Items['category']['id']][] = $Items;
 					}
 		 		}
+				$catList[100] = 'C@W';
 		 		ksort($catList);
 		 		$currectCat = array_keys($catList);
 	  			$firstCat = $currectCat[0];
@@ -130,6 +131,33 @@
 					$return['message'] = $billDataReturned['message'];
 					return json_encode($return);
 				}
+		}
+		/* Function To Get Caw Product */
+		public function getCawProduct(){
+			$return = array('error'=>false, 'message'=>'', 'data' => array());
+			$customer_id = $_POST['customer_id'];
+			$resultCawProduct = $this->cDB->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_RETAIL_CUSTOMER_LIST)->setParam(array('key'=>$customer_id,'include_docs'=>'true'))->execute();
+			$this->log->trace('CAW PRODUCT DETAILS'."\r\n".json_encode($resultCawProduct));
+			
+			if(array_key_exists('rows', $resultCawProduct) && count($resultCawProduct['rows'])>0){
+				$rows = $resultCawProduct['rows'][0]['doc']['schedule'];
+				$day_number = date('N', strtotime(date('d-m-Y')));
+				$productList = array();
+				if(array_key_exists($day_number, $rows)){
+					foreach($rows[$day_number] as $key => $value){
+						$productList[100][] = $value;
+					} 
+					$return['data'] = json_encode($productList, true);
+				}else{
+					$return['error'] = true;
+					$return['message'] = 'NO ORDER SCHEDULE FOR CURRENT DAY';
+				}
+				
+			}else{
+				$return['error'] = true;
+				$return['message'] = 'Customer Not Found';
+			}
+			return $return;
 		}
 
 		/* Function To Get Bill Data */
