@@ -38,6 +38,18 @@
 			$this->log->trace('GET DELIVERY BOY'."\r\n".$getStaff);
 			echo json_encode($result);
 		}
+		
+		/* Function To Get CAW CUSTOMER*/
+		function getCawCustomer(){ 
+			$token = $_REQUEST['token'];
+			$getCustomer = "SELECT name label, id FROM customer_master 
+						 WHERE active = 'Y' 
+						 AND location_id = '".$_SESSION['user']['location']['id']."' 
+						 AND name LIKE '%$token%'";
+			$result = $this->db->func_query($getCustomer);
+			$this->log->trace('GET CAW CUSTOMER'."\r\n".$getCustomer);
+			echo json_encode($result);
+		}
 
 		
 
