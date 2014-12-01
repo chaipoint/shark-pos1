@@ -242,6 +242,7 @@ function uploadBill(){
 								"staff_id" => $doc['staff_id'], 
 								"staff_name" => $doc['staff_name'],
 								"customer_name" => $doc['customer']['name'],
+								"customer_type" => $doc['customer']['type'],
 								"customer_city" => $doc['customer']['city'],
 								"customer_locality" => $doc['customer']['locality'],
 								"customer_sublocality" => $doc['customer']['sub_locality'],
