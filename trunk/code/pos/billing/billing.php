@@ -132,6 +132,9 @@
 					return json_encode($return);
 				}
 		}
+		public function in_array_r($item , $array){
+				return preg_match('/"'.$item.'"/i' , json_encode($array));
+		}
 		/* Function To Get Caw Product */
 		public function getCawProduct(){
 			$return = array('error'=>false, 'message'=>'', 'data' => array());
@@ -144,8 +147,11 @@
 				$day_number = date('N', strtotime(date('d-m-Y')));
 				$productList = array();
 				if(array_key_exists($day_number, $rows)){
-					foreach($rows[$day_number] as $key => $value){
-						$productList[100][] = $value;
+					foreach($rows[$day_number] as $key => $value){ 
+						if($this->in_array_r($value['name'] , $productList)){
+						}else{
+							$productList[100][] = $value;
+						}
 					} 
 					$return['data'] = json_encode($productList, true);
 				}else{
@@ -159,7 +165,7 @@
 			}
 			return $return;
 		}
-
+			
 		/* Function To Get Bill Data */
 		public function getBillData($bill_id){
 				$return = array('error'=>false, 'message'=>'', 'data' => array());
