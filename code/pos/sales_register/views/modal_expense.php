@@ -21,6 +21,15 @@
 							</td>
 						</tr>
 						<tr>
+							<td>Item 
+							</td>
+							<td>
+								<span class="inv_cus_con"> 
+									<input type="text" id="item" class="form-control" name="item" required data-bv-notempty-message="The last name is required and cannot be empty" />	
+								</span>
+							</td>
+						</tr>
+						<tr>
 							<td>Head 
 							</td>
 							<td> 
@@ -110,6 +119,7 @@
 				  <thead>
 				  	<tr>
 				  		<th>#</th>
+				  		<th>Item</th>
 				  		<th>Head</th>
 				  		<th>Purpose</th>
 				  		<th>Done By</th>
@@ -131,6 +141,7 @@
                     			}
                                	echo '<tr>
                                          <td>'.$i.'</td>
+                                         <td>'.$value['doc']['item'].'</td>
 				  		      			 <td>'.$head.'</td>
 				  		     			 <td>'.$value['doc']['expense_purpose'].'</td>
 				  		     			 <td>'.$done_by.'</td>
@@ -145,6 +156,7 @@
                      <tfoot>
                       <tr>
                      	<th class="text-center">Total</th>
+                     	<th></th>
                      	<th></th>
                      	<th></th>
                      	<th></th>
