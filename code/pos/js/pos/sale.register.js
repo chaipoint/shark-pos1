@@ -48,9 +48,9 @@ $("#search_button").click(function(){
 		event.preventDefault();
 		$('#addExpenseModal').modal();
 		$('#expense_purpose, #expense_amount').val('');
-		$('#expense_purpose, #expense_amount').cKeyboard();
+		$('#item, #expense_purpose, #expense_amount').cKeyboard();
 		setTimeout(function(){
-			$('#expense_purpose').focus();				
+			$('#item').focus();				
 		},500);
 
 	});
