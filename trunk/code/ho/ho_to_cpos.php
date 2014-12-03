@@ -418,6 +418,7 @@ function uploadPettyExpense(){
 								"_rev" => $doc['_rev'],
 								"expense_date" => $doc['expense_date'].' '.$doc['expense_time'],
 								"expense_head" => $doc['expense_head'],
+								"item" => $doc['item'],
 								"expense_purpose" => $doc['expense_purpose'],
 								"expense_amount" => $doc['expense_amount'],
 								"expense_done_by" => $doc['expense_done_by_id'],
