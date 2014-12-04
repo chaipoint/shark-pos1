@@ -389,7 +389,7 @@ $(document).ready(function(){ //alert(JSON.stringify(productArray));
 				$(".ppc").show();
 				$("#ppc").val('');
 				$('#balance').closest('tr').hide();
-				bootbox.alert('Please Swipe The Card', function() { 
+				bootbox.alert(type=='ppc' ? 'Please Swipe The Card' : 'Please scan the Bar Code', function() { 
 					setTimeout(function(){
 						$("#ppc").focus();
 					},600);	
