@@ -37,13 +37,13 @@ $(document).ready(function(){
 					console.log(response);
 					var $res = $.parseJSON(response);
 					if($res.count){
-						beep(2000,2);
+						beep(20000,3);
 						$('#notification').removeClass('hide');
 					}else{
 						$('#notification').addClass('hide');
 					}
 				})
-			},300000);
+			},30000);
 		});
 	}
 
