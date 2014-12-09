@@ -115,7 +115,9 @@ $(document).ready(function(){
  		});
 
 		$(document).ajaxError(function() {
- 		  	bootbox.alert('Error In Ajax Request!Please Contact Admin');
+ 		  	bootbox.alert('Unable To Process.Please Try Later', function(){
+				window.location.reload(true);
+			});
 		});
 
 		$(document).ajaxSend(function() { 
