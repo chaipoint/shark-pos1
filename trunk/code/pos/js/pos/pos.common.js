@@ -115,9 +115,7 @@ $(document).ready(function(){
  		});
 
 		$(document).ajaxError(function() {
- 		  	bootbox.alert('Unable To Process.Please Try Later', function(){
-				window.location.reload(true);
-			});
+ 		  	bootbox.alert('Unable To Process.Please Try Another Method');
 		});
 
 		$(document).ajaxSend(function() { 
