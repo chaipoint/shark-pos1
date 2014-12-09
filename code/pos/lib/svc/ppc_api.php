@@ -217,6 +217,7 @@ function timeOutCancellation(){
 
 /*Function To Perform ppc redeem cancel, ppc load cancel, ppc activate cancel*/
 function cancel($details, $request_type){ 
+
 	global $CARD_RESPONSE_ARRAY;
 	$responseArray = $CARD_RESPONSE_ARRAY;
 	$return = array('error'=>false, 'message'=>'');
@@ -238,7 +239,7 @@ function cancel($details, $request_type){
 	
 	$cardNumber = $details['card_number'];
 	$cardPin = '';
-	$notes = 'SHARK POS Transaction On '.Date("d/m/Y H:i:s");
+	$notes = 'SHARK POS Transaction On '.Date("d/m/Y H:i:s").'.'.(!empty($details['cancel_reason']) ? $details['cancel_reason'] : '');
 	$trackData = $details['card_number'];
 	$invoiceNumber = $details['invoice_number'];
 	$amount = $details['amount'];
