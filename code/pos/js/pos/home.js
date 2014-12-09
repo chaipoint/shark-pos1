@@ -141,27 +141,27 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 
 			case 'store_ppc_card_activate_form':
 				formData.request_type = 'activate_ppc_card';
-				if((formData.first_name).trim() == ""){msg += "<li>Provide First Name</li>";}
-				else if((formData.last_name).trim() == ""){msg += "<li>Provide Last Name</li>";}
-				else if((formData.mobile_no).trim() == ""){msg += "<li>Provide Mobile NUmber</li>";}
-				else if((formData.card_number).trim() == ""){msg += "<li>Provide Currect Card No</li>";}
-				else if((formData.amount).trim() == ""){msg += "<li>Provide Amount</li>";}
+				if(!/^[a-zA-Z\s]+$/.test(formData.first_name)){msg += "<li>Provide Correct First Name</li>";}
+				else if(!/^[a-zA-Z\s]+$/.test(formData.last_name)){msg += "<li>Provide Correct Last Name</li>";}
+				else if(!/^\d{10}$/.test(formData.mobile_no)){msg += "<li>Provide Valid Mobile Number</li>";}
+				else if((formData.amount).trim() == ""){msg += "<li>Provide Valid Amount</li>";}
+				else if(!/^[0-9;=?]+$/.test(formData.card_number)){msg += "<li>Provide Correct Card No</li>";}
 				break;
 			
 			case 'store_ppc_card_load_form':
 				formData.request_type = 'load_ppc_card';
-				if((formData.card_number).trim() == ""){msg += "<li>Provide Currect Card No</li>";}
-				else if((formData.amount).trim() == ""){msg += "<li>Provide Amount</li>";}
+				if((formData.amount).trim() == ""){msg += "<li>Provide Amount</li>";}
+				else if(!/^[0-9;=?]+$/.test(formData.card_number)){msg += "<li>Provide Correct Card No</li>";}
 				break;
 
 			case 'store_ppc_card_balance_check_form':
 				formData.request_type = 'balance_check_ppc_card';
-				if((formData.card_number).trim() == ""){msg += "<li>Provide Currect Card No</li>";}
+				if(!/^[0-9;=?]+$/.test(formData.card_number)){msg += "<li>Provide Correct Card No</li>";}
 				break;
 
 			case 'store_ppa_card_load_form':
 				formData.request_type = 'load_ppa_card';
-				if((formData.card_number).trim() == ""){msg += "<li>Provide Currect Card No</li>";}
+				if((formData.card_number).trim() == ""){msg += "<li>Provide Correct Card No</li>";}
 				else if((formData.amount).trim() == ""){msg += "<li>Provide Amount</li>";}
 				break;
 
@@ -178,7 +178,6 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 				url: "index.php?dispatch=billing.loadCard",
 				data : formData
 			}).done(function(response) { 
-				$('#'+formID+'')[0].reset();
 				var $res =  $.parseJSON($.trim(response));
 				console.log($res); 
 				if($res.error){ 
