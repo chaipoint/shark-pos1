@@ -24,7 +24,7 @@
 
 <?php   
 if(array_key_exists('rows', $card_load_data) && count($card_load_data['rows'])>0) { 
-    $data = $card_load_data['rows'];
+    $data = $card_load_data['rows']; //echo $last_ppc_bill; print_r($data);
     foreach ($data as $key => $value) { if($value['doc']['status']!='cancel'){ ?>
 	      <tr class="text-center" data-doc_id="<?php echo $value['doc']['_id']; ?>" data-txn_no="<?php echo $value['doc']['txn_no']; ?>" data-approval_code="<?php echo $value['doc']['approval_code']; ?>" data-amount="<?php echo $value['doc']['amount']; ?>" data-card_no="<?php echo $value['doc']['card_no']; ?>" data-invoice_number="<?php echo $value['doc']['invoice_number']; ?>">
 		        <td style="text-align:center"><?php echo DATE('H:i:s',strtotime($value['doc']['time'])); ?></td>
@@ -32,11 +32,13 @@ if(array_key_exists('rows', $card_load_data) && count($card_load_data['rows'])>0
             <td style="text-align:center"><?php echo $value['doc']['txn_type']; ?></td>
             <td style="text-align:center"><?php echo $value['doc']['amount']; ?></td>
             <td>
-            <?php if(empty($_GET['sales_reg_search']) || (!empty($_GET['sales_reg_search']) && $_GET['sales_reg_search']==date('d-F-Y'))) { ?>
-                 <a class="tip btn btn-warning btn-xs edit-bill cancel-transaction text-center" style="width:17px;height:17px;" title="Cancel Transaction" href="javascript:void(0);">
+            <?php if(empty($_GET['sales_reg_search']) || (!empty($_GET['sales_reg_search']) && $_GET['sales_reg_search']==date('d-F-Y'))) { 
+					if($value['doc']['card_type']=='ppc' && $value['doc']['invoice_number']==$last_ppc_bill){
+					?>
+				 <a class="tip btn btn-warning btn-xs edit-bill cancel-transaction text-center" style="width:17px;height:17px;" title="Cancel Transaction" href="javascript:void(0);">
   		              C
   		           </a>
-            <?php } ?>
+            <?php }} ?>
 		          
 		        </td>
         </tr>
