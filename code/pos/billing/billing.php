@@ -263,6 +263,7 @@
 								$data['approval_code'] = $billDataReturned['data']['card']['approval_code'];
 								$data['invoice_number'] = $billDataReturned['data']['card']['invoice_number'];
 								$data['card_number'] = $billDataReturned['data']['card']['no'];
+								$data['cancel_reason'] = $_POST['cancel_reason'];
 								$dir =  dirname(__FILE__).'/../lib/svc/ppc_api.php';
                					require_once $dir;
                 				$ppc = new PpcAPI();
