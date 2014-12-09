@@ -42,6 +42,7 @@
 			$data['head_data'] = $configHead['data']['head'];
 			$data['expense_data'] = $sr->getExpenseData($this->getCDate(), $this->getCDate());
 			$data['card_load_data'] = $sr->getCardLoadSale($this->getCDate());
+			$data['last_ppc_bill'] = $sr->getLastPpcBill($this->getCDate());
 			$data['shift'] = '';
 			$data['reconcilation'] = '';
 			$this->commonView('header_html');
