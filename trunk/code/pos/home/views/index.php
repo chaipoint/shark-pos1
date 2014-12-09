@@ -316,10 +316,10 @@
 							</div>
 
 							<div class="input-group padded">
-								<span class="input-group-addon" style='width:26%'>
+								<span class="input-group-addon" >
 									<img src="<?php echo IMG ?>inr.png"> 
 								</span> 
-								<input type="text" name="amount" style='width:115%' value="" id="amount" class="input-sm form-control" placeholder="Amount" autocomplete="off"/>
+								<input type="text" name="amount" value="" id="amount" class="input-sm form-control" placeholder="Amount" autocomplete="off"/>
 							</div>
 
 							
@@ -419,10 +419,10 @@
 							</div>
 							
 							<div class="input-group padded">
-								<span class="input-group-addon" style='width:26%'>
+								<span class="input-group-addon">
 									<img src="<?php echo IMG ?>inr.png"> 
 								</span> 
-								<input type="text" name="amount" value="" style='width:115%' id="amount" class="input-sm form-control" placeholder="Amount" autocomplete="off"/>
+								<input type="text" name="amount" value=""  id="amount" class="input-sm form-control" placeholder="Amount" autocomplete="off"/>
 							</div>
 
 							<div class="input-group padded">
@@ -452,10 +452,10 @@
 							<input type="hidden" name="validateFor" value="card">
 							
 							<div class="input-group padded">
-								<span class="input-group-addon" style='width:26%'>
+								<span class="input-group-addon">
 									<img src="<?php echo IMG ?>inr.png"> 
 								</span> 
-								<input type="text" name="amount" style='width:118%' value="" id="amount" class="input-sm form-control" placeholder="Amount" autocomplete="off"/>
+								<input type="text" name="amount"  value="" id="amount" class="input-sm form-control" placeholder="Amount" autocomplete="off"/>
 							</div>
 
 							<div class="input-group padded">
