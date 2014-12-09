@@ -1,6 +1,9 @@
 var keyboard = new Array();
 var resData = '';
 $(document).ready(function(){
+	$(window).load( function(){
+		$('input').val( ' ' ); setTimeout( function(){ $('input').val( '' ); }, 20 );
+	});
 	$('#error_message_shift, #error_message_card').hide();
 	$("#active_bill_table_wrapper").on('click', '.edit-bill', function(event){
 		if(!is_shift_running){
