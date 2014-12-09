@@ -13,6 +13,9 @@ var modifyBill = false;
 var popupKeyboard = null;
 
 $(document).ready(function(){ 
+	$(window).load( function(){
+		$('input').val( ' ' ); setTimeout( function(){ $('input').val( '' ); }, 20 );
+	});
 	var url = $.url();
 	$(this).attr("title", "Shark |ChaiPoint POS| Billing"); 
 	/*
