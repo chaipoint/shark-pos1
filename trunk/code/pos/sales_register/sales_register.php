@@ -22,6 +22,7 @@
 				$resultBillList = $this->getBills($date1, $date2);
 				$resultExpenseList = $this->getExpenseData($date1, $date2);
 				$resultCardLoadSale = $this->getCardLoadSale($date1);
+				$resultLastPpcBill = $this->getLastPpcBill($this->getCDate()); 
 				
 				$pettyExpence = 0;
 				if(count($resultExpenseList['rows'])>0){
@@ -46,6 +47,7 @@
 					$resultBillList['staff_list'] = $st->getStaffList();
 					$resultBillList['expense_data'] = $resultExpenseList;
 					$resultBillList['card_load_data'] = $resultCardLoadSale;
+					$resultBillList['last_ppc_bill'] = $resultLastPpcBill;
 					$this->view($resultBillList);
 
 					require_once DIR.'/login/login.php';
@@ -86,6 +88,16 @@
 		function getCardLoadSale($date){
 				$resultSale = $this->cDB->getDesign(CARD_SALE_DESIGN_DOCUMENT)->getView(CARD_SALE_DESIGN_DOCUMENT_VIEW_GET_SALE)->setParam(array("include_docs"=>"true","startkey"=>'"'.$date.'"',"endkey"=>'"'.$date.'"'))->execute();
 				return $resultSale;
+		}
+		
+		/* Function To Get Last PPC Bill */
+		function getLastPpcBill($date){
+				$resultLastBill = $this->cDB->getDesign(PPC_DETAIL_DESIGN_DOCUMENT)->getView(PPC_DETAIL_DESIGN_DOCUMENT_VIEW_LAST_BILL)->setParam(array("include_docs"=>"true","startkey"=>'"'.$date.'"',"endkey"=>'"'.$date.'"',"descending"=>"true","limit"=>"1"))->execute();
+				$lastBill = '';
+				if(count($resultLastBill['rows'])>0){
+					$lastBill = $resultLastBill['rows'][0]['doc']['invoice_number'];
+				}
+				return $lastBill;
 		}
 
 		/* Function To Get Petty Expense */
