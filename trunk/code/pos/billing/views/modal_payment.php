@@ -167,7 +167,7 @@
 						<tr class="ppc row" style="display:none;">
 								<td>Card No :</td>
 								<td>
-									<input type="text" id="ppc" name="ppc"  class="form-control" autocomplete="off"/>
+									<input type="password" id="ppc" name="ppc"  class="form-control" autocomplete="off"/>
 									<span id="loading_image" class="hide"><img class="text-center" src="<?php echo IMG;?>loader.gif"/></span>
 									<div id='error_div' class='hide'>
 										<span id='error_message' style="color:red;"></span> 
