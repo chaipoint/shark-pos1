@@ -112,15 +112,9 @@
 						</a>
 					</li>
 					<li>
-						<?php 
-						$connected = @fsockopen("www.google.com", 80);
-						if($connected) { 
-							echo '<img src="'.IMG.'ok.png" class="con">';
-							fclose($connected);
-						}else {
-							echo '<img src="'.IMG.'not_ok.png" class="con" >';
-						} 
-						?>
+						<span class="hide" id="internetYes"><img src="<?php echo IMG?>ok.png" class="con"></span>
+						<span class="hide" id="internetNo"><img src="<?php echo IMG?>not_ok.png" class="con"></span>
+						
 						
 					</li>
 				</ul>
