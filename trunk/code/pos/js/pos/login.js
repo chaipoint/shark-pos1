@@ -16,6 +16,7 @@ $(document).ready(function(){
 				$("#"+errorHolder).hide();
 				var msg = "";
 				var formData = form.serializeObject();
+				alert(JSON.stringify(formData));//return false;
 				//var diffDays = Math.round(diffMs / 86400000); // minutes
 				if( formID == 'loginform'){
 					var curret = new Date();
@@ -46,6 +47,7 @@ $(document).ready(function(){
 							formData.mode = 'shift_end';
 							if((formData.petty_cash_end).trim() == ""){msg += "<li>Provide Petty Cash</li>";}
 							if((formData.box_cash).trim() == ""){msg += "<li>Provide Box Cash</li>";}
+							if((formData.cash_denomination).trim() == ""){msg += "<li>Provide Cash Denomination</li>";}
 							break;						
 						case 'store_day_end_form':
 							formData.mode = 'day_end';
