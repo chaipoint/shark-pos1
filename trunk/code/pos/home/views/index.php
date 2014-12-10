@@ -158,6 +158,13 @@
 							<input type="text" name="box_cash" value="" id="box_cash" class="input-sm form-control" placeholder="Box Cash" autocomplete="off"/>
 						</div>
 
+						<div class="input-group padded">
+							<span class="input-group-addon">
+								<i class="glyphicon glyphicon-briefcase"></i> 
+							</span> 
+							<input type="text" name="cash_denomination" value="" id="cash_denomination" class="input-sm form-control" placeholder="Cash Denomination" autocomplete="off"/>
+						</div>
+
 						<div class="row padded">
 							<div class="col-md-7">
 								<button type="submit" class="btn btn-success btn-sm btn-block btn-lg">End Shift 
@@ -170,6 +177,16 @@
 								</button>
 							</div>
 						</div>
+						<input type='hidden' name='qty_10' id='qty_10' value='0'>
+						<input type='hidden' name='qty_20' id='qty_20' value='0'>
+						<input type='hidden' name='qty_50' id='qty_50' value='0'>
+						<input type='hidden' name='qty_100' id='qty_100' value='0'>
+						<input type='hidden' name='qty_500' id='qty_500' value='0'>
+						<input type='hidden' name='qty_sodex' id='qty_sodex' value='0'>
+						<input type='hidden' name='amount_sodex' id='amount_sodex' value='0'>
+						<input type='hidden' name='qty_restaurent' id='qty_restaurent' value='0'>
+						<input type='hidden' name='amount_restaurent' id='amount_restaurent' value='0'>
+						
 					</form>
 
 					<form id="store_day_end_form"  class="store_shift hide" action="" method="post" accept-charset="utf-8" class="separate-sections form-horizontal" autocomplete="off">
