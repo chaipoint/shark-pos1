@@ -420,7 +420,7 @@ $(document).ready(function(){
                   			url:  (payment_type=='ppc') ? 'index.php?dispatch=billing.ppcBill' : 'index.php?dispatch=billing.ppaBill',
                   			data:  {'card_number':card_no,'amount':total_amount},
 							timeout:7000
-               			}).done(function(response){ 
+               			}).done(function(response){  
                	  			console.log(response);
                	  			$("span#loading_image").addClass('hide');
                	  			$('#submit-sale').attr('disabled',false);
