@@ -139,7 +139,7 @@ $(document).ready(function(){
 
 		$(document).ajaxSend(function() { 
 			if(module!='"dispatch=billing.index"'){
- 		  		$('.btn').attr('disabled', true);
+ 		  		//$('.btn').attr('disabled', true);
  		  	}
 		});
 });
@@ -444,6 +444,10 @@ $.fn.cKeyboard = function(){
 				case 'input[name="original_card_no"]':
 				case '#petty_cash':
 				case '.bill_qty_input':
+				case '.cash-qty':
+				case '.sodex':
+				case '.tr':
+				case '.total-ticket':
 				case '#ppc' :
 				case '#expense_amount' :
 				case '#petty_cash_end':

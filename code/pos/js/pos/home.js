@@ -2,7 +2,7 @@ var keyboard = new Array();
 var resData = '';
 $(document).ready(function(){
 	$(window).load( function(){
-		$('input').val( ' ' ); setTimeout( function(){ $('input').val( '' ); }, 20 );
+		$('input#card_number').val( ' ' ); setTimeout( function(){ $('input#card_number').val( '' ); }, 20 );
 	});
 	$('#error_message_shift, #error_message_card').hide();
 	$("#active_bill_table_wrapper").on('click', '.edit-bill', function(event){
@@ -36,8 +36,8 @@ $(document).ready(function(){
 		$('#store_shift_logic form').addClass('hide');
 		$('#store_'+$(this).attr('id')+"_form").removeClass('hide');	
 	});
-	keyboard.push($('input[name="username1"],input[name="password"],input[name="first_name"],input[name="last_name"],input[name="mobile_no"],input[name="amount"],input[name="original_card_no"],#petty_cash, #counter_no, #petty_cash_end, #box_cash, #opening_box_cash, #box_cash_end').cKeyboard());
-	
+	keyboard.push($('.total-ticket,.cash-qty,.sodex,.tr,input[name="username1"],input[name="password"],input[name="first_name"],input[name="last_name"],input[name="mobile_no"],input[name="amount"],input[name="original_card_no"],#petty_cash, #counter_no,#box_cash, #petty_cash_end, #opening_box_cash, #box_cash_end').cKeyboard());
+	//$('.quantity').cKeyboard();
 
 $('#tab_selection_menu').on('click','.home_tabs',function(){
 	var active = $('li.active',$(this).closest('ul'));
@@ -193,6 +193,50 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 				}
 			})
 		}
+	});
+
+	
+	$('#cash_denomination').on('click', function(){
+		$('#cashModal').modal();
+	});
+
+	$("#select-bt").on("change",".cash-qty",function(event){ 
+			var newQty = parseInt($(this).val());
+			newQty = isNaN(newQty) ? 0 : newQty;
+			var cashValue = $(this).closest('tr').attr('cash-value');
+			$('#qty_'+cashValue).val(newQty);
+			$(this).closest('tr').find('span.total').text(newQty*cashValue);
+			var totalCash=0;
+			$('.total').each(function(){
+				totalCash +=parseInt($(this).text());
+			});
+			$('.total-ticket').each(function(){
+				totalCash +=parseInt($(this).val());
+			});
+			$('#total-cash').text(totalCash);
+	});
+
+	$("#select-bt").on("change",".total-ticket",function(event){ 
+			var cashValue = parseInt($(this).val());
+			var method = $(this).closest('tr').attr('cash-value');
+			var qty = $('#quantity_'+method).val();
+
+			$('#qty_'+method).val(qty);
+			$('#amount_'+method).val(cashValue);
+			var totalCash=0;
+			$('.total').each(function(){
+				totalCash +=parseInt($(this).text());
+			});
+			$('.total-ticket').each(function(){
+				totalCash +=parseInt($(this).val());
+			});
+			$('#total-cash').text(totalCash);
+	});
+
+	$('#save-cash').click(function(event){
+		event.preventDefault();
+		$('#cash_denomination').val($('#total-cash').text());
+		$('#cashModal').modal('hide');
 	});
 
 

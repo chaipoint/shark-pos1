@@ -270,7 +270,7 @@ $(document).ready(function(){
 			generateSalesTable();
 		});
 
-		$("#saletbl").on("change",".bill_qty_input",function(event){
+		$("#saletbl").on("change",".bill_qty_input",function(event){ alert('hi');
 			var newQty = parseInt($(this).val());
 			newQty = isNaN(newQty) ? 0 : newQty;
 			var pID = $(this).closest('tr').attr('billing-product');
