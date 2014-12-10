@@ -126,7 +126,8 @@ function uploadShiftData(){
 											 opening_petty_cash='".$shValue['petty_cash_balance']['opening_petty_cash']."', 
 											 petty_expense='".$shValue['petty_cash_balance']['petty_expense']."',
 											 closing_petty_cash='".$shValue['petty_cash_balance']['closing_petty_cash']."',
-											 inward_petty_cash='".$shValue['petty_cash_balance']['inward_petty_cash']."' 
+											 inward_petty_cash='".$shValue['petty_cash_balance']['inward_petty_cash']."',
+											 cash_denomination='10' 
 											 WHERE id=".$shiftList[$shValue['shift_no']];
 								$db->db_query($upsQuery);
 							}else{
@@ -161,7 +162,7 @@ function uploadShiftData(){
 				$shiftInsert = array();
 				$reconciliationInsert = array();
 				foreach($value['doc']['shift'] as $sKey => $sValue){
-						$shiftInsert[] = "(".$insertId.",'".$sValue['start_time']."','".$sValue['end_time']."',".$sValue['start_login_id'].",'".$sValue['end_petty_cash']."','".$sValue['opening_cash_inbox']."','".$sValue['end_cash_inbox']."',".$sValue['counter_no'].",".$sValue['shift_no'].",'".$sValue['petty_cash_balance']['opening_petty_cash']."', '".$sValue['petty_cash_balance']['petty_expense']."','".$sValue['petty_cash_balance']['closing_petty_cash']."','".$sValue['petty_cash_balance']['inward_petty_cash']."')";
+						$shiftInsert[] = "(".$insertId.",'".$sValue['start_time']."','".$sValue['end_time']."',".$sValue['start_login_id'].",'".$sValue['end_petty_cash']."','".$sValue['opening_cash_inbox']."','".$sValue['end_cash_inbox']."',".$sValue['counter_no'].",".$sValue['shift_no'].",'".$sValue['petty_cash_balance']['opening_petty_cash']."', '".$sValue['petty_cash_balance']['petty_expense']."','".$sValue['petty_cash_balance']['closing_petty_cash']."',inward_petty_cash='".$sValue['petty_cash_balance']['inward_petty_cash']."')";
 				}
 				if(count($shiftInsert)>0){
 					$insertQuery = "INSERT INTO cp_pos_shift_data (pos_day_id, start_time, end_time, staff_id, end_petty_cash, opening_cash_inbox ,end_cash_inbox, counter_no, shift_no, opening_petty_cash, petty_expense, closing_petty_cash, inward_petty_cash) values ".implode(",", $shiftInsert);
