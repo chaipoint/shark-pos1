@@ -50,13 +50,14 @@
 					$return['error'] = true;
 					$return['message'] = START_DAY_ERROR ;
 				}else{
-					$data = array('type'=>'shift_start','opening_box_cash'=>array_key_exists('opening_box_cash',$_POST) ? $_POST['opening_box_cash'] : '' ,'counter_no'=>array_key_exists('counter_no', $_POST) ? $_POST['counter_no'] : '', 'time'=>$this->getCDTime(),'login' =>$_SESSION['user']['mysql_id'],'name' =>$_SESSION['user']['name']);
+					$data = array('type'=>'shift_start','opening_box_cash'=>array_key_exists('opening_box_cash',$_POST) ? $_POST['opening_box_cash'] : '' ,'counter_no'=>array_key_exists('counter_no', $_POST) ? $_POST['counter_no'] : '', 'time'=>$this->getCDTime(),'login' =>$_SESSION['user']['mysql_id'],'name' =>$_SESSION['user']['name'],'qty_10'=>'','qty_20'=>'','qty_50'=>'','qty_100'=>'','qty_500'=>'','qty_sodex'=>'','qty_restaurent'=>'');
 					$return['message'] = START_DAY_SUCCESS;
 
 					if(count($result['rows']) == 1){
 						$totalShifts = count($result['rows'][0]['doc']['shift']);
 						if($totalShifts != 0 && empty($result['rows'][0]['doc']['shift'][$totalShifts-1]['end_time'])){
-							$data = array('type'=>'shift_end','end_petty_cash'=>$_POST['petty_cash_end'], 'box_cash'=>$_POST['box_cash'], 'time'=>$this->getCDTime(), 'login' =>$_SESSION['user']['mysql_id'], 'name' =>$_SESSION['user']['name']);
+							$data = array('type'=>'shift_end','end_petty_cash'=>$_POST['petty_cash_end'], 'box_cash'=>$_POST['box_cash'], 'time'=>$this->getCDTime(), 'login' =>$_SESSION['user']['mysql_id'], 'name' =>$_SESSION['user']['name'],'qty_10'=>$_POST['qty_10'],'qty_20'=>$_POST['qty_20'],'qty_50'=>$_POST['qty_50'],'qty_100'=>$_POST['qty_100'],'qty_500'=>$_POST['qty_500'],'qty_sodex'=>$_POST['qty_sodex'].".".$_POST['amount_sodex'],'qty_restaurent'=>$_POST['qty_restaurent'].".".$_POST['amount_restaurent']);
+							
 							$return['message'] = STORE_SHIFT_ENDED;
 							if($result['rows'][0]['doc']['shift'][$totalShifts-1]['start_login_id'] != $_SESSION['user']['mysql_id']){
 								$return['error'] = true;
@@ -104,7 +105,6 @@
 						$data['petty_expense'] = $pettyExpence ;
 						$data['closing_petty_cash'] = ($data['opening_petty_cash'] + $inward - $pettyExpence);
 						$data['inward_petty_cash'] = $inward;
-						
 						$result = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getUpdate(STORE_DESIGN_DOCUMENT_UPDATE_STORE_SHIFT,$result['rows'][0]['id'])->setParam($data)->execute();
 						if($data['type'] == 'shift_start'){
 							$_SESSION['user']['counter'] = $_POST['counter_no'];
