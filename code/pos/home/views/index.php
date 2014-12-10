@@ -592,3 +592,4 @@
   </div>
 </div>
 <?php require_once 'modal_inward.php';?>
+<?php require_once 'cash_denomination_modal.php';?>
