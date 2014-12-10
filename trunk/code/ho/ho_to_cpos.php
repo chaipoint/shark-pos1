@@ -58,7 +58,7 @@ function uploadShiftData(){
 		}
 
 		$rows = $shift_data['rows'];
-		echo '<pre>';print_r($rows);echo '</pre>'; die();
+		echo '<pre>';print_r($dbList);echo '</pre>'; die();
 		foreach($rows as $key => $value){ 
 			if(array_key_exists($value['id'], $dbList)){ 
 				if($dbList[$value['id']]['_rev'] !== $value['doc']['_rev']){ 
