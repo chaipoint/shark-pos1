@@ -118,7 +118,7 @@ function uploadShiftData(){
 					if(count($shiftList)>0){
 						foreach($value['doc']['shift'] as $shKey => $shValue){
 							if(array_key_exists($shValue['shift_no'], $shiftList)){ echo 't1';
-								$upsQuery = "UPDATE cp_pos_shift_data 
+								echo $upsQuery = "UPDATE cp_pos_shift_data 
 											 SET end_time = '".$shValue['end_time']."', 
 											 end_petty_cash = '".$shValue['end_petty_cash']."', 
 											 opening_cash_inbox = '".$shValue['opening_cash_inbox']."',
