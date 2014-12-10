@@ -109,7 +109,7 @@ function uploadShiftData(){
 						$db->db_query($insertReconciliation);
 					}
 					
-					$selectShiftData = "SELECT id, shift_no FROM cp_pos_shift_data WHERE pos_day_id = ".$dbList[$value['id']]['id'];
+					echo $selectShiftData = "SELECT id, shift_no FROM cp_pos_shift_data WHERE pos_day_id = ".$dbList[$value['id']]['id'];
 					$resultSelectData = $db->func_query($selectShiftData);
 					$shiftList = array();
 					foreach($resultSelectData as $sKey => $sValue){
