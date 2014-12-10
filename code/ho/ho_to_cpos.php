@@ -117,7 +117,7 @@ function uploadShiftData(){
 					}
 					if(count($shiftList)>0){
 						foreach($value['doc']['shift'] as $shKey => $shValue){
-							if(array_key_exists($shValue['shift_no'], $shiftList)){
+							if(array_key_exists($shValue['shift_no'], $shiftList)){ echo 't1';
 								$upsQuery = "UPDATE cp_pos_shift_data 
 											 SET end_time = '".$shValue['end_time']."', 
 											 end_petty_cash = '".$shValue['end_petty_cash']."', 
@@ -130,7 +130,7 @@ function uploadShiftData(){
 											 cash_denomination='10' 
 											 WHERE id=".$shiftList[$shValue['shift_no']];
 								$db->db_query($upsQuery);
-							}else{
+							}else{echo 't2';
 								$insertQuery = "INSERT INTO cp_pos_shift_data (pos_day_id, start_time, end_time, staff_id, end_petty_cash, opening_cash_inbox, end_cash_inbox, counter_no, shift_no, opening_petty_cash, petty_expense, closing_petty_cash, inward_petty_cash, cash_denomination) values ";
 								$insertQuery .= "(".$dbList[$value['id']]['id'].",'".$shValue['start_time']."','".$shValue['end_time']."',".$shValue['start_login_id'].",'".$shValue['end_petty_cash']."','".$shValue['opening_cash_inbox']."','".$shValue['end_cash_inbox']."',".$shValue['counter_no'].",".$shValue['shift_no'].",'".$shValue['petty_cash_balance']['opening_petty_cash']."', '".$shValue['petty_cash_balance']['petty_expense']."','".$shValue['petty_cash_balance']['closing_petty_cash']."',inward_petty_cash='".$shValue['petty_cash_balance']['inward_petty_cash']."','20')";								
 								$db->db_query($insertQuery);
