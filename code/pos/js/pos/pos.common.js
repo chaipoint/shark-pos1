@@ -5,8 +5,9 @@ Please Don't Make any Changes in this File Prior permissson to
 	9992749952
 */
 /*Reload as Toggle between Network offline and online*/
-window.addEventListener("offline", function(e) { window.location.reload(true);})
-window.addEventListener("online", function(e) { window.location.reload(true);})
+//window.addEventListener("offline", function(e) { window.location.reload(true);})
+//window.addEventListener("online", function(e) { window.location.reload(true);})
+
 //setTimeout(,2000);
 var url = $.url();
 var module = JSON.stringify(url.data.attr.query);
@@ -46,6 +47,23 @@ $(document).ready(function(){
 			},30000);
 		});
 	}
+	
+	$(function(){
+		window.setInterval(function(){
+		 var result = checkInternet();
+		 if(result==true){
+			$('#internetYes').removeClass('hide');
+			$('#internetNo').addClass('hide');
+			$('.payment-type-bt[data-value="ppc"]').attr('disabled',false);
+			$('.payment-type-bt[data-value="ppa"]').attr('disabled',false);
+		 }else{
+			$('#internetYes').addClass('hide');
+			$('#internetNo').removeClass('hide');
+			$('.payment-type-bt[data-value="ppc"]').attr('disabled',true);
+			$('.payment-type-bt[data-value="ppa"]').attr('disabled',true);
+		 }
+		},1000);
+	});
 
 
 	/*For Login Concept*/
@@ -116,6 +134,7 @@ $(document).ready(function(){
 
 		$(document).ajaxError(function() {
  		  	bootbox.alert('Unable To Process.Please Try Another Method');
+			$("span#loading_image").addClass('hide');
 		});
 
 		$(document).ajaxSend(function() { 
@@ -473,6 +492,14 @@ function toggleRepBT (){
 	}else{
 		$("#billing_stop_sync_bt").addClass('hidden')
 		$("#billing_sync_bt").removeClass('hidden')		
+	}
+}
+
+function checkInternet(){
+	if(navigator.onLine === true) {
+		return true;
+	}else{
+		return false;
 	}
 }
 
