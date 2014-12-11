@@ -184,7 +184,7 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 				var $res =  $.parseJSON($.trim(response));
 				console.log($res); 
 				if($res.error){ 
-					$("#"+errorHolder).show();$("#"+errorHolder+" ul").html($res.data['message']);
+					$("#"+errorHolder).show();$("#"+errorHolder+" ul").html($res.message);
 				}else if($res.data['success']=='False'){
 					bootbox.alert($res.data['message']);
 				}else{
@@ -242,8 +242,6 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 		$('#cash_denomination').val($('#total-cash').text());
 		$('#cashModal').modal('hide');
 	});
-
-
 });
 function shift_data_tab(response){ 
 	if(!response){
