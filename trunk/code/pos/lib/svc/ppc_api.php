@@ -26,7 +26,7 @@ class PpcAPI extends App_config {
 function ppcOperation($details, $request_type){ 
 	global $CARD_RESPONSE_ARRAY;
 	$responseArray = $CARD_RESPONSE_ARRAY;
-	$return = array('error'=>false, 'message'=>'');
+	$return = array('error'=>false, 'message'=>'', 'data'=>array());
 	
 	if(!is_array($details) || count($details) == 0){
 		$return['error'] = true;
@@ -61,6 +61,11 @@ function ppcOperation($details, $request_type){
 	}
 
 	$trackData = $details['card_number'];
+	if(strpos($trackData,'=') == false){
+		$return['error'] = true;
+		$return['message'] = "Incorrect Card Number";
+		return $return;
+	}
 	list($first, $second) = explode('=', $trackData); // To Get Card Number
 	$cardNumber = str_replace(';', '', $first);
 	$cardPin = '';
