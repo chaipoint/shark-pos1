@@ -7,6 +7,12 @@
 <script type="text/javascript" src="<?php echo (JS.'dataTables.jqueryui.js');?>" ></script>
 <script type="text/javascript" src="<?php echo JS; ?>bootstrapValidator.js"></script>
 <script type="text/javascript" src="<?php echo (JS.'pos/sale.register.js');?>" ></script>
+<style>
+table.dataTable thead th {
+padding: 3px 0px 3px 5px;
+cursor: pointer;
+}
+</style>
     <div class="panel panel-info"> 
       <div class="panel-heading col" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><a href="javascript:void(0)">Paid Bill Details
       <i class="glyphicon glyphicon-chevron-down pull-right"></i></a></div>
