@@ -366,7 +366,7 @@
 					$loadResponse = $ppc->ppcOperation($_POST, $_POST['request_type']);
 				}
 			}
-				if($loadResponse['data']['success']=='True' && $loadResponse['data']['txn_type']!=BALANCE_CHECK && $loadResponse['data']['txn_type']!=REISSUE_PPC_CARD){
+				if(!empty($loadResponse['data']) && $loadResponse['data']['success']=='True' && $loadResponse['data']['txn_type']!=BALANCE_CHECK && $loadResponse['data']['txn_type']!=REISSUE_PPC_CARD){
 					$saveData = array();
 					$saveData['cd_doc_type'] = CARD_SALE_DOC_TYPE;
 					$saveData['card_no'] = $loadResponse['data']['card_number'];
