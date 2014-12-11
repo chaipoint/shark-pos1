@@ -450,15 +450,16 @@
 							</div>
 
 							<div class="row padded">
+								
+
+								<div class="col-md-7">
+									<button type="submit" style="" class="btn hide btn-success btn-sm btn-block btn-lg">Activate Card 
+										<i class="glyphicon glyphicon-log-in"></i>
+									</button>
+								</div>
 								<div class="col-md-5">
 									<button type="reset" class="btn btn-danger btn-sm btn-block btn-lg">Reset 
 										<i class="glyphicon glyphicon-refresh"></i>
-									</button>
-								</div>
-
-								<div class="col-md-7">
-									<button type="submit" style="" class="btn btn-success btn-sm btn-block btn-lg">Activate Card 
-										<i class="glyphicon glyphicon-log-in"></i>
 									</button>
 								</div>
 								
@@ -483,15 +484,16 @@
 							</div>
 
 							<div class="row padded">
+								
+
+								<div class="col-md-7">
+									<button type="submit" style="" class="btn hide btn-success btn-sm btn-block btn-lg">Load Card 
+										<i class="glyphicon glyphicon-log-in"></i>
+									</button>
+								</div>
 								<div class="col-md-5">
 									<button type="reset" class="btn btn-danger btn-sm btn-block btn-lg">Reset 
 										<i class="glyphicon glyphicon-refresh"></i>
-									</button>
-								</div>
-
-								<div class="col-md-7">
-									<button type="submit" style="" class="btn btn-success btn-sm btn-block btn-lg">Load Card 
-										<i class="glyphicon glyphicon-log-in"></i>
 									</button>
 								</div>
 								
@@ -512,15 +514,16 @@
 
 							<div class="row padded">
 								
+								
+
+								<div class="col-md-7">
+									<button type="submit" style="" class="btn btn-success hide btn-sm btn-block btn-lg hides">Check Balance 
+										<i class="glyphicon glyphicon-log-in"></i>
+									</button>
+								</div>
 								<div class="col-md-5">
 									<button type="reset" class="btn btn-danger btn-sm btn-block btn-lg">Reset
 										<i class="glyphicon glyphicon-refresh"></i>
-									</button>
-								</div>
-
-								<div class="col-md-7">
-									<button type="submit" style="" class="btn btn-success btn-sm btn-block btn-lg hides">Check Balance 
-										<i class="glyphicon glyphicon-log-in"></i>
 									</button>
 								</div>
 								
