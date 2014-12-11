@@ -219,9 +219,6 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 	$("#select-bt").on("change",".total-ticket",function(event){ 
 			var cashValue = parseInt($(this).val());
 			var method = $(this).closest('tr').attr('cash-value');
-			var qty = $('#quantity_'+method).val();
-
-			$('#qty_'+method).val(qty);
 			$('#amount_'+method).val(cashValue);
 			var totalCash=0;
 			$('.total').each(function(){
@@ -231,6 +228,13 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 				totalCash +=parseInt($(this).val());
 			});
 			$('#total-cash').text(totalCash);
+	});
+
+	$("#select-bt").on("change",".qunt",function(event){
+		var qty = parseInt($(this).val());
+		var method = $(this).closest('tr').attr('cash-value');
+		$('#qty_'+method).val(qty);
+
 	});
 
 	$('#save-cash').click(function(event){
