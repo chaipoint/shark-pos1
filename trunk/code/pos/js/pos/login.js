@@ -16,7 +16,7 @@ $(document).ready(function(){
 				$("#"+errorHolder).hide();
 				var msg = "";
 				var formData = form.serializeObject();
-				alert(JSON.stringify(formData));//return false;
+				
 				//var diffDays = Math.round(diffMs / 86400000); // minutes
 				if( formID == 'loginform'){
 					var curret = new Date();
