@@ -139,7 +139,7 @@ $(document).ready(function(){
 
 		$(document).ajaxSend(function() { 
 			if(module!='"dispatch=billing.index"'){
- 		  		//$('.btn').attr('disabled', true);
+ 		  		$('.btn').attr('disabled', true);
  		  	}
 		});
 });
