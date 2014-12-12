@@ -5,18 +5,18 @@
 	
 class PpcAPI extends App_config {
 		private $configData;
-		global $config;
-		$OPM = $config['operating_mode'];
 		public function initialize(){
+				global $config;
+				$OPM = $config['operating_mode'];
 				$configResult = $this->getConfig($this->cDB, array('ppc_api'));
 			    $this->configData = (count($configResult['data']) > 0) ? $configResult['data'] : array();
 			    $configData = $this->configData['ppc_api'];
 			    $storeDetails = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_MYSQL_ID)->setParam(array('include_docs'=>'true',"key"=>'"'.$_SESSION['user']['store']['id'].'"'))->execute();
 				$result = $storeDetails['rows'][0]['doc'];
 				$svp = new SVProperties();
-				$svp->setServerURL($configData[$OPM.'url']);
-				$svp->setForwardingEntityId($configData[$OPM.'entity_id']);
-				$svp->setForwardingEntityPassword($configData[$OPM.'entity_password']);
+				$svp->setServerURL($configData[$OPM.'_url']);
+				$svp->setForwardingEntityId($configData[$OPM.'_entity_id']);
+				$svp->setForwardingEntityPassword($configData[$OPM.'_entity_password']);
 				$svp->setTerminalId($result['ppc_details']['tid']);
 				$svp->setUsername($result['ppc_details']['uid']);
 				$svp->setPassword($result['ppc_details']['pwd']);
