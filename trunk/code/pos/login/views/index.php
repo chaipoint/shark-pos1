@@ -53,7 +53,7 @@
 											</span> <input type="text" name="username" value=""
 												id="username" class="form-control" placeholder="Username" autocomplete="off" autofocus="true"/>
 										</div>
-										<?php
+										<?php 
 											$timestamp = getGmtOffset('Asia/Kolkata');
 											$current_time = date('Y/m/d H:i:s', $timestamp-19800);
 											function getGmtOffset($zone){
@@ -63,7 +63,8 @@
 												$json = curl_exec($ch);
 												curl_close($ch);
 												$data = json_decode($json);
-												return (int)$data->timestamp;
+												return @(int)$data->timestamp;
+
 											}
 										?>
 										<div class="input-group">
