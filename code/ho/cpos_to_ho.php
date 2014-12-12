@@ -290,6 +290,11 @@ function updateStore(){
 							unset($updateArray[$i]['location_id']);
 							unset($updateArray[$i]['location_name']);
 							unset($updateArray[$i]['address']);
+							unset($updateArray[$i]['ppa_uid']);
+							unset($updateArray[$i]['ppa_pwd']);
+							unset($updateArray[$i]['ppc_tid']);
+							unset($updateArray[$i]['ppc_uid']);
+							unset($updateArray[$i]['ppc_pwd']);
 
 							$selectSchedule = "SELECT * FROM  `cp_store_timings` WHERE store_id =".$storeDetails['mysql_id'];
 							$resultSchedule = mysql_query($selectSchedule);
