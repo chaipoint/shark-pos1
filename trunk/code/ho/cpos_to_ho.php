@@ -249,7 +249,8 @@ function updateStore(){
 	$getStoreNameQuery = "SELECT sm.id mysql_id, sm.name, sm.code,
 	                      sm.type, sm.address, sm.phone_1, sm.phone_2, photo,
 	                      weekly_off, lm.id location_id, lm.name location_name,
-	                      sm.sms, sm.foe_allowed is_foe, sm.active, sm.store_time store_open_schedule
+	                      sm.sms, sm.foe_allowed is_foe, sm.active, sm.store_time store_open_schedule,
+	                      sm.ppa_uid, sm.ppa_pwd, sm.ppc_uid, sm.ppc_pwd, sm.ppc_tid
                           FROM store_master sm
                           LEFT JOIN  location_master lm ON lm.id = sm.location_id 
                           WHERE sm.active = 'Y'";
@@ -276,7 +277,13 @@ function updateStore(){
 							$updateArray[$i]['address'] = $storeDetails['address'];
 							$updateArray[$i]['location']['id'] = $storeDetails['location_id'];
 							$updateArray[$i]['location']['name'] = $storeDetails['location_name'];
-                            $updateArray[$i]['phone'][] = $updateArray[$i]['phone_1'];
+							$updateArray[$i]['ppa_details']['uid'] = $storeDetails['ppa_uid'];
+							$updateArray[$i]['ppa_details']['pwd'] = $storeDetails['ppa_pwd'];
+							$updateArray[$i]['ppc_details']['tid'] = $storeDetails['ppc_tid'];
+							$updateArray[$i]['ppc_details']['uid'] = $storeDetails['ppc_uid'];
+							$updateArray[$i]['ppc_details']['pwd'] = $storeDetails['ppc_pwd'];
+							
+							$updateArray[$i]['phone'][] = $updateArray[$i]['phone_1'];
 							$updateArray[$i]['phone'][] = $updateArray[$i]['phone_2'];
 							unset($updateArray[$i]['phone_1']);
 							unset($updateArray[$i]['phone_2']);
