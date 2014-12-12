@@ -328,8 +328,13 @@
 			$return = array('error'=>false,'message'=>'','data'=>array());
 			$dir =  dirname(__FILE__).'/../lib/api/ppa_api.php';
             require_once $dir;
-            
-            $config_data = $this->configData['ppa_api'];
+            $storeDetails = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_MYSQL_ID)->setParam(array('include_docs'=>'true',"key"=>'"'.$_SESSION['user']['store']['id'].'"'))->execute();
+			$result = $storeDetails['rows'][0]['doc'];
+			$config_data = $this->configData['ppa_api'];
+			$config_data['uid'] = $result['ppa_details']['uid'];
+			$config_data['pwd'] = $result['ppa_details']['pwd'];
+			unset($config_data['username']);
+			unset($config_data['password']);
             if($_SERVER['REQUEST_METHOD'] == 'POST') {
             	$balanceDeduction = array();
             	$invoiceNumber = $this->cDB->getDesign(PPC_DETAIL_DESIGN_DOCUMENT)->getUpdate(PPC_DETAIL_DESIGN_DOCUMENT_UPDATE_GET_BILL_NO,'generateppcBill')->setParam(array('date'=>$this->getCDate()))->execute();;
@@ -347,7 +352,13 @@
         	if(array_key_exists('request_type', $_POST) && ($_POST['request_type'] == LOAD_PPA_CARD || $_POST['request_type'] == REWARD_REDEMPTION || $_POST['request_type'] == REWARD_CHECK)){
         		$dir =  dirname(__FILE__).'/../lib/api/ppa_api.php';
             	require_once $dir;
+            	$storeDetails = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_MYSQL_ID)->setParam(array('include_docs'=>'true',"key"=>'"'.$_SESSION['user']['store']['id'].'"'))->execute();
+				$result = $storeDetails['rows'][0]['doc'];
             	$config_data = $this->configData['ppa_api'];
+            	$config_data['uid'] = $result['ppa_details']['uid'];
+				$config_data['pwd'] = $result['ppa_details']['pwd'];
+				unset($config_data['username']);
+				unset($config_data['password']);
             	$card_type = PPA;
             	$invoiceNumber = '';
             	if($_POST['request_type'] != REWARD_CHECK){
