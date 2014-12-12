@@ -9,14 +9,15 @@ class PpcAPI extends App_config {
 				$configResult = $this->getConfig($this->cDB, array('ppc_api'));
 			    $this->configData = (count($configResult['data']) > 0) ? $configResult['data'] : array();
 			    $configData = $this->configData['ppc_api'];
-				
+			    $storeDetails = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_MYSQL_ID)->setParam(array('include_docs'=>'true',"key"=>'"'.$_SESSION['user']['store']['id'].'"'))->execute();
+				$result = $storeDetails['rows'][0]['doc'];
 				$svp = new SVProperties();
 				$svp->setServerURL($configData['url']);
 				$svp->setForwardingEntityId($configData['entity_id']);
 				$svp->setForwardingEntityPassword($configData['entity_password']);
-				$svp->setTerminalId($configData['terminal_id']);
-				$svp->setUsername($configData['username']);
-				$svp->setPassword($configData['password']);
+				$svp->setTerminalId($result['ppc_details']['tid']);
+				$svp->setUsername($result['ppc_details']['uid']);
+				$svp->setPassword($result['ppc_details']['pwd']);
 
 				$svp = GCWebPos::initLibrary($svp); 
 				return $svp;
