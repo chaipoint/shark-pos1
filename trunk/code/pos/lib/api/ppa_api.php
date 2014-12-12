@@ -3,8 +3,8 @@
             global $CARD_RESPONSE_ARRAY;
             $responseArray = $CARD_RESPONSE_ARRAY;
 			$return = array('error'=>false,'message'=>'','data'=>array());
-    		$username = $details["username"];
-    		$password = $details['password'];
+    		$username = $details['uid'];
+    		$password = $details['pwd'];
     		$authorization = 'Basic '.base64_encode("$username:$password");
     		$tuCurl = curl_init();
             $txn_type = '';
