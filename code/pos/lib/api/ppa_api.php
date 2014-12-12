@@ -1,10 +1,10 @@
 <?php 
 		function ppa_api($details, $data, $request_type, $invoiceNumber){
-            global $CARD_RESPONSE_ARRAY;
+			global $CARD_RESPONSE_ARRAY;
             $responseArray = $CARD_RESPONSE_ARRAY;
 			$return = array('error'=>false,'message'=>'','data'=>array());
-    		$username = $details['uid'];
-    		$password = $details['pwd'];
+    		$username = $details['username'];
+    		$password = $details['password'];
     		$authorization = 'Basic '.base64_encode("$username:$password");
     		$tuCurl = curl_init();
             $txn_type = '';
@@ -46,16 +46,16 @@
                         $txn_type = LOAD; 
                     }
     			
-    			    $url = $details['url']."card/balanceupdate/?format=json&card_number=$card_number&amount=$amount";
+					$url = $details['url']."card/balanceupdate/?format=json&card_number=$card_number&amount=$amount";
     			    curl_setopt($tuCurl, CURLOPT_SSL_VERIFYPEER , 0);
     			    curl_setopt($tuCurl, CURLOPT_HEADER, 0);
     			    curl_setopt($tuCurl, CURLOPT_URL, "$url");
     			    curl_setopt($tuCurl, CURLOPT_RETURNTRANSFER, 1);
     			    curl_setopt($tuCurl, CURLOPT_HTTPHEADER, array("Authorization: ".$authorization));
     			    $tuData = curl_exec($tuCurl); 
-    			    curl_close($tuCurl); 
+					curl_close($tuCurl); 
     			    $result = json_decode($tuData,true);
-                    $responseArray['success'] = $result['success'];
+					$responseArray['success'] = $result['success'];
                     $responseArray['message'] = $result['message'];
                     $responseArray['balance'] = $result['balance'];
                     $responseArray['card_number'] = $result['card_number'];
