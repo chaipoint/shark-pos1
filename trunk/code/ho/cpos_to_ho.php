@@ -356,6 +356,7 @@ function updateStore(){
 										$updateArray[$i]['menu_items'][$j]['category']['id'] = $productDetails['category_id'];
 										$updateArray[$i]['menu_items'][$j]['category']['name'] = $productDetails['category'];
 										$updateArray[$i]['menu_items'][$j]['packaging'] = $productDetails['packaging'];
+										$updateArray[$i]['menu_items'][$j]['recipe_id'] = '';
 										if(array_key_exists($storeDetails['mysql_id'], $productRecipeArray) && array_key_exists($productDetails['id'], $productRecipeArray[$storeDetails['mysql_id']])){
 											$updateArray[$i]['menu_items'][$j]['recipe_id'] = $productRecipeArray[$storeDetails['mysql_id']][$productDetails['id']] ;
 										}
