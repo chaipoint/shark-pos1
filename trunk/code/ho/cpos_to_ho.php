@@ -256,6 +256,14 @@ function updateStore(){
                           WHERE sm.active = 'Y'";
 						$logger->trace("Query To Get All The Store From CPOS Database: ".($getStoreNameQuery));
 						$storeResult = mysql_query($getStoreNameQuery);
+	$getProductRecipe = "SELECT id, product_id, store_id 
+						 FROM cp_recipes_master WHERE active = 'Y'";
+						$logger->trace("Query To Get All The Product Recipes From CPOS Database: ".($getProductRecipe));
+						$recipesResult = mysql_query($getProductRecipe);
+						$productRecipeArray = array();
+						while($row = mysql_fetch_assoc($recipesResult)){
+							$productRecipeArray[$row['store_id']][$row['product_id']] = $row['id'];
+						}echo '<pre>';print_r($productRecipeArray);echo'</pre>'; die();
 						$updateArray = array();
 	                    $html = array();
 						$i = 0;
