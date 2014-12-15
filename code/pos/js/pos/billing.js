@@ -847,6 +847,7 @@ $(document).ready(function(){
 
 });
 function generateSalesTable(productId, qty, productData){
+	
 	var addAtLast = false;
 	if(productData){
 		addAtLast = true;
@@ -860,6 +861,7 @@ function generateSalesTable(productId, qty, productData){
 			$billingItems[productID] = new Object();
 			$billingItems[productID].category_id = selectedCat;
 			$billingItems[productID].category_name = catArray[selectedCat];
+			$billingItems[productID].recipe_id = productData.recipe_id;
 			$billingItems[productID].id = productID;
 			$billingItems[productID].name = productData.name;
 			$billingItems[productID].price = isNaN(productData.price * 1) ? 0 : productData.price;
