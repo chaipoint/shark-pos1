@@ -5,12 +5,15 @@ Please Don't Make any Changes in this File Prior permissson to
 	9992749952
 */
 /*Reload as Toggle between Network offline and online*/
-//window.addEventListener("offline", function(e) { window.location.reload(true);})
-//window.addEventListener("online", function(e) { window.location.reload(true);})
+
 
 //setTimeout(,2000);
 var url = $.url();
 var module = JSON.stringify(url.data.attr.query);
+if(module!='"dispatch=billing.index"'){
+	window.addEventListener("offline", function(e) { window.location.reload(true);})
+	window.addEventListener("online", function(e) { window.location.reload(true);})
+}
 
 $(document).ready(function(){
 	if(! navigator.onLine){
