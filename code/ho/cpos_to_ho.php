@@ -263,7 +263,7 @@ function updateStore(){
 						$productRecipeArray = array();
 						while($row = mysql_fetch_assoc($recipesResult)){
 							$productRecipeArray[$row['store_id']][$row['product_id']] = $row['id'];
-						}echo '<pre>';print_r($productRecipeArray);echo'</pre>'; die();
+						}//echo '<pre>';print_r($productRecipeArray);echo'</pre>'; die();
 						$updateArray = array();
 	                    $html = array();
 						$i = 0;
@@ -345,6 +345,7 @@ function updateStore(){
 							while($innerRow = mysql_fetch_assoc($productList)){	
 								$productDetails = $innerRow;
 									if(is_numeric($productDetails['price'])){
+
 										$updateArray[$i]['menu_items'][$j]['mysql_id'] = $productDetails['id']; 
 										$updateArray[$i]['menu_items'][$j]['code'] = $productDetails['code'];
 										$updateArray[$i]['menu_items'][$j]['name'] = $productDetails['name'];
@@ -355,6 +356,9 @@ function updateStore(){
 										$updateArray[$i]['menu_items'][$j]['category']['id'] = $productDetails['category_id'];
 										$updateArray[$i]['menu_items'][$j]['category']['name'] = $productDetails['category'];
 										$updateArray[$i]['menu_items'][$j]['packaging'] = $productDetails['packaging'];
+										if(array_key_exists($storeDetails['mysql_id'], $productRecipeArray) && array_key_exists($productDetails['id'], $productRecipeArray[$storeDetails['mysql_id']])){
+											$updateArray[$i]['menu_items'][$j]['recipe_id'] = $productRecipeArray[$storeDetails['mysql_id']][$productDetails['id']] ;
+										}
 										$updateArray[$i]['menu_items'][$j]['is_coc'] = $productDetails['is_coc'];
 										$updateArray[$i]['menu_items'][$j]['is_foe'] = $productDetails['is_foe'];
 										$updateArray[$i]['menu_items'][$j]['is_web'] = $productDetails['is_web'];
