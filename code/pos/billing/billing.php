@@ -355,10 +355,10 @@
             	$storeDetails = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_MYSQL_ID)->setParam(array('include_docs'=>'true',"key"=>'"'.$_SESSION['user']['store']['id'].'"'))->execute();
 				$result = $storeDetails['rows'][0]['doc'];
             	$config_data = $this->configData['ppa_api'];
-            	$config_data['uid'] = $result['ppa_details']['uid'];
-				$config_data['pwd'] = $result['ppa_details']['pwd'];
-				unset($config_data['username']);
-				unset($config_data['password']);
+            	$config_data['username'] = $result['ppa_details']['uid'];
+				$config_data['password'] = $result['ppa_details']['pwd'];
+				//unset($config_data['username']);
+				//unset($config_data['password']);
             	$card_type = PPA;
             	$invoiceNumber = '';
             	if($_POST['request_type'] != REWARD_CHECK){
