@@ -35,6 +35,7 @@
 		<?php
 			$display = '';
 			$total = $total_qty = 0; $bill_no ='';
+			if(is_array($orders) && count($orders)){
 			foreach($orders as $key => $data){
 				$bill_no = (array_key_exists($data['order_id'], $billArray) ? $billArray[$data['order_id']] : '');
 				
@@ -84,6 +85,7 @@
 							$total +=$data['net_amount'];
 							$total_qty +=count($data['products']);
 			}
+		}
 			echo $display;
 		?>
 	   </tbody>
