@@ -4,7 +4,7 @@
 		function __construct(){
 			parent::__construct();
 			$this->log =  Logger::getLogger("CP-POS|BILLING");
-			$this->getDBConnection($this->cDB);
+			//$this->getDBConnection($this->cDB);
 			$configResult = $this->getConfig($this->cDB, array('channel', 'bill_status', 'payment_mode', 'ppa_api', 'delivery_channel', 'company_details'));
 			$this->configData = (count($configResult['data']) > 0) ? $configResult['data'] : array();
 		}
