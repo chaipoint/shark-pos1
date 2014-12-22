@@ -10,7 +10,7 @@
 	
 
 	require_once 'common/app_config.php';
-	require_once 'lib/mysql/db.php';
+	//require_once 'lib/mysql/db.php';
 
 	$appConfig = new App_config();
 
