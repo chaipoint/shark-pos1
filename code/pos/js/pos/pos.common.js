@@ -37,10 +37,10 @@ $(document).ready(function(){
 					type: 'POST',
 					url: 'index.php?dispatch=orders.getCocOrder',
 					data: {request_type:'getCOCOrder'},
-				}).done(function(response){
+				}).done(function(response){ 
 					console.log(response);
 					var $res = $.parseJSON(response);
-					if($res.count){
+					if($res.data['newOrder']){
 						beep(20000,3);
 						$('#notification').removeClass('hide');
 					}else{
