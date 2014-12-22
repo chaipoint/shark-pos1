@@ -147,10 +147,24 @@ define('OK', "ok");
 define('PAID', "paid");
 
 
-global $PAYMENT_MODE, $ORDER_STATUS, $CARD_RESPONSE_ARRAY;
+global $PAYMENT_MODE, $ORDER_STATUS, $CARD_RESPONSE_ARRAY, $ERT_PRODUCT_ARRAY;
 $PAYMENT_MODE = array('cash'=>0,'ppc'=>0,'ppa'=>0,'caw'=>0);
 $ORDER_STATUS = array('New'=>0,'Confirmed'=>0,'Cancelled'=>0,'Dispatched'=>0,'Delivered'=>0,'Paid'=>0);
 $CARD_RESPONSE_ARRAY = array('success'=>'', 'message'=>'', 'balance'=>'', 'card_number'=>'', 'txn_no'=>'', 'approval_code'=>'', 'txn_type'=>'');
+$ERT_PRODUCT_ARRAY = array('102'=>'37', '245'=>'43',
+						 '334'=>'107', '120'=>'4', 
+						 	'118'=>'2', '107'=>'45', 
+						 		'117'=>'1', '332'=>'105', 
+						 			'242'=>'35', '106'=>'42', 
+						 				'247'=>'54', '333'=>'106', 
+						 					'331'=>'104', '110'=>'48', 
+						 						'108'=>'46', '246'=>'44', 
+						 							'109'=>'47', '103'=>'39', 
+						 								'114'=>'53',
+						 									'119'=>'3',  
+						 										'240'=>'34', '112'=>'51', 
+						 											'105'=>'41', '335'=>'108', 
+						 												'124'=>'6');
 
 
 ?>
