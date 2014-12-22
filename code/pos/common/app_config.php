@@ -202,7 +202,7 @@ session_start();
 				$sql_user = $dt['username'];
 				$sql_password = $dt['password'];
 				$sql_db = $dt['db'];			
-				$this->db = new Database();
+				//$this->db = new Database();
 			}
 		}
 		public function getConfig($connection, $key){
