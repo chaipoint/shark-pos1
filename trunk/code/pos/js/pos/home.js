@@ -126,6 +126,7 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 		$("#"+errorHolder).hide();
 		var msg = "";
 		var formData = form.serializeObject(); 
+		
 		switch(formID){
 
 			case 'store_ppc_card_issue_form':
@@ -175,12 +176,14 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 		} 
 		if(msg){
 			$("#"+errorHolder).show();$("#"+errorHolder+" ul").html(msg);
-		}else{  
+		}else{ 
+			$("#ajaxfadediv").addClass('ajaxfadeclass'); 
 			$.ajax({
 				type: 'POST',
 				url: "index.php?dispatch=billing.loadCard",
 				data : formData
 			}).done(function(response) { 
+				$("#ajaxfadediv").removeClass('ajaxfadeclass');
 				var $res =  $.parseJSON($.trim(response));
 				console.log($res); 
 				if($res.error){ 
@@ -287,11 +290,13 @@ function shift(response){
 }
 function searchShiftData(){
 	var date = $("#shift_data_search").val();
+	$("#ajaxfadediv").addClass('ajaxfadeclass');
 	$.ajax({
 			type: 'POST',
 			url: "index.php?dispatch=home.getShiftAndCashRe",
 	  		data : {date:date} ,
 		}).done(function(response) {
+			$("#ajaxfadediv").removeClass('ajaxfadeclass');
 			var result = $.parseJSON(response);
 			if(result.error){
 				bootbox.alert(result.message);
