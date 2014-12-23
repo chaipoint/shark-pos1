@@ -11,10 +11,8 @@
 			}			
 			$data = array();
 			require_once DIR.'/sales_register/sales_register.php';
-			require_once DIR.'/billing/billing.php';
 			require_once DIR.'/staff/staff.php';
 			$sr = new sales_register();
-			$bl = new billing();
 			$st = new Staff();
 
 			$data = $sr->getBills($this->getCDate(), $this->getCDate());
@@ -33,8 +31,7 @@
 					}
 				}
 			}
-			//$todaysale = json_decode($sr->getTodaysSale(),true);
-			//$data['payment_sum'] = (!$todaysale['error']) ? $todaysale['data'] : array();
+			
 			$data['shift_data'] = $result;
 			$data['staff_list'] = $st->getStaffList();
 			$data['total_shift'] = $totalShifts;
