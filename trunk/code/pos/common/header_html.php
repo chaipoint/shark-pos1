@@ -8,6 +8,7 @@
 		</script>
 	</head>
 	<body>
+		<div id="ajaxfadediv"></div>
 <?php	if(@$error){
 		echo '<script>$(document).ready(function(){ db_error();});</script>';
 	}
