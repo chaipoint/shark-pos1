@@ -419,7 +419,7 @@ $(document).ready(function(){
                   			type: 'POST',
                   			url:  (payment_type=='ppc') ? 'index.php?dispatch=billing.ppcBill' : 'index.php?dispatch=billing.ppaBill',
                   			data:  {'card_number':card_no,'amount':total_amount},
-							timeout:15000
+							timeout:18000
                			}).done(function(response){  
                	  			console.log(response);
                	  			$("span#loading_image").addClass('hide');
@@ -739,12 +739,14 @@ $(document).ready(function(){
 			billDetails.utility_check = printUtility;
 			console.log(billDetails);
 			$('#submit-sale').attr('disabled',true);
+			$("#ajaxfadediv").addClass('ajaxfadeclass');
 			$.ajax({
 				type: 'POST',
 				url: "index.php?dispatch=billing.save",
 		  		data : billDetails,
 			}).done(function(response) {
 				console.log(response);
+				$("#ajaxfadediv").removeClass('ajaxfadeclass');
 				result = $.parseJSON($.trim(response));
 				$('#submit-sale').attr('disabled',false);
 				if(result.error){
