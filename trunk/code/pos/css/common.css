@@ -20,6 +20,16 @@ height: 40px;
 max-height: 40px;
 background-color: gainsboro !important;
 }
+.ajaxfadeclass {
+  background-color:rgba(0,0,0,0.6); 
+  width:200%; 
+  height:200%; 
+  left:0; 
+  top:0; 
+  z-index:9999999998; 
+  position:fixed;
+  opacity: 0.8; 
+}
 
 .ui-widget-header {
 	line-height: 0px !important;
