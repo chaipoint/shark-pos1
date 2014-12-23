@@ -90,12 +90,12 @@ $(document).ready(function(){
 	$(".sync-bt").click(function(){ 
 		var msgHolder = $(this).closest('.modal-body');
 		$("#loading_image").removeClass('hide');
-		//return false;
+		$("#ajaxfadediv").addClass('ajaxfadeclass');
 		$.ajax({
 			url: "index.php?dispatch=utils.sync&mode="+$(this).attr('id'),
 		}).done(function(response) {
+			$("#ajaxfadediv").removeClass('ajaxfadeclass');
 			result = $.parseJSON(response);
-			//alert(JSON.stringify(result));
 			var msg = "";
 			var reload = false;
 			if(result.error){
