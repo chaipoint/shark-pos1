@@ -145,6 +145,7 @@ define('CONTINUOUS', "continuous");
 define('CANCEL', "cancel");
 define('OK', "ok");
 define('PAID', "paid");
+define('API_URL', 'http://54.178.189.25/cpos/api/coc/coc_api.php');
 
 
 global $PAYMENT_MODE, $ORDER_STATUS, $CARD_RESPONSE_ARRAY, $ERT_PRODUCT_ARRAY;
