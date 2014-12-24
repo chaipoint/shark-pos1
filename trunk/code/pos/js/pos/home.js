@@ -191,7 +191,14 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 				}else if($res.data['success']=='False'){
 					bootbox.alert($res.data['message']);
 				}else{
-					bootbox.alert($res.data['message']+'.Your Balance is:'+$res.data['balance']);
+					if(formID=='store_ppc_card_load_form' || formID=='store_ppc_card_activate_form' || formID=='store_ppa_card_load_form'){
+						bootbox.alert($res.data['message']+'.Your Balance is:'+$res.data['balance'], function(){
+							window.location.reload(true);
+						});
+					}else{
+						bootbox.alert($res.data['message']+'.Your Balance is:'+$res.data['balance']);
+					}
+					
 
 				}
 			})
