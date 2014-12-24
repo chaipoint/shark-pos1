@@ -158,7 +158,7 @@ function ppcOperation($details, $request_type){
 function createLastBillDoc($cardNumber, $amount, $invoiceNumber, $transactionId, $txn_type){
 	$bill_data = array();
 	if(!empty($_SESSION['user']['ppc_bill'])){
-		$bill_data['_id'] = $_SESSION['user']['ppc_bill']['_id'];
+		//$bill_data['_id'] = $_SESSION['user']['ppc_bill']['_id'];
 	}
 	$bill_data['status'] = 'False';
 	$bill_data['cd_doc_type'] = LAST_PPC__BILL_DOC_TYPE;
