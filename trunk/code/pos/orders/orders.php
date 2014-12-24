@@ -145,7 +145,7 @@
 			$status = (!empty($status) ? $status : 'New');
 			$storeId = $_SESSION['user']['store']['id'];
 			$postData = array('action'=>'getCocOrder', 'store_id'=>$storeId, 'status'=>$status);
-			$url = 'http://54.178.189.25/cpos/api/coc/coc_api.php';
+			$url = API_URL;
 			$ch = curl_init();
 			curl_setopt_array($ch, array(CURLOPT_URL => $url, CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true, CURLOPT_POSTFIELDS => $postData));
 			$response = curl_exec($ch);
@@ -160,7 +160,7 @@
 				$return = array('error'=>true, 'message'=>'Please Provide Valid Input Variable');
 				return $return;
 			}
-			$url = 'http://54.178.189.25/cpos/api/coc/coc_api.php';
+			$url = API_URL;
 			$ch = curl_init();
 			curl_setopt_array($ch, array(CURLOPT_URL => $url, CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true, CURLOPT_POSTFIELDS => $postData));
 			$response = curl_exec($ch);
