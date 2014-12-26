@@ -633,3 +633,14 @@ z-index:9999
 .ui-priority-secondary, .ui-widget-content .ui-priority-secondary,  .ui-widget-header .ui-priority-secondary { opacity: .7; filter:Alpha(Opacity=70); font-weight: normal; }
 .ui-state-disabled, .ui-widget-content .ui-state-disabled, .ui-widget-header .ui-state-disabled { opacity: .35; filter:Alpha(Opacity=35); background-image: none; }
 .ui-helper-hidden-accessible { position: absolute !important; clip: rect(1px 1px 1px 1px); clip: rect(1px,1px,1px,1px); }
+
+.ajaxfadeclass {
+  background-color:rgba(0,0,0,0.6); 
+  width:200%; 
+  height:200%; 
+  left:0; 
+  top:0; 
+  z-index:9999999998; 
+  position:fixed;
+  opacity: 0.8; 
+}
