@@ -30,13 +30,14 @@ $(document).ready(function(){
 	});
 	
 	is_shift_running = (is_shift_running==undefined) ? false : is_shift_running;
-	if(is_shift_running){
+	if(is_shift_running && navigator.onLine){
 		$(function(){
 			window.setInterval(function(){
 				$.ajax({
 					type: 'POST',
 					url: 'index.php?dispatch=orders.getCocOrder',
 					data: {request_type:'getCOCOrder'},
+					timeout:20000
 				}).done(function(response){ 
 					console.log(response);
 					var $res = $.parseJSON(response);
