@@ -260,7 +260,7 @@ function autocomplete(){
 				});				
 			}			
 			xhr = 	$.ajax({
-				url: "index.php?dispatch=staff."+action,
+				url: action,
 				data: data,
 				success: function( data, status ) {
 					if(data){
