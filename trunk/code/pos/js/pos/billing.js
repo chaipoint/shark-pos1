@@ -204,7 +204,7 @@ $(document).ready(function(){
 				if(selectedCat == 100){
 					$("#proajax").html('');
 					bootbox.dialog({
-						message:'<div class="form-group"><input type="text" name="customer_name" id="customer_name" class="autocomplete form-control" action="getCawCustomer" strict="true" target="customer_id"/></div>',
+						message:'<div class="form-group"><input type="text" name="customer_name" id="customer_name" class="autocomplete form-control" action="index.php?dispatch=customer.retail_customer" strict="true" target="customer_id"/></div>',
 						title:"Select Customer",
 						buttons:{
 							main:{
