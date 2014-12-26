@@ -101,11 +101,13 @@ $(document).ready(function(){
 });
 
 function changeStatus(data){ 
+			$("#ajaxfadediv").addClass('ajaxfadeclass');
 			$.ajax({
 				type: 'POST',
 				url: "index.php?dispatch=orders.updateOrderStatus",
 				data : data
 			}).done(function(response) {
+				$("#ajaxfadediv").removeClass('ajaxfadeclass');
 				var result = $.parseJSON($.trim(response));
 				if(result.error){
 					bootbox.alert(result.message);
