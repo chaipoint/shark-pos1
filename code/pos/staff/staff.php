@@ -3,14 +3,8 @@
 		function __construct(){
 			parent::__construct();
 			$this->log =  Logger::getLogger("CP-POS|STAFF");
-			$this->getDBConnection($this->cDB);
 		}
 		
-		/*function getStaff(){
-			$staffList = $this->cDB->getDesign(STAFF_DESIGN_DOCUMENT)->getView(STAFF_DESIGN_DOCUMENT_VIEW_STAFF_USERNAME)->setParam(array("include_docs"=>"true"))->execute();
-			return $staffList;
-		}*/
-
 		/* Function To Get Store Staff */
 		function getStaffList(){
 				$staffList = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_MYSQL_ID)->setParam(array("include_docs"=>"true"))->execute();
@@ -29,28 +23,23 @@
 
 		/* Function To Get Delivery Boy For COC Order*/
 		function getDeliveryBoy(){ 
-			$token = $_REQUEST['token'];
-			$getStaff = "SELECT name label, id FROM staff_master 
-						 WHERE active = 'Y' 
-						 AND location_id = '".$_SESSION['user']['location']['id']."' 
-						 AND name LIKE '%$token%'";
-			$result = $this->db->func_query($getStaff);
-			$this->log->trace('GET DELIVERY BOY'."\r\n".$getStaff);
-			echo json_encode($result);
+			$return = array();	
+			$options = array();
+			if(array_key_exists('token', $_REQUEST)){
+				$options['startkey'] = '"'.$_REQUEST['token'].'a"';
+				$options['endkey'] = '"'.$_REQUEST['token'].'z"';
+			}
+			$deliveryBoy = $this->cDB->getDesign(STAFF_DESIGN_DOCUMENT)->getView(STAFF_DESIGN_DOCUMENT_VIEW_STAFF_NAME)->setParam($options)->execute();
+			$this->log->trace('GET DELIVERY BOY'."\r\n".json_encode($deliveryBoy));
+			$this->cDB->getLastUrl();			
+			if(array_key_exists('rows', $deliveryBoy)){
+				$rows = $deliveryBoy['rows'];
+				foreach($rows as $key => $value){
+					$return[$key]['id'] = $value['value']; 
+					$return[$key]['label'] = $value['key']; 
+				}
+			}
+			return $return;
 		}
 		
-		/* Function To Get CAW CUSTOMER*/
-		function getCawCustomer(){ 
-			$token = $_REQUEST['token'];
-			$getCustomer = "SELECT name label, id FROM customer_master 
-						 WHERE active = 'Y' 
-						 AND location_id = '".$_SESSION['user']['location']['id']."' 
-						 AND name LIKE '%$token%'";
-			$result = $this->db->func_query($getCustomer);
-			$this->log->trace('GET CAW CUSTOMER'."\r\n".$getCustomer);
-			echo json_encode($result);
-		}
-
-		
-
-}
+	}
