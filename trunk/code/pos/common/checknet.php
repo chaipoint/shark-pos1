@@ -76,10 +76,11 @@ $(document).ready(function(){
     
     if(navigator.onLine){
         $(function(){
-            window.setInterval(function(){
+            window.setInterval(function(){ 
+			var host = 'http://'+"<?php echo $_SERVER['HTTP_HOST']; ?>"; 
                 $.ajax({
                     type: 'POST',
-                    url: 'http://localhost/pos/index.php?dispatch=orders.getCocOrder',
+                    url: host+'/pos/index.php?dispatch=orders.getCocOrder',
                     data: {request_type:'getCOCOrder'},
                     timeout:20000
                 }).done(function(response){ 
