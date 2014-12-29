@@ -1,50 +1,4 @@
-	<style>
-@-webkit-keyframes blink {
-    0% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-}
-@-moz-keyframes blink {
-    0% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-}
-@-o-keyframes blink {
-    0% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
-}
-.con {
-    -webkit-animation: blink 1s;
-    -webkit-animation-iteration-count: infinite;
-    -moz-animation: blink 1s;
-    -moz-animation-iteration-count: infinite;
-    -o-animation: blink 1s;
-    -o-animation-iteration-count: infinite;
-    height: 40px;
-    width: 34px;
-    margin-left: 11px;
-    margin-top: 5px;
-}
-</style>
+
 	<div id="wrap">
 		<div class="navbar navbar-static-top navbar-inverse">
 			<div class="container">
@@ -86,17 +40,10 @@
 						<a href="javascript:void(0)" class="require_valid_user btn nav-button btn-success btn-sm external <?php echo (MODULE == 'sales_register' ? 'active-btn' : ''); ?>" style="padding: 5px 8px; margin: 10px 0 5px 5px;" data-toggle="modal" data-target="" id="sales_register">Sale Register</a>
 					</li>
 				<?php }?>
-					<li class="hide" id="notification">
+					<!--<li class="hide" id="notification">
 						<img src="<?php echo IMG; ?>noti.ico" class="con">
-					</li>
-					<!--<li>
-					    <a
-					class="btn nav-button btn-success btn-sm external"
-					style="padding: 5px 8px; margin: 10px 0 5px 5px;"
-					data-toggle="modal" data-target="#saleModal" id="todays_sale"> Today's Sale 
-				        </a>
-
 					</li>-->
+					
                     
 					</ul>
 				<ul class="nav navbar-nav navbar-right">
@@ -111,12 +58,9 @@
 							<i class="glyphicon glyphicon-log-out"></i>&nbsp;Logout 
 						</a>
 					</li>
-					<li>
-						<span class="hide" id="internetYes"><img src="<?php echo IMG?>ok.png" class="con"></span>
-						<span class="hide" id="internetNo"><img src="<?php echo IMG?>not_ok.png" class="con"></span>
-						
-						
-					</li>
+
+					<iframe name="myiframe" src="<?php echo APP ?>/common/checknet.php" frameBorder="0" scrolling="no" style="width:88px;height:50px;float:right"></iframe>
+					
 				</ul>
 			</div>
 		</div>
