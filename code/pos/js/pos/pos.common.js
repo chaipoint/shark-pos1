@@ -10,10 +10,11 @@ Please Don't Make any Changes in this File Prior permissson to
 //setTimeout(,2000);
 var url = $.url();
 var module = JSON.stringify(url.data.attr.query);
-if(module!='"dispatch=billing.index"'){
+
+/*if(module!='"dispatch=billing.index"'){
 	window.addEventListener("offline", function(e) { window.location.reload(true);})
 	window.addEventListener("online", function(e) { window.location.reload(true);})
-}
+}*/
 
 $(document).ready(function(){
 	if(! navigator.onLine){
@@ -30,7 +31,8 @@ $(document).ready(function(){
 	});
 	
 	is_shift_running = (is_shift_running==undefined) ? false : is_shift_running;
-	if(is_shift_running && navigator.onLine){
+	
+	/*if(is_shift_running && navigator.onLine){
 		$(function(){
 			window.setInterval(function(){
 				$.ajax({
@@ -47,22 +49,20 @@ $(document).ready(function(){
 					}else{
 						$('#notification').addClass('hide');
 					}
+				}).error(function(x, t, m){
+					return false;
 				})
 			},30000);
 		});
-	}
+	}*/
 	
 	$(function(){
 		window.setInterval(function(){
 		 var result = checkInternet();
 		 if(result==true){
-			$('#internetYes').removeClass('hide');
-			$('#internetNo').addClass('hide');
 			$('.payment-type-bt[data-value="ppc"]').attr('disabled',false);
 			$('.payment-type-bt[data-value="ppa"]').attr('disabled',false);
 		 }else{
-			$('#internetYes').addClass('hide');
-			$('#internetNo').removeClass('hide');
 			$('.payment-type-bt[data-value="ppc"]').attr('disabled',true);
 			$('.payment-type-bt[data-value="ppa"]').attr('disabled',true);
 		 }
@@ -94,6 +94,7 @@ $(document).ready(function(){
 		$("#ajaxfadediv").addClass('ajaxfadeclass');
 		$.ajax({
 			url: "index.php?dispatch=utils.sync&mode="+$(this).attr('id'),
+			timeout:120000,
 		}).done(function(response) {
 			$("#ajaxfadediv").removeClass('ajaxfadeclass');
 			result = $.parseJSON(response);
@@ -112,6 +113,15 @@ $(document).ready(function(){
 				window.location.reload(true);
 			}
 			console.log(response);
+		}).error(function(x, t, m){
+			$("#ajaxfadediv").removeClass('ajaxfadeclass');
+			if(t==='timeout'){
+				console.log('timeout');
+				bootbox.alert('Sorry Timeout Occured! Please Conatact Admin', function(){
+					$("#sync-modal").modal('hide');
+				});
+			}
+
 		});
 	});
 
@@ -130,7 +140,7 @@ $(document).ready(function(){
 
 		});		
 
-		$(document).ajaxSuccess(function() {
+		/*$(document).ajaxSuccess(function() {
  		  	if(module!='"dispatch=billing.index"'){ 
  		  		$('.btn').attr('disabled', false);
  		  	}
@@ -143,9 +153,9 @@ $(document).ready(function(){
 
 		$(document).ajaxSend(function() { 
 			if(module!='"dispatch=billing.index"'){
- 		  		//$('.btn').attr('disabled', true);
+ 		  		$('.btn').attr('disabled', true);
  		  	}
-		});
+		});*/
 });
 
 var createDataTable = function (path,table,footerRow,filterRow) { //alert(filterRow); 
