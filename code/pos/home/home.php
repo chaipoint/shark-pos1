@@ -127,7 +127,6 @@
 		   	$total = 0;
     		if(count($shift_data['rows'])){
 				$shifts = $shift_data['rows'][0]['doc']['shift'];
-				//$total = count($shifts);
 				$day = $shift_data['rows'][0]['doc']['day'];
 				$shift_end_cash = ($day['start_cash']+$day['petty_cash_balance']['inward_petty_cash']-$day['petty_cash_balance']['petty_expense']);
 				$tablesShiftData .='<tr><td style="font-size:9px">DAY START</td>
