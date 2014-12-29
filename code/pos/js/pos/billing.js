@@ -451,7 +451,11 @@ $(document).ready(function(){
 								$('#card_invoice_no').val(result.data['invoice_number']);
 								$('#submit-sale').trigger('click');
 							}
-              			});
+              			}).error(function(x, t, m){
+								if(t==='timeout'){
+									bootbox.alert('Enable to Process.Please Try Another Method');
+								}
+						});
              		}else{
                			bootbox.alert("Sorry,No Internet Available");
                			return false;
