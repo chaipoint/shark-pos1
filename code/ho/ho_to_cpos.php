@@ -227,7 +227,7 @@ function uploadBill(){
 	$no_bill = $unsuccessful = $successful = $counter = 0;
 	$billData = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_NO_MYSQL_ID)->setParam(array('include_docs'=>'true'))->execute();
  	$logger->debug("URL to sccess data ".$couch->getLastUrl());
-
+	print_r($billData); die();
  	if(array_key_exists('rows', $billData)){
  		foreach($billData['rows'] as $key => $value){
  			$doc = $value['doc'];
