@@ -17,6 +17,10 @@ define ('BILLING_DESIGN_DOCUMENT_VIEW_BILL_BY_ORDER', 'bill_by_order');
 define ('STORE_DESIGN_DOCUMENT_VIEW_STORE_MYSQL_ID', 'store_mysql_id');
 define ('STORE_DESIGN_DOCUMENT_VIEW_STORE_SHIFT', 'store_shift');
 define ('DESIGN_HO_DESIGN_DOCUMENT_VIEW_RETAIL_CUSTOMER_LIST', 'retail_customer_list');
+define ('DESIGN_HO_DESIGN_DOCUMENT_VIEW_CONFIG_LIST', 'config_list');
+define ('DESIGN_HO_DESIGN_DOCUMENT_VIEW_STORE_BY_MYSQL_ID', 'store_by_mysql_id');
+define ('DESIGN_HO_DESIGN_DOCUMENT_VIEW_STAFF_BY_MYSQL_ID', 'staff_by_mysql_id');
+//define ('DESIGN_HO_DESIGN_DOCUMENT_VIEW_RETAIL_CUSTOMER_LIST', 'retail_customer_list');
 define ('CUSTOMERS_DESIGN_DOCUMENT_VIEW_RETAIL_CUSTOMER_LIST', 'retail_customer_list');
 define ('PETTY_EXPENSE_DESIGN_DOCUMENT_VIEW_GET_EXPENSE', 'get_expense');
 define ('PETTY_EXPENSE_DESIGN_DOCUMENT_VIEW_GET_INWARD', 'get_inward');
@@ -50,6 +54,7 @@ define ('DESIGN_REPLICATE', "doc_replication/design_replication");
 define ('BILL_REPLICATE', "doc_replication/bill_replication");
 
 /* Constant For CD Doc Type */
+define ('STORE_MASTER_DOC_TYPE', 'store_master');
 define ('BILLING_DOC_TYPE', 'store_bill');
 define ('PETTY_EXPENSE_DOC_TYPE', 'petty_expense');
 define ('PETTY_INWARD_DOC_TYPE', 'petty_inward');
@@ -58,7 +63,9 @@ define ('LOGIN_HISTORY_DOC_TYPE', 'login_history');
 define ('CARD_SALE_DOC_TYPE', 'card_sale');
 define ('LAST_INITIALIZE_DOC_TYPE', 'last_initialize');
 define ('LAST_PPC__BILL_DOC_TYPE', 'last_ppc_bill');
-
+define ('CONFIG_MASTER_DOC_TYPE', 'config_master');
+define ('STAFF_MASTER_DOC_TYPE', 'staff_master');
+define ('RETAIL_CUSTOMERS_DOC_TYPE', 'retail_customers');
 
 /* Constant For Request Type */
 define ('GET_RETAIL_CUSTOMER', 'getRetailCustomer');
@@ -148,6 +155,8 @@ define('CANCEL', "cancel");
 define('OK', "ok");
 define('PAID', "paid");
 define('API_URL', 'http://54.178.189.25/cpos/api/coc/coc_api.php');
+define ('INSERT_SUCCESS', 'RECORD INSERTED SUCCESSFULLY');
+define ('UPDATE_SUCCESS', 'RECORD UPDATED SUCCESSFULLY');
 
 
 global $PAYMENT_MODE, $ORDER_STATUS, $CARD_RESPONSE_ARRAY, $ERT_PRODUCT_ARRAY;
