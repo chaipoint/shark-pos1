@@ -1,5 +1,6 @@
 <?php
 $con = mysql_connect('54.178.189.25', 'root', 'mtf@9081');
+if(!$con) die(mysql_errno());
 mysql_select_db('cabbeein_cpos', $con);
 
 require_once '../lib/log4php/Logger.php';
@@ -145,6 +146,7 @@ function updateCustomers($location){
 	}
 	$result = json_encode($html,true);
 	//$logger->debug("End OF updateStaff Function");
+	mysql_close();
 	return $result;
 }
 
@@ -221,6 +223,7 @@ function updateStaff($location){
 	  	}
 	}
 	$result = json_encode($html,true);
+	mysql_close();
 	return $result;
 }
 
@@ -403,6 +406,7 @@ function updateStore($store_id){
   		}
 	}
 	$result = json_encode($html,true);
+	mysql_close();
 	return $result;
 }
 
@@ -471,6 +475,7 @@ function updateConfig(){
   		}
 	}	
 	$result = json_encode($html,true);
+	mysql_close();
 	return $result;
 }
 
