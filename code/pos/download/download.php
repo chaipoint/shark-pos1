@@ -9,6 +9,8 @@ require_once '../constant.php';
 
 //$locationId = $argv[1]; /*Contain Location ID*/
 //$storeId_id = $argv[2]; /*Contain STORE ID*/
+$argv[1]=$_GET['function'];
+$argv[2]=(!empty($_GET['variable']) ? $_GET['variable'] : '');
 switch ($argv[1]){
 	case 'updateConfig':
 	echo updateConfig();
