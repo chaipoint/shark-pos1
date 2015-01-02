@@ -22,7 +22,9 @@ $(document).ready(function(){
 					var diffMs = (server.getTime() - curret.getTime()); 
 					var diffMins = Math.round(diffMs / 60000); // minutes
 					if(diffMins < 0 || diffMins > 5){
-						bootbox.alert('System And Server Time Is Mismatch');
+						bootbox.alert('System And Server Time Is Mismatch', function(){
+							window.location.reload(true);
+						});
 						return false;
 					}
 				}
