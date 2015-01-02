@@ -1,18 +1,40 @@
 <?php
-class download extends App_config{
-	function __construct(){
-		parent::__construct();
-		$this->getDBConnection($this->cDB);
-		global $location, $store_id;
-		$location = ''; $store_id = '';
-	}
+$con = mysql_connect('54.178.189.25', 'root', 'mtf@9081');
+mysql_select_db('cabbeein_cpos', $con);
+
+require_once '../lib/log4php/Logger.php';
+require_once '../config.php';
+require_once '../common/couchdb_phpclass.php';
+require_once '../constant.php';
+
+//$locationId = $argv[1]; /*Contain Location ID*/
+//$storeId_id = $argv[2]; /*Contain STORE ID*/
+switch ($argv[1]){
+	case 'updateConfig':
+	echo updateConfig();
+	break;
+
+	case 'updateStore' :
+	echo updateStore($argv[2]);
+		break;
+
+	case 'updateStaff' :
+	echo updateStaff($argv[2]);
+		break;
+
+	case 'updateCustomers' :
+	echo updateCustomers($argv[2]);
+		break;
+}
+
+
 
 /* Function To Download Retail Customer From CPOS */
-function updateCustomers(){
-	global $location;
+function updateCustomers($location){
+	$couch = new CouchPHP();
     $existingRC = array(); 
-	$listRC = $this->cDB->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getview(DESIGN_HO_DESIGN_DOCUMENT_VIEW_RETAIL_CUSTOMER_LIST)->setParam(array('include_docs'=>'true'))->execute();
-	//$logger->trace("GET RETAIL CUSTOMER FROM HO: ".json_encode($listRC));
+	$listRC = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getview(DESIGN_HO_DESIGN_DOCUMENT_VIEW_RETAIL_CUSTOMER_LIST)->setParam(array('include_docs'=>'true'))->execute();
+	
 	if(array_key_exists('rows', $listRC)){
 		foreach ($listRC['rows'] as $rkey => $rvalue) {
 					$existingRC[$rvalue['doc']['mysql_id']]['_id'] = $rvalue['doc']['_id'];
@@ -24,17 +46,22 @@ function updateCustomers(){
 				cm.e_mail, cm.location_id, cm.customer_id, cm.type, cm.note, GROUP_CONCAT(DISTINCT(isb.day)) day 
 				FROM customer_master cm 
 				LEFT JOIN isb_delivery isb ON isb.customer_id = cm.id AND isb.active = 'Y'
-				WHERE cm.active = 'Y' AND location_id = $location 
+				WHERE cm.active = 'Y' AND cm.location_id = $location 
 				GROUP BY isb.customer_id
 				ORDER BY `cm`.`id` ASC";
 				
-	//$logger->trace("GET RETAIL CUSTOMER FROM CPOS: ".$cusQuery);
-	$dbResult = $this->db->func_query($cusQuery);
+	$result = mysql_query($cusQuery);
+	$dbResult = array();
+	while ($row = mysql_fetch_array($result)) {
+		$dbResult[] = $row;
+	}
+	
 	$insertArray = array();
 	$updateCounter = 0;
 	$insertCounter = 0;
 	$deleteCounter = 0;
 	$i = 0;
+	
 	foreach($dbResult as $key => $value){
 		if(array_key_exists($value['id'], $existingRC)){
 			$value['_id'] = $existingRC[$value['id']]['_id'];
@@ -61,8 +88,12 @@ function updateCustomers(){
 							LEFT JOIN cp_reference_master crm ON crm.id = cim.item_group_code AND crm.active = 'Y'
 							WHERE isb.active = 'Y' 
 							AND isb.customer_id = '".$value['mysql_id']."' AND isb.day = '".$inValue."'";
-			//$logger->trace("GET PRODUCT DETAILS FOR RETAIL CUSTOMER FROM CPOS: ".$getProduct);
-			$dbResult = $this->db->func_query($getProduct);
+			
+			$res = mysql_query($getProduct);
+			$dbResult = array();
+			while ($row = mysql_fetch_array($res)) {
+				$dbResult[] = $row;
+			}
 			$j=0;
 			
 			if(is_array($dbResult) && count($dbResult)>0){
@@ -87,15 +118,15 @@ function updateCustomers(){
 	}
 	if(count($existingRC)>0){
 		foreach($existingRC as $keyR => $valueR){
-			$res = $this->cDB->deleteDoc($valueR['_id'])->setParam(array('rev'=>$valueR['_rev']))->execute();
+			$res = $couch->deleteDoc($valueR['_id'])->setParam(array('rev'=>$valueR['_rev']))->execute();
 			$deleteCounter++;
 		}
 	}
 	$totalInsert = count($insertArray);
 	if($totalInsert > 0){
-		$result=$this->cDB->saveDocument(true)->execute(array("docs"=>$insertArray));
+		$result=$couch->saveDocument(true)->execute(array("docs"=>$insertArray));
   		if(array_key_exists('error', $result)){
-  				//$logger->debug("ERROR:Retail Customers Not Updated IN CouchDb");
+  				
   				$html['error'] = true;
 				$html['update'] = false;
 				$html['msg'] = ERROR.' '.$result['error'];
@@ -110,41 +141,36 @@ function updateCustomers(){
 	}
 	$result = json_encode($html,true);
 	//$logger->debug("End OF updateStaff Function");
-	echo $result;
+	return $result;
 }
 
 /* Function To Download Staff From CPOS*/
-function updateStaff(){
-	global $location;
+function updateStaff($location){
+	$couch = new CouchPHP();
+	$result = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_STAFF_BY_MYSQL_ID)->setParam(array("include_docs"=>"true"))->execute();
 	
-	$result = $this->cDB->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_STAFF_BY_MYSQL_ID)->setParam(array("include_docs"=>"true"))->execute();
-	//$logger->trace("GET STAFF FROM HO: ".json_encode($result));
 	$itemList = array();
 	$_idList = array();
     if(array_key_exists('rows', $result)){
-    	//$logger->debug("Creating Array of Existing Staff In CouchDB");
 		$docs = $result['rows'];
 		foreach($docs as $dKey => $dValue){
 	    	$itemList[$dValue['doc']['mysql_id']] = $dValue['doc'];
 	    	$_idList[$dValue['doc']['_id']] = $dValue['doc']['_rev'];
        }
-       //$logger->trace("Array of Existing Staff IN CouchDB: ".json_encode($itemList));
+      
 	}
 	
- 	//$logger->debug("Get All The Staff From CPOS Database");
- 	$getStaff = 'SELECT   sm.id mysql_id, sm.name, sm.username, sm.code,
+ 	
+ 	$getStaff = "SELECT   sm.id mysql_id, sm.name, sm.username, sm.code,
 	    	      sm.password, sm.address, sm.photo, sm.email,sm.phone_1,
 		          sm.phone_2,lm.id location_id, lm.name location_name,tm.id title_id,
 	        	  tm.name title_name, sm.active 
 			  	  from staff_master sm
 			   	  LEFT JOIN  location_master lm ON lm.id = sm.location_id 
-                  LEFT JOIN  title_master tm ON tm.id = sm.title_id AND tm.active ="Y" 
-                  where sm.active = "Y" AND location_id = "$location"';
+                  LEFT JOIN  title_master tm ON tm.id = sm.title_id AND tm.active ='Y' 
+                  where sm.active = 'Y' AND sm.location_id = $location";
     $result = mysql_query($getStaff);
-    //$logger->trace("Query To Get All The Staff From CPOS Database: ".$getStaff);
-	
-	//$logger->debug("Creating Array To Update Staff In CouchDb");
-	$updateArray = array();
+    $updateArray = array();
 	$html = array();
 	$i = 0;
 	$updateCounter = 0;
@@ -172,49 +198,41 @@ function updateStaff(){
 	}
 	if(count($_idList)>0){
 		foreach ($_idList as $key => $value) {
-			$res = $this->cDB->deleteDoc($key)->setParam(array('rev'=>$value))->execute();
+			$res = $couch->deleteDoc($key)->setParam(array('rev'=>$value))->execute();
 			$i++;
 		}
 	}
     $insertCounter = $i-$updateCounter;	
-	//$logger->trace("Array To Update Staff In CouchDb: ".json_encode($updateArray));
-
 	if(is_array($updateArray) && count($updateArray)>0){
-		$result=$this->cDB->saveDocument(true)->execute(array("docs"=>$updateArray));
+		$result = $couch->saveDocument(true)->execute(array("docs"=>$updateArray));
 		if(array_key_exists('error', $result)){
-  			//$logger->debug("ERROR:Staff Not Updated IN CouchDb");
   			$html['error'] = true;
 			$html['update'] = false;
 			$html['msg'] = ERROR.' '.$result['error'];
    		}
   		else{
-  			//$logger->debug("Staff Updated Successfully IN CouchDb");
   			$html['error'] = false;
 			$html['update'] = true;
 			$html['msg'] = ( $insertCounter>0 ? ($updateCounter==0 ? "$insertCounter ".INSERT_SUCCESS."" : "$insertCounter ".INSERT_SUCCESS." AND $updateCounter ".UPDATE_SUCCESS."" ) : "$updateCounter ".UPDATE_SUCCESS."");
 	  	}
 	}
 	$result = json_encode($html,true);
-	//$logger->debug("End OF updateStaff Function");
-	echo $result;
+	return $result;
 }
 
 /* Function To Download Store From CPOS */
-function updateStore(){
-    global $store_id;
-	$result = $this->cDB->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_STORE_BY_MYSQL_ID)->setParam(array("include_docs"=>"true"))->execute();
-	//$logger->trace("GET STORE FROM HO: ".json_encode($result));
+function updateStore($store_id){
+    $couch = new CouchPHP();
+	$result = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_STORE_BY_MYSQL_ID)->setParam(array("include_docs"=>"true"))->execute();
 	$storeList = array();
 	$_idList = array();
 
     if(array_key_exists('rows', $result)){
 		$docs = $result['rows'];
-		//$logger->debug("Creating Array of Existing Store In CouchDB"); 
-		foreach($docs as $dKey => $dValue){
+		 foreach($docs as $dKey => $dValue){
 	    $storeList[$dValue['doc']['mysql_id']] = $dValue['doc'];
 	    $_idList[$dValue['doc']['_id']] = $dValue['doc']['_rev'];	
 	  	}
-	    //$logger->trace("Array of Existing Store IN CouchDB: ".json_encode($storeList));
 	}
   
 	$getStoreNameQuery = "SELECT sm.id mysql_id, sm.name, sm.code,
@@ -224,23 +242,23 @@ function updateStore(){
 	                      sm.ppa_uid, sm.ppa_pwd, sm.ppc_uid, sm.ppc_pwd, sm.ppc_tid
                           FROM store_master sm
                           LEFT JOIN  location_master lm ON lm.id = sm.location_id 
-                          WHERE sm.active = 'Y' AND id = $store_id";
-						//$logger->trace("Query To Get All The Store From CPOS Database: ".($getStoreNameQuery));
-						$storeResult = mysql_query($getStoreNameQuery);
+                          WHERE sm.active = 'Y' AND sm.id = $store_id";
+						
+	$storeResult = mysql_query($getStoreNameQuery);
 	$getProductRecipe = "SELECT id, product_id, store_id 
 						 FROM cp_recipes_master WHERE active = 'Y'";
-						//$logger->trace("Query To Get All The Product Recipes From CPOS Database: ".($getProductRecipe));
+						
 						$recipesResult = mysql_query($getProductRecipe);
 						$productRecipeArray = array();
 						while($row = mysql_fetch_assoc($recipesResult)){
 							$productRecipeArray[$row['store_id']][$row['product_id']] = $row['id'];
-						}//echo '<pre>';print_r($productRecipeArray);echo'</pre>'; die();
+						}
 						$updateArray = array();
 	                    $html = array();
 						$i = 0;
 						$updateCounter = 0;
 						$insertCounter = 0;
-						//$logger->debug("Creating Array To Update Store In CouchDb");
+						
 					    while($row = mysql_fetch_assoc($storeResult)){
                             $storeDetails = $row;
                             $updateArray[$i] = $storeDetails;
@@ -310,7 +328,7 @@ function updateStore(){
 								 LEFT JOIN cp_reference_master crm on crm.id = pm.type 
 								 where  pm.active = 'Y'
 								 order by  pm.id asc";
-							//$logger->trace("Query To Get All The Store Product From CPOS Database: ".$products);
+							
 							$productList = mysql_query($products);
 							$j = 0;
 							while($innerRow = mysql_fetch_assoc($productList)){	
@@ -343,7 +361,7 @@ function updateStore(){
 										 LEFT JOIN staff_master sm ON sm.id = ss.staff_id 
 										 LEFT JOIN title_master tm ON tm.id = sm.title_id 
 										 WHERE ss.store_id = '".$storeDetails['mysql_id']."' AND ss.active = 'Y' AND sm.active = 'Y' AND tm.active = 'Y'";
-							//$logger->trace("Query To Get All The Store Staff From CPOS Database: ".$getStaff);
+							
 							$staffList = mysql_query($getStaff);
 							$k = 0;
 							while ($row = mysql_fetch_assoc($staffList)) {
@@ -357,49 +375,46 @@ function updateStore(){
 				
 						$i++;
 					}
-			//$logger->trace("Array To Update Store In CouchDb: ".json_encode($updateArray));  
+			
 			if(count($_idList)>0){
 				foreach ($_idList as $key => $value) {
-				$res = $this->cDB->deleteDoc($key)->setParam(array('rev'=>$value))->execute();
+				$res = $couch->deleteDoc($key)->setParam(array('rev'=>$value))->execute();
 				$i++;
 			}
 		} 
 	$insertCounter = $i-$updateCounter;
 	if (is_array($updateArray) && count($updateArray)>0){
-		$result=$this->cDB->saveDocument(true)->execute(array("docs"=>$updateArray));
+		$result=$couch->saveDocument(true)->execute(array("docs"=>$updateArray));
  		if(array_key_exists('error', $result)){
-  			//$logger->debug("ERROR:Store Not Updated IN CouchDb");
+  			
   			$html['error'] = true;
 			$html['update'] = false;
 			$html['msg'] = ERROR.' '.$result['error'];
     	}
   		else{
-  			//$logger->debug("Store Updated Successfully IN CouchDb");
+  			
   			$html['error'] = false;
 			$html['update'] = true;
 			$html['msg'] = $html['msg'] = ($insertCounter>0 ? ($updateCounter==0 ? "$insertCounter ".INSERT_SUCCESS."" : "$insertCounter ".INSERT_SUCCESS." AND $updateCounter ".UPDATE_SUCCESS."" ) : "$updateCounter ".UPDATE_SUCCESS."");
   		}
 	}
 	$result = json_encode($html,true);
-	//$logger->debug("End OF update Store Function");
-	echo $result;
+	return $result;
 }
 
 /* Function To Download Configration Setting From CPOS */
-function updateConfig(){
-	$result = $this->cDB->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_CONFIG_LIST)->setParam(array('include_docs'=>'true','limit'=>1))->execute();
-	//$logger->trace("GET CONFIGRATION SETTING FROM HO: ".json_encode($result));
-	
+function updateConfig(){ 
+	$couch = new CouchPHP();
+	$result = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_CONFIG_LIST)->setParam(array('include_docs'=>'true','limit'=>1))->execute();
 	$categoryList = array();
 	$updateArray = array();
     if(array_key_exists('rows', $result)){
 		$docs = $result['rows'];
-		//$logger->debug("Creating Array of Existing Config Setting In CouchDB");
 		foreach($docs as $dKey => $dValue){
 			$updateArray['_id'] = $dValue['doc']['_id'];
 			$updateArray['_rev'] = $dValue['doc']['_rev'];
 	  	}
-	    //$logger->trace("Array of Existing Config Setting IN CouchDB: ".json_encode($updateArray));
+	   
 	}
 	
     $getConfigDetail = 'SELECT mode, GROUP_CONCAT(id) AS id, GROUP_CONCAT(name) AS name, GROUP_CONCAT(code) AS code 
@@ -408,11 +423,10 @@ function updateConfig(){
                         AND active = "Y"
                         GROUP BY mode';
 
-    //$logger->trace("Query To Get All The Config Setting From CPOS Database: ".$getConfigDetail);
-	$result = mysql_query($getConfigDetail);
+    $result = mysql_query($getConfigDetail);
 	$updateCounter = 0;
 	$i = 0;
-	//$logger->debug("Creating Array To Update Config Setting In CouchDb");
+	
 	while($row = mysql_fetch_assoc($result)){
        	$updateArray['cd_doc_type'] = CONFIG_MASTER_DOC_TYPE;
 		$idexplode = explode(',', $row['id']);
@@ -430,24 +444,22 @@ function updateConfig(){
       
 	}
 	$insertCounter = $i-$updateCounter;
-    //$logger->trace("Array To Update Config Setting In CouchDb: ".json_encode($updateArray));
+    
   
    	if(is_array($updateArray) && count($updateArray)>0){
-		$this->cDB->saveDocument();
+		$couch->saveDocument();
 		if(array_key_exists('_rev', $updateArray)){
-			$this->cDB->setParam(array('rev'=>$updateArray['_rev']));		
+			$couch->setParam(array('rev'=>$updateArray['_rev']));		
 		}
-		$result =	$this->cDB->execute($updateArray);
-  
+		$result = $couch->execute($updateArray);
+  		print_r($result);
   		if(array_key_exists('error', $result)){
-  			//$logger->debug("ERROR:Config Setting Not Updated IN CouchDb");
-  			//$logger->debug("data:".json_encode($result));
-    		$html['error'] = true;
+  			$html['error'] = true;
 			$html['update'] = false;
 			$html['msg'] = ERROR.' '.$result['error'];
   		}
   		else{
-  			//$logger->debug("Config Setting Updated Successfully IN CouchDb");
+  			
   			$html['error'] = false;
 			$html['update'] = true;
 			$html['msg'] = $html['msg'] = $html['msg'] = ($insertCounter>0 ? ($updateCounter==0 ? "".INSERT_SUCCESS."" : "$insertCounter ".INSERT_SUCCESS." AND $updateCounter ".UPDATE_SUCCESS."" ) : "".UPDATE_SUCCESS."");
@@ -455,9 +467,8 @@ function updateConfig(){
   		}
 	}	
 	$result = json_encode($html,true);
-	//$logger->debug("End OF update Config Function");
-	echo $result;
+	return $result;
 }
-}
+
 
 ?>
