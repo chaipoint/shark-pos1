@@ -21,4 +21,8 @@ timeout /T 30
 
 echo "CUSTOMER DOCUMENT"
 START http://localhost:2020/pos/download/download.php?param=updateCustomers-2
+timeout /T 30
 
+START http://localhost:5984/_utils
+START http://localhost:2020/pos
+dir
