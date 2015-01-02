@@ -1,4 +1,7 @@
 cd d:\xampp\htdocs\pos
-svn update  http://54.249.247.15/svn/vente/trunk/code/utility .
+d:
+svn update  
 cd d:\utility
-svn update http://54.249.247.15/svn/vente/trunk/code/utility .
+d:
+svn update 
+c:
