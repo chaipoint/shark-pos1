@@ -53,20 +53,25 @@
 											</span> <input type="text" name="username" value=""
 												id="username" class="form-control" placeholder="Username" autocomplete="off" autofocus="true"/>
 										</div>
-										<?php $current_time = date('Y/m/d H:i:s');
-										/*
+										<?php 
+										
 											$timestamp = getGmtOffset('Asia/Kolkata');
-											$current_time = date('Y/m/d H:i:s', $timestamp-19800);
+											$current_time = ($timestamp!=0 ? date('Y/m/d H:i:s', $timestamp-19800) : date('Y/m/d H:i:s') );
 											function getGmtOffset($zone){
 												$ch = curl_init();
 												curl_setopt($ch, CURLOPT_URL, 'http://api.timezonedb.com/?key=KE5HRDHLJVRW&zone=' . $zone . '&format=json');
 												curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+												curl_setopt($ch, CURLOPT_TIMEOUT, 5000); //timeout in seconds
 												$json = curl_exec($ch);
+												$curl_errno = curl_errno($ch);
+												$curl_error = curl_error($ch);
 												curl_close($ch);
+												if ($curl_errno > 0) {
+													return 0;
+												} 
 												$data = json_decode($json);
 												return @(int)$data->timestamp;
-
-											}*/
+											}
 										?>
 										<div class="input-group">
 											<span class="input-group-addon"><i
