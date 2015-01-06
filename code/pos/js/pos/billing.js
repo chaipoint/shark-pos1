@@ -284,7 +284,7 @@ $(document).ready(function(){
 		$('#print-can').on('click', function(event){
 			event.preventDefault();
 			if(modifyBill){
-				if(doc){
+				if(doc){ 
 					$.ajax({
 						type: 'POST',
 						url: "index.php?dispatch=billing.rePrint",
@@ -296,10 +296,10 @@ $(document).ready(function(){
 						}else{
 							if(response.message!=''){		
 							bootbox.alert(response.message,function(){
-							window.location = "?dispatch=sales_register";													
+							window.location.reload(true);													
 							});
 							}else{
-							window.location = "?dispatch=sales_register";
+							window.location.reload(true);
 							}
 						}
 						});
