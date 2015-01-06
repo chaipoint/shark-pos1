@@ -82,7 +82,7 @@ $(document).ready(function(){
                     type: 'POST',
                     url: host+'/pos/index.php?dispatch=orders.getCocOrder',
                     data: {request_type:'getCOCOrder'},
-                    timeout:20000
+                    timeout:6000
                 }).done(function(response){ 
                     console.log(response);
                     var $res = $.parseJSON(response);
