@@ -11,5 +11,5 @@ $config['cpos_db'] = 'cabbeein_cpos';
 /* HO DATABASE CONFIGRATION */
 $config['ho_port'] = '5984';
 //$config['ho_url'] = 'http://pos:pos@127.0.0.1:5984/';	--test
-$config['ho_url'] = 'http://shark:shark789@127.0.0.1:5984/';
+$config['ho_url'] = 'http://pos:pos@127.0.0.1:5984/';
 $config['ho_db'] = 'sharkho';
