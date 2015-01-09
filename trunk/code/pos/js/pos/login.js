@@ -16,7 +16,7 @@ $(document).ready(function(){
 				$("#"+errorHolder).hide();
 				var msg = "";
 				var formData = form.serializeObject();
-				if( formID == 'loginform'){
+				/*if( formID == 'loginform'){
 					var curret = new Date();
 					var server = new Date(formData.current_time);
 					var diffMs = (server.getTime() - curret.getTime()); 
@@ -27,7 +27,7 @@ $(document).ready(function(){
 						});
 						return false;
 					}
-				}
+				}*/
 				if(formData.username1){
 					formData.username = formData.username1;
 				}
