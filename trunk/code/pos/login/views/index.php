@@ -55,7 +55,7 @@
 										</div>
 										<?php 
 										
-											$timestamp = getGmtOffset('Asia/Kolkata');
+											/*$timestamp = getGmtOffset('Asia/Kolkata');
 											$current_time = ($timestamp!=0 ? date('Y/m/d H:i:s', $timestamp-19800) : date('Y/m/d H:i:s') );
 											function getGmtOffset($zone){
 												$ch = curl_init();
@@ -71,15 +71,15 @@
 												} 
 												$data = json_decode($json);
 												return @(int)$data->timestamp;
-											}
+											}*/
 										?>
 										<div class="input-group">
 											<span class="input-group-addon"><i
 												class="glyphicon glyphicon-lock"></i> </span> <input
 												type="password" name="password" value="" id="password"
 												class="form-control" placeholder="Password" autocomplete="off"/>
-												<input type="hidden" name="current_time" value="<?php echo $current_time;?>" id="current_time"
-												class="form-control" autocomplete="off"/>
+											<!--	<input type="hidden" name="current_time" value="<?php echo $current_time;?>" id="current_time"
+												class="form-control" autocomplete="off"/> -->
 												
 										</div>
 										<div class="row">
