@@ -32,8 +32,6 @@ switch ($argv[1]){
 		break;
 }
 
-
-
 /* Function To Download Retail Customer From CPOS */
 function updateCustomers($location){
 	$couch = new CouchPHP();
@@ -56,10 +54,10 @@ function updateCustomers($location){
 				ORDER BY `cm`.`id` ASC";
 				
 	$result = mysql_query($cusQuery);
-	$dbResult = array();
-	while ($row = mysql_fetch_array($result)) {
+	//$dbResult = array();
+	/*while ($row = mysql_fetch_array($result)) {
 		$dbResult[] = $row;
-	}
+	}*/
 	
 	$insertArray = array();
 	$updateCounter = 0;
@@ -67,7 +65,7 @@ function updateCustomers($location){
 	$deleteCounter = 0;
 	$i = 0;
 	
-	foreach($dbResult as $key => $value){
+	while($value=mysql_fetch_assoc($result)){
 		if(array_key_exists($value['id'], $existingRC)){
 			$value['_id'] = $existingRC[$value['id']]['_id'];
 			$value['_rev'] = $existingRC[$value['id']]['_rev'];
