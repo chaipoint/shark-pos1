@@ -160,7 +160,7 @@ define ('UPDATE_SUCCESS', 'RECORD UPDATED SUCCESSFULLY');
 
 
 global $PAYMENT_MODE, $ORDER_STATUS, $CARD_RESPONSE_ARRAY, $ERT_PRODUCT_ARRAY;
-$PAYMENT_MODE = array('cash'=>0,'ppc'=>0,'ppa'=>0,'caw'=>0);
+$PAYMENT_MODE = array('cash'=>0,'ppc'=>0,'ppa'=>0,'caw'=>0,'credit'=>0);
 $ORDER_STATUS = array('New'=>0,'Confirmed'=>0,'Cancelled'=>0,'Dispatched'=>0,'Delivered'=>0,'Paid'=>0);
 $CARD_RESPONSE_ARRAY = array('success'=>'', 'message'=>'', 'balance'=>'', 'card_number'=>'', 'txn_no'=>'', 'approval_code'=>'', 'txn_type'=>'');
 $ERT_PRODUCT_ARRAY = array('102'=>'37', '245'=>'43',
