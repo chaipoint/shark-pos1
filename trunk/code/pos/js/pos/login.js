@@ -10,24 +10,54 @@ $(document).ready(function(){
 				var form = $(this);
 				var formID = form.attr('id');
 				var errorHolder = 'error_message_shift';
+				
 				if( formID == 'loginform'){
 					var errorHolder = 'error_message';
 				}
 				$("#"+errorHolder).hide();
 				var msg = "";
 				var formData = form.serializeObject();
-				/*if( formID == 'loginform'){
-					var curret = new Date();
-					var server = new Date(formData.current_time);
-					var diffMs = (server.getTime() - curret.getTime()); 
-					var diffMins = Math.round(diffMs / 60000); // minutes
-					if(diffMins < 0 || diffMins > 5){
-						bootbox.alert('System And Server Time Is Mismatch', function(){
+				if( formID == 'loginform'){
+					
+					/*$.ajax({
+				  		type: 'POST',
+				  		url: "http://cp-os.com/cpos/api/coc/coc_api.php",
+				  		data : {'action':"getCurrentDate"},
+				  		timeout:5000
+					}).done(function(response) {
+						console.log(response);
+						var $result = $.parseJSON(response);
+						var serverDate = $result.data;
+						var systemDate = new Date();
+						var month = systemDate.getMonth() + 1;
+						month = (month < 10 ? '0' : '') + month;
+						var day = systemDate.getDate();
+						var year = systemDate.getFullYear();
+						var systemDate = year+"-"+month+"-"+day;
+						if(new Date(serverDate) > new Date(systemDate) || new Date(serverDate) < new Date(systemDate)){
+							bootbox.alert('Incorrect Date');
+							var valid = false;
+						} alert(valid)
+					});*/ 
+					//var curret = new Date();
+					//var server = new Date(formData.current_time);
+					//var diffMs = (server.getTime() - curret.getTime()); 
+					//var diffMins = Math.round(diffMs / 60000); // minutes
+					var systemDate = new Date();
+						var month = systemDate.getMonth() + 1;
+						month = (month < 10 ? '0' : '') + month;
+						var day = systemDate.getDate();
+						var year = systemDate.getFullYear();
+						var systemDate = year+"-"+month+"-"+day;//alert(systemDate);
+						var serverDate = formData.current_time;//alert(serverDate);
+					if(new Date(serverDate) > new Date(systemDate) || new Date(serverDate) < new Date(systemDate)){
+						bootbox.alert('System And Server Date Is Mismatch', function(){
 							window.location.reload(true);
 						});
 						return false;
 					}
-				}*/
+					
+				}
 				if(formData.username1){
 					formData.username = formData.username1;
 				}
