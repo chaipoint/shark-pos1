@@ -55,8 +55,8 @@
     			    $tuData = curl_exec($tuCurl); 
 					curl_close($tuCurl); 
     			    $result = json_decode($tuData,true);
-					$responseArray['success'] = $result['success'];
-                    $responseArray['message'] = $result['message'];
+					$responseArray['success'] = (!empty($result) ? $result['success'] : 'False');
+                    $responseArray['message'] = (!empty($result) ? $result['message'] : 'Server Error! Please Contact Admin');
                     $responseArray['balance'] = $result['balance'];
                     $responseArray['card_number'] = $result['card_number'];
                     $responseArray['txn_no'] = $result['approval_code'];
