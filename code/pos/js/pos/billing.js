@@ -423,21 +423,33 @@ $(document).ready(function(){
                			}).done(function(response){  
                	  			console.log(response);
                	  			$("span#loading_image").addClass('hide');
-               	  			$('#submit-sale').attr('disabled',false);
-               	 			result = $.parseJSON($.trim(response));
-               	 			if(result.error){
+               	  			var IS_JSON = true;
+							try
+								{
+								var result = $.parseJSON($.trim(response));
+								}
+							catch(err)
+								{
+								IS_JSON = false;
+								}  
+               	 			
+							if (IS_JSON) {
+							if(result.error){
 				 				$('.ppc_balance').hide();
+								$('#ppc').val('');
 								bootbox.alert(result.message);
 							}else if(result.data['success']=='False'){
 								$('.ppc_balance').hide();
 								if(result.data['balance']=='' || result.data['balance']==null){
 									bootbox.alert(result.data['message']);
+									$('#ppc').val('');
 								}else{
 									$('#load_amount_div').css('display','none');
 									$('#error_message').text('Balance is Insufficient. Do You Want To Load It?');
 								    $('#error_div').removeClass('hide');
 								}
-							}else{ 
+							}else if(result.data['success']=='True'){
+								$('#submit-sale').attr('disabled',false);
 								$('.ppc_balance').show();
 								$('#ac_balance').text(result.data['balance']);
 								$('#card_number').val(result.data['card_number']);
@@ -450,6 +462,11 @@ $(document).ready(function(){
 								$('#is_prepaid').val('Y');
 								$('#card_invoice_no').val(result.data['invoice_number']);
 								$('#submit-sale').trigger('click');
+							}
+							}else{
+								$('.ppc_balance').hide();
+								$('#ppc').val('');
+								bootbox.alert('Server Error! Please Contact Admin');
 							}
               			}).error(function(x, t, m){
 								if(t==='timeout'){
@@ -487,7 +504,17 @@ $(document).ready(function(){
 			  		data : {'request_type':request_type,'amount':total_amount,'card_number':card_no},
 				}).done(function(response) { 
 					console.log(response);
-					$result = $.parseJSON($.trim(response));
+					var IS_JSON = true;
+					try
+						{
+							var $result = $.parseJSON($.trim(response));
+						}
+					catch(err)
+						{
+							IS_JSON = false;
+						}  
+					//$result = $.parseJSON($.trim(response));
+					if(IS_JSON){
 					if($result.error){
 				 		$('.ppc_balance').hide();
 						bootbox.alert($result.message);
@@ -495,10 +522,15 @@ $(document).ready(function(){
 						$('.ppc_balance').hide();
 						$('#load_amount_div').css('display','none');
 						bootbox.alert($result.data['message']);
-					}else{ 
+					}else if($result.data['success']=='True'){ 
 						$('#load_amount_div').css('display','none');
 						$('#ppc').trigger('change');
 					} 
+					} else{
+						$('.ppc_balance').hide();
+						$('#load_amount_div').css('display','none');
+						bootbox.alert('Server Error! Please Contact Admin');
+					}
 					
 				});
 			}
