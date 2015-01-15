@@ -184,8 +184,18 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 				data : formData
 			}).done(function(response) { 
 				$("#ajaxfadediv").removeClass('ajaxfadeclass');
-				var $res =  $.parseJSON($.trim(response));
-				console.log($res); 
+				var IS_JSON = true;
+					try
+						{
+							var $res = $.parseJSON($.trim(response));
+						}
+					catch(err)
+						{
+							IS_JSON = false;
+						}  
+				//var $res =  $.parseJSON($.trim(response));
+				//console.log($res);
+				if(IS_JSON){
 				if($res.error){ 
 					$("#"+errorHolder).show();$("#"+errorHolder+" ul").html($res.message);
 				}else if($res.data['success']=='False'){
@@ -200,6 +210,9 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 					}
 					
 
+				}
+				}else{
+					bootbox.alert('Server Error! Please Contact Admin');
 				}
 			})
 		}
