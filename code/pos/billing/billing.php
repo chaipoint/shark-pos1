@@ -11,6 +11,7 @@
 
 		/* This Function Is Automatically Called When We Come On Billing Module */
 		function index(){ 
+			global $ERT_PRODUCT_ARRAY;
 			if(array_key_exists('referer',$_GET) && $_GET['referer'] == HOME){
 			}else{
 				if(!array_key_exists('shift', $_SESSION['user'])){
@@ -67,7 +68,7 @@
 	 						$billData = $billDataReturned['data'];
 					}
 	  			}
-	  			$data = array('error'=>false, 'catList'=>$catList, 'productList'=>$productList, 'firstCat'=>$firstCat, 'config_data'=>$this->configData, 'bill'=>$billData, 'lastBillNo'=>$lastBillNo, 'lastBillTime'=>$lastBillTime);
+	  			$data = array('error'=>false, 'ertList'=>$ERT_PRODUCT_ARRAY, 'catList'=>$catList, 'productList'=>$productList, 'firstCat'=>$firstCat, 'config_data'=>$this->configData, 'bill'=>$billData, 'lastBillNo'=>$lastBillNo, 'lastBillTime'=>$lastBillTime);
 
 	  		}
 	  		/* To Check Print Utility Exists Or Not */
