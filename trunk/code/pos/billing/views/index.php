@@ -135,6 +135,7 @@
 														<tr class="">
 															<td width="25%" class="text-left"> <button class='btn btn-sm btn-primary'  id='reward_redemption'>Reward</button> </td>
 															<td width="25%" class="text-left"><input type='text' class="form-control hide" name='redemption_code' placeholder='Scan Code' id='redemption_code' style="width:101px" /></td>
+															<td width="25%" id="image_loading" class="text-left hide"><img src="<?php echo IMG ?>loader.gif"></td>
 															<td width="30%" class="text-left"><strong>Total Payable</strong></td>
 															<td class="text_right"><strong><span id="total-payable">0</span></strong></td>
 														</tr>
