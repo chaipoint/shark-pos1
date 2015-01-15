@@ -92,6 +92,8 @@ $(document).ready(function(){
 		}).done(function(response) { 
 			console.log(response);
 			$('#image_loading').addClass('hide');  
+			
+
 			$result = $.parseJSON($.trim(response));
 			if($result.error){
 				$('#redemption_code').val('').addClass('hide');
@@ -99,30 +101,38 @@ $(document).ready(function(){
 			}else if($result.data['success']=='False'){
 				$('#redemption_code').val('').addClass('hide');
 				bootbox.alert($result.data['message']);
-			}else{ 
-				var productNewList = new Object();
-				$.each(productArray, function(index, data){
-					var category = index;
-					$.each(data, function(pIndex, pData){
-						productNewList[pData.mysql_id]  = new Object();
-						productNewList[pData.mysql_id].cat = category;
-						productNewList[pData.mysql_id].seq = pIndex;
+			}else if($result.data['success']=='True'){ 
+				var product = ertArray[$result.data['product_id']];
+				if(product!=undefined){
+					var productNewList = new Object();
+					$.each(productArray, function(index, data){
+						var category = index;
+						$.each(data, function(pIndex, pData){
+							productNewList[pData.mysql_id]  = new Object();
+							productNewList[pData.mysql_id].cat = category;
+							productNewList[pData.mysql_id].seq = pIndex;
+						});
 					});
-				});
-				var productData = productArray[productNewList[$result.data['product_id']].cat] [productNewList[$result.data['product_id']].seq];
-				$('#discount_input_box').val('100').prop('disabled',true);
-				$intDiscount =  100;
-				$('#reward_redemption_code').val(code);
-				$('#card_invoice_no').val($result.data['invoice_number']);
-				$('#claim_reward').removeClass('hide');
-				$('#payment').addClass('hide');
-				generateSalesTable($result.data['product_id'], '1', productData);
-				$('.bill_qty_input').prop('readonly', true);
-				$('.del_row').addClass('hide');
-				$('.category-product').prop('disabled', true);
-				$('#proajax button[value="'+$result.data['product_id']+'"]').addClass('active-btn').prop('disabled', false);
-				$('.category-selection').prop('disabled', true);
-			} 
+				
+					var productData = productArray[productNewList[product].cat] [productNewList[product].seq];
+					$('#discount_input_box').val('100').prop('disabled',true);
+					$intDiscount =  100;
+					$('#reward_redemption_code').val(code);
+					$('#card_invoice_no').val($result.data['invoice_number']);
+					$('#claim_reward').removeClass('hide');
+					$('#payment').addClass('hide');
+					generateSalesTable(product, '1', productData);
+					$('.bill_qty_input').prop('readonly', true);
+					$('.del_row').addClass('hide');
+					$('.category-product').prop('disabled', true);
+					$('#proajax button[value="'+$result.data['product_id']+'"]').addClass('active-btn').prop('disabled', false);
+					$('.category-selection').prop('disabled', true);
+				}else{
+					bootbox.alert('Product Not Found in List');
+				}
+			} else{
+				bootbox.alert('Server Error! Please Contact Admin');
+			}
 					
 		});
 
@@ -137,7 +147,8 @@ $(document).ready(function(){
 			url: "index.php?dispatch=billing.loadCard",
 			data: {'request_type':request_type, 'code':code, 'markused':markused}
 		}).done(function(response) { 
-			console.log(response);  
+			console.log(response);
+
 			$result = $.parseJSON($.trim(response));
 			if($result.error){
 				$('#redemption_code').val('').addClass('hide');
@@ -145,7 +156,7 @@ $(document).ready(function(){
 			}else if($result.data['success']=='False'){
 				$('#redemption_code').val('').addClass('hide');
 				bootbox.alert($result.data['message']);
-			}else{ 
+			}else if($result.data['success']=='True'){ 
 				$('#paid_by').val('ppa');
 				$("#phone_number").val('');
 				$("#delivery_channel").val(74);
@@ -167,6 +178,8 @@ $(document).ready(function(){
 				$('#card_company').val('urbanPiper');
 				$('#card_invoice_no').val($result.data['invoice_number']);
 				$('#submit-sale').trigger('click');
+			}else{
+				bootbox.alert('Server Error! Please Contact Admin');
 			} 
 					
 		});
@@ -423,46 +436,47 @@ $(document).ready(function(){
                			}).done(function(response){  
                	  			console.log(response);
                	  			$("span#loading_image").addClass('hide');
+               	  			
                	  			var IS_JSON = true;
-							try
-								{
-								var result = $.parseJSON($.trim(response));
+								try{
+									var result = $.parseJSON($.trim(response));
 								}
-							catch(err)
-								{
-								IS_JSON = false;
+								catch(err){
+									IS_JSON = false;
 								}  
                	 			
 							if (IS_JSON) {
-							if(result.error){
-				 				$('.ppc_balance').hide();
-								$('#ppc').val('');
-								bootbox.alert(result.message);
-							}else if(result.data['success']=='False'){
-								$('.ppc_balance').hide();
-								if(result.data['balance']=='' || result.data['balance']==null){
-									bootbox.alert(result.data['message']);
+								if(result.error){
+				 					$('.ppc_balance').hide();
 									$('#ppc').val('');
+									bootbox.alert(result.message);
+								}else if(result.data['success']=='False'){
+									$('.ppc_balance').hide();
+									if(result.data['balance']=='' || result.data['balance']==null){
+										bootbox.alert(result.data['message']);
+										$('#ppc').val('');
+									}else{
+										$('#load_amount_div').css('display','none');
+										$('#error_message').text('Balance is Insufficient. Do You Want To Load It?');
+								    	$('#error_div').removeClass('hide');
+									}
+								}else if(result.data['success']=='True'){
+									$('#submit-sale').attr('disabled',false);
+									$('.ppc_balance').show();
+									$('#ac_balance').text(result.data['balance']);
+									$('#card_number').val(result.data['card_number']);
+									$('#card_type').val(payment_type);
+									$('#card_company').val(payment_type == 'ppa' ? 'urbanPiper' : 'qwikcilver');
+									$('#card_redeem_amount').val(total_amount);
+									$('#card_txn_no').val(result.data['txn_no']);
+									$('#card_approval_code').val(result.data['approval_code']);
+									$('#card_balance').val(result.data['balance']);
+									$('#is_prepaid').val('Y');
+									$('#card_invoice_no').val(result.data['invoice_number']);
+									$('#submit-sale').trigger('click');
 								}else{
-									$('#load_amount_div').css('display','none');
-									$('#error_message').text('Balance is Insufficient. Do You Want To Load It?');
-								    $('#error_div').removeClass('hide');
+									bootbox.alert('Server Error! Please Contact Admin');
 								}
-							}else if(result.data['success']=='True'){
-								$('#submit-sale').attr('disabled',false);
-								$('.ppc_balance').show();
-								$('#ac_balance').text(result.data['balance']);
-								$('#card_number').val(result.data['card_number']);
-								$('#card_type').val(payment_type);
-								$('#card_company').val(payment_type == 'ppa' ? 'urbanPiper' : 'qwikcilver');
-								$('#card_redeem_amount').val(total_amount);
-								$('#card_txn_no').val(result.data['txn_no']);
-								$('#card_approval_code').val(result.data['approval_code']);
-								$('#card_balance').val(result.data['balance']);
-								$('#is_prepaid').val('Y');
-								$('#card_invoice_no').val(result.data['invoice_number']);
-								$('#submit-sale').trigger('click');
-							}
 							}else{
 								$('.ppc_balance').hide();
 								$('#ppc').val('');
