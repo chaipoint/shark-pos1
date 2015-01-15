@@ -569,7 +569,7 @@
 								</div>
 
 								<div class="col-md-7">
-									<button type="submit" style="" class="btn btn-success btn-sm btn-block btn-lg">Load Card 
+									<button type="submit" style="" class="btn hide btn-success btn-sm btn-block btn-lg">Load Card 
 										<i class="glyphicon glyphicon-log-in"></i>
 									</button>
 								</div>
