@@ -24,6 +24,8 @@
 			<script>
 				var catList = \''.json_encode($catList).'\';
 				var catArray = $.parseJSON(catList);
+				var ertList = \''.json_encode($ertList).'\';
+				var ertArray = $.parseJSON(ertList);
 				var productList = \''.json_encode($productList).'\';
 				var productArray = $.parseJSON(productList);
 				var selectedCat = '.$firstCat.';
