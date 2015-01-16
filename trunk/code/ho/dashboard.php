@@ -134,14 +134,19 @@
 </div>
 
 
-<?php $getSale = $couch->getDesign('billing')->getView('bill_by_date')->setParam(array("group"=>"true","startkey"=>'["'.date('Y-m-d').'"]',"endkey"=>'["'.date('Y-m-d').'",{}]'))->execute();
-      $topStore = $couch->getDesign('sales')->getView('top_store')->setParam(array("group"=>"true","startkey"=>'["'.date('Y-m-d').'"]',"endkey"=>'["'.date('Y-m-d').'",{}]'))->execute();
+<?php 
+		$date = date('Y-m-d');
+        if(array_key_exists('sales_reg_search', $_GET)){
+          $date = date('Y-m-d',strtotime($_GET['sales_reg_search']));
+        }
+		//$getSale = $couch->getDesign('billing')->getView('bill_by_date')->setParam(array("group"=>"true","startkey"=>'["'.date('Y-m-d').'"]',"endkey"=>'["'.date('Y-m-d').'",{}]'))->execute();
+		$topStore = $couch->getDesign('sales')->getView('top_store')->setParam(array("group"=>"true","startkey"=>'["'.$date.'"]',"endkey"=>'["'.$date.'",{}]'))->execute();
       
 
-  $totalSale = 0;
+  /*$totalSale = 0;
   if(array_key_exists('rows', $getSale) && count($getSale['rows'])>0){
   $totalSale = $getSale['rows'][0]['value'];
-  } 
+  } */
 
   $topStoreArray = array();
   if(array_key_exists('rows', $topStore)) { 
@@ -151,7 +156,7 @@
      }
      krsort($topStoreArray);
 ?>
-        <!--<h4>Today's Sale (Rs.<?php echo $totalSale;?>)</h4>-->
+        <!--<h4>Today's Sale (Rs.<?php //echo $totalSale;?>)</h4>-->
 <!-- Default panel contents -->
 <div class="row">
 <div class="panel-group" id="accordion">
