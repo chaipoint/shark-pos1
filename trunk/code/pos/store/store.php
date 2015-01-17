@@ -85,7 +85,9 @@
 									}
 								}
 							}
-
+							require_once DIR.'/home/home.php';
+							$hm = new home();
+							$hm->getShiftAndCashRe();
 							require_once DIR.'/sales_register/sales_register.php';
 							$sr = new sales_register();
 							$resultExpenseList = $sr->getExpenseData($this->getCDate(), $this->getCDate());
