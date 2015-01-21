@@ -164,7 +164,7 @@
     <div class="panel panel-info">
       <div class="panel-heading">
         <h4 class="panel-title">
-          <a class="col" data-value="sale_summary" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Top 5 Stores
+          <a class="col" data-value="sale_summary" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Stores Sale
           <i class="glyphicon glyphicon-chevron-up pull-right"></i>
           </a>
         </h4>
@@ -209,7 +209,7 @@
   <div class="panel panel-info">
     <div class="panel-heading" >
       <h4 class="panel-title">
-        <a class="col" id="todays_sale" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Top 5 Items
+        <a class="col" id="todays_sale" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Items Sale
         <i class="glyphicon glyphicon-chevron-up pull-right"></i>
         </a>
       </h4>
