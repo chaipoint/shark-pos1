@@ -169,7 +169,7 @@
           </a>
         </h4>
       </div>
-      <div id="collapseOne" class="panel-collapse collapse">
+      <div id="collapseOne" class="panel-collapse collapse in">
        <div class="panel-body">
         <div class="col-md-6 col-lg-6">
           <table class="table">
