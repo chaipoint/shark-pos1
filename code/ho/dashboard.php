@@ -59,7 +59,7 @@
 <ol class="breadcrumb" style="margin-top:60px;">
 <li>
 <div class="form-group">
-  <label  class="control-label" for="sales_reg_search">Sales ON</label>&nbsp;&nbsp;&nbsp;&nbsp;
+  <label  class="control-label" for="sales_reg_search">Sales On</label>&nbsp;&nbsp;&nbsp;&nbsp;
 <div class="input-group">
       <input type="text" name = "sales_reg_search" id="sales_reg_search" class="form-control datepicker" required data-provide="datepicker-inline" data-date-format="dd-MM-yyyy"  data-date-autoclose = "true" data-date-end-date="+0d" name="expense_date" readonly/>
       <span class="input-group-btn">
@@ -76,7 +76,7 @@
       <div class='row' style="margin-top:20px;">
       
       
-        <div class="smallstat box col-lg-2 col-sm-4" style="width:110px;margin-left:14px;">
+        <div class="smallstat box col-lg-2 col-sm-4" style="width:130px;margin-left:14px;">
           <i class="glyphicon glyphicon-usd fa green"></i>
           <span class="title">Cash Sale</span>
           <span class="value"><?php echo $cashSale;?></span>
@@ -91,7 +91,7 @@
         </div>
       
 
-        <div class="smallstat box col-lg-2 col-sm-4" style="width:125px;margin-left:8px;">
+        <div class="smallstat box col-lg-2 col-sm-4" style="width:130px;margin-left:8px;">
           <i class="glyphicon glyphicon-usd fa blue"></i>
           <span class="title">PPC Sale</span>
           <span class="value"><?php echo $ppcSale; ?></span>
@@ -99,7 +99,7 @@
       
 
         
-        <div class="smallstat box col-lg-2 col-sm-4" style="width:125px;margin-left:8px;">
+        <div class="smallstat box col-lg-2 col-sm-4" style="width:130px;margin-left:8px;">
           <i class="glyphicon glyphicon-usd fa blue"></i>
           <span class="title">PPA Sale</span>
           <span class="value"><?php echo $ppaSale; ?></span>
@@ -107,7 +107,7 @@
       
 
        
-        <div class="smallstat box col-lg-2 col-sm-4" style="width:115px;margin-left:8px;">
+        <div class="smallstat box col-lg-2 col-sm-4" style="width:130px;margin-left:8px;">
           <i class="glyphicon glyphicon-usd fa blue"></i>
           <span class="title">Credit Sale</span>
           <span class="value"><?php echo $creditSale; ?></span>
@@ -123,7 +123,7 @@
     
 
       
-        <div class="smallstat box col-lg-2 col-sm-4" style="width:110px;margin-left:8px;">
+        <div class="smallstat box col-lg-2 col-sm-4" style="width:130px;margin-left:8px;">
           <i class="glyphicon glyphicon-usd fa orange"></i>
           <span class="title">Total Sale</span>
           <span class="value"><?php echo (($cashSale + $cashInDelivery + $ppcSale + $ppaSale) - $petty_expense) ;?></span>
