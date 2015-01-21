@@ -16,6 +16,7 @@
 		<script type="text/javascript" src="js/jquery.keyboard.min.js"></script>
 		<script type="text/javascript" src="js/bootbox.js"></script>
 		<script src="js/login.js"></script>
+		<script src="js/common.js"></script>
 		<script type="text/javascript" src="js/bootstrap-datepicker.js"></script>
 		<link rel="stylesheet" href="css/datepicker.css">	</head>
 	</head>
