@@ -77,7 +77,7 @@
       
       
         <div class="smallstat box col-lg-2 col-sm-4" style="width:130px;margin-left:14px;">
-          <i class="glyphicon glyphicon-usd fa green"></i>
+          <i class="glyphicon fa gray"></i>
           <span class="title">Cash Sale</span>
           <span class="value"><?php echo $cashSale;?></span>
         </div>
@@ -85,14 +85,14 @@
 
       
         <div class="smallstat box col-lg-2 col-sm-4" style="width:130px;margin-left:8px;">
-          <i class="glyphicon glyphicon-usd fa pink"></i>
+          <i class="glyphicon fa gray"></i>
           <span class="title">Pending Cash</span>
           <span class="value"><?php echo $cashInDelivery;?></span>
         </div>
       
 
         <div class="smallstat box col-lg-2 col-sm-4" style="width:130px;margin-left:8px;">
-          <i class="glyphicon glyphicon-usd fa blue"></i>
+          <i class="glyphicon fa gray"></i>
           <span class="title">PPC Sale</span>
           <span class="value"><?php echo $ppcSale; ?></span>
         </div>
@@ -100,7 +100,7 @@
 
         
         <div class="smallstat box col-lg-2 col-sm-4" style="width:130px;margin-left:8px;">
-          <i class="glyphicon glyphicon-usd fa blue"></i>
+          <i class="glyphicon fa gray"></i>
           <span class="title">PPA Sale</span>
           <span class="value"><?php echo $ppaSale; ?></span>
         </div>
@@ -108,7 +108,7 @@
 
        
         <div class="smallstat box col-lg-2 col-sm-4" style="width:130px;margin-left:8px;">
-          <i class="glyphicon glyphicon-usd fa blue"></i>
+          <i class="glyphicon fa gray"></i>
           <span class="title">Credit Sale</span>
           <span class="value"><?php echo $creditSale; ?></span>
         </div>
@@ -116,7 +116,7 @@
 
       
         <div class="smallstat box col-lg-2 col-sm-4" style="width:150px;margin-left:8px;">
-          <i class="glyphicon glyphicon-usd fa red"></i>
+          <i class="glyphicon fa gray"></i>
           <span class="title">Petty Expense</span>
           <span class="value"><?php echo $petty_expense;?></span>
         </div>
@@ -124,7 +124,7 @@
 
       
         <div class="smallstat box col-lg-2 col-sm-4" style="width:130px;margin-left:8px;">
-          <i class="glyphicon glyphicon-usd fa orange"></i>
+          <i class="glyphicon fa gray"></i>
           <span class="title">Total Sale</span>
           <span class="value"><?php echo (($cashSale + $cashInDelivery + $ppcSale + $ppaSale) - $petty_expense) ;?></span>
         </div>
