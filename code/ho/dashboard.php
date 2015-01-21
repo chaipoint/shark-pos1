@@ -183,13 +183,13 @@
           <tbody>
       <?php $i=1; 
       if(is_array($topStoreArray)&& count($topStoreArray)>0) { 
-       foreach ($topStoreArray as $key => $value) { ?>
+       foreach ($topStoreArray as $key => $value) { if($value!=''){ ?>
          <tr>
            <td><?php echo $i;?></td>
            <td><?php echo $value; ?></td>
            <td><?php echo $key; ?></td>
          </tr>
-      <?php $i++;}} ?>
+      <?php $i++;}}} ?>
       <?php for($j=$i;$j<=5;$j++) { ?>
          <tr>
            <td><?php echo $j;?></td>
