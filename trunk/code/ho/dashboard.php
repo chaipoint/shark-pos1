@@ -73,7 +73,7 @@
 
     
       <!--<h2>Dashboard</h2>-->
-      <div class='row' style="margin-top:20px;">
+      <div class='row' style="margin-top:35px;">
       
       
         <div class="smallstat box col-lg-2 col-sm-4" style="width:130px;margin-left:14px;">
