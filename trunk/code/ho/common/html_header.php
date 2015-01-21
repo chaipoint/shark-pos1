@@ -6,8 +6,8 @@
         </div>
         <div class="navbar-collapse collapse" >
             <ul class="nav navbar-nav" >
-            <li class="active"><a  href="#">Home</a></li>
-            <li><a href="#about" style="color:#ffffff;">Reports</a></li>
+            <li class="active"><a  href="#">Dashboard</a></li>
+            <!--<li><a href="#about" style="color:#ffffff;">Reports</a></li>
             <li><a href="#contact" style="color:#ffffff;">Analytics</a></li>
             <li class="dropdown">
              <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="color:#ffffff;">Data Set <span class="caret"></span></a>
@@ -15,12 +15,12 @@
              <li><a href="#">Staff Master</a></li>
                 <li><a href="#">Store Master</a></li>
                 <li><a href="#">Settings</a></li>
-                <li class="divider"></li>
+                <li class="divider"></li>-->
                 <!--<li class="dropdown-header">Nav header</li>-->
-                <li><a href="#">Bill Details</a></li>
+                <!--<li><a href="#">Bill Details</a></li>
                 <li><a href="#">Attendance Sheet</a></li>
               </ul>
-            </li>
+            </li>-->
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="color:#ffffff;">Data Sync <span class="caret"></span></a>
               <ul class="dropdown-menu" role="menu">
