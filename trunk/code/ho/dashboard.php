@@ -214,7 +214,7 @@
         </a>
       </h4>
     </div>
-    <div id="collapseThree" class="panel-collapse collapse">
+    <div id="collapseThree" class="panel-collapse collapse in">
       <div class="panel-body">
        <div class="col-md-6 col-lg-6">
         <table class="table">
