@@ -161,7 +161,7 @@
 <div class="row">
 <div class="panel-group" id="accordion">
   <div class="col-sm-6">
-    <div class="panel panel-default">
+    <div class="panel panel-info">
       <div class="panel-heading">
         <h4 class="panel-title">
           <a class="col" data-value="sale_summary" data-toggle="collapse" data-parent="#accordion" href="#collapseOne">Top 5 Stores
@@ -206,7 +206,7 @@
 </div>
 </div>
 <div class="col-sm-6 pull-left">
-  <div class="panel panel-default">
+  <div class="panel panel-info">
     <div class="panel-heading" >
       <h4 class="panel-title">
         <a class="col" id="todays_sale" data-toggle="collapse" data-parent="#accordion" href="#collapseThree">Top 5 Items
@@ -265,7 +265,7 @@
 </div>
 </div>
 </div>
-
+<!--
 <div class="col-sm-6 pull-left">
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -279,7 +279,7 @@
       <div class="panel-body">
        <div class="col-md-12 col-lg-6">
   
-<!-- Table -->
+
   <table class="table">
     <thead>
       <tr>
@@ -329,10 +329,11 @@
 </div>
 
 </div>
-
+-->
+<!--
 <div class="col-sm-6 pull-left">
   <div class="panel panel-default">
-  <!-- Default panel contents -->
+  
     <div class="panel-heading" >
       <h4 class="panel-title">
         <a class="col" id="todays_sale" data-toggle="collapse" data-parent="#accordion" href="#collapseFive">Top 5 Seller
@@ -343,7 +344,7 @@
   <div id="collapseFive" class="panel-collapse collapse">
       <div class="panel-body">
        <div class="col-md-6 col-lg-6">
-<!-- Table -->
+
   <table class="table">
     <thead>
       <tr>
@@ -392,7 +393,7 @@
 </div>
 </div>
 </div>
-</div>
+</div> -->
 </div>
 </div>
 </div>
