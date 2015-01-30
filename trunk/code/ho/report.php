@@ -66,13 +66,13 @@
 			}
 		}
 		header("cache-control: private");
-        header('content-Disposition:attachment;filename =Bill_Wise_Report_'.$date.'.csv');
+        header('content-Disposition:attachment;filename=Bill_Wise_Report_'.$date.'.csv');
         header('content-type: application/csv,UTF-8');
         header('content-length: ' . strlen($csv));
         header('content-Transfer-Encoding:binary');
-        ob_clean();
-        flush();
-        echo $csv;
+        //ob_clean();
+        //flush();
+        //echo $csv;
 		//echo '<pre>';
 		//print_r($getRecord);
 		//echo '</pre>';
