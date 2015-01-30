@@ -12,10 +12,16 @@ $('.datepicker').datepicker('update', new Date(date.getFullYear(), date.getMonth
     	$("#search_button").trigger('click');
     });
 $("#search_button").click(function(){
+	alert('dfvfdv');
 	$("#search_form").submit();
 	console.log('hello');
 });
 
+$("#report_button").click(function(){
+	alert('vfdgfdv');
+	$("#report_form").submit();
+	console.log('hello00000000000000000');
+});
 
 /* Function To Update Staff Data */
 $('#retail_customer_synk').on('click',function(){
