@@ -7,8 +7,8 @@
         <div class="navbar-collapse collapse" >
             <ul class="nav navbar-nav" >
             <li class="active"><a  href="dashboard.php">Dashboard</a></li>
-            <!--<li><a href="#about" style="color:#ffffff;">Reports</a></li>
-            <li><a href="#contact" style="color:#ffffff;">Analytics</a></li>
+            <li><a href="report.php" style="color:#ffffff;">Reports</a></li>
+            <!--<li><a href="#contact" style="color:#ffffff;">Analytics</a></li>
             <li class="dropdown">
              <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="color:#ffffff;">Data Set <span class="caret"></span></a>
              <ul class="dropdown-menu" role="menu">
