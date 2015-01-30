@@ -10,20 +10,13 @@
 		<!--Body Header Start -->
 <?php 
 		require_once 'common/html_header.php';
+		$getStore = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_STORE_BY_NAME)->setParam()->execute();
+		echo '<pre>';
+		print_r($getStore);
+		echo '</pre>';
 ?>
 		<div class="container-fluid">
-     
-		<!--Progress Bar Div -->
-
-		<div class="progress" align="center" id="progress" style="margin-top:80px;display:none;">
-			<div class="progress-bar progress-bar-striped active"  role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
-				<span class="sr-only">45% Complete</span>
-			</div>
-		</div>
-		<!--Progress Bar Div End -->
-
 		
-
 		<form class="form-inline" id="report_form" name="report_form" method="post" action="download.php"> 
 			<ol class="breadcrumb" style="margin-top:60px;">
 				<li>
@@ -36,6 +29,13 @@
 						<div class="input-group">
 							<select name="store" id="store" class="form-control">
 								<option value=''>All</option>
+								<?php
+								if(array_key_exists('rows', $getStore)){
+									foreach($getStore['rows'] as $key => $value){
+										echo '<option value="'.$value['key'].'">"'.$value['value'].'"</option>';
+									}
+								}
+								?>
 								<option value='88'>Old Airport Road</option>
 							</select>
 						</div>
@@ -51,13 +51,7 @@
 
     
       <!--<h2>Dashboard</h2>-->
-      
-
-
-
-       
-
-		</div>
+      </div>
 	</body>
 	<!-- Body Container End -->
 	<!-- footer Start -->
