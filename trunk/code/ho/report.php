@@ -11,9 +11,6 @@
 <?php 
 		require_once 'common/html_header.php';
 		$getStore = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_STORE_BY_NAME)->setParam()->execute();
-		echo '<pre>';
-		print_r($getStore);
-		echo '</pre>';
 ?>
 		<div class="container-fluid">
 		
@@ -28,11 +25,11 @@
 						<label  class="control-label" for="store">Store</label>&nbsp;&nbsp;&nbsp;&nbsp;
 						<div class="input-group">
 							<select name="store" id="store" class="form-control">
-								<option value=''>All</option>
+								<option value='all'>All</option>
 								<?php
 								if(array_key_exists('rows', $getStore)){
 									foreach($getStore['rows'] as $key => $value){
-										echo '<option value="'.$value['key'].'">"'.$value['value'].'"</option>';
+										echo '<option value="'.$value['key'].'">'.$value['value'].'</option>';
 									}
 								}
 								?>
