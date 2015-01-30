@@ -44,8 +44,5 @@ $(document).ready(function(){
 				event.preventDefault(); 	//Privents Formto Submit
 			});
 			
-			$('#report_button').click(function(){
-				alert('hi');
-				$('#report-form').submit();
-			});
+			
 });
