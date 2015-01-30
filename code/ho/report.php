@@ -1,5 +1,6 @@
 <?php 
 	require_once 'common/header.php';
+	require_once 'constant.php';
     require_once 'common/couchdb.phpclass.php';
 	$couch = new CouchPHP(); 
 ?>
