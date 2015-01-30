@@ -43,6 +43,4 @@ $(document).ready(function(){
 				}
 				event.preventDefault(); 	//Privents Formto Submit
 			});
-			
-			
 });
