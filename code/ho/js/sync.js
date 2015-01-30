@@ -12,15 +12,13 @@ $('.datepicker').datepicker('update', new Date(date.getFullYear(), date.getMonth
     	$("#search_button").trigger('click');
     });
 $("#search_button").click(function(){
-	alert('dfvfdv');
 	$("#search_form").submit();
-	console.log('hello');
+	console.log('Bill Data');
 });
 
 $("#report_button").click(function(){
-	alert('vfdgfdv');
 	$("#report_form").submit();
-	console.log('hello00000000000000000');
+	console.log('Bill Wise Report');
 });
 
 /* Function To Update Staff Data */
