@@ -5,7 +5,7 @@
 	$couch = new CouchPHP(); 
 ?>
 	<link rel="stylesheet" href="css/common.css" type="text/css">
-	
+	<script type="text/javascript" src="js/sync.js"></script>
 	<body>
 		<!--Body Header Start -->
 <?php 
@@ -24,7 +24,7 @@
 
 		
 
-		<form class="form-inline" id="report-form" name="report-form" method="post"> 
+		<form class="form-inline" id="report_form" name="report_form" method="post"> 
 			<ol class="breadcrumb" style="margin-top:60px;">
 				<li>
 					<div class="form-group">
@@ -32,7 +32,7 @@
 						<div class="input-group">
 							<input type="text" name="date" id="date" class="form-control datepicker" required data-provide="datepicker-inline" data-date-format="dd-MM-yyyy"  data-date-autoclose = "true" data-date-end-date="+0d" readonly/>
 						</div>
-						<label  class="control-label" for="sales_reg_search">Store</label>&nbsp;&nbsp;&nbsp;&nbsp;
+						<label  class="control-label" for="store">Store</label>&nbsp;&nbsp;&nbsp;&nbsp;
 						<div class="input-group">
 							<select name="store" id="store" class="form-control">
 								<option value=''>All</option>
@@ -41,7 +41,7 @@
 						</div>
 						<div class="input-group">
 							<span class="input-group-btn">
-							<button class="btn btn-primary" type="submit" style="padding-top:4px; padding-bottom:5px;" id="report_button"><i class="glyphicon glyphicon-search"></i></button>
+							<button class="btn btn-primary" type="button" style="padding-top:4px; padding-bottom:5px;" id="report_button"><i class="glyphicon glyphicon-search"></i></button>
 							</span>
 						</div>
 					</div>
