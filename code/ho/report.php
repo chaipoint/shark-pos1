@@ -5,6 +5,7 @@
 	$couch = new CouchPHP(); 
 ?>
 	<link rel="stylesheet" href="css/common.css" type="text/css">
+	<script type="text/javascript" src="js/login.js"></script>
 	<body>
 		<!--Body Header Start -->
 <?php 
@@ -40,7 +41,7 @@
 						</div>
 						<div class="input-group">
 							<span class="input-group-btn">
-							<button class="btn btn-primary" type="submit" style="padding-top:4px; padding-bottom:5px;" id="search_button"><i class="glyphicon glyphicon-search"></i></button>
+							<button class="btn btn-primary" type="button" style="padding-top:4px; padding-bottom:5px;" id="report_button"><i class="glyphicon glyphicon-search"></i></button>
 							</span>
 						</div>
 					</div>
@@ -71,8 +72,8 @@
         header('content-type: application/csv,UTF-8');
         header('content-length: ' . strlen($csv));
         header('content-Transfer-Encoding:binary');
-        //ob_clean();
-        //flush();
+        ob_clean();
+        flush();
         echo $csv;
 		//echo '<pre>';
 		//print_r($getRecord);
