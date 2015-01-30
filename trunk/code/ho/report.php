@@ -57,7 +57,7 @@
 	if(!empty($_REQUEST['store'])){
 		$date = date('Y-m-d', strtotime($_REQUEST['date']));
 		$store = $_REQUEST['store'];
-		$getRecord = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_BILL_BY_STORE)->setParam(array("key"=>'["'.$date.'", "'.$store.'"]'))->execute();
+		$getRecord = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_BILL_BY_STORE)->setParam(array("include_docs"=>true,"key"=>'["'.$date.'", "'.$store.'"]'))->execute();
 		echo '<pre>';
 		print_r($getRecord);
 		echo '</pre>';
