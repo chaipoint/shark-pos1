@@ -7,6 +7,7 @@ define ('LOGIN_DESIGN_DOCUMENT', 'login');
 /* Constant For Design Document View */
 define ('DESIGN_HO_DESIGN_DOCUMENT_VIEW_RETAIL_CUSTOMER_LIST', 'retail_customer_list');
 define ('DESIGN_HO_DESIGN_DOCUMENT_VIEW_BILL_BY_STORE', 'bill_by_store');
+define ('DESIGN_HO_DESIGN_DOCUMENT_VIEW_STORE_BY_NAME', 'store_by_name');
 define ('DESIGN_HO_DESIGN_DOCUMENT_VIEW_STAFF_BY_MYSQL_ID', 'staff_by_mysql_id');
 define ('DESIGN_HO_DESIGN_DOCUMENT_VIEW_STORE_BY_MYSQL_ID', 'store_by_mysql_id');
 define ('DESIGN_HO_DESIGN_DOCUMENT_VIEW_CONFIG_LIST', 'config_list');
