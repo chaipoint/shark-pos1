@@ -5,7 +5,7 @@
 	$couch = new CouchPHP(); 
 ?>
 	<link rel="stylesheet" href="css/common.css" type="text/css">
-	<script type="text/javascript" src="js/login.js"></script>
+	
 	<body>
 		<!--Body Header Start -->
 <?php 
@@ -41,7 +41,7 @@
 						</div>
 						<div class="input-group">
 							<span class="input-group-btn">
-							<button class="btn btn-primary" type="button" style="padding-top:4px; padding-bottom:5px;" id="report_button"><i class="glyphicon glyphicon-search"></i></button>
+							<button class="btn btn-primary" type="submit" style="padding-top:4px; padding-bottom:5px;" id="report_button"><i class="glyphicon glyphicon-search"></i></button>
 							</span>
 						</div>
 					</div>
