@@ -56,10 +56,13 @@
 
 <?php 
 	if(!empty($_REQUEST['store'])){
+		echo '<pre>';
+		print_r($_POST);
+		echo '</pre>';
 		$date = date('Y-m-d', strtotime($_REQUEST['date']));
 		$store = $_REQUEST['store'];
 		$csv = '';
-		$csv = '"StoreId", "StoreName", "BillNo", "BillDate", "BillTime"'. "\r";
+		$csv .= '"StoreId", "StoreName", "BillNo", "BillDate", "BillTime"'. "\r";
 		//$getRecord = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_BILL_BY_STORE)->setParam(array("include_docs"=>"true","key"=>'["'.$date.'", "'.$store.'"]'))->execute();
 		//if(array_key_exists('rows', $getRecord)){
 			//foreach($getRecord['rows'] as $key=>$value){
@@ -75,9 +78,7 @@
         ob_clean();
         flush();
         echo $csv;
-		//echo '<pre>';
-		//print_r($getRecord);
-		//echo '</pre>';
+		
 	}
 ?>
        
