@@ -25,7 +25,7 @@
 						<label  class="control-label" for="store">Store</label>&nbsp;&nbsp;&nbsp;&nbsp;
 						<div class="input-group">
 							<select name="store" id="store" class="form-control">
-								<option value='all'>All</option>
+								<!--<option value='all'>All</option>-->
 								<?php
 								if(array_key_exists('rows', $getStore)){
 									foreach($getStore['rows'] as $key => $value){
@@ -33,7 +33,7 @@
 									}
 								}
 								?>
-								<option value='88'>Old Airport Road</option>
+								
 							</select>
 						</div>
 						<div class="input-group">
