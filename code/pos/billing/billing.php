@@ -41,6 +41,18 @@
 				$result = $resultStoreMenu['rows'][0]['doc'];
 				if(!array_key_exists('mysql_id', $_SESSION['user']['store'])){
 					unset($resultStoreMenu['rows'][0]['doc']['menu_items']);
+					unset($resultStoreMenu['rows'][0]['doc']['schedule']);
+					unset($resultStoreMenu['rows'][0]['doc']['ppa_details']);
+					unset($resultStoreMenu['rows'][0]['doc']['ppc_details']);
+					unset($resultStoreMenu['rows'][0]['doc']['phone']);
+					unset($resultStoreMenu['rows'][0]['doc']['store_staff']);
+					unset($resultStoreMenu['rows'][0]['doc']['cd_doc_type']);
+					unset($resultStoreMenu['rows'][0]['doc']['store_open_schedule']);
+					unset($resultStoreMenu['rows'][0]['doc']['is_foe']);
+					unset($resultStoreMenu['rows'][0]['doc']['sms']);
+					unset($resultStoreMenu['rows'][0]['doc']['weekly_off']);
+					unset($resultStoreMenu['rows'][0]['doc']['photo']);
+					unset($resultStoreMenu['rows'][0]['doc']['type']);
 					foreach($resultStoreMenu['rows'][0]['doc'] as $key => $data){
 						$_SESSION['user']['store'][$key] = $data;
 					}
@@ -80,11 +92,16 @@
 				$this->log->trace("COMPANY DETAILS TO BE PRINT \r\n".json_encode($company_data));
 				file_put_contents(COMPANY_DETAIL_TXT_PATH, json_encode($company_data,true));
 			}
+			//echo '<pre>';
+			//print_r($_SESSION);
+			//echo '</pre>';
 	  		/* To Get Retail Customer*/
 	  		require_once DIR.'/customer/customer.php';
 	  		$cus = new Customer();
 	  		$data['customer'] = $cus->retail_customer();
-	  		
+	  		//echo '<pre>';
+			//print_r($_SESSION);
+			//echo '</pre>';
 			$this->commonView('header_html',array('error'=>$data['error']));
 			$this->commonView('navbar');
 			if(!$data['error']){
@@ -92,6 +109,7 @@
 			}
 			$this->commonView('footer_inner');
 			$this->commonView('footer_html');
+			
 		}
 
 		/* Function To Get Retail Customer Detail */
