@@ -38,7 +38,7 @@
 						</div>
 						<div class="input-group">
 							<span class="input-group-btn">
-							<button class="btn btn-primary" type="button" style="padding-top:4px; padding-bottom:5px;" id="report_button"><i class="glyphicon glyphicon-search"></i></button>
+							<button class="btn btn-primary" type="button" style="padding-top:4px; padding-bottom:5px;" id="report_button"><i class="glyphicon glyphicon-download-alt"></i></button>
 							</span>
 						</div>
 					</div>
