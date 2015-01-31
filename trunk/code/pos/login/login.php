@@ -139,6 +139,9 @@
 								$_POST['login_time'] = $_SESSION['user']['login']['time'];
 								unset($_SESSION['user']);
 							}
+							unset($userData["email"]);
+							unset($userData["phone"]);
+							unset($userData["address"]);
 							$_SESSION['user'] = $userData;
 
 							$this->log->trace('LOGIN HISTORY '."\r\n".json_encode($loginHistory));
