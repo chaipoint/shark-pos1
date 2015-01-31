@@ -230,9 +230,10 @@ function uploadBill(){
 
  	if(array_key_exists('rows', $billData)){
  		foreach($billData['rows'] as $key => $value){
- 			$doc = $value['doc'];
+			$doc = $value['doc'];
  			$docKey = $value['key'];
  			$dValue['doc'] = $doc;
+			if(empty($doc['mysql_id'])){
 			$docsData = array(	"_id"  => $doc['_id'],
 								"_rev" => $doc['_rev'],
 								"bill_no" => $doc['bill_no'],
@@ -304,7 +305,7 @@ function uploadBill(){
 			}else{
 				$no_bill = 1;
 			}
- 		$counter++;}
+ 		$counter++;}}
  	}
 
 	if($successful==1){
