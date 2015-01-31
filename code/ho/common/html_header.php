@@ -1,3 +1,7 @@
+<?php 
+	$dashboard =(basename($_SERVER['PHP_SELF'])=='dashboard.php' ? 'active' : ''); 
+	$report = (basename($_SERVER['PHP_SELF'])=='report.php' ? 'active' : ''); 
+?>
 <!-- Fixed navbar -->
   <div class="navbar navbar-default navbar-fixed-top"  role="navigation">
         <div class="container" >
@@ -6,8 +10,8 @@
         </div>
         <div class="navbar-collapse collapse" >
             <ul class="nav navbar-nav" >
-            <li class="active"><a  href="dashboard.php">Dashboard</a></li>
-            <li><a href="report.php" style="color:#ffffff;">Reports</a></li>
+            <li class="<?php echo $dashboard; ?>"><a  href="dashboard.php">Dashboard</a></li>
+            <li class="<?php echo $report; ?>"><a href="report.php" style="color:#ffffff;">Reports </a></li>
             <!--<li><a href="#contact" style="color:#ffffff;">Analytics</a></li>
             <li class="dropdown">
              <a href="#" class="dropdown-toggle" data-toggle="dropdown" style="color:#ffffff;">Data Set <span class="caret"></span></a>
