@@ -42,6 +42,9 @@
 			$data['last_ppc_bill'] = $sr->getLastPpcBill($this->getCDate());
 			$data['shift'] = '';
 			$data['reconcilation'] = '';
+			//echo '<pre>';
+			//print_r($_SESSION);
+			//echo '</pre>';
 			$this->commonView('header_html');
 			$this->commonView('navbar');
 			$this->view($data);
@@ -56,6 +59,7 @@
 			
 			$this->commonView('footer_inner');
 			$this->commonView('footer_html');
+			
 		} 
 		/* Function To Get Shift Data And Cash Reconciliation */
 		function getShiftAndCashRe(){
