@@ -47,6 +47,7 @@ $(document).ready(function(){
 						var month = systemDate.getMonth() + 1;
 						month = (month < 10 ? '0' : '') + month;
 						var day = systemDate.getDate();
+						day = (day < 10 ? '0' : '') + day;
 						var year = systemDate.getFullYear();
 						var systemDate = year+"-"+month+"-"+day;//alert(systemDate);
 						var serverDate = formData.current_time;//alert(serverDate);
