@@ -143,8 +143,9 @@
 				$billDataReturned = $this->getBillData($bill); 
 				if(!$billDataReturned['error']){
 	 				$billData = $billDataReturned['data'];
-	 				$re = $this->printBill($billData);
-	 				return json_encode($re);
+	 				//$re = $this->printBill($billData);
+					$return['data'] = $billData;
+	 				return json_encode($return);
 	 			}else{
 					$return['error'] = true;
 					$return['message'] = $billDataReturned['message'];
@@ -249,12 +250,12 @@
 						$result = $this->cDB->saveDocument()->execute($_POST);
 						$this->log->trace("SAVE BILL RESULT \r\n".json_encode($result));
 						if(array_key_exists('ok', $result)){
-							if($_POST['utility_check']=='true'){
+							/*if($_POST['utility_check']=='true'){
 								$res = $this->printBill($_POST);
 								$return['error'] = $res['error'];
 			                    $return['message'] = $res['message'];
-							}
-			                $return['data']['bill_no'] = $currentBillNo;
+							}*/
+			                $return['data'] = $_POST;
 						}
 					}else{
 						$return['error'] = true;
