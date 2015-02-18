@@ -204,4 +204,5 @@
 		</div>
 	</div>
 	<?php require_once 'modal_payment.php';?>
+	<div id="printBill" style="display:none;" ></div>
 	
