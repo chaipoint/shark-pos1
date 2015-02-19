@@ -803,7 +803,8 @@ $(document).ready(function(){
 				if(result.error){
 					bootbox.alert(result.message);
 				}else{
-			
+					resetBill(true);
+					$intDiscount = 0;
 					printBill(response);
 					$('#payModal').modal('hide');
 					if(result.message!=''){
@@ -814,12 +815,8 @@ $(document).ready(function(){
 						if(!printUtility){bootbox.alert('Print Utility Not Exists').find(".btn-primary").removeClass("btn-primary").addClass("btn-danger");}
 						window.location='index.php?dispatch=billing.index';
 					}
-					
-					resetBill(true);
-					$('#payModal').modal('hide');					
-					$intDiscount = 0;
-					
-					window.location.reload(true);
+					//$('#payModal').modal('hide');					
+					//window.location.reload(true);
 				}
 			});
 		});
