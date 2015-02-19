@@ -817,6 +817,7 @@ $(document).ready(function(){
 					
 					resetBill(true);	
 					$intDiscount = 0;
+					window.location.reload(true);
 				}
 			});
 		});
