@@ -815,8 +815,10 @@ $(document).ready(function(){
 						window.location='index.php?dispatch=billing.index';
 					}
 					
-					resetBill(true);	
+					resetBill(true);
+					$('#payModal').modal('hide');					
 					$intDiscount = 0;
+					
 					window.location.reload(true);
 				}
 			});
