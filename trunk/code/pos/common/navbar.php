@@ -64,3 +64,4 @@
 				</ul>
 			</div>
 		</div>
+		<div id="printBill" style="display:none;" ></div>
