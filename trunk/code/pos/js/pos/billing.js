@@ -466,6 +466,7 @@ $(document).ready(function(){
 									$('.ppc_balance').show();
 									$('#ac_balance').text(result.data['balance']);
 									$('#card_number').val(result.data['card_number']);
+									$('#card_txn_type').val(result.data['txn_type']);
 									$('#card_type').val(payment_type);
 									$('#card_company').val(payment_type == 'ppa' ? 'urbanPiper' : 'qwikcilver');
 									$('#card_redeem_amount').val(total_amount);
@@ -775,6 +776,7 @@ $(document).ready(function(){
 			billDetails.card.company = $('#card_company').val();
 			billDetails.card.redeem_amount = $('#card_redeem_amount').val();
 			billDetails.card.txn_no = $('#card_txn_no').val();
+			billDetails.card.txn_type = $('#card_txn_type').val();
 			billDetails.card.approval_code = $('#card_approval_code').val();
 			billDetails.card.balance = $('#card_balance').val();
 			billDetails.card.invoice_number = $('#card_invoice_no').val();
@@ -787,7 +789,7 @@ $(document).ready(function(){
 			}
 			billDetails.reprint = 1;
 			billDetails.request_type = 'save_bill';
-			billDetails.utility_check = printUtility;
+			//billDetails.utility_check = printUtility;
 			console.log(billDetails);
 			$('#submit-sale').attr('disabled',true);
 			$("#ajaxfadediv").addClass('ajaxfadeclass');
@@ -1007,148 +1009,4 @@ var setFocus = function(id) {
 
 function getCawProduct(customer_id){
  alert(customer_id);
-}
-
-function printBill(responce_array){
-var responce_array1=$.parseJSON(responce_array);
-bill_array=responce_array1.data;
-var company="Mountain Trail Foods Pvt. Ltd."; 
-var companyAddress="#10\/1 2nd floor PT Street Basvangudi";
-var companyRegion="Bangalore-560004";
-var companyPhone="";
-var companyTin="TIN:1234567890123456";
-var companySTN="STN:1234567890123456";
-var breakLine="---------------------------------------------------------------------";
-// -------------------------------------------------------store Detail
-var store_detail="";
-store_detail+="<p >CHAIPOINT</p>";
-store_detail+="<p >"+bill_array.store_name+" - "+bill_array.location_name+"</p>";
-store_detail+="<p >"+breakLine+"</p>";
-//---------------------------------------------------------
-//-------------------------------------------------------------Invoice Detail
-var currentTime = new Date();
-var month = currentTime.getMonth() + 1;
-var day = currentTime.getDate();
-var year = currentTime.getFullYear();
-var dte=month + "-" + day + "-" + year;
-var tme = currentTime.getHours() + ":"+ currentTime.getMinutes() + ":" + currentTime.getSeconds();
-var invoice_detail="";
-invoice_detail+="<table align='center' style='width:100%;text-align:left;'><tr ><td >Invoice No: "+((bill_array.bill_no === 'undefined')?"":bill_array.bill_no)+"</td><td style='text-align:right;' >Partner:"+((bill_array.staff_id === 'undefined')?"":bill_array.staff_id)+"</td></tr>";
-invoice_detail+="<tr ><td>Date:"+dte+"</td><td style='text-align:right;'>Time:"+tme+"</td></tr>";
-invoice_detail+="</table>";
-invoice_detail+="<p >"+breakLine+"</p>";
-//-------------------------------------------------------------------------
-//---------------------------------------------------------------------Item detail
-var item_detail="";
-if(!((bill_array.card.type).toUpperCase()=='PPC' || (bill_array.card.type).toUpperCase()=='PPA' )){
-item_detail+="<table align='center' style='width:100%;text-align:left; boredr-botton:1px solid #000;' ><tr><th style='width:50%;'>ITEM</th><th style='text-align:right;width:20%;'>QTY</th><th style='text-align:right;width:30%;'>AMOUNT</th></tr>";
- item_data=bill_array.items;
- item_detail+="</table>"+"<p >"+breakLine+"</p>"+"<table align='center' style='width:100%;text-align:left;' >";
- for (var tmp in item_data) {
-  item_detail+="<tr><td style='width:50%;'>"+item_data[tmp].name+"</td><td style='text-align:right;width:20%;'>"+item_data[tmp].qty+"</td><td style='text-align:right;width:30%;'>"+parseFloat(item_data[tmp].subTotal).toFixed(2)+"</td></tr>";
-  }
-item_detail+="</table>";
-item_detail+="<p >"+breakLine+"</p>";
-}
-//--------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------Bill details
-bill_array.discountAmount=0;
-var bill_details="";
-if(!((bill_array.card.type).toUpperCase()=='PPC' || (bill_array.card.type).toUpperCase()=='PPA' )){
-bill_details+="<p style='text-align:right;'><span style='float:left;width:50%;' >Discount(-):"+parseFloat(bill_array.total_discount).toFixed(2)+"</span><span style='float:right;width:50%;' >Sub Total:"+(parseFloat(bill_array.sub_total)-parseFloat(bill_array.total_discount)).toFixed(2)+"</span></p>";
-//bill_details+="<p style='text-align:right;'>Net: "+parseFloat(bill_array.sub_total).toFixed(2)+"</p>";
-bill_details+="<p style='text-align:right;'>VAT(+): "+parseFloat(bill_array.total_tax).toFixed(2)+"</p>";
-bill_details+="<p style='text-align:right;font-size:12px;line-height:12px;'>Total: "+parseFloat(bill_array.total_amount).toFixed(2)+"</p>";
-//bill_details+="<p style='text-align:right;'>Due Amount: "+parseFloat(bill_array.due_amount).toFixed(2)+"</p>";
-
-bill_details+="<p style='textalign:center;'>"+breakLine+"</p>";
-}
-//----------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------Thank company
-var companyDetail1="";
-companyDetail1+="<p  >THANK YOU. VISIT AGAIN</p>";
-companyDetail1+="<p >"+breakLine+"</p>";
-companyDetail1+="<p  >Registered Office </p>";
-companyDetail1+="<p style='text-align:left;' >"+company+"</p>";
-companyDetail1+="<p style='text-align:left;'>"+companyAddress+"</p>";
-companyDetail1+="<p style='text-align:left;'>"+companyRegion+"</p>";
-companyDetail1+="<p style='text-align:left;'>"+companyPhone+"</p>";
-companyDetail1+="<p style='text-align:left;'>"+companyTin+"</p>";
-companyDetail1+="<p style='text-align:left;'>"+companySTN+"</p>";
-companyDetail1+="<p >"+breakLine+"</p>";
-//--------------------------------------------------------------------------------
-//  -----------------------------------------------------------------------Customer Detail
-var customer_detail="";
-if(bill_array.customer.type=="coc"){
-customer_detail+="<p > CHAI ON CALL ORDER</p>";
-customer_detail+="<p style='text-align:left;'>Order No: "+bill_array.order_no+"</p>";
-customer_detail+="<p style='text-align:left;'>Company Name: "+bill_array.customer.company_name+"</p>";
-customer_detail+="<p style='text-align:left;'>Customer Name: "+bill_array.customer.name+"</p>";
-customer_detail+="<p style='text-align:left;'>Phone: "+bill_array.customer.phone_no+"</p>";
-customer_detail+="<p style='text-align:left;'>City: "+bill_array.customer.city+"</p>";
-customer_detail+="<p style='text-align:left;'>Locality: "+bill_array.customer.locality+"</p>";
-customer_detail+="<p style='text-align:left;'>Landmark: "+bill_array.customer.land_mark+"</p>";
-customer_detail+="<p >"+breakLine+"</p>";
-
-}
-//---------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------CAW Detail
-var caw_detail="";
-if(bill_array.payment_type=="caw"){
-caw_detail+="<p > CHAI AT WORK </p>";
-caw_detail+="<p style='text-align:left;'>Company Name: "+bill_array.customer.company_name+"</p>";
-caw_detail+="<p style='text-align:left;'>Phone: "+bill_array.customer.phone_no+"</p>";
-caw_detail+="<p style='text-align:left;'>Address: "+bill_array.customer.address+"</p>";
-caw_detail+="<p >"+breakLine+"</p>";
-}
-//---------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------Card Detail Reciept
-var card_detail="";
-if((bill_array.card.type).toUpperCase()=='PPC' || (bill_array.card.type).toUpperCase()=='PPA' ){
-card_detail+="<p style='text-align:right;'><span style='float:left;width:50%;' >Card Type: "+(bill_array.card.type).toUpperCase()+"</span><span style='float:right;width:50%;' >Txn Type:"+"load"+"</span></p>";
-card_detail+="<p >Card No: "+bill_array.card.no+"</p>";
-card_detail+="<p >Txn No: "+bill_array.card.txn_no+"</p>";
-card_detail+="<p >"+"Txn type"+" Amount: "+bill_array.card.redeem_amount+"</p>";
-//card_detail+="<p >Card Type:"++"</p>";
-//card_detail+="<p >Card Type:"++"</p>";
-card_detail+="<p >Balance: "+bill_array.card.balance+"</p>";
-card_detail+="<p >"+breakLine+"</p>";
-}
-
-
-//---------------------------------------------------------------------------------------------
-//------------------------------------------------------------------------------Duplicate Reciept
-var reprint="";
-if(parseInt(bill_array.reprint)>0){
-reprint+="<p style='text-align:left;' >This is duplicate copy.</p>";
-}
-
-
-
-var companyDetail="<div style='width:210px;text-align:center;border:0px solid #333;font-size:10px;line-height:10px;' >";
-companyDetail+=store_detail;
-companyDetail+=invoice_detail;
-companyDetail+=card_detail;
-companyDetail+=item_detail;
-companyDetail+=bill_details;
-companyDetail+=customer_detail;
-companyDetail+=caw_detail;
-companyDetail+=companyDetail1;
-companyDetail+=reprint;
-companyDetail+="</div>";
-
-//alert(JSON.stringify(bill_array.customer));
-//alert(bill_array.customer.name);
-
-$("#printBill").html(companyDetail); 
-var mywindow = window.open('', 'my div', 'height=400,width=600');
-
-//mywindow.print();
-      var divElements = $("#printBill").html();
-            var oldPage = document.body.innerHTML;
-            document.body.innerHTML = 
-              "<html><head><title></title><style type='text/css' media='print'>	p{line-height:10px;}</style></head><body>" + 
-              divElements + "</body>";
-				window.print();		
-            document.body.innerHTML = oldPage;
 }
