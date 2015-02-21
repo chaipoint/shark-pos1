@@ -110,10 +110,10 @@
 															<td class="text_right" colspan="2"><span id="total">0</span>
 															</td>
 														</tr>
-														<tr class="">
+														<tr class="hide" >
 															<td width="25%" rowspan="2">
 																<div class="input-group">
-																			<input type="text" class="form-control input-sm" id="discount_input_box" placeholder="%" name="discount_input_box"/>
+																			<input type="hidden" class="form-control input-sm" id="discount_input_box" placeholder="%" name="discount_input_box"/>
 																			<span class="input-group-addon">
 																			<i class="glyphicon glyphicon-remove" id="discount-close"></i>
 																		</span>

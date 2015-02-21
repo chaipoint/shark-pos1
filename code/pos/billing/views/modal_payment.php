@@ -44,6 +44,7 @@
 				<input type="hidden" name="card_company" id="card_company">
 				<input type="hidden" name="card_redeem_amount" id="card_redeem_amount">
 				<input type="hidden" name="card_txn_no" id="card_txn_no">
+				<input type="hidden" name="card_txn_type" id="card_txn_type">
 				<input type="hidden" name="card_approval_code" id="card_approval_code">
 				<input type="hidden" name="card_balance" id="card_balance">
 				<input type="hidden" name="card_invoice_no" id="card_invoice_no">
