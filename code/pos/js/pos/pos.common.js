@@ -558,7 +558,7 @@ var companyRegion="Bangalore-560004";
 var companyPhone="";
 var companyTin="TIN:1234567890123456";
 var companySTN="STN:1234567890123456";
-var breakLine="---------------------------------------------------------------------<br />";
+var breakLine="------------------------------------------------------------<br />";
 // -------------------------------------------------------store Detail
 var store_detail="";
 store_detail+="<p >CHAIPOINT</p>";
@@ -665,7 +665,7 @@ if(parseInt(bill_array.reprint)>0){
 reprint+="<p style='text-align:left;' >This is duplicate copy.</p>";
 }
 
-var billingDetail="<div style='width:210px;text-align:center;border:0px solid #333;font-size:10px;line-height:10px;' >";
+var billingDetail="<div style='width:180px;text-align:center;border:0px solid #333;font-size:10px;line-height:10px;' >";
 billingDetail+=store_detail;
 billingDetail+=invoice_detail;
 
