@@ -142,7 +142,7 @@ function updateCustomers($location){
 			$html['data']['deleted'] = $deleteCounter;
   		}
 	}
-	$result = json_encode($html,true);
+	$result = json_encode($html);
 	//$logger->debug("End OF updateStaff Function");
 	mysql_close();
 	return $result;
@@ -220,7 +220,7 @@ function updateStaff($location){
 			$html['msg'] = ( $insertCounter>0 ? ($updateCounter==0 ? "$insertCounter ".INSERT_SUCCESS."" : "$insertCounter ".INSERT_SUCCESS." AND $updateCounter ".UPDATE_SUCCESS."" ) : "$updateCounter ".UPDATE_SUCCESS."");
 	  	}
 	}
-	$result = json_encode($html,true);
+	$result = json_encode($html);
 	mysql_close();
 	return $result;
 }
@@ -244,7 +244,7 @@ function updateStore($location_id){
 	                      sm.type, sm.address, sm.phone_1, sm.phone_2, photo,
 	                      weekly_off, lm.id location_id, lm.name location_name,
 	                      sm.sms, sm.foe_allowed is_foe, sm.active, sm.store_time store_open_schedule,
-	                      sm.ppa_uid, sm.ppa_pwd, sm.ppc_uid, sm.ppc_pwd, sm.ppc_tid, sm.bill_type, sm.message
+	                      sm.ppa_uid, sm.ppa_pwd, sm.ppc_uid, sm.ppc_pwd, sm.ppc_tid, sm.billing_type, sm.store_message
                           FROM store_master sm
                           LEFT JOIN  location_master lm ON lm.id = sm.location_id 
                           WHERE sm.active = 'Y' AND sm.type != 'WHO' AND sm.location_id = $location_id";
@@ -277,8 +277,8 @@ function updateStore($location_id){
 
 							$updateArray[$i]['cd_doc_type'] = STORE_MASTER_DOC_TYPE;
 							$updateArray[$i]['address'] = $storeDetails['address'];
-							$updateArray[$i]['bill_type'] = $storeDetails['bill_type'];
-							$updateArray[$i]['store_message'] = $storeDetails['message'];
+							$updateArray[$i]['bill_type'] = $storeDetails['billing_type'];
+							$updateArray[$i]['store_message'] = $storeDetails['store_message'];
 							$updateArray[$i]['location']['id'] = $storeDetails['location_id'];
 							$updateArray[$i]['location']['name'] = $storeDetails['location_name'];
 							$updateArray[$i]['ppa_details']['uid'] = $storeDetails['ppa_uid'];
@@ -405,7 +405,7 @@ function updateStore($location_id){
 			$html['msg'] = $html['msg'] = ($insertCounter>0 ? ($updateCounter==0 ? "$insertCounter ".INSERT_SUCCESS."" : "$insertCounter ".INSERT_SUCCESS." AND $updateCounter ".UPDATE_SUCCESS."" ) : "$updateCounter ".UPDATE_SUCCESS."");
   		}
 	}
-	$result = json_encode($html,true);
+	$result = json_encode($html);
 	mysql_close();
 	return $result;
 }
@@ -474,7 +474,7 @@ function updateConfig(){
   	
   		}
 	}	
-	$result = json_encode($html,true);
+	$result = json_encode($html);
 	mysql_close();
 	return $result;
 }
