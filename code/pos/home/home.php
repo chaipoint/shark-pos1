@@ -4,18 +4,30 @@
 			parent::__construct();
 		}
 		public function index(){
-			$result = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_SHIFT)->setParam(array('key'=>'"'.$this->getCDate().'"','include_docs'=>'true'))->execute();
+			if(array_key_exists('store_id', $_POST)){
+				unset($_SESSION['user']['store']);
+				$_SESSION['user']['store']['name'] = $_POST['store_name'];
+				$_SESSION['user']['store']['id'] = $_POST['store_id'];
+				$_SESSION['user']['store']['code'] = $_POST['store_code'];
+				$_SESSION['user']['store']['bill_type'] = $_POST['bill_type'];
+				$_SESSION['user']['store']['store_message'] = $_POST['store_message'];
+			}
+			$result = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_SHIFT)->setParam(array("startkey" => '["'.$this->getCDate().'","'.$_SESSION['user']['store']['id'].'"]', "endkey" => '["'.$this->getCDate().'","'.$_SESSION['user']['store']['id'].'"]','include_docs'=>'true'))->execute();
 			if(!array_key_exists('rows', $result)){
 				header("LOCATION:index.php?error=true");
 				die;
-			}			
+			}
+			/*echo '<pre>';
+			print_r($_SESSION);
+			echo '</pre>';
+			*/
 			$data = array();
-			require_once DIR.'/sales_register/sales_register.php';
-			require_once DIR.'/staff/staff.php';
-			$sr = new sales_register();
-			$st = new Staff();
+			//require_once DIR.'/sales_register/sales_register.php';
+			//require_once DIR.'/staff/staff.php';
+			//$sr = new sales_register();
+			//$st = new Staff();
 
-			$data = $sr->getBills($this->getCDate(), $this->getCDate());
+			//$data = $sr->getBills($this->getCDate(), $this->getCDate());
 			$data['is_store_open'] = 'false';
 			$data['is_shift_running'] = 'false';
 			$totalShifts = 0;
@@ -33,18 +45,16 @@
 			}
 			
 			$data['shift_data'] = $result;
-			$data['staff_list'] = $st->getStaffList();
+			//$data['staff_list'] = $st->getStaffList();
 			$data['total_shift'] = $totalShifts;
 			$configHead = $this->getConfig($this->cDB, 'head');
 			$data['head_data'] = $configHead['data']['head'];
-			$data['expense_data'] = $sr->getExpenseData($this->getCDate(), $this->getCDate());
-			$data['card_load_data'] = $sr->getCardLoadSale($this->getCDate());
-			$data['last_ppc_bill'] = $sr->getLastPpcBill($this->getCDate());
+			//$data['expense_data'] = $sr->getExpenseData($this->getCDate(), $this->getCDate());
+			//$data['card_load_data'] = $sr->getCardLoadSale($this->getCDate());
+			//$data['last_ppc_bill'] = $sr->getLastPpcBill($this->getCDate());
 			$data['shift'] = '';
 			$data['reconcilation'] = '';
-			//echo '<pre>';
-			//print_r($_SESSION);
-			//echo '</pre>';
+			
 			$this->commonView('header_html');
 			$this->commonView('navbar');
 			$this->view($data);
@@ -52,15 +62,52 @@
 			require_once DIR.'/login/login.php';
 			$login = new Login();
 			$login->form_login();
-
+			
 			require_once DIR.'/utils/utils.php';
 			$utils = new Utils();
 			$utils->generate_rep_running_flag();
-			
-			$this->commonView('footer_inner');
+			//$this->commonView('footer_inner');
 			$this->commonView('footer_html');
 			
 		} 
+		
+		function report(){
+			$data = array();
+			require_once DIR.'/sales_register/sales_register.php';
+			$sr = new sales_register();
+			$data = $sr->getBills($this->getCDate(), $this->getCDate());
+			//print_r($data);die();
+			$data['last_ppc_bill'] = $sr->getLastPpcBill($this->getCDate());
+			$data['card_load_data'] = $sr->getCardLoadSale($this->getCDate());
+			$this->commonView('header_html');
+			$this->commonView('navbar');
+			$this->commonView('menu');
+			$this->view($data);
+			$this->commonView('operation');
+			//$this->commonView('footer_inner');
+			$this->commonView('footer_html');
+		}
+		
+		function ppc(){
+			$this->commonView('header_html');
+			$this->commonView('navbar');
+			$this->commonView('menu');
+			$this->view();
+			$this->commonView('operation');
+			//$this->commonView('footer_inner');
+			$this->commonView('footer_html');
+		}
+		
+		function ppa(){
+			$this->commonView('header_html');
+			$this->commonView('navbar');
+			$this->commonView('menu');
+			$this->view();
+			$this->commonView('operation');
+			//$this->commonView('footer_inner');
+			$this->commonView('footer_html');
+		}
+		
 		/* Function To Get Shift Data And Cash Reconciliation */
 		function getShiftAndCashRe(){
 			$date = $this->getCDate();

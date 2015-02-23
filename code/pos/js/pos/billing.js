@@ -185,6 +185,29 @@ $(document).ready(function(){
 		});
 		
 	});
+	
+	$('#apply_discount').click(function(){
+		var discount_code = $('#discount_input_box').val();
+		$("#ajaxfadediv").addClass('ajaxfadeclass');
+		$.ajax({
+			type: 'POST',
+			url: "index.php?dispatch=billing.getCoupanCode",
+			data : {'coupan_code':discount_code},
+			timeout:10000
+			}).done(function(response) {
+				//alert(response); 
+				$("#ajaxfadediv").removeClass('ajaxfadeclass');
+				$result = $.parseJSON(response);
+				if($result.error){
+					bootbox.alert($result.message);
+				}else if(!$result.error){
+					//bootbox.alert($result.message);
+					$intDiscount = $result.data['discount_amount'];
+					generateSalesTable();
+				}
+			});
+		$('#discount_input_box').val('');
+	});
 	//---START--- Initial Configurations on Load Of Page
 
 
@@ -293,37 +316,9 @@ $(document).ready(function(){
 
 		//---END--- Event For Product Selection
 		
-		/* Function For Re-Print */
-		$('#print-can').on('click', function(event){
-			event.preventDefault();
-			if(modifyBill){
-				if(doc){ 
-					$.ajax({
-						type: 'POST',
-						url: "index.php?dispatch=billing.rePrint",
-						data : {request_type:'print_bill', doc:doc},
-					}).done(function(response) { 
-						response1 = $.parseJSON(response);
-						if(response1.error){
-							bootbox.alert(response1.message);
-						}else{
-							printBill(response);
-							if(response1.message!=''){		
-							bootbox.alert(response1.message,function(){
-							window.location.reload(true);													
-							});
-							}else{
-							window.location.reload(true);
-							}
-						}
-						});
-				}
-			}
-
-		});
-
-		//onCancel Of Bill
+		// ON Cancel Of Bill
 		$("#cancel").click(function(){
+			//alert($(this).text());
 			if(modifyBill){
 				bootbox.dialog({
 					message:'<div class="form-group"><textarea name="cancel_reason_bill" id="cancel_reason_bill" class="form-control"></textarea></div>',
@@ -351,7 +346,8 @@ $(document).ready(function(){
 													bootbox.alert(response.message);
 												}else{
 													bootbox.alert(response.message,function(){
-														window.location = "?dispatch="+url.param('referer');													
+														//window.location = "?dispatch="+url.param('referer');
+														window.location = "?dispatch=home.report";	
 													});
 												}
 											});
@@ -363,15 +359,17 @@ $(document).ready(function(){
 							label:"No, Don't Cancel",
 							className:"btn-danger btn-sm",
 							callback:function(){
-								window.location = '?dispatch='+url.param('referer');
+								//window.location = '?dispatch='+url.param('referer');
+								window.location = "?dispatch=home.report";
 							}
 						},	
 					}
 				});
 				$('#cancel_reason_bill').cKeyboard();
 				setTimeout(function(){$('#cancel_reason_bill').focus();},600);
-			}
+			}else{
 			resetBill(true);
+			}
 		});
 
 		$("#content").on('click','#paid_button',function(){
@@ -466,7 +464,6 @@ $(document).ready(function(){
 									$('.ppc_balance').show();
 									$('#ac_balance').text(result.data['balance']);
 									$('#card_number').val(result.data['card_number']);
-									$('#card_txn_type').val(result.data['txn_type']);
 									$('#card_type').val(payment_type);
 									$('#card_company').val(payment_type == 'ppa' ? 'urbanPiper' : 'qwikcilver');
 									$('#card_redeem_amount').val(total_amount);
@@ -539,6 +536,7 @@ $(document).ready(function(){
 						$('#load_amount_div').css('display','none');
 						bootbox.alert($result.data['message']);
 					}else if($result.data['success']=='True'){ 
+						printBill(response);
 						$('#load_amount_div').css('display','none');
 						$('#ppc').trigger('change');
 					} 
@@ -776,7 +774,6 @@ $(document).ready(function(){
 			billDetails.card.company = $('#card_company').val();
 			billDetails.card.redeem_amount = $('#card_redeem_amount').val();
 			billDetails.card.txn_no = $('#card_txn_no').val();
-			billDetails.card.txn_type = $('#card_txn_type').val();
 			billDetails.card.approval_code = $('#card_approval_code').val();
 			billDetails.card.balance = $('#card_balance').val();
 			billDetails.card.invoice_number = $('#card_invoice_no').val();
@@ -799,15 +796,17 @@ $(document).ready(function(){
 		  		data : billDetails,
 			}).done(function(response) {
 				console.log(response);
+				//alert(response);
 				$("#ajaxfadediv").removeClass('ajaxfadeclass');
 				result = $.parseJSON($.trim(response));
 				$('#submit-sale').attr('disabled',false);
+				var check = result.error;
 				if(result.error){
 					bootbox.alert(result.message);
 				}else{
 					resetBill(true);
 					$intDiscount = 0;
-					printBill(response);
+					printBill(response, false);
 					$('#payModal').modal('hide');
 					if(result.message!=''){
 						bootbox.alert(result.message, function(){
@@ -817,10 +816,13 @@ $(document).ready(function(){
 						if(!printUtility){bootbox.alert('Print Utility Not Exists').find(".btn-primary").removeClass("btn-primary").addClass("btn-danger");}
 						window.location='index.php?dispatch=billing.index';
 					}
-					//$('#payModal').modal('hide');					
-					//window.location.reload(true);
+					
+					//resetBill(true);	
+					//$intDiscount = 0;
 				}
 			});
+			
+			
 		});
 		//---END--- SUbmit Payment Bill
 
@@ -1010,3 +1012,5 @@ var setFocus = function(id) {
 function getCawProduct(customer_id){
  alert(customer_id);
 }
+
+

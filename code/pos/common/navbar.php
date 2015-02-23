@@ -1,31 +1,34 @@
-
-	<div id="wrap">
+<style>
+.navbar-inverse {
+background-color: #f5f5f5;
+border-color: #0066cc;
+}
+.navbar-inverse .navbar-nav > li > a {
+color: #007fff;
+}
+.navbar-nav.navbar-right:last-child {
+margin-right: -196px;
+}
+</style>	
+	
 		<div class="navbar navbar-static-top navbar-inverse">
 			<div class="container">
 				<div class="navbar-header">
-					<button type="button" class="navbar-toggle" data-toggle="collapse"
-						data-target=".navbar-inverse-collapse">
-						<span class="icon-bar"></span> <span class="icon-bar"></span> <span
-							class="icon-bar"></span>
-					</button>
-					<a class="navbar-brand" style="font-size:22px;font-weight:bold">Shark</a>
+				  <img src="<?php echo IMG?>logo.png" height="50px"  style="position:absolute;left:182px">
 				</div>
 				<ul class="nav navbar-nav">
-					<li class="dropdown"><a class="dropdown-toggle tip"
-						data-toggle="dropdown" href="#" data-placement="right"
-						title="Language"><img
-							src=""
-							style="margin-top: -1px" align="middle"> </a>
-						<ul class="dropdown-menu" style="min-width: 60px;" role="menu"
-							aria-labelledby="dLabel">
-							<li><a><img
-									src=""
-									class="language-img"> &nbsp;&nbsp; English </a></li>
-						</ul>
+					<iframe name="myiframe" src="<?php echo APP ?>/common/checknet.php" frameBorder="0" scrolling="no" style="width:250px;height:50px;float:right;margin-left:80px;"></iframe>
+				</ul>
+				
+				<?php if(MODULE != 'store' && MODULE != 'home' && MODULE != 'billing' && MODULE != 'orders' && MODULE != 'dashboard'  ){?>
+				<ul class="nav navbar-nav">
+					<li>
+						<a href="index.php?dispatch=home.index" class="btn nav-button btn-success btn-sm external <?php echo (MODULE == 'home' ? 'active-btn' : ''); ?>" style="padding: 5px 8px; margin: 10px 0 5px 5px;" data-placement="right" title="Home">Home</a>
 					</li>
-					<li><a href="index.php?dispatch=home.index" class="btn nav-button btn-success btn-sm external <?php echo (MODULE == 'home' ? 'active-btn' : ''); ?>" style="padding: 5px 8px; margin: 10px 0 5px 5px;" data-placement="right" title="Home">Home</a></li>
 				<?php if(array_key_exists('shift', $_SESSION['user'])){?>
-					<li><a href="index.php?dispatch=billing.index" class="btn nav-button btn-success btn-sm external <?php echo (MODULE == 'billing' ? 'active-btn' : ''); ?>" style="padding: 5px 8px; margin: 10px 0 5px 5px;" data-placement="right" title="Sales">Billing </a></li>
+					<li>
+						<a href="index.php?dispatch=billing.index" class="btn nav-button btn-success btn-sm external <?php echo (MODULE == 'billing' ? 'active-btn' : ''); ?>" style="padding: 5px 8px; margin: 10px 0 5px 5px;" data-placement="right" title="Sales">Billing </a>
+					</li>
 					<li>
 						<a href="index.php?dispatch=orders" class="btn nav-button btn-success btn-sm external <?php echo (MODULE == 'orders' ? 'active-btn' : ''); ?>" style="padding: 5px 8px; margin: 10px 0 5px 5px;">CoC Orders</a>
 					</li>
@@ -40,28 +43,37 @@
 						<a href="javascript:void(0)" class="require_valid_user btn nav-button btn-success btn-sm external <?php echo (MODULE == 'sales_register' ? 'active-btn' : ''); ?>" style="padding: 5px 8px; margin: 10px 0 5px 5px;" data-toggle="modal" data-target="" id="sales_register">Sale Register</a>
 					</li>
 				<?php }?>
-					<!--<li class="hide" id="notification">
-						<img src="<?php echo IMG; ?>noti.ico" class="con">
-					</li>-->
-					
-                    
-					</ul>
+				</ul>
+				<?php } ?>
 				<ul class="nav navbar-nav navbar-right">
-					<li>
-						<a>
-							<?php echo $_SESSION['user']['name']." (".$_SESSION['user']['title']['name']."), ".$_SESSION['user']['store']['name'];?>
+					<li><a><?php echo $_SESSION['user']['name']." (".$_SESSION['user']['title']['name'].") " ; 
+							      echo (array_key_exists('store', $_SESSION['user']) ? ','.$_SESSION['user']['store']['name'] : '');
+							?>
 						</a>
 					</li>
+					<?php if(MODULE != 'store' && MODULE != 'home' ){?>
+					<li><a class="tip" data-placement="left" href="index.php?dispatch=home" title="Home" id="home" style="margin-right:-22px">
+							Home |
+						</a>
+					</li>
+					<?php } ?>
+					
+					<?php if(MODULE == 'home' ){?>
+					<li><a class="tip" data-placement="left" href="index.php?dispatch=store" title="Change Store" id="change_store" style="margin-right:-22px">
+							Change Store |
+						</a>
+					</li>
+					<?php } ?>
 					
 					<li>
 						<a class="tip" data-placement="left" href="javascirpt:void(0)" title="Logout" id="logout">
-							<i class="glyphicon glyphicon-log-out"></i>&nbsp;Logout 
+							  Logout 
 						</a>
 					</li>
 
-					<iframe name="myiframe" src="<?php echo APP ?>/common/checknet.php" frameBorder="0" scrolling="no" style="width:88px;height:50px;float:right"></iframe>
+					
 					
 				</ul>
 			</div>
 		</div>
-		<div id="printBill" style="display:none;" ></div>
+	<div id="printBill" style="display:none;" ></div>

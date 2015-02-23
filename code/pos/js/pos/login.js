@@ -50,7 +50,7 @@ $(document).ready(function(){
 						day = (day < 10 ? '0' : '') + day;
 						var year = systemDate.getFullYear();
 						var systemDate = year+"-"+month+"-"+day;//alert(systemDate);
-						var serverDate = formData.current_time;//alert(serverDate);
+						var serverDate = formData.current_time;//alert(serverDate); return false;
 					if(new Date(serverDate) > new Date(systemDate) || new Date(serverDate) < new Date(systemDate)){
 						bootbox.alert('System And Server Date Is Mismatch', function(){
 							window.location.reload(true);

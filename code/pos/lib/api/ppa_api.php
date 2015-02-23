@@ -1,6 +1,6 @@
 <?php 
 		function ppa_api($details, $data, $request_type, $invoiceNumber){
-			global $CARD_RESPONSE_ARRAY;
+			global $CARD_RESPONSE_ARRAY, $config;
             $responseArray = $CARD_RESPONSE_ARRAY;
 			$return = array('error'=>false,'message'=>'','data'=>array());
     		$username = $details['username'];
@@ -63,6 +63,14 @@
                     $responseArray['approval_code'] = $result['approval_code'];
                     $responseArray['invoice_number'] = $invoiceNumber;
                     $responseArray['txn_type'] = $txn_type;
+					$responseArray['card_type'] = 'PPA';
+					$responseArray['store_message'] = $_SESSION['user']['store']['store_message'];
+					$responseArray['store_name'] = $_SESSION['user']['store']['name'];
+					$responseArray['staff_id'] = $_SESSION['user']['mysql_id'];
+					$responseArray['location_name'] = $_SESSION['user']['location']['name'];
+					$mode = ($config['billing_mode']=='local' ? 'L' : 'C');
+					$responseArray['bill'] = $_SESSION['user']['store']['code']."".$_SESSION['user']['counter']."".str_pad($invoiceNumber, 4 , '0', STR_PAD_LEFT)."".$mode;
+					
                     $return['data'] = $responseArray;
                 } 
     		return $return;

@@ -76,8 +76,8 @@
 				$this->log->trace('POST DATA '."\r\n".json_encode($_POST));
 				$_POST['password'] = md5($_POST['password']);
 				$resultJSON = $this->cDB->getDesign(STAFF_DESIGN_DOCUMENT)->getList(STAFF_DESIGN_DOCUMENT_LIST_GET_USER, STAFF_DESIGN_DOCUMENT_VIEW_STAFF_USERNAME)->execute($_POST);			
-
 				$result = $resultJSON;
+				
 				if(!array_key_exists('for', $result)){ // To Check Which form to be validate
 					if(!$result['error']){
 						if($_POST['validateFor'] == SALE_REGISTER_PROTECTED_SCREEN || $_POST['validateFor'] == SHIFT_DATA_PROTECTED_SCREEN || $_POST['validateFor'] == DATA_SYNC_PROTECTED_SCREEN){
@@ -103,47 +103,42 @@
 								$returnData['message'] = NOT_ALLOWED_TO_ACCESS;
 							}
 						}else{
-							$userData["store"]['name'] = $this->store_name;
-							$userData["store"]['location'] = $this->store_location['id'];
-							$userData["store"]['location_name'] = $this->store_location['name'];
-
-							$userData["_id"] = $result['data']['_id'];
-							$userData["_rev"] = $result['data']['_rev'];
-							$userData["code"] = $result['data']['code'];
+							if(!empty($_POST['current_time'])){
+								$userData["server_date"] = $_POST['current_time'];
+							}else{
+								$userData["server_date"] = $_SESSION['user']['server_date'];
+							}
 							$userData["mysql_id"] = $result['data']['mysql_id'];
 							$userData["name"] = $result['data']['name'];
 							$userData["username"] = $result['data']['username'];
-							$userData["email"] = $result['data']['email'];
-							$userData["phone"] = $result['data']['phone'];
-							$userData["address"] = $result['data']['address'];
 							$userData["location"]['id'] = $result['data']['location_id'];
 							$userData["location"]['name'] = $result['data']['location_name'];
 							$userData["title"]['id'] = $result['data']['title']['id'];
 							$userData["title"]['name'] = $result['data']['title']['name'];
-							$userData["store"]['id'] = $this->store;
 							$loginHistory['cd_doc_type'] = LOGIN_HISTORY_DOC_TYPE;
 							$loginHistory['id'] = $userData["mysql_id"];
-							$loginHistory['store'] = $this->store;
 							$loginHistory['login_time'] = $this->getCDTime();
 							$loginHistory['logout_time'] = '';
 							$loginHistory['app_version'] = $config['version'];
-
 							$result = $this->cDB->saveDocument()->execute($loginHistory);
 							if(array_key_exists('ok', $result)){
 									$userData['login']['id'] = $result['id'];
 									$userData['login']['time'] = $this->getCDTime();
 							}
 							if(array_key_exists('user', $_SESSION)){
+								$userData['store']['name'] = $_SESSION['user']['store']['name'];
+							    $userData['store']['id'] = $_SESSION['user']['store']['id'];
+								$userData['store']['code'] = $_SESSION['user']['store']['code'];
+								$userData['store']['bill_type'] = $_SESSION['user']['store']['bill_type'];
+								$userData['store']['store_message'] = $_SESSION['user']['store']['store_message'];
+								$userData['shift'] = (!empty($_SESSION['user']['shift']) ? $_SESSION['user']['shift'] : '');
+								$userData['counter'] = (!empty($_SESSION['user']['counter']) ? $_SESSION['user']['counter'] : '');
 								$_POST['login_id'] = $_SESSION['user']['mysql_id'];
 								$_POST['login_name'] = $_SESSION['user']['name'];
 								$_POST['login_time'] = $_SESSION['user']['login']['time'];
 								unset($_SESSION['user']);
 							}
-							unset($userData["email"]);
-							unset($userData["phone"]);
-							unset($userData["address"]);
 							$_SESSION['user'] = $userData;
-
 							$this->log->trace('LOGIN HISTORY '."\r\n".json_encode($loginHistory));
 							$this->log->trace('SESSION DATA '."\r\n".json_encode($userData));
 
@@ -152,15 +147,7 @@
 								$store = new Store();
 								$returnData = json_decode($store->storeFunction(),true);
 							}else{
-								require_once DIR.'/utils/utils.php';
-								$design = new utils();
-								$repDesign['error'] = false;
-								if($repDesign['error']==true){
-									$returnData['error'] = true;
-									$returnData['message'] = REPLICATE_ERROR;
-								}else{
-									$returnData['data']['redirect'] = LOGIN_DISPATCH; 
-								} 								
+								$returnData['data']['redirect'] = LOGIN_DISPATCH;
 							}
 						}
 						 

@@ -109,7 +109,7 @@
 		
 		/* Function To Get Todays Bill For Login Store */
 		function getBills($date1, $date2){
-				$resultBillList = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getList(BILLING_DESIGN_DOCUMENT_LIST_SALES_REGISTER, BILLING_DESIGN_DOCUMENT_VIEW_HANDLE_UPDATED_BILLS)->setParam(array("include_docs"=>"true","descending"=>"true","endkey" => '["'.$date1.'"]',"startkey" => '["'.$date2.'",{},{},{}]'))->execute();
+				$resultBillList = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getList(BILLING_DESIGN_DOCUMENT_LIST_SALES_REGISTER,BILLING_DESIGN_DOCUMENT_VIEW_BILL_BY_STORE_COUNTER)->setParam(array("include_docs"=>"true","descending"=>"true","startkey" => '["'.$this->getCDate().'", "'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]',"endkey" => '["'.$this->getCDate().'","'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]'))->execute();
 				return 	$resultBillList;
 		}
 

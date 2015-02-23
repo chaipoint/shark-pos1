@@ -1,9 +1,12 @@
 var keyboard = new Array();
 var resData = '';
 $(document).ready(function(){
+	
 	$(window).load( function(){
-		$('input#card_number').val( ' ' ); setTimeout( function(){ $('input#card_number').val( '' ); }, 20 );
+		$('input#card_number').val(' '); 
+		setTimeout( function(){ $('input#card_number').val( '' ); }, 20 );
 	});
+	
 	$('#error_message_shift, #error_message_card').hide();
 	$("#active_bill_table_wrapper").on('click', '.edit-bill', function(event){
 		if(!is_shift_running){
@@ -11,54 +14,13 @@ $(document).ready(function(){
 			bootbox.alert('Please Start Shift Before Modify Bill.');
 		}
 	});	
-	if(is_store_open){
-		$('#shift_breadcrumb').text($('#shift_nav li:nth-child(2)').text());
-		$('#store_shift_message').text('Store is Opened.');
-		if(is_shift_running){
-			$('#store_shift_message').html('Store Shift <b>'+$('#shift_count').text()+' </b>is in Process. Started by <span class="label label-warning">'+$('#shift_starter').text()+' </span><a href="index.php?dispatch=billing" class="btn btn-sm btn-primary">Start Billing</a>');
-			$('#shift_breadcrumb').text($('#shift_nav li:nth-child(3) a').addClass('btn-primary').text());
-			$('#store_shift_start_form').hide();
-			//$('#shift_nav li:nth-child(2) a').addClass('bg-success');
-		}else{
-			$('#store_shift_end_form').hide();
-			$('#shift_nav li:nth-child(2) a').addClass('btn-primary');
-			$('#shift_nav li:nth-child(4) a').addClass('btn-primary');
-		}
-//		$('#shift_nav li:nth-child(1) a').addClass('bg-success');
-
-	}else{
-		$('#shift_nav li:first a').addClass('btn-primary');
-	}
-	$('#shift_nav a:not(.btn-primary,.apart_day_shift)').attr("disabled","disabled");
-	$('#shift_nav a[disabled="disabled"]').css('background-color','white');
-	$('#shift_nav a[disabled="disabled"]').css('color','black');
-	$('#shift_nav li a.btn-primary').click(function(){ 
+	
+	$('.alert-info.store-operation').click(function(){ 
 		$('#store_shift_logic form').addClass('hide');
 		$('#store_'+$(this).attr('id')+"_form").removeClass('hide');	
 	});
 	keyboard.push($('.total-ticket,.cash-qty,.sodex,.tr,input[name="username1"],input[name="password"],input[name="first_name"],input[name="last_name"],input[name="mobile_no"],input[name="amount"],input[name="original_card_no"],#petty_cash, #counter_no,#box_cash, #petty_cash_end, #opening_box_cash, #box_cash_end').cKeyboard());
-	//$('.quantity').cKeyboard();
-
-$('#tab_selection_menu').on('click','.home_tabs',function(){
-	var active = $('li.active',$(this).closest('ul'));
-	active.removeClass('active');
-	$(this).parent().addClass('active');
-	$('.tabs_data').addClass('hidden');
-	var thisId = $(this).attr('id');
-	$('#'+thisId+'_data').removeClass('hidden');
-	if(thisId == 'shift_data_tab' && (($('#'+thisId+'_data').html()).trim() == '' || is_login_allowed)){
-		$('#'+thisId+'_data').html('');
-	}else{
-		if(thisId == 'shift_data_tab'){
-			$('#shift_data_tab_holder').removeClass('hidden');			
-		}else{
-			$('#shift_data_tab_holder').addClass('hidden');
-		}
-	}
-});
-
-
-
+	
 	/* Function To Add Prety Inward */
 	$('#add_inward').click(function(event){
 		event.preventDefault();
@@ -70,8 +32,33 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 		},500);
 
 	});
-
-/* Function To View Prety Expense */
+	
+	/* Function For Re-Print */
+	$('.reprint-bill').on('click', function(event){
+		var doc = $(this).attr('id');
+		event.preventDefault();
+		$.ajax({
+			type: 'POST',
+			url: "index.php?dispatch=billing.rePrint",
+			data : {request_type:'print_bill', doc:doc},
+		}).done(function(response) {
+			response1 = $.parseJSON(response);
+			if(response1.error){
+				bootbox.alert(response1.message);
+			}else{
+				printBill(response, true);
+				if(response1.message!=''){		
+					bootbox.alert(response1.message,function(){
+					window.location.reload(true);													
+					});
+				}else{
+					window.location.reload(true);
+				}
+			}
+		});
+	});
+		
+	/* Function To View Prety Expense */
 	$('#view_inward').click(function(event){
 		event.preventDefault();
 		$('#viewInwardModal').modal();
@@ -182,7 +169,8 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 				type: 'POST',
 				url: "index.php?dispatch=billing.loadCard",
 				data : formData
-			}).done(function(response) { 
+			}).done(function(response) {
+				//alert(response);
 				$("#ajaxfadediv").removeClass('ajaxfadeclass');
 				var IS_JSON = true;
 					try
@@ -193,8 +181,7 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 						{
 							IS_JSON = false;
 						}  
-				//var $res =  $.parseJSON($.trim(response));
-				//console.log($res);
+				
 				if(IS_JSON){
 				if($res.error){ 
 					$("#"+errorHolder).show();$("#"+errorHolder+" ul").html($res.message);
@@ -202,14 +189,14 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 					bootbox.alert($res.data['message']);
 				}else{
 					if(formID=='store_ppc_card_load_form' || formID=='store_ppc_card_activate_form' || formID=='store_ppa_card_load_form'){
+						printBill(response, false);
 						bootbox.alert($res.data['message']+'.Your Balance is:'+$res.data['balance'], function(){
 							window.location.reload(true);
 						});
 					}else{
+						
 						bootbox.alert($res.data['message']+'.Your Balance is:'+$res.data['balance']);
 					}
-					
-
 				}
 				}else{
 					bootbox.alert('Server Error! Please Contact Admin');
@@ -220,9 +207,12 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 
 	
 	$('#cash_denomination').on('click', function(){
-		$('#cashModal').modal();
+		//alert('dsfsdf');
+		$('#cashModal').modal('show');
+		$('#cash-denomination-form').show();
 	});
-
+	
+	
 	$("#select-bt").on("change",".cash-qty",function(event){ 
 			var newQty = parseInt($(this).val());
 			newQty = isNaN(newQty) ? 0 : newQty;
@@ -266,52 +256,54 @@ $('#tab_selection_menu').on('click','.home_tabs',function(){
 		$('#cashModal').modal('hide');
 	});
 });
-function shift_data_tab(response){ 
-	if(!response){
-		searchShiftData();
-		return;
+	function shift_data_tab(response){ 
+		if(!response){
+			searchShiftData();
+			return;
+		}
+		$('#login_holder_home').modal('hide');
+		$('#shift_data_tab_data').html(response.shift_table+response.cash_reconciliation_table);
+		$('#shift_data_tab_holder').removeClass('hidden');
 	}
-	$('#login_holder_home').modal('hide');
-	$('#shift_data_tab_data').html(response.shift_table+response.cash_reconciliation_table);
-	$('#shift_data_tab_holder').removeClass('hidden');
-}
-function shift(response){ 
-	$('#store_shift_message').html(response.message);
-	active = '';
-	$("#store_shift_logic form:input").val('');
-	$('#store_shift_logic form').addClass('hide');
-	switch(response.mode){
-		case 'day_start':
-			is_store_open = true;
-			active = 'shift_start';
-			$('#store_shift_logic form#store_shift_start_form').show();
-		break;
-		case 'day_end':
-			is_store_open = false;
-			active = 'day_start';
-			$('#logout').trigger('click');
-		break;
-		case 'shift_start':
-			is_shift_running = true;
-			active = 'shift_end';
-			$('#store_shift_logic form#store_shift_end_form').show();
-			window.location.reload(true);
-		break;
-		case 'shift_end':
-			is_shift_running = false;
-			active = 'shift_start';
-			$('#store_shift_logic form#store_shift_start_form').show();
-			window.location.reload(true);
-		break;
-	}	
-	$('#shift_nav li a.btn-primary').removeClass('btn-primary');
-	$('#shift_nav li a#'+active).addClass('btn-primary');
-	window.location.reload(true);	
-}
-function searchShiftData(){
-	var date = $("#shift_data_search").val();
-	$("#ajaxfadediv").addClass('ajaxfadeclass');
-	$.ajax({
+	function shift(response){ 
+		$("#ajaxfadediv").addClass('ajaxfadeclass');
+		$('#store_shift_message').html(response.message);
+		active = '';
+		$("#store_shift_logic form:input").val('');
+		$('#store_shift_logic form').addClass('hide');
+		switch(response.mode){
+			case 'day_start':
+				is_store_open = true;
+				//active = 'shift_start';
+				//$('#store_shift_logic form#store_shift_start_form').show();
+				window.location.reload(true);
+			break;
+			case 'day_end':
+				is_store_open = false;
+				active = 'day_start';
+				$('#logout').trigger('click');
+			break;
+			case 'shift_start':
+				is_shift_running = true;
+				//active = 'shift_end';
+				//$('#store_shift_logic form#store_shift_end_form').show();
+				window.location.reload(true);
+			break;
+			case 'shift_end':
+				is_shift_running = false;
+				//active = 'shift_start';
+				//$('#store_shift_logic form#store_shift_start_form').show();
+				window.location.reload(true);
+			break;
+		}	
+	//$('#shift_nav li a.btn-primary').removeClass('btn-primary');
+	//$('#shift_nav li a#'+active).addClass('btn-primary');
+	//window.location.reload(true);	
+	}
+	function searchShiftData(){
+		var date = $("#shift_data_search").val();
+		$("#ajaxfadediv").addClass('ajaxfadeclass');
+		$.ajax({
 			type: 'POST',
 			url: "index.php?dispatch=home.getShiftAndCashRe",
 	  		data : {date:date} ,
@@ -324,4 +316,4 @@ function searchShiftData(){
 				shift_data_tab(result.data);
 			}
 		});
-}
+	}

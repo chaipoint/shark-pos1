@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Shark | ChaiPoint POS</title>	
+		<title>Shark | ChaiPoint POS</title>
 		<?php require_once 'header_externals.php';?>
 		<script> 
 			var is_shift_running = <?php if(!empty($_SESSION) && array_key_exists('shift', $_SESSION['user'])){ echo 'true';}else{ echo 'false' ;} ?>;

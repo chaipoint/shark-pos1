@@ -226,7 +226,7 @@ function updateStaff($location){
 }
 
 /* Function To Download Store From CPOS */
-function updateStore($store_id){
+function updateStore($location_id){
     $couch = new CouchPHP();
 	$result = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_STORE_BY_MYSQL_ID)->setParam(array("include_docs"=>"true"))->execute();
 	$storeList = array();
@@ -244,10 +244,10 @@ function updateStore($store_id){
 	                      sm.type, sm.address, sm.phone_1, sm.phone_2, photo,
 	                      weekly_off, lm.id location_id, lm.name location_name,
 	                      sm.sms, sm.foe_allowed is_foe, sm.active, sm.store_time store_open_schedule,
-	                      sm.ppa_uid, sm.ppa_pwd, sm.ppc_uid, sm.ppc_pwd, sm.ppc_tid
+	                      sm.ppa_uid, sm.ppa_pwd, sm.ppc_uid, sm.ppc_pwd, sm.ppc_tid, sm.bill_type, sm.message
                           FROM store_master sm
                           LEFT JOIN  location_master lm ON lm.id = sm.location_id 
-                          WHERE sm.active = 'Y' AND sm.id = $store_id";
+                          WHERE sm.active = 'Y' AND sm.type != 'WHO' AND sm.location_id = $location_id";
 						
 	$storeResult = mysql_query($getStoreNameQuery);
 	$getProductRecipe = "SELECT id, product_id, store_id 
@@ -277,6 +277,8 @@ function updateStore($store_id){
 
 							$updateArray[$i]['cd_doc_type'] = STORE_MASTER_DOC_TYPE;
 							$updateArray[$i]['address'] = $storeDetails['address'];
+							$updateArray[$i]['bill_type'] = $storeDetails['bill_type'];
+							$updateArray[$i]['store_message'] = $storeDetails['message'];
 							$updateArray[$i]['location']['id'] = $storeDetails['location_id'];
 							$updateArray[$i]['location']['name'] = $storeDetails['location_name'];
 							$updateArray[$i]['ppa_details']['uid'] = $storeDetails['ppa_uid'];

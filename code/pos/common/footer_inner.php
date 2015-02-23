@@ -1,4 +1,4 @@
-	</div>
+	
 	<div id="footer">
 		<div class="container" >
 			<p class="credit" style="font-size:10px;">

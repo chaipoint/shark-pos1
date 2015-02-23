@@ -74,31 +74,42 @@ $(document).ready(function(){
 		},1000);
 	});
     
-    if(navigator.onLine){
+    
         $(function(){
             window.setInterval(function(){ 
-			var host = 'http://'+"<?php echo $_SERVER['HTTP_HOST']; ?>"; 
+			var host = 'http://'+"<?php echo $_SERVER['HTTP_HOST']; ?>";
+			if(navigator.onLine){
                 $.ajax({
                     type: 'POST',
-                    url: host+'/pos/index.php?dispatch=orders.getCocOrder',
-                    data: {request_type:'getCOCOrder'},
+                    url: host+'/pos/index.php?dispatch=orders.getNewOrder',
+					//url: 'http://54.178.189.25/cpos/api/coc/coc_api.php',
+                    data: {'action':'getCocOrder'},
                     timeout:6000
-                }).done(function(response){ 
+                }).done(function(response){  
                     console.log(response);
+					//alert(response);return false;
                     var $res = $.parseJSON(response);
-                    if($res.data['newOrder']){
+                    if($res.data['cocOrder']){
                         beep(20000,3);
-                        $('#notification').show();
-                    }else{
-                        $('#notification').hide();
-                    }
+                        $('#coc_notification').show();
+                    }else {
+						$('#coc_notification').hide();
+					}
+					
+					if($res.data['oloOrder']){
+						beep(20000,3);
+                        $('#olo_notification').show();
+					}else{
+						$('#olo_notification').hide();
+					}
                 }).error(function(x, t, m){
                     console.log(t);
                     return false;
                 })
+			}
             },30000);
         });
-    }	
+    	
 
 });
 
@@ -133,9 +144,12 @@ $(document).ready(function(){
         };
     })();
 </script>
-<span style="display:none" id="internetYes"><img src="../images/ok.png" class="con"></span>
-<span style="display:none" id="internetNo"><img src="../images/not_ok.png" class="con"></span>
-<span style="display:none" id="notification"><img src="../images/noti.ico" class="con1"></span>
+<div style="">
+	<span style="display:none;float:left;width:40px;margin:0px 5px;" id="internetYes"><img src="../images/ok.png" class="con"></span>	
+	<span style="display:none;float:left;width:40px;margin:0px 5px;" id="internetNo"><img src="../images/not_ok.png" class="con"></span>
+	<span style="display:none;float:left;width:40px;margin:0px 5px;" id="olo_notification"><img src="../images/online.jpg" class="con1"></span>
+	<span style="display:none;float:left;width:40px;margin:0px 5px;" id="coc_notification"><img src="../images/noti.ico" class="con1"></span>
+</div>
 
 
 	
