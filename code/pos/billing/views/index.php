@@ -22,7 +22,7 @@
 	margin:34px;
 	}
 </style>
-<script> var printUtility = <?php echo $printUtility; ?>; </script>
+<!--<script> var printUtility = <?php //echo $printUtility; ?>; </script>-->
 <script type="text/javascript" src="<?php echo JS;?>pos/billing.js"></script>
 <?php 
 	$script = "";
@@ -64,7 +64,7 @@
 									}
 
 									if(!empty($_GET['order'])){ 
-										echo '<strong style="color:#3071a9">Order No: '.$_GET['order'].'</strong>';
+										echo '<strong style="color:#3071a9">Order No: '.$_GET['order'].'&nbsp;&nbsp;</strong>';
 									}
 
 									if(!empty($lastBillNo) && !empty($lastBillTime)){
