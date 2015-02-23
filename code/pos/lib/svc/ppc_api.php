@@ -27,7 +27,8 @@ class PpcAPI extends App_config {
 
 /*Function To Perform Redeem, Load, Activate, Card Issue, Balance Check Operation  */
 function ppcOperation($details, $request_type){ 
-	global $CARD_RESPONSE_ARRAY, $config; 
+	//global $CARD_RESPONSE_ARRAY, $config; 
+	global $CARD_RESPONSE_ARRAY; 
 	$responseArray = $CARD_RESPONSE_ARRAY;
 	$return = array('error'=>false, 'message'=>'', 'data'=>array());
 	
@@ -41,10 +42,10 @@ function ppcOperation($details, $request_type){
 
 	$getConfigDetails = $this->cDB->getDesign(PPC_DETAIL_DESIGN_DOCUMENT)->getView(PPC_DETAIL_DESIGN_DOCUMENT_VIEW_INITIALIZE_DETAIL)->setParam(array('include_docs'=>'true',"startkey" => '["'.$this->getCDate().'", "'.$_SESSION['user']['store']['id'].'", "'.$_SESSION['user']['counter'].'"]', "endkey" => '["'.$this->getCDate().'","'.$_SESSION['user']['store']['id'].'", "'.$_SESSION['user']['counter'].'"]'))->execute();
 	if(array_key_exists('rows', $getConfigDetails) && count($getConfigDetails['rows'])>0){ 
-		$config1 = $getConfigDetails['rows'][0]['doc']['details']['params'];
+		$config = $getConfigDetails['rows'][0]['doc']['details']['params'];
 		$batchNo = $getConfigDetails['rows'][0]['doc']['details']['params']['CurrentBatchNumber'];
 		$svp = new SVProperties();
-		$svp->params = $config1 ;
+		$svp->params = $config ;
 		$configDetails = $svp;
 		
 	}else{
@@ -151,8 +152,8 @@ function ppcOperation($details, $request_type){
 		$responseArray['store_name'] = $_SESSION['user']['store']['name'];
 		$responseArray['staff_id'] = $_SESSION['user']['mysql_id'];
 		$responseArray['location_name'] = $_SESSION['user']['location']['name'];
-		$mode = ($config['billing_mode']=='local' ? 'L' : 'C');
-		$responseArray['bill'] = $_SESSION['user']['store']['code']."".$_SESSION['user']['counter']."".str_pad($invoiceNumber, 4 , '0', STR_PAD_LEFT)."".$mode;
+		//$mode = ($config['billing_mode']=='local' ? 'L' : 'C');
+		//$responseArray['bill'] = $_SESSION['user']['store']['code']."".$_SESSION['user']['counter']."".str_pad($invoiceNumber, 4 , '0', STR_PAD_LEFT)."".$mode;
 		//$responseArray['store_message'] = $_SESSION['user']['store']['store_message'];
 		$return['data'] = $responseArray;
 		if($request_type!=BALANCE_CHECK_PPC_CARD){
