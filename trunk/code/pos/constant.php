@@ -14,6 +14,7 @@ define ('PPC_DETAIL_DESIGN_DOCUMENT', 'ppc_detail');
 /* Constant For Design Document View */
 define ('BILLING_DESIGN_DOCUMENT_VIEW_HANDLE_UPDATED_BILLS', 'handle_updated_bills');
 define ('BILLING_DESIGN_DOCUMENT_VIEW_BILL_BY_ORDER', 'bill_by_order');
+define ('BILLING_DESIGN_DOCUMENT_VIEW_BILL_BY_STORE_COUNTER', 'bill_by_store_counter');
 define ('STORE_DESIGN_DOCUMENT_VIEW_STORE_MYSQL_ID', 'store_mysql_id');
 define ('STORE_DESIGN_DOCUMENT_VIEW_STORE_SHIFT', 'store_shift');
 define ('DESIGN_HO_DESIGN_DOCUMENT_VIEW_RETAIL_CUSTOMER_LIST', 'retail_customer_list');
@@ -93,7 +94,7 @@ define ('REQUEST_METHOD_NOT_ALLOWED', 'Request Method Not Allowed');
 
 /* Constant For Dispatch */
 
-define ('LOGIN_DISPATCH', 'index.php?dispatch=home');
+define ('LOGIN_DISPATCH', 'index.php?dispatch=store');
 
 /* Other Constant */
 
@@ -157,6 +158,10 @@ define('PAID', "paid");
 define('API_URL', 'http://54.178.189.25/cpos/api/coc/coc_api.php');
 define ('INSERT_SUCCESS', 'RECORD INSERTED SUCCESSFULLY');
 define ('UPDATE_SUCCESS', 'RECORD UPDATED SUCCESSFULLY');
+define ('WALKIN', 'Walk-in');
+define ('COC', 'COC');
+define ('OLO', 'OLO');
+define ('PREORDER', 'Pre-Order');
 
 
 global $PAYMENT_MODE, $ORDER_STATUS, $CARD_RESPONSE_ARRAY, $ERT_PRODUCT_ARRAY;

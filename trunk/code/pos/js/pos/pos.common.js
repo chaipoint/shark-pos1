@@ -30,31 +30,56 @@ $(document).ready(function(){
 		//sales register have handleResponse
 	});
 	
-	is_shift_running = (is_shift_running==undefined) ? false : is_shift_running;
+	//is_shift_running = (is_shift_running==undefined) ? false : is_shift_running;
 	
-	/*if(is_shift_running && navigator.onLine){
-		$(function(){
-			window.setInterval(function(){
-				$.ajax({
-					type: 'POST',
-					url: 'index.php?dispatch=orders.getCocOrder',
-					data: {request_type:'getCOCOrder'},
-					timeout:20000
-				}).done(function(response){ 
-					console.log(response);
-					var $res = $.parseJSON(response);
-					if($res.data['newOrder']){
-						beep(20000,3);
-						$('#notification').removeClass('hide');
-					}else{
-						$('#notification').addClass('hide');
-					}
-				}).error(function(x, t, m){
-					return false;
-				})
-			},30000);
-		});
-	}*/
+	$('#start_billing').on('click', function(){
+		var url = $(this).data('menu');
+		//alert(url);
+		if(url=='Walk-in'){
+			window.location.href = 'index.php?dispatch=billing.index';
+		}else if(url =='COC'){
+			window.location.href = 'index.php?dispatch=orders.index';
+		}else if(url =='OLO'){
+			window.location.href = 'index.php?dispatch=olo.index';
+		}else if(url =='Pre-Order'){
+			window.location.href = 'index.php?dispatch=preorder.index';
+		}
+	});
+
+	$('#dashboard').click(function(){
+		window.location.href = 'index.php?dispatch=dashboard.index';
+	});
+	$('#walk-in').click(function(){
+		window.location.href = 'index.php?dispatch=billing.index';
+	});
+	$('#reprint_operation').click(function(){
+		window.location.href = 'index.php?dispatch=home.report';
+	});
+	$('#ppc_operation').click(function(){
+		window.location.href = 'index.php?dispatch=home.ppc';
+	});
+	$('#ppa_operation').click(function(){
+		window.location.href = 'index.php?dispatch=home.ppa';
+	});
+	$('#ppa_operation').click(function(){
+		window.location.href = 'index.php?dispatch=home.ppa';
+	});
+	$('#coc').click(function(){
+		window.location.href = 'index.php?dispatch=orders.index';
+	});
+	$('#olo').click(function(){
+		window.location.href = 'index.php?dispatch=orders.olo';
+	});
+	
+	if($('#shift_end').hasClass('alert-danger')){
+		$('#change_store').show();
+		$('#dashboard').hide();
+		
+	}else{
+		$('#change_store').hide();
+		$('#dashboard').show();
+	}
+	
 	
 	$(function(){
 		window.setInterval(function(){
@@ -124,6 +149,40 @@ $(document).ready(function(){
 
 		});
 	});
+	
+	
+	$("#billing_sync").click(function(){
+		//alert('hello'); return false;
+		$("#loading_image").removeClass('hide');
+		$("#ajaxfadediv").addClass('ajaxfadeclass');
+		$.ajax({
+			url: "index.php?dispatch=utils.sync&mode=billing_sync_bt",
+			timeout:120000,
+		}).done(function(response) {
+			$("#ajaxfadediv").removeClass('ajaxfadeclass');
+			result = $.parseJSON(response);
+			var reload = false;
+			if(result.error){
+				bootbox.alert(result.message);
+			}else{
+				reload = true;
+			}
+			$("#loading_image").addClass('hide');
+			if(reload){
+				window.location.reload(true);
+			}
+			console.log(response);
+		}).error(function(x, t, m){
+			$("#ajaxfadediv").removeClass('ajaxfadeclass');
+			if(t==='timeout'){
+				console.log('timeout');
+				bootbox.alert('Sorry Timeout Occured! Please Conatact Admin', function(){
+					//$("#sync-modal").modal('hide');
+				});
+			}
+
+		});
+	});
 
 
 
@@ -132,7 +191,7 @@ $(document).ready(function(){
 			event.preventDefault();
 			bootbox.confirm("Are you sure to Logout?", function(result) {
             if(result==true){
-            	window.location='index.php?dispatch=login.out';
+            	window.location.href='index.php?dispatch=login.out';
             }else{
             	window.location.reload(true);            	
             }
@@ -160,7 +219,7 @@ $(document).ready(function(){
 
 var createDataTable = function (path,table,footerRow,filterRow) { //alert(filterRow); 
     var media_path = path;
-    var iDisplay = 25;
+    var iDisplay = 5;
     var oTable=null;
 		if(oTable!=null){
 			oTable.destroy();
@@ -401,7 +460,7 @@ $.fn.cKeyboard = function(){
 							'default':['M T F 0 1 2 3 4 5 6 7 8 9 {Bksp}','{accept} {cancel}']
 						};
 					break;
-				case '#discount_input_box':
+				/*case '#discount_input_box':
 					options.layout = 'caustom';
 					options.usePreview = true;
 					options.customLayout = {
@@ -423,7 +482,7 @@ $.fn.cKeyboard = function(){
 							$("#discount-close").trigger('click');
 						}
 					};
-					break;
+					break;*/
 				case '#paid-amount':
 					options.layout = 'caustom';
 					options.customLayout = {
@@ -548,22 +607,39 @@ function checkInternet(){
 
     };
 })();
-function printBill(responce_array){
-//alert(JSON.stringify(responce_array));
+
+
+function printBill(responce_array, p){
+//alert(p);
+responce_array = $.trim(responce_array);
 var responce_array1=$.parseJSON(responce_array);
 bill_array=responce_array1.data;
+var flag=0;
+if(bill_array.card_number){
+flag=1;
+}
+//alert(flag);
 var company="Mountain Trail Foods Pvt. Ltd."; 
 var companyAddress="#10\/1 2nd floor PT Street Basvangudi";
 var companyRegion="Bangalore-560004";
 var companyPhone="";
 var companyTin="TIN:1234567890123456";
 var companySTN="STN:1234567890123456";
-var breakLine="---------------------------------------------------------<br />";
+var breakLine="---------------------------------------------------------------------<br />";
+
 // -------------------------------------------------------store Detail
 var store_detail="";
+//if(flag==1){
+//store_detail+="<p >CHAIPOINT</p>";
+//store_detail+="<p >Mobifly - Delhi</p>";
+//store_detail+=breakLine;
+//}else{
 store_detail+="<p >CHAIPOINT</p>";
 store_detail+="<p >"+bill_array.store_name+" - "+bill_array.location_name+"</p>";
 store_detail+=breakLine;
+//}
+
+
 //-------------------------------------------------------------Invoice Detail
 //alert(JSON.stringify(bill_array));
 var currentTime = new Date();
@@ -573,38 +649,16 @@ var year = currentTime.getFullYear();
 var dte=month + "-" + day + "-" + year;
 var tme = currentTime.getHours() + ":"+ currentTime.getMinutes() + ":" + currentTime.getSeconds();
 var invoice_detail="";
-invoice_detail+="<table align='center' style='width:100%;text-align:left;'><tr ><td >Invoice No: "+((bill_array.bill_no === 'undefined')?"":bill_array.bill_no)+"</td><td style='text-align:right;' >Partner:"+((bill_array.staff_id === 'undefined')?"":bill_array.staff_id)+"</td></tr>";
+//if(flag==0){
+invoice_detail+="<table align='center' style='width:100%;text-align:left;'><tr ><td >Invoice No: "+((bill_array.bill === 'undefined')?"":bill_array.bill)+"</td><td style='text-align:right;' >Partner:"+((bill_array.staff_id === 'undefined')?"":bill_array.staff_id)+"</td></tr>";
 invoice_detail+="<tr ><td>Date:"+dte+"</td><td style='text-align:right;'>Time:"+tme+"</td></tr>";
 invoice_detail+="</table>";
 invoice_detail+=breakLine;
-//---------------------------------------------------------------------Item detail
-var item_detail="";
-//if(((bill_array.card.type).toUpperCase()=='PPC' || (bill_array.card.type).toUpperCase()=='PPA' )){
-item_detail+="<table align='center' style='width:100%;text-align:left; boredr-botton:1px solid #000;' ><tr><th style='width:50%;'>ITEM</th><th style='text-align:right;width:20%;'>QTY</th><th style='text-align:right;width:30%;'>AMOUNT</th></tr>";
- item_data=bill_array.items;
- item_detail+="</table>"+breakLine+"<table align='center' style='width:100%;text-align:left;' >";
- for (var tmp in item_data) {
-  item_detail+="<tr><td style='width:50%;'>"+item_data[tmp].name+"</td><td style='text-align:right;width:20%;'>"+item_data[tmp].qty+"</td><td style='text-align:right;width:30%;'>"+parseFloat(item_data[tmp].subTotal).toFixed(2)+"</td></tr>";
-  }
-item_detail+="</table>";
-item_detail+=breakLine;
-//}
-//--------------------------------------------------------------------------------Bill details
-bill_array.discountAmount=0;
-var bill_details="";
-bill_details+="<table align='center' style='width:100%;text-align:left;'>";
-bill_details+="<tr ><td style='text-align:right;'>Sub Total: "+(parseFloat(bill_array.sub_total)).toFixed(2)+"</td></tr>";
-if(parseFloat(bill_array.total_discount)>0){
-bill_details+="<tr ><td style='text-align:right;'>Discount(-): "+parseFloat(bill_array.total_discount).toFixed(2)+"</td></tr>";
-}
-bill_details+="<tr ><td style='text-align:right;'>Net: "+parseFloat(parseFloat(bill_array.sub_total)-parseFloat(bill_array.total_discount)).toFixed(2)+"</td></tr>";
-bill_details+="<tr ><td style='text-align:right;'>VAT(+): "+parseFloat(bill_array.total_tax).toFixed(2)+"</td></tr>";
-if(parseFloat(bill_array.round_off)>0){
-bill_details+="<tr ><td style='text-align:right;'>Rounding Off: "+parseFloat(bill_array.round_off).toFixed(2)+"</td></tr>";
-}
-bill_details+="<tr ><td style='text-align:right;'>Total: "+parseFloat(bill_array.due_amount).toFixed(2)+"</td></tr>";
-bill_details+="</table>";
-bill_details+=breakLine;
+//}else{
+//invoice_detail+="<table align='center' style='width:100%;text-align:left;'><tr ><td >Invoice No: "+((bill_array.bill === 'undefined')?"":bill_array.bill)+"</td><td style='text-align:right;' >Partner:"+'301'+"</td></tr>";
+//invoice_detail+="<tr ><td>Date:"+dte+"</td><td style='text-align:right;'>Time:"+tme+"</td></tr>";
+//invoice_detail+="</table>";
+//invoice_detail+=breakLine;
 //}
 //----------------------------------------------------------------------------------Thank company
 var companyDetail1="";
@@ -620,35 +674,23 @@ companyDetail1+="<tr ><td style='text-align:left;'>"+companyTin+"</td></tr>";
 companyDetail1+="<tr ><td style='text-align:left;'>"+companySTN+"</td></tr>";
 companyDetail1+="</table>";
 companyDetail1+=breakLine;
-//  -----------------------------------------------------------------------Customer Detail
-var customer_detail="";
-if(bill_array.customer.type=="coc"){
-customer_detail+=" CHAI ON CALL ORDER<br/>";
-customer_detail+="<table align='center' style='width:100%;text-align:left;'>";
-customer_detail+="<tr ><td style='text-align:left;'>Order No: "+bill_array.order_no+"</td></tr>";
-customer_detail+="<tr ><td style='text-align:left;'>Company Name: "+bill_array.customer.company_name+"</td></tr>";
-customer_detail+="<tr ><td style='text-align:left;'>Customer Name: "+bill_array.customer.name+"</td></tr>";
-customer_detail+="<tr ><td style='text-align:left;'>Phone: "+bill_array.customer.phone_no+"</td></tr>";
-customer_detail+="<tr ><td style='text-align:left;'>City: "+bill_array.customer.city+"</td></tr>";
-customer_detail+="<tr ><td style='text-align:left;'>Locality: "+bill_array.customer.locality+"</td></tr>";
-customer_detail+="<tr ><td style='text-align:left;'>Landmark: "+bill_array.customer.land_mark+"</td></tr>";
-customer_detail+="</table>";
-customer_detail+=breakLine;
-}
-//------------------------------------------------------------------------------CAW Detail
-var caw_detail="";
-if(bill_array.payment_type=="caw"){
-caw_detail+=" CHAI AT WORK <br />";
-caw_detail+="<table align='center' style='width:100%;text-align:left;'>";
-caw_detail+="<tr ><td style='text-align:left;'>Company Name: "+bill_array.customer.company_name+"</td></tr>";
-caw_detail+="<tr ><td style='text-align:left;'>Phone: "+bill_array.customer.phone_no+"</td></tr>";
-caw_detail+="<tr ><td style='text-align:left;'>Address: "+bill_array.customer.address+"</td></tr>";
-caw_detail+="</table>";
-caw_detail+=breakLine;
+if((bill_array.store_message).length>0){
+companyDetail1+=bill_array.store_message+"<br/>";
+companyDetail1+=breakLine;
 }
 //------------------------------------------------------------------------------Card Detail Reciept
 var card_detail="";
-if((bill_array.card.type).toUpperCase()=='PPC' || (bill_array.card.type).toUpperCase()=='PPA' ){
+if(flag==1){
+card_detail+="<p style='text-align:center;line-height:8px;margin-top:0px;'>Transaction successful.</p>";
+card_detail+=breakLine;
+card_detail+="<table align='center' style='width:100%;text-align:left;'>";
+card_detail+="<tr ><td style='text-align:center;'>"+(bill_array.card_type).toUpperCase()+" "+((bill_array.txn_type).substr(0,1).toUpperCase()+(bill_array.txn_type).substr(1).toLowerCase())+"</td></tr>";
+card_detail+="<tr ><td style='text-align:left;'  >Card No: "+bill_array.card_number+"</td></tr>";
+card_detail+="<tr ><td style='text-align:left;'  >Txn No: "+bill_array.txn_no+"</td></tr>";
+card_detail+="<tr ><td style='text-align:left;'  >Balance: "+bill_array.balance+"(Reward points will be added)</td></tr>";
+card_detail+="</table>";
+card_detail+=breakLine;
+}else if((bill_array.card.type).toUpperCase()=='PPC' || (bill_array.card.type).toUpperCase()=='PPA' ){
 card_detail+="<table align='center' style='width:100%;text-align:left;'>";
 card_detail+="<tr ><td style='text-align:left;'>Card Type: "+(bill_array.card.type).toUpperCase()+"</td><td style='text-align:right;' >Txn Type:"+((bill_array.card.txn_type).substr(0,1).toUpperCase()+(bill_array.card.txn_type).substr(1).toLowerCase())+"</td></tr>";
 card_detail+="<tr ><td style='text-align:left;' colspan='2' >Card No: "+bill_array.card.no+"</td></tr>";
@@ -658,18 +700,82 @@ card_detail+="<tr ><td style='text-align:left;' colspan='2' >Balance: "+bill_arr
 card_detail+="</table>";
 card_detail+=breakLine;
 }
+//---------------------------------------------------------------------Item detail
+var item_detail="";
+//if(((bill_array.card.type).toUpperCase()=='PPC' || (bill_array.card.type).toUpperCase()=='PPA' )){
+if(flag==0){
+item_detail+="<table align='center' style='width:100%;text-align:left; boredr-botton:1px solid #000;' ><tr><th style='width:50%;'>ITEM</th><th style='text-align:right;width:20%;'>QTY</th><th style='text-align:right;width:30%;'>AMOUNT</th></tr>";
+ item_data=bill_array.items;
+ item_detail+="</table>"+breakLine+"<table align='center' style='width:100%;text-align:left;' >";
+ for (var tmp in item_data) {
+  item_detail+="<tr><td style='width:50%;'>"+item_data[tmp].name+"</td><td style='text-align:right;width:20%;'>"+item_data[tmp].qty+"</td><td style='text-align:right;width:30%;'>"+parseFloat(item_data[tmp].subTotal).toFixed(2)+"</td></tr>";
+  }
+item_detail+="</table>";
+item_detail+=breakLine;
+}
+//alert(item_detail);
+//--------------------------------------------------------------------------------Bill details
+bill_array.discountAmount=0;
+var bill_details="";
+if(flag==0){
+bill_details+="<table align='center' style='width:100%;text-align:left;'>";
+bill_details+="<tr ><td style='text-align:right;'>Sub Total: "+(parseFloat(bill_array.sub_total)).toFixed(2)+"</td></tr>";
+if(parseFloat(bill_array.total_discount)>0){
+bill_details+="<tr ><td style='text-align:right;'>Discount(-): "+parseFloat(bill_array.total_discount).toFixed(2)+"</td></tr>";
+}
+bill_details+="<tr ><td style='text-align:right;'>Net: "+parseFloat(parseFloat(bill_array.sub_total)-parseFloat(bill_array.total_discount)).toFixed(2)+"</td></tr>";
+bill_details+="<tr ><td style='text-align:right;'>VAT(+): "+parseFloat(bill_array.total_tax).toFixed(2)+"</td></tr>";
+if(parseFloat(bill_array.round_off)>0){
+bill_details+="<tr ><td style='text-align:right;'>Rounding Off: "+parseFloat(bill_array.round_off).toFixed(2)+"</td></tr>";
+}
+bill_details+="<tr ><td style='text-align:right;'>Total: "+parseFloat(bill_array.due_amount).toFixed(2)+"</td></tr>";
+bill_details+="</table>";
+bill_details+=breakLine;
+}
+//  -----------------------------------------------------------------------Customer Detail
+var customer_detail="";
+if(flag==0){
+if(bill_array.customer.type=="coc"){
+var order_type="COC";
+if(bill_array.booking_channel_name=="OLO"){
+order_type="OLO";
+}
+customer_detail+=" CHAI ON CALL ORDER("+order_type+")<br/>";
+customer_detail+="<table align='center' style='width:100%;text-align:left;'>";
+customer_detail+="<tr ><td style='text-align:left;'>Order No: "+bill_array.order_no+" / "+(bill_array.time.created).slice(-8)+"</td></tr>";
+customer_detail+="<tr ><td style='text-align:left;'>Packed At: "+tme+"</td></tr>";
+customer_detail+="<tr ><td style='text-align:left;'>Company Name: "+bill_array.customer.company_name+"</td></tr>";
+customer_detail+="<tr ><td style='text-align:left;'>Customer Name: "+bill_array.customer.name+"</td></tr>";
+customer_detail+="<tr ><td style='text-align:left;'>Phone: "+bill_array.customer.phone_no+"</td></tr>";
+customer_detail+="<tr ><td style='text-align:left;'>City: "+bill_array.customer.city+"</td></tr>";
+customer_detail+="<tr ><td style='text-align:left;'>Locality: "+bill_array.customer.locality+"</td></tr>";
+customer_detail+="<tr ><td style='text-align:left;'>Landmark: "+bill_array.customer.land_mark+"</td></tr>";
+customer_detail+="</table>";
+customer_detail+=breakLine;
+}}
+//------------------------------------------------------------------------------CAW Detail
+var caw_detail="";
+if(flag==0){
+if(bill_array.payment_type=="caw"){
+caw_detail+=" CHAI AT WORK <br />";
+caw_detail+="<table align='center' style='width:100%;text-align:left;'>";
+caw_detail+="<tr ><td style='text-align:left;'>Company Name: "+bill_array.customer.company_name+"</td></tr>";
+caw_detail+="<tr ><td style='text-align:left;'>Phone: "+bill_array.customer.phone_no+"</td></tr>";
+caw_detail+="<tr ><td style='text-align:left;'>Address: "+bill_array.customer.address+"</td></tr>";
+caw_detail+="</table>";
+caw_detail+=breakLine;
+}}
 //------------------------------------------------------------------------------Duplicate Reciept
-var reprint="";
-
-if(parseInt(bill_array.reprint)>0){
-reprint+="<p style='text-align:left;' >This is duplicate copy.</p>";
+var reprint1="";
+if(p==true){
+reprint1+="<p style='text-align:center;' >DUPLICATE COPY</p>";
 }
 
-var billingDetail="<div style='width:160px;text-align:center;border:0px solid #333;font-size:10px;line-height:10px;' >";
+var billingDetail="<div style='width:210px;text-align:center;border:0px solid #333;font-size:10px;line-height:10px;' >";
 billingDetail+=store_detail;
 billingDetail+=invoice_detail;
 
-if(!(bill_array.card.txn_type=='load' || bill_array.card.txn_type=='activate')  ){
+if(flag==0){
 billingDetail+=item_detail;
 billingDetail+=bill_details;
 }
@@ -677,12 +783,12 @@ billingDetail+=card_detail;
 billingDetail+=customer_detail;
 billingDetail+=caw_detail;
 billingDetail+=companyDetail1;
-billingDetail+=reprint;
+billingDetail+=reprint1;
 billingDetail+="</div>";
 
 //alert(JSON.stringify(bill_array.customer));
 //alert(bill_array.customer.name);
-
+//alert(billingDetail);
 $("#printBill").html(billingDetail); 
       var divElements = $("#printBill").html();
             var oldPage = document.body.innerHTML;
@@ -691,9 +797,10 @@ $("#printBill").html(billingDetail);
               divElements + "</body>";
 				window.print();	
 			document.body.innerHTML = oldPage;
-			
-				//window.location.href = window.location;
+			window.location.href = window.location;
             
 			
 			//return true;
 }
+
+

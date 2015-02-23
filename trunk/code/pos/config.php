@@ -4,9 +4,12 @@
 	$config is array to hold global configuration for whole application
 	@operating_mode is used in accessing URLs of production and test servers
 		values:- test|production
+	@billing_mode is used in accessing URLs of production and test servers
+		values:- local|production
 */
 global $config;
 $config['operating_mode'] = 'production';
+$config['billing_mode'] = 'local';
 
 /*
 	Operation Mode test Local Details

@@ -13,10 +13,11 @@ padding: 3px 0px 3px 5px;
 cursor: pointer;
 }
 </style>
-    <div class="panel panel-info"> 
+<?php //print_r($sales_data);?>
+<div class="panel panel-info" style="margin-left:-10px;"> 
       <div class="panel-heading col" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><a href="javascript:void(0)">Paid Bill Details
       <i class="glyphicon glyphicon-chevron-down pull-right"></i></a></div>
-      <div id="collapseTwo" class="panel-collapse collapse">
+      <div id="collapseTwo" class="panel-collapse collapse in">
         <div class="panel-body">
 
           <table id="active_bill_table" class="table table-striped table-bordered table-condensed table-hover" style="margin-bottom:5px;">
@@ -68,7 +69,7 @@ cursor: pointer;
 
 <?php $sub_total = $total_amount = $total_tax = $due_amount = $counter = 0; //print_r($data);
 if(is_array($data) && count($data)>0) { 
-    foreach ($data as $key => $value) { 
+    foreach ($data as $key => $value) { ;
       if($value['bill_status'] != 'Cancelled') { ?>
 	      <tr class="text-center">
 		        <td style="text-align:center"><?php echo $value['bill_no']; ?></td>
@@ -88,7 +89,7 @@ if(is_array($data) && count($data)>0) {
             <td style="text-align:center"><?php echo $value['is_cod']; echo '</br><b>'.($value['is_cod']=='Y' ? $value['order_no'] : '').'</b>'; ?></td>
             <td style="text-align:center"><?php echo $value['is_prepaid']; ?></td>
             <td style="text-align:center"><?php echo $value['is_credit']; ?></td>
-		        <td>
+		        <td style="width:132px;">
 			         <!--<a href="#"  class="tip btn btn-primary btn-xs" title="View Invoice">
 			             <i class="glyphicon glyphicon-list"></i>
                </a>-->
@@ -98,14 +99,17 @@ if(is_array($data) && count($data)>0) {
   		              M
   		         </a>
 				 <?php } else if($value['payment_type']!='ppc' && $value['payment_type']!='ppa') { ?>
-				 <a class="tip btn btn-warning btn-xs edit-bill text-center" style="width:17px;height:17px;" title="Cancel Bill" href="<?php echo URL;?>?dispatch=billing&bill_no=<?php echo $value['_id']; ?>&bill=<?php echo $value['bill_no']; ?>&referer=<?php echo MODULE;?>">
-  		              M
+				 <a class="tip btn btn-warning btn-xs edit-bill" style="width:47px;height:25px;float:left" title="MODIFY" href="<?php echo URL;?>?dispatch=billing&bill_no=<?php echo $value['_id']; ?>&bill=<?php echo $value['bill_no']; ?>&referer=<?php echo MODULE;?>">
+  		              Modify
+  		         </a>
+				 <a class="tip btn btn-success btn-xs reprint-bill" style="width:70px;height:25px;float:right" title="REPRINT" id="<?php echo $value['_id'];?>">
+  		              Re-print
   		         </a>
                <?php 
 				}			   
                 if($value['bill_status'] == "CoD") {
                   ?>
-                 <a class="tip btn btn-warning btn-xs pay_bill text-center" style="width:17px;height:17px;" title="Pay Bill" data-href="<?php echo $value['_id']; ?>">
+                 <a class="tip btn btn-warning btn-xs pay_bill text-center" style="width:20px;height:25px;" title="Pay Bill" data-href="<?php echo $value['_id']; ?>">
                      P
                  </a>
               <?php
@@ -153,6 +157,7 @@ if(is_array($data) && count($data)>0) {
 </div>
 </div>
 </div>
+
 <script>
   var oTable = null;
   var footerRow = [3,4,5,6,7];

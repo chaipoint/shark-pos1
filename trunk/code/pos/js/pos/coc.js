@@ -24,6 +24,7 @@ $(document).ready(function(){
 	});
 
 	$('.bt-update-status').click(function(){
+		
 		var ajax = true;
 		var data = new Object();
 		var ele = this;
@@ -116,10 +117,21 @@ function changeStatus(data){
 					}
 				}else{
 					bootbox.alert("Order "+data.new_status+" Successfully");
-					$('tr[data-order-id="'+data.order+'"]','#order-holder').remove();//ele.closest('tr').remove();
+					$('span#order_status-'+data.order).html(data.new_status);
 					$("span#"+data.current_status).text(parseInt($("span#"+data.current_status).text())-1);
 					$("span#"+data.new_status).text(parseInt($("span#"+data.new_status).text())+1);
-					$('#tot-amt').text(parseFloat($('#tot-amt').text().replace(',', '')) - parseFloat((data.net_amount).replace(',', '')));
+					if(data.new_status =='Cancelled' || data.new_status =='Delivered'){
+						$('#Confirmed-'+data.order).hide();
+						$('#Cancelled-'+data.order).hide();
+						$('#Dispatched-'+data.order).hide();
+						$('#Delivered-'+data.order).hide();
+						$('#bill_button-'+data.order).hide();
+					}else{
+						$('#bill_button').show();
+						$('#'+data.new_status+'-'+data.order).hide();
+						
+					}
+					
 				}
 			});	
 }

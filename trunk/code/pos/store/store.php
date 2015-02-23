@@ -4,7 +4,40 @@
 			parent::__construct();
 			$this->log =  Logger::getLogger("CP-POS|STORE");
 		}
+		function index(){
+			if(!array_key_exists('user', $_SESSION)){
+				header("LOCATION:index.php");
+			}
+			
+			$data = array('error' => false, 'storeList'=>array());
+			$getStore = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_MYSQL_ID)->setParam(array('include_docs'=>'true'))->execute();
+			$this->log->trace('STORE LIST'."\r\n".json_encode($getStore));
 
+			if(array_key_exists('rows', $getStore) && count($getStore['rows'])>0){
+				foreach($getStore['rows'] as $key => $value){
+					$storeList[$key]['name'] = $value['value']['name'] ;
+					$storeList[$key]['id'] = $value['key'] ;
+					$storeList[$key]['code'] = $value['doc']['code'];
+					$storeList[$key]['bill_type'] = @$value['doc']['bill_type'];
+					$storeList[$key]['store_message'] = @$value['doc']['store_message'];
+				}
+			}
+			
+			sort($storeList);
+			/*echo '<pre>';
+			print_r($_SESSION);
+			echo '</pre>';
+			*/
+			$data = array('error'=>false, 'storeList'=>$storeList);
+			$this->commonView('header_html',array('error'=>$data['error']));
+			$this->commonView('navbar');
+			if(!$data['error']){
+				$this->view($data);
+			}
+			//$this->commonView('footer_inner');
+			$this->commonView('footer_html');
+
+		}
 		/* Function To Get Store Details */
 		function getStore($store = 0, $include_docs = 'false'){
 			if(array_key_exists('store', $_GET)){
@@ -42,7 +75,7 @@
 		function storeFunction(){
 			$return = array('error'=>false, 'message'=>'', 'data'=>array());
 
-			$result = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_SHIFT)->setParam(array('key'=>'"'.$this->getCDate().'"', 'include_docs'=>'true'))->execute();
+			$result = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_SHIFT)->setParam(array("startkey" => '["'.$this->getCDate().'","'.$_SESSION['user']['store']['id'].'"]', "endkey" => '["'.$this->getCDate().'","'.$_SESSION['user']['store']['id'].'"]', 'include_docs'=>'true'))->execute();
 			$this->log->trace('STORE SHIFT DATA'."\r\n".json_encode($result));
 			$total_rows = count($result['rows']);
 			if(array_key_exists('rows', $result) && $total_rows == 1){
@@ -63,8 +96,8 @@
 								$return['error'] = true;
 								$return['message'] = 'You are not allowed to end Shift. As it is started by '.$result['rows'][0]['doc']['shift'][$totalShifts-1]['start_staff_name'];
 							}else{
-								unset($_SESSION['user']['shift']);
-								unset($_SESSION['user']['counter']);
+								//unset($_SESSION['user']['shift']);
+								//unset($_SESSION['user']['counter']);
 							}
 						}else{
 							if($_POST['mode'] == 'day_end'){

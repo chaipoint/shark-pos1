@@ -7,35 +7,9 @@
 
 		/* This Function Is Automatically Called When We Come On COC Module */
 		function index(){
-			$status = 'New';
-			if(array_key_exists('status', $_GET) && !empty($_GET['status'])){
-				$status = $_GET['status'];
-			}
-
-			$getData = $this->getCocOrder($status);
+			$getData = $this->getCocOrder('COC');
+			//print_r($getData);die();
 			if(!$getData['error']){
-				$print = '<div class="hidden">%s</div>';
-				$actionButtons = '<div class="btn-group-horizontal">';
-				switch($status){
-					case 'New':
-						$actionButtons .= '<button class="btn btn-sm btn-success bt-update-status" data-new_status="Confirmed" data-current_status="'.$status.'"><i class="glyphicon glyphicon-ok"></i>&nbsp;Confirm</button>&nbsp;&nbsp;';
-						$actionButtons .= '<button class="btn btn-sm btn-danger bt-update-status" data-new_status="Cancelled" data-current_status="'.$status.'"><i class="glyphicon glyphicon-trash"></i>&nbsp;Cancel</button>&nbsp;&nbsp;';
-						break;
-					case 'Confirmed':
-						$actionButtons .= '<button class="btn btn-sm btn-success bt-update-status" data-new_status="Dispatched" data-current_status="'.$status.'"><i class="glyphicon glyphicon-ok"></i>&nbsp;Dispatch</button>&nbsp;&nbsp;';
-		            	$actionButtons .= '<button class="btn btn-sm btn-danger bt-update-status" data-new_status="Cancelled" data-current_status="'.$status.'"><i class="glyphicon glyphicon-trash"></i>&nbsp;Cancel</button>&nbsp;&nbsp;';
-						$print = '<button class="btn btn-primary btn-sm generate-bill"  data-order-id="%s"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;Bill</button>';
-						break;
-					case 'Dispatched':
-						$actionButtons .= '<button class="btn btn-sm btn-success bt-update-status" data-new_status="Delivered" data-current_status="'.$status.'">Delivered</button>';
-						break;
-					case 'Delivered':
-						$actionButtons .= '<button class="btn btn-sm btn-success bt-update-status" data-new_status="Paid" data-current_status="'.$status.'">Paid</button>';
-					 	break;
-					case 'Paid':
-					case 'Cancelled':
-				}
-				$actionButtons .= '</div><div style="margin-top:5px;" class="btn-group-horizontal"><button class="btn-sm btn btn-default"><i class="glyphicon glyphicon-print"></i>&nbsp;Print</button>&nbsp;&nbsp;'.$print.'</div>';
 			}
 	    	$billArray = array();
 	    	$resultGetBill = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getView(BILLING_DESIGN_DOCUMENT_VIEW_HANDLE_UPDATED_BILLS)->setParam(array("include_docs"=>"true","descending"=>"true","endkey" => '["'.$this->getCDate().'"]',"startkey" => '["'.$this->getCDate().'",{},{},{}]'))->execute();
@@ -48,10 +22,36 @@
 	    
 			$this->commonView('header_html',array('error'=>$getData['error']));
 			$this->commonView('navbar');
+			$this->commonView('menu');
 			if(!$getData['error']){
-				$this->view(array('orders'=>$getData['data']['orderList'],'billArray'=>$billArray,'action'=>$actionButtons, 'status'=>$status, 'order_count'=>$getData['data']['orderCount']));
+				$this->view(array('orders'=>$getData['data']['orderList'],'billArray'=>$billArray, 'order_count'=>$getData['data']['orderCount']));
 			}
-			$this->commonView('footer_inner');
+			$this->commonView('operation');
+			//$this->commonView('footer_inner');
+			$this->commonView('footer_html');
+		}
+		
+		function olo(){
+			$getData = $this->getCocOrder('OLO');
+			if(!$getData['error']){
+			}
+	    	$billArray = array();
+	    	$resultGetBill = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getView(BILLING_DESIGN_DOCUMENT_VIEW_HANDLE_UPDATED_BILLS)->setParam(array("include_docs"=>"true","descending"=>"true","endkey" => '["'.$this->getCDate().'"]',"startkey" => '["'.$this->getCDate().'",{},{},{}]'))->execute();
+	    		if(array_key_exists('rows', $resultGetBill) && count($resultGetBill['rows'])>0){
+	    			$docs = $resultGetBill['rows'];
+	    			foreach ($docs as $key => $value) {
+	    				$billArray[$value['doc']['order_no']] = $value['doc']['bill_no']; 	
+	    			 } 
+	    		} 
+	    
+			$this->commonView('header_html',array('error'=>$getData['error']));
+			$this->commonView('navbar');
+			$this->commonView('menu');
+			if(!$getData['error']){
+				$this->view(array('orders'=>$getData['data']['orderList'],'billArray'=>$billArray, 'order_count'=>$getData['data']['orderCount']));
+			}
+			$this->commonView('operation');
+			//$this->commonView('footer_inner');
 			$this->commonView('footer_html');
 		}
         
@@ -141,10 +141,22 @@
 		}
 		
 
-		function getCocOrder($status=''){
-			$status = (!empty($status) ? $status : 'New');
+		function getCocOrder($order_type=''){
 			$storeId = $_SESSION['user']['store']['id'];
-			$postData = array('action'=>'getCocOrder', 'store_id'=>$storeId, 'status'=>$status);
+			$postData = array('action'=>'getCocOrder', 'store_id'=>$storeId, 'status'=>$order_type);
+			$url = API_URL;
+			$ch = curl_init();
+			curl_setopt_array($ch, array(CURLOPT_URL => $url, CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true, CURLOPT_POSTFIELDS => $postData));
+			$response = curl_exec($ch);
+			curl_close($ch);
+			$response = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $response);
+			$data = json_decode($response, true);
+			return $data;
+		}
+		
+		function getNewOrder(){
+			$storeId = $_SESSION['user']['store']['id'];
+			$postData = array('action'=>'getNewOrder', 'store_id'=>$storeId);
 			$url = API_URL;
 			$ch = curl_init();
 			curl_setopt_array($ch, array(CURLOPT_URL => $url, CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true, CURLOPT_POSTFIELDS => $postData));

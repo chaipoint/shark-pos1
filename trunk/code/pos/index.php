@@ -1,6 +1,6 @@
 <?php
 	date_default_timezone_set('Asia/Calcutta');
-
+	//echo date('Y-m-d H:i:s');
 	/*Configuration Class For Whole Application*/
 	require_once 'config.php';
 	require_once 'constant.php';
@@ -8,7 +8,8 @@
 	Logger::configure('common/config.xml');
 	$logger = Logger::getLogger("CP-POS|INDEX");;
 	
-
+	error_reporting(E_ALL);
+ini_set('display_errors', 1);
 	require_once 'common/app_config.php';
 	//require_once 'lib/mysql/db.php';
 
