@@ -152,13 +152,14 @@ $(document).ready(function(){
 	
 	
 	$("#billing_sync").click(function(){
-		//alert('hello'); return false;
+		//alert('hello'); //return false;
 		$("#loading_image").removeClass('hide');
 		$("#ajaxfadediv").addClass('ajaxfadeclass');
 		$.ajax({
 			url: "index.php?dispatch=utils.sync&mode=billing_sync_bt",
 			timeout:120000,
 		}).done(function(response) {
+			//alert(response);
 			$("#ajaxfadediv").removeClass('ajaxfadeclass');
 			result = $.parseJSON(response);
 			var reload = false;
@@ -608,7 +609,6 @@ function checkInternet(){
     };
 })();
 
-
 function printBill(responce_array, p){
 //alert(p);
 responce_array = $.trim(responce_array);
@@ -802,5 +802,4 @@ $("#printBill").html(billingDetail);
 			
 			//return true;
 }
-
 
