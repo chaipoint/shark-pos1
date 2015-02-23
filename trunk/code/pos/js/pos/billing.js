@@ -536,7 +536,7 @@ $(document).ready(function(){
 						$('#load_amount_div').css('display','none');
 						bootbox.alert($result.data['message']);
 					}else if($result.data['success']=='True'){ 
-						printBill(response);
+						//printBill(response);
 						$('#load_amount_div').css('display','none');
 						$('#ppc').trigger('change');
 					} 
