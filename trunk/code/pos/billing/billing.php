@@ -248,7 +248,7 @@
 						$currentBillNo = '1' ;
 					}
 					if(is_numeric($currentBillNo)){
-						$mode = ($config['operating_mode']=='test' ? 'L' : 'C');
+						$mode = ($config['billing_mode']=='local' ? 'L' : 'C');
 						$_POST['bill'] = $_SESSION['user']['store']['code']."".$_SESSION['user']['counter']."".str_pad($currentBillNo, 4 , '0', STR_PAD_LEFT)."".$mode;
 						$_POST['bill_no'] = $currentBillNo;
 						$_POST['store_message'] = $_SESSION['user']['store']['store_message'];
