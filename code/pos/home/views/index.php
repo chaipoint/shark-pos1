@@ -14,7 +14,7 @@
 		<button class="alert <?php echo (($is_store_open=='true' && $is_shift_running=='false') ? 'alert-info' : 'alert-danger'); ?> store-operation" id="day_end" style="margin-left:184px; margin-right:20px; width:30%; text-align:center;">Close Store</button>
 	</div>
 	<div style='margin-top:18px'>
-		<button class="alert <?php echo (($is_store_open=='true' && $is_shift_running=='false' ) ? 'alert-info' : 'alert-danger'); ?> store-operation" id="shift_start" style="margin-left:372px; width:15%; text-align:center;">Start My Shift</button>
+		<button class="alert <?php echo (($is_store_open=='true' && $is_shift_running=='false' ) ? 'alert-info' : 'alert-danger'); ?> store-operation" id="shift_start" style="margin-left:315px; width:15%; text-align:center;">Start My Shift</button>
 		<button class="alert <?php echo (($is_store_open=='true' && $is_shift_running=='true') ? 'alert-info' : 'alert-danger'); ?> store-operation" id="shift_end" style="margin-left:184px; margin-right:20px; width:15%; text-align:center;">End My Shift</button>
 	</div>
 	<div class="panel panel-info" style="margin-left:168px;margin-right:184px;margin-top:20px;" id="store_shift_logic">
@@ -190,27 +190,27 @@
 							</div>
 						</form>
 					</div>
-					<div class="col-lg-8 col-md-6 col-sm-6 pull-right">
+					<div class="col-lg-8 col-md-7 col-sm-6 pull-right">
 						<ul class="list-unstyled">
 							<?php if(array_key_exists('rows', $shift_data) && count($shift_data['rows']) > 0) {?>
-							<li style="margin-left:215px"><span class="glyphicon glyphicon-ok"></span> &nbsp;Login By <?php echo $shift_data['rows'][0]['doc']['login_staff_name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($shift_data['rows'][0]['doc']['login_time']));?></li>
-							<li style="margin-left:215px"><span class="glyphicon glyphicon-ok"></span> &nbsp;Store Open by <?php echo $shift_data['rows'][0]['doc']['day']['start_staff_name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($shift_data['rows'][0]['doc']['day']['start_time']));?></li>
+							<li style=""><span class="glyphicon glyphicon-ok"></span> &nbsp;Login By <?php echo $shift_data['rows'][0]['doc']['login_staff_name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($shift_data['rows'][0]['doc']['login_time']));?></li>
+							<li style=""><span class="glyphicon glyphicon-ok"></span> &nbsp;Store Open by <?php echo $shift_data['rows'][0]['doc']['day']['start_staff_name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($shift_data['rows'][0]['doc']['day']['start_time']));?></li>
 							<?php foreach($shift_data['rows'][0]['doc']['shift'] as $key => $value) {?>
-							<li style="margin-left:215px"><span class="glyphicon glyphicon-ok"></span> &nbsp;Shift <?php echo $value['shift_no']; ?> Started by <?php echo $value['start_staff_name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($value['start_time']));?> </li>
+							<li style=""><span class="glyphicon glyphicon-ok"></span> &nbsp;Shift <?php echo $value['shift_no']; ?> Started by <?php echo $value['start_staff_name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($value['start_time']));?> </li>
 							<?php if(!empty($value['end_time'])) {?>
-							<li style="margin-left:215px"><span class="glyphicon glyphicon-ok"></span> &nbsp;Shift <?php echo $value['shift_no']; ?> Closed by <?php echo $value['end_staff_name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($value['end_time']));?> </li>
+							<li style=""><span class="glyphicon glyphicon-ok"></span> &nbsp;Shift <?php echo $value['shift_no']; ?> Closed by <?php echo $value['end_staff_name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($value['end_time']));?> </li>
 							<?php }?>
 							<?php }?>
 							<?php if(!empty($shift_data['rows'][0]['doc']['day']['end_time'])) {?>
-							<li style="margin-left:215px"><span class="glyphicon glyphicon-ok"></span> &nbsp;Store Closed by <?php echo $shift_data['rows'][0]['doc']['day']['end_staff_name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($shift_data['rows'][0]['doc']['day']['end_time']));?></li>
+							<li style=""><span class="glyphicon glyphicon-ok"></span> &nbsp;Store Closed by <?php echo $shift_data['rows'][0]['doc']['day']['end_staff_name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($shift_data['rows'][0]['doc']['day']['end_time']));?></li>
 							<?php }?>
 							<?php }else{ ?>
-							<li style="margin-left:215px"><span class="glyphicon glyphicon-ok"></span> &nbsp;Login By <?php echo $_SESSION['user']['name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($_SESSION['user']['login']['time']));?></li>
+							<li style=""><span class="glyphicon glyphicon-ok"></span> &nbsp;Login By <?php echo $_SESSION['user']['name'];?> at <?php echo date('d-m-Y H:i:s',strtotime($_SESSION['user']['login']['time']));?></li>
 							<?php }?>
 						</ul>
 						<div>
 							
-							<button class="alert alert-success store-operation"  id="dashboard" style="margin-left:468px;width:160px;margin-top:6px;color:black">Goto Dashboard</button>
+							<button class="alert alert-success store-operation"  id="dashboard" style="width:160px;margin-top:6px;color:black">Goto Dashboard</button>
 						</div>
 					</div>
 				</div>

@@ -2,16 +2,7 @@
 	.btn {
 		width:83px;
 		}
-	.operation_div {	
-		margin-top:.5%;
-		margin-left:13.5%;
-		width:600px;
-	   }
-	.operation_div button {
-		margin:10px;
-		float:left;
-		line-height:4px; height:16px; width:150px; text-align:center; color:black;
-		}
+	
 	 li {
  	   list-style-type: none;
 	 }
@@ -26,9 +17,9 @@
 	
 </style>
 <script type="text/javascript" src="<?php echo JS?>pos/coc.js"></script>
-<div class="panel panel-info" style="margin-left:192px;margin-top:36px;height:485px;margin-right:10px;"> 
+<div class="panel panel-info" style="margin-left:21px;margin-top:56px;height:485px;width:88%"> 
   
-	 <div class="panel-body tabbable" style="width:80%">
+	 <div class="panel-body tabbable" style="width:88%">
         <ul class="nav nav-pills" role="" style="margin-top:-23px;">
 		  <li class="disabled"><a style="color:#aaaaaa">New&nbsp;&nbsp;<span id="New" style="color:green"  ><?php echo $order_count['New']; ?></span></a></li>
 		  <li class="disabled"><a style="color:#aaaaaa">Confirmed&nbsp;&nbsp;<span id="Confirmed" style="color:green"  ><?php echo $order_count['Confirmed']; ?></span></a></li>

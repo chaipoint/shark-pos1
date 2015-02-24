@@ -461,7 +461,7 @@ $.fn.cKeyboard = function(){
 							'default':['M T F 0 1 2 3 4 5 6 7 8 9 {Bksp}','{accept} {cancel}']
 						};
 					break;
-				/*case '#discount_input_box':
+				case '#discount_input_box':
 					options.layout = 'caustom';
 					options.usePreview = true;
 					options.customLayout = {
@@ -483,7 +483,7 @@ $.fn.cKeyboard = function(){
 							$("#discount-close").trigger('click');
 						}
 					};
-					break;*/
+					break;
 				case '#paid-amount':
 					options.layout = 'caustom';
 					options.customLayout = {
@@ -625,7 +625,7 @@ var companyRegion="Bangalore-560004";
 var companyPhone="";
 var companyTin="TIN:1234567890123456";
 var companySTN="STN:1234567890123456";
-var breakLine="---------------------------------------------------------------------<br />";
+var breakLine="--------------------------------------------------------------------------<br />";
 
 // -------------------------------------------------------store Detail
 var store_detail="";
@@ -771,7 +771,7 @@ if(p==true){
 reprint1+="<p style='text-align:center;' >DUPLICATE COPY</p>";
 }
 
-var billingDetail="<div style='width:210px;text-align:center;border:0px solid #333;font-size:10px;line-height:10px;' >";
+var billingDetail="<div style='width:240px;text-align:center;border:0px solid #333;font-size:10px;line-height:10px;' >";
 billingDetail+=store_detail;
 billingDetail+=invoice_detail;
 
@@ -793,8 +793,8 @@ $("#printBill").html(billingDetail);
       var divElements = $("#printBill").html();
             var oldPage = document.body.innerHTML;
             document.body.innerHTML = 
-              "<html><head><title></title><style type='text/css' media='print'>	p{line-height:10px;}</style></head><body>" + 
-              divElements + "</body>";
+              "<html><head><title></title><style type='text/css' media='print'>	p {line-height:10px;}</style></head><body>" + 
+              divElements + "</body></html>";
 				window.print();	
 			document.body.innerHTML = oldPage;
 			window.location.href = window.location;

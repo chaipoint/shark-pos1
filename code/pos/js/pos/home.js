@@ -170,7 +170,7 @@ $(document).ready(function(){
 				url: "index.php?dispatch=billing.loadCard",
 				data : formData
 			}).done(function(response) {
-				//alert(response);
+				alert(response);
 				$("#ajaxfadediv").removeClass('ajaxfadeclass');
 				var IS_JSON = true;
 					try

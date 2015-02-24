@@ -14,7 +14,7 @@ cursor: pointer;
 }
 </style>
 <?php //print_r($sales_data);?>
-<div class="panel panel-info" style="margin-left:-10px;"> 
+<div class="panel panel-info" style="margin-top:3.7%"> 
       <div class="panel-heading col" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><a href="javascript:void(0)">Paid Bill Details
       <i class="glyphicon glyphicon-chevron-down pull-right"></i></a></div>
       <div id="collapseTwo" class="panel-collapse collapse in">

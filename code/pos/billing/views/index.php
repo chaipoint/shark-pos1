@@ -7,17 +7,7 @@
 	.navbar {
 		margin-bottom: 1px;
 		}
-	.operation_div {	
-		top:90%;
-		left:13.2%;
-		position:absolute;
-		width:600px;
-	   }
-	.operation_div button {
-		margin:10px;
-		float:left;
-		line-height:4px; height:16px; width:150px; text-align:center; color:black;
-	}
+	
 	#wrapper {
 	margin:34px;
 	}
@@ -98,7 +88,7 @@
 									<div id="totaldiv" style="background-color:#A9A9A9;">
 										<table id="totaltbl" class="table table-striped table-condensed totals" style="margin-bottom:10px;color:black;margin-top:-72px;">
 											<tbody>
-												<tr class="">
+												<tr class="hide">
 													<td width="25%" >Discount</td>
 													<td width="25%"> 
 														<div class="input-group">
