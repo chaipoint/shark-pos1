@@ -468,6 +468,7 @@ $(document).ready(function(){
 									$('#card_company').val(payment_type == 'ppa' ? 'urbanPiper' : 'qwikcilver');
 									$('#card_redeem_amount').val(total_amount);
 									$('#card_txn_no').val(result.data['txn_no']);
+									$('#card_txn_type').val(result.data['txn_type']);
 									$('#card_approval_code').val(result.data['approval_code']);
 									$('#card_balance').val(result.data['balance']);
 									$('#is_prepaid').val('Y');
@@ -774,6 +775,7 @@ $(document).ready(function(){
 			billDetails.card.company = $('#card_company').val();
 			billDetails.card.redeem_amount = $('#card_redeem_amount').val();
 			billDetails.card.txn_no = $('#card_txn_no').val();
+			billDetails.card.txn_type = $('#card_txn_type').val();
 			billDetails.card.approval_code = $('#card_approval_code').val();
 			billDetails.card.balance = $('#card_balance').val();
 			billDetails.card.invoice_number = $('#card_invoice_no').val();
@@ -797,6 +799,7 @@ $(document).ready(function(){
 			}).done(function(response) {
 				console.log(response);
 				//alert(response);
+				//return false;
 				$("#ajaxfadediv").removeClass('ajaxfadeclass');
 				result = $.parseJSON($.trim(response));
 				$('#submit-sale').attr('disabled',false);
