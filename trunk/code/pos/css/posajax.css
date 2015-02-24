@@ -34,9 +34,7 @@
 		box-shadow:         -5px 0px 10px rgba(50, 50, 50, 0.50);
 
 }
-.ui-keyboard div {
-	font-size: 1.1em;
-}
+
 .ui-keyboard-button {
 	height: 3em;
 	width: 3em;
@@ -651,3 +649,6 @@ z-index:9999
 		color:green ;
 		font-weight:bold;
 	}
+	
+	
+	

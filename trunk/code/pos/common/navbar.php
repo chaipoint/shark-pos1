@@ -6,15 +6,13 @@ border-color: #0066cc;
 .navbar-inverse .navbar-nav > li > a {
 color: #007fff;
 }
-.navbar-nav.navbar-right:last-child {
-margin-right: -196px;
-}
+
 </style>	
 	
 		<div class="navbar navbar-static-top navbar-inverse">
 			<div class="container">
 				<div class="navbar-header">
-				  <img src="<?php echo IMG?>logo.png" height="50px"  style="position:absolute;left:182px">
+				  <img src="<?php echo IMG?>logo.png" height="50px">
 				</div>
 				<ul class="nav navbar-nav">
 					<iframe name="myiframe" src="<?php echo APP ?>/common/checknet.php" frameBorder="0" scrolling="no" style="width:250px;height:50px;float:right;margin-left:80px;"></iframe>

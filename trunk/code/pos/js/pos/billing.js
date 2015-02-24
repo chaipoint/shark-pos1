@@ -423,7 +423,7 @@ $(document).ready(function(){
            	var payment_type = $('#paid_by').val();
            	var total_amount = $('#twt').text();
            	$('#error_message').text();
-          		if(card_no!='') {
+          		if(card_no!='') { 
               		if(navigator.onLine === true) {
                 		$("span#loading_image").removeClass('hide');
                 		$('#submit-sale').attr('disabled',true);
@@ -804,8 +804,8 @@ $(document).ready(function(){
 				if(result.error){
 					bootbox.alert(result.message);
 				}else{
-					resetBill(true);
-					$intDiscount = 0;
+					//resetBill(true);
+					//$intDiscount = 0;
 					printBill(response, false);
 					$('#payModal').modal('hide');
 					if(result.message!=''){
@@ -817,8 +817,8 @@ $(document).ready(function(){
 						window.location='index.php?dispatch=billing.index';
 					}
 					
-					//resetBill(true);	
-					//$intDiscount = 0;
+					resetBill(true);	
+					$intDiscount = 0;
 				}
 			});
 			

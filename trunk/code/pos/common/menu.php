@@ -2,13 +2,13 @@
 	
 	.menu_div {	
 		top:4%;
-		left:13.2%;
-		position:absolute;
+		left:.8%;
+		
 		width:600px;
 	   }
 	.menu_div button {
-		margin:27px;
-		margin-left:13px;
+		margin:2px;
+		margin-left:21px;
 		float:left;
 		line-height:4px; height:16px; width:150px; text-align:center; color:black;
 		
