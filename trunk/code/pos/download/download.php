@@ -46,7 +46,7 @@ function updateCustomers($location){
 	}
 
 	$cusQuery = "SELECT cm.id, cm.name, cm.address, cm.phone, cm.contact_person,
-				cm.e_mail, cm.location_id, cm.customer_id, cm.type, cm.note, GROUP_CONCAT(DISTINCT(isb.day)) day 
+				cm.e_mail, cm.location_id, cm.customer_id, cm.type, cm.billing_type, cm.note, GROUP_CONCAT(DISTINCT(isb.day)) day 
 				FROM customer_master cm 
 				LEFT JOIN isb_delivery isb ON isb.customer_id = cm.id AND isb.active = 'Y'
 				WHERE cm.active = 'Y' AND cm.location_id = $location 
