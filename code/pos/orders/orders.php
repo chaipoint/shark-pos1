@@ -7,11 +7,11 @@
 
 		/* This Function Is Automatically Called When We Come On COC Module */
 		function index(){
-			$status = 'New';
+			$status = NEW_ORDER;
 			if(array_key_exists('status', $_GET) && !empty($_GET['status'])){
 				$status = $_GET['status'];
 			}
-			$getData = $this->getCocOrder($status , 'COC');
+			$getData = $this->getCocOrder($status , COC);
 			if(!$getData['error']){
 				$actionButtons = $this->actionButton($status);
 			}
@@ -36,12 +36,11 @@
 		}
         
 		function olo(){
-			$status = 'New';
+			$status = NEW_ORDER;
 			if(array_key_exists('status', $_GET) && !empty($_GET['status'])){
 				$status = $_GET['status'];
 			}
-			//echo 'sdfs';
-			$getData = $this->getCocOrder($status , 'OLO');
+			$getData = $this->getCocOrder($status , OLO);
 			if(!$getData['error']){
 				$actionButtons = $this->actionButton($status);
 			}
@@ -70,7 +69,7 @@
 		function updateOrderStatus(){
 			require_once dirname(__FILE__).'/../lib/api/sms_api.php';
 			$return = array('error' => false, 'message' => '', 'data' => array());
-			$details = $this->getConfig($this->cDB,'sms_api');
+			$details = $this->getConfig($this->cDB, 'sms_api');
 
 			if(array_key_exists('new_status', $_POST) && array_key_exists('current_status', $_POST)){
 				$current = $_POST['current_status'];
@@ -182,7 +181,7 @@
 
 		function changeOrderStatus($postData){
 			if(empty($postData)){
-				$return = array('error'=>true, 'message'=>'Please Provide Valid Input Variable');
+				$return = array('error'=>true, 'message'=>VALID_INPUT_ERROR);
 				return $return;
 			}
 			$url = API_URL;
