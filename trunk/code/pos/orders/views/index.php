@@ -1,44 +1,40 @@
 <style>
-	.btn {
-		width:83px;
-		}
-	
 	 li {
  	   list-style-type: none;
 	 }
 	 ul {
 	   padding-left:0px
 	}
-	
 	.size {font-size:10px}
-	
-	.
-  
+	.bt-update-status {width:70%;margin-top:5%;}
+	.print {width:70%}
 	
 </style>
 <script type="text/javascript" src="<?php echo JS?>pos/coc.js"></script>
-<div class="panel panel-info" style="margin-left:21px;margin-top:56px;height:485px;width:88%"> 
+<div class="padded menu_div"  style="min-height:450px;">
+<div class="panel panel-info" style="width:80%"> 
   
-	 <div class="panel-body tabbable" style="width:88%">
-        <ul class="nav nav-pills" role="" style="margin-top:-23px;">
-		  <li class="disabled"><a style="color:#aaaaaa">New&nbsp;&nbsp;<span id="New" style="color:green"  ><?php echo $order_count['New']; ?></span></a></li>
-		  <li class="disabled"><a style="color:#aaaaaa">Confirmed&nbsp;&nbsp;<span id="Confirmed" style="color:green"  ><?php echo $order_count['Confirmed']; ?></span></a></li>
-		  <li class="disabled"><a style="color:#aaaaaa">Cancelled&nbsp;&nbsp;<span id="Cancelled" style="color:green"><?php echo $order_count['Cancelled']; ?></span></a></li>
-		  <li class="disabled"><a style="color:#aaaaaa">Dispatched&nbsp;&nbsp;<span id="Dispatched" style="color:green"><?php echo $order_count['Dispatched']; ?></span></a></li>
-		  <li class="disabled"><a style="color:#aaaaaa">Delivered&nbsp;&nbsp;<span id="Delivered" style="color:green"><?php echo $order_count['Delivered']; ?></span></a></li>
-		  <li class="disabled"><a style="color:#aaaaaa">Paid&nbsp;&nbsp;<span id="Paid" style="color:green"><?php echo $order_count['Paid']; ?></span></a></li>
+	 <div class="panel-body tabbable">
+        <ul class="nav nav-pills" role="tablist" style="margin-top:-13px;">
+		  <li class="<?php echo ($status == 'New' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders&status=New">New&nbsp;&nbsp;<span id="New" class="" <?php echo ($order_count['New']!=0) ? 'style="color:red"' : ''; ?>><?php echo $order_count['New']; ?></span></a></li>
+		  <li class="<?php echo ($status == 'Confirmed' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders&status=Confirmed">Confirmed&nbsp;&nbsp;<span id="Confirmed" class="" <?php echo ($order_count['Confirmed']!=0) ? 'style="color:red"' : ''; ?>><?php echo $order_count['Confirmed']; ?></span></a></li>
+		  <li class="<?php echo ($status == 'Cancelled' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders&status=Cancelled">Cancelled&nbsp;&nbsp;<span id="Cancelled" class="" <?php echo ($order_count['Cancelled']!=0) ? 'style="color:red"' : ''; ?>><?php echo $order_count['Cancelled']; ?></span></a></li>
+		  <li class="<?php echo ($status == 'Dispatched' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders&status=Dispatched">Dispatched&nbsp;&nbsp;<span id="Dispatched" class="" <?php echo ($order_count['Dispatched']!=0) ? 'style="color:red"' : ''; ?>><?php echo $order_count['Dispatched']; ?></span></a></li>
+		  <li class="<?php echo ($status == 'Delivered' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders&status=Delivered">Delivered&nbsp;&nbsp;<span id="Delivered" class="" <?php echo ($order_count['Delivered']!=0) ? 'style="color:#1a1a1a"' : ''; ?>><?php echo $order_count['Delivered']; ?></span></a></li>
+		  <li class="<?php echo ($status == 'Paid' ? 'active' : '');?>"><a href="<?php echo URL;?>?dispatch=orders&status=Paid">Paid&nbsp;&nbsp;<span id="Paid" class="" <?php echo ($order_count['Paid']!=0) ? 'style="color:#1a1a1a"' : ''; ?>><?php echo $order_count['Paid']; ?></span></a></li>
 	    </ul>
 
          <table class="table table-bordered table-stripped" id="order-holder" style="font-size:10px;">
            <thead>
 		     <tr  style="font-size:12px;background-color:#428bca;color:white;">
 			   <th style="width:120px;">Order No / Bill No</th>
-			   <th style="width:120px;">Customer Details</th>
-			   <th style="width:200px;">Order Details</th>
+			   <th style="width:142px;">Customer Details</th>
+			   <th style="width:158px;">Order Details</th>
 			   <th style="width:60px;">Amount</th>
-			   <th style="width:220px;">Item Summary</th>
+			   <th style="width:160px;">Item Summary</th>
 			   <th style="width:120px;">Comment</th>
-			  </tr>
+			   <th style="width:120px;"><?php echo ($status == 'Cancelled' ? 'Reason' : 'Action');?></th>
+		     </tr>
 	       </thead>
 	     <tbody>
 		<?php
@@ -49,32 +45,7 @@
 				$bill_no = (array_key_exists($data['order_id'], $billArray) ? $billArray[$data['order_id']] : '');
 				
 			$display .= '<tr data-order-id="'.$data['order_id'].'" data-order-details=\''.json_encode($data).'\'>
-							<td class="text-left"><strong>'.$data['order_id'].' / '.$bill_no.'</strong><br>
-								<strong><span id="order_status-'.$data['order_id'].'">'.$data['status'].'</span></strong>
-								
-								'.(($data['status'] == 'Dispatched') ?
-								"<ul>
-									<li id='Cancelled-".$data['order_id']."'><input type='radio' name='status-".$data['order_id']."'  value='Cancelled' class='size bt-update-status ".(($data['status']=='Cancelled' || $data['status']=='Delivered') ? 'hide' : ''). "' data-new_status='Cancelled' data-current_status='".$data['status']."'> Cancel&nbsp&nbsp&nbsp&nbsp&nbsp</li>
-									<li id='Delivered-".$data['order_id']."'><input type='radio' name='status-".$data['order_id']."'  value='Delivered' class='bt-update-status ".(($data['status']=='Cancelled' || $data['status']=='Delivered') ? 'hide' : '')."' data-new_status='Delivered' data-current_status='".$data['status']."'> Delivered&nbsp&nbsp</li>
-								</ul>" : (($data['status'] == 'Confirmed') ?
-								
-								"<ul >
-									<li id='Dispatched-".$data['order_id']."'><input type='radio' name='status-".$data['order_id']."'  value='Dispatched' class='size bt-update-status ".(($data['status']=='Cancelled' || $data['status']=='Delivered') ? 'hide' : '')."' data-new_status='Dispatched' data-current_status='".$data['status']."'> Dispatch&nbsp&nbsp&nbsp</li>
-									<li id='Cancelled-".$data['order_id']."'><input type='radio' name='status-".$data['order_id']."'  value='Cancelled' class='size bt-update-status ".(($data['status']=='Cancelled' || $data['status']=='Delivered') ? 'hide' : '')."' data-new_status='Cancelled' data-current_status='".$data['status']."'> Cancel&nbsp&nbsp&nbsp&nbsp&nbsp</li>
-									<li id='Delivered-".$data['order_id']."'><input type='radio' name='status-".$data['order_id']."'  value='Delivered' class='size bt-update-status ".(($data['status']=='Cancelled' || $data['status']=='Delivered') ? 'hide' : '')."' data-new_status='Delivered' data-current_status='".$data['status']."'> Delivered&nbsp&nbsp</li>
-								</ul>"
-									  : (($data['status'] == 'New') ?
-								"<ul>
-									<li id='Confirmed-".$data['order_id']."'><input type='radio' name='status-".$data['order_id']."'  value='Confirmed' class='size bt-update-status ".(($data['status']=='Cancelled' || $data['status']=='Delivered') ? 'hide' : '')."' data-new_status='Confirmed' data-current_status='".$data['status']."'> Confirmed</li>
-									<li id='Dispatched-".$data['order_id']."'><input type='radio' name='status-".$data['order_id']."'  value='Dispatched' class='size bt-update-status ".(($data['status']=='Cancelled' || $data['status']=='Delivered') ? 'hide' : '')."' data-new_status='Dispatched' data-current_status='".$data['status']."'> Dispatch&nbsp&nbsp&nbsp</li>
-									<li id='Cancelled-".$data['order_id']."'><input type='radio' name='status-".$data['order_id']."'  value='Cancelled' class='size bt-update-status ".(($data['status']=='Cancelled' || $data['status']=='Delivered') ? 'hide' : '')."' data-new_status='Cancelled' data-current_status='".$data['status']."'> Cancel&nbsp&nbsp&nbsp&nbsp&nbsp</li>
-									<li id='Delivered-".$data['order_id']."'><input type='radio' name='status-".$data['order_id']."'  value='Delivered' class='size bt-update-status ".(($data['status']=='Cancelled' || $data['status']=='Delivered') ? 'hide' : '')."' data-new_status='Delivered' data-current_status='".$data['status']."'> Delivered&nbsp&nbsp</li>
-								</ul>"
-									
-									: ''))).'
-								
-								<button id="bill_button-'.$data['order_id'].'" class="btn btn-primary btn-sm generate-bill '.(($data['status']=='Cancelled' || $data['status']=='Delivered') ? 'hide' : '').'"  data-order-id='.$data['order_id'].'><i class="glyphicon glyphicon-list-alt"></i>&nbsp;Bill</button>
-							</td>
+							<td class="text-center"><strong>'.$data['order_id'].' / '.$bill_no.'</strong></td>
 							<td>
 								<table>
 									<tr>
@@ -100,7 +71,6 @@
 									</tr>
 								</table>
 							</td>
-							
 							<td class="text-center">
 								<table class="table toggle-table">
 									<tbody>
@@ -133,7 +103,15 @@
 								
 								<td>'.$data['comment'].'</td>
 								
-								
+								<td>'.($status == 'Delivered' ? "<span class='text-center'>".$data['delivery_boy']."</span>" : '')." ".($status == 'Cancelled' ? $data['cancel_reason'] : '')." ".sprintf($action,$data['order_id']).'
+									
+										<!--<button class="btn btn-sm btn-primary">Confirm</button>
+										<button class="btn btn-sm btn-primary">Cancel</button>
+										<button class="btn btn-sm btn-primary">Dispatch</button>
+										<button class="btn btn-sm btn-primary">Delivered</button>
+										<button class="btn btn-sm btn-primary">Paid</button>-->
+									
+								</td>
 							</tr>';
 							$total +=$data['net_amount'];
 							$total_qty +=count($data['products']);
@@ -154,4 +132,5 @@
 	   <?php } ?>
     </table>
   </div>
+</div>
 </div>

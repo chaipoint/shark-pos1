@@ -9,13 +9,12 @@ var $intDiscount = 0;
 var $totalDiscountAmount = 0.0;
 var order = 0;
 var loadedBill = null;
+var cawBill = null;
 var modifyBill = false;
 var popupKeyboard = null;
 
 $(document).ready(function(){ 
-	$(window).load( function(){
-		$('input').val( ' ' ); setTimeout( function(){ $('input').val( '' ); }, 20 );
-	});
+	
 	var url = $.url();
 	$(this).attr("title", "Shark |ChaiPoint POS| Billing"); 
 	/*
@@ -46,7 +45,7 @@ $(document).ready(function(){
 
 	var url = $.url(window.location);
 	order = url.param('order');
-	if(order && order > 0 && ! isNaN(order)){
+	if(order && order > 0 && ! isNaN(order)){ alert('sdfsfsdfsdfsdfsdf');
 		/*
 		*	PLEASE Don't Change This code Block Without Prior Permission
 		*/
@@ -70,6 +69,54 @@ $(document).ready(function(){
 				//$('#proajax button[category-product-sequence="'+productNewList[data['id']].seq+'"]').addClass('active-btn');
 				$('#proajax button[value="'+data['id']+'"]').addClass('active-btn');
 				generateSalesTable(data['id'], parseInt(data['qty']), productData);
+			});
+		}
+	}
+	
+	
+	var url = $.url(window.location);
+	cawOrder = url.param('cawOrder');
+	if(cawOrder && cawOrder > 0 && ! isNaN(cawOrder)){ 
+		
+		/*
+		*	PLEASE Don't Change This code Block Without Prior Permission
+		*/
+		cawBill = new Object();
+		var orderData = $.parseJSON(localStorage.getItem(cawOrder));
+		cawBill = orderData;
+		if(orderData){
+			$.ajax({
+				type: 'POST',
+				url: "index.php?dispatch=billing.getCawProduct",
+				data : {request_type:'getCawProduct', 'customer_id':orderData.mysql_id},
+			}).done(function(response) { //alert(response); return false;  
+				console.log(response);
+				var $result = $.parseJSON(response);
+				if($result.error){ 
+					bootbox.alert($result.message);
+					return false;
+				}
+				productArray = $.extend(true, productArray ,$.parseJSON($result.data));
+				console.log(productArray);
+				var productNewList = new Object();
+				$.each(productArray, function(index, data){
+					var category = index;
+					$.each(data, function(pIndex, pData){
+						productNewList[pData.mysql_id]  = new Object();
+						productNewList[pData.mysql_id].cat = category;
+						productNewList[pData.mysql_id].seq = pIndex;
+					});
+				});
+				$.each(orderData.product, function (index, data){
+					var productData = productArray[productNewList[data['id']].cat] [productNewList[data['id']].seq];
+					$('#proajax button[value="'+data['id']+'"]').addClass('active-btn');
+					generateSalesTable(data['id'], parseInt(data['qty']), productData);
+				});
+				$('.bill_qty_input').prop('readonly', true);
+				$('.del_row').addClass('hide');
+				$('.category-product').prop('disabled', true);
+				$('.category-selection').prop('disabled', true);
+				
 			});
 		}
 	}
@@ -306,7 +353,7 @@ $(document).ready(function(){
 			generateSalesTable();
 		});
 
-		$("#saletbl").on("change",".bill_qty_input",function(event){ alert('hi');
+		$("#saletbl").on("change",".bill_qty_input",function(event){ 
 			var newQty = parseInt($(this).val());
 			newQty = isNaN(newQty) ? 0 : newQty;
 			var pID = $(this).closest('tr').attr('billing-product');
@@ -615,6 +662,29 @@ $(document).ready(function(){
 					$("#bill_status_id").val(77);
 					$("#customer_type").val('coc');
 					$("#customer_type").prop('disabled',true);
+			}else if(cawBill){
+					$("#customer_type").val('caw');
+					$("#customer_type").prop('disabled',true);
+					$("#paid-amount").prop('disabled',true);
+					$("#customer_name").val(cawBill.mysql_id);
+					$("#customer_name").prop('disabled',true);
+					$("#is_cod").val('N');
+					$("#is_prepaid").val('N');
+					$("#is_credit").val('Y');
+					$('.payment-type-bt[data-value="caw"]').trigger('click');
+					$('.payment-type-bt').attr('disabled',true);
+					$('.payment-type-bt[data-value="caw"]').attr('disabled',false);
+					$('#billing_customer').addClass('hide');
+					$('#customer_name').removeClass('hide');
+					$('#phone_number').val(cawBill.phone);
+					$('#billing_customer_address').val(cawBill.address);
+					$('#billing_customer_company_name').val(cawBill.name);
+					$("span#address").closest('tr').removeClass('hide');
+					$("span#address").text(cawBill.address);
+					$("span#contact_person").closest('tr').removeClass('hide');
+					$("span#contact_person").text(cawBill.contact_person);
+					$("#challan_no").val(cawBill.challan_no);
+					$("#onsite_time").val(cawBill.onsite_time);
 			}
 			popupKeyboard = $('#paid-amount, #phone_number, #billing_customer').cKeyboard();
 
@@ -669,25 +739,7 @@ $(document).ready(function(){
 		});
 		//---END--- Payment Event After Products selection  or Without Product Selection
 
-		$('#customer_name').on('change', function(){
-			if(!$(this).val()){ return false;}
-			var customer_id = $(this).val();
-			$.ajax({
-					type: 'POST',
-					url: "index.php?dispatch=billing.getRetailCustomer",
-			  		data : {request_type:'getRetailCustomer','customer_id':customer_id},
-				}).done(function(response) { 
-					console.log(response);
-					$result = $.parseJSON(response);
-					$('#phone_number').val($result.data['phone']);
-					$('#billing_customer_address').val($result.data['address']);
-					$('#billing_customer_company_name').val($result.data['name']);
-					$("span#address").closest('tr').removeClass('hide');
-					$("span#address").text($result.data['address']);
-					$("span#contact_person").closest('tr').removeClass('hide');
-					$("span#contact_person").text($result.data['contact_person']);
-				});
-		});
+		
 
 		//---START--- SUbmit Payment Bill
 		$("#submit-sale").click(function(event){ 
@@ -735,10 +787,8 @@ $(document).ready(function(){
 			billDetails.total_amount = ($totalAmountWT).toFixed(2);
 			billDetails.round_off = (($totalAmountWT).toFixed(0) - $totalAmountWT).toFixed(2);
 			billDetails.due_amount = parseFloat(billDetails.total_amount) + parseFloat(billDetails.round_off);
-			
 			billDetails.paid_amount = $('#paid-amount').val();
 			billDetails.payment_type = $("#paid_by").val();
-
 			billDetails.is_cod = $("#is_cod").val();
 			billDetails.is_prepaid = $("#is_prepaid").val();
 			
@@ -768,7 +818,10 @@ $(document).ready(function(){
 			billDetails.customer.phone_no = $("#phone_number").val();
 			billDetails.customer.company_name = $("#billing_customer_company_name").val();
 			billDetails.customer.address = $("#billing_customer_address").val();
-
+			if(billDetails.payment_type=='caw'){
+				billDetails.customer.challan_no = $('#challan_no').val();
+				billDetails.customer.onsite_time = $('#onsite_time').val();
+			}
 			billDetails.card = new Object();
 			billDetails.card.no = $('#card_number').val();
 			billDetails.card.type = $('#card_type').val();
@@ -779,6 +832,7 @@ $(document).ready(function(){
 			billDetails.card.approval_code = $('#card_approval_code').val();
 			billDetails.card.balance = $('#card_balance').val();
 			billDetails.card.invoice_number = $('#card_invoice_no').val();
+			
 			if(!$('#reward_redemption_code').val()){
 				billDetails.card.reward_redemption = 'no';
 				billDetails.card.redemption_code = '';
@@ -909,7 +963,6 @@ $(document).ready(function(){
 
 });
 function generateSalesTable(productId, qty, productData){
-	
 	var addAtLast = false;
 	if(productData){
 		addAtLast = true;
@@ -977,9 +1030,10 @@ function generateSalesTable(productId, qty, productData){
 	$("#ts_con").text($totalTaxAmount.toFixed(2));
 	$("#total-payable").text($totalAmountWT.toFixed(0));	
 	$("#ds_con").text(($totalDiscountAmount).toFixed(2));
+	
 }
-function resetBill(refresh){
-	if(refresh){
+function resetBill(refresh){ 
+	if(refresh){ 
 		$billingItems = new Object();
 		delete $billingItems;
 		$('#discount_input_box').val('').prop('disabled',false);
