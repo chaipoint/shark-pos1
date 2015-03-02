@@ -17,17 +17,7 @@
 				header("LOCATION:index.php?error=true");
 				die;
 			}
-			/*echo '<pre>';
-			print_r($_SESSION);
-			echo '</pre>';
-			*/
 			$data = array();
-			//require_once DIR.'/sales_register/sales_register.php';
-			//require_once DIR.'/staff/staff.php';
-			//$sr = new sales_register();
-			//$st = new Staff();
-
-			//$data = $sr->getBills($this->getCDate(), $this->getCDate());
 			$data['is_store_open'] = 'false';
 			$data['is_shift_running'] = 'false';
 			$totalShifts = 0;
@@ -45,13 +35,9 @@
 			}
 			
 			$data['shift_data'] = $result;
-			//$data['staff_list'] = $st->getStaffList();
 			$data['total_shift'] = $totalShifts;
 			$configHead = $this->getConfig($this->cDB, 'head');
 			$data['head_data'] = $configHead['data']['head'];
-			//$data['expense_data'] = $sr->getExpenseData($this->getCDate(), $this->getCDate());
-			//$data['card_load_data'] = $sr->getCardLoadSale($this->getCDate());
-			//$data['last_ppc_bill'] = $sr->getLastPpcBill($this->getCDate());
 			$data['shift'] = '';
 			$data['reconcilation'] = '';
 			
@@ -120,11 +106,8 @@
 			$cash_in_box = 0;
 			$excess_in_box = 0;
 			$minus = 0;
-			//require_once DIR.'/billing/billing.php';
-			//$bl = new billing();
 			require_once DIR.'/sales_register/sales_register.php';
 			$sr = new sales_register();
-			//$todaysale = json_decode($sr->getTodaysSale($date),true);
 			$sales_reg = $sr->getBills($date, $date);
 			$shift_inward = 0;
 			$shift_expense = 0;
@@ -266,7 +249,7 @@
     		$cash_reconciliation_insert['cash_in_box'] = $cash_in_box;
     		$cash_reconciliation_table .= $excess;
     		$cash_reconciliation_table .= '</tbody><thead><tr><th style="font-size:12px;text-align:left">Total Sale</th><th>'.($total).'</th></tr></thead><thead><tr><th style="font-size:12px;text-align:left">Cash In Box</th><th>'.($cash_in_box).'</th></tr></thead></table></div></div>';
-    		// && array_key_exists('date', $_POST)
+    		
     		if(!$returnData['error'] && array_key_exists(0, $shift_data['rows'])){ 
 				$result = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getUpdate(STORE_DESIGN_DOCUMENT_UPDATE_STORE_SHIFT,$shift_data['rows'][0]['id'])->setParam($cash_reconciliation_insert)->execute();
     		}
@@ -274,13 +257,5 @@
 			
 			return $returnData;
 		
-			
-			/*$this->commonView('header_html');
-			$this->commonView('navbar');
-			$this->commonView('menu');
-			$this->view($returnData);
-			$this->commonView('operation');
-			//$this->commonView('footer_inner');
-			$this->commonView('footer_html');*/
 		}
 }
