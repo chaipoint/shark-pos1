@@ -166,8 +166,15 @@ define ('COC', 'COC');
 define ('OLO', 'OLO');
 define ('PREORDER', 'Pre-Order');
 define ('CAW', 'CAW');
-
-
+define ('NO_COUPON_FOUND', 'No Coupon Exists For Your Store');
+define ('INVALID_COUPON', 'Enter Valid Coupan');
+define ('NOT_FOUND', 'not_found');
+define ('BILL_NOT_FOUND', 'Bill Not Found');
+define ('LOCAL', 'L');
+define ('CLOUD', 'C');
+define ('LOCAL_BILLING_MODE', 'local');
+define ('NO_CUSTOMER_ASSIGN', 'No Customer Assign');
+define ('APPROVED_SCHEDULE_NOT_FOUND', 'Approved Schedule Not Found');
 global $PAYMENT_MODE, $ORDER_STATUS, $CARD_RESPONSE_ARRAY, $ERT_PRODUCT_ARRAY;
 $PAYMENT_MODE = array('cash'=>0,'ppc'=>0,'ppa'=>0,'caw'=>0,'credit'=>0);
 $ORDER_STATUS = array('New'=>0,'Confirmed'=>0,'Cancelled'=>0,'Dispatched'=>0,'Delivered'=>0,'Paid'=>0);
