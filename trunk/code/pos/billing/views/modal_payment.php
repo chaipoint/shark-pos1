@@ -48,6 +48,8 @@
 				<input type="hidden" name="card_approval_code" id="card_approval_code">
 				<input type="hidden" name="card_balance" id="card_balance">
 				<input type="hidden" name="card_invoice_no" id="card_invoice_no">
+				<input type="hidden" name="challan_no" id="challan_no"/>
+				<input type="hidden" name="onsite_time" id="onsite_time"/>
 				<input type="hidden" name="reward_redemption_code" id="reward_redemption_code">
 
 			<div class="modal-body">
