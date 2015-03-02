@@ -62,7 +62,7 @@
 			require_once DIR.'/sales_register/sales_register.php';
 			$sr = new sales_register();
 			$data = $sr->getBills($this->getCDate(), $this->getCDate());
-			print_r($data);die();
+			//print_r($data);die();
 			$data['last_ppc_bill'] = $sr->getLastPpcBill($this->getCDate());
 			$data['card_load_data'] = $sr->getCardLoadSale($this->getCDate());
 			$this->commonView('header_html');
