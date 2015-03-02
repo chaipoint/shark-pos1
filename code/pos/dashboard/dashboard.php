@@ -5,17 +5,38 @@
 			$this->log =  Logger::getLogger("CP-POS|DASHBOARD");
 		}
 		function index(){
-			/*echo'<pre>';
-			print_r($_SESSION);
-			echo '</pre>';*/
-			$data = array('error' => false, 'message' => '', 'data'=> array());
-			$this->commonView('header_html', array('error'=>$data['error']));
-			$this->commonView('navbar');
-			//$this->commonView('menu');
-			if(!$data['error']){
-				$this->view();
+			$data = array('error'=>false, 'message' => '', 'data'=> array());
+			$response = array();
+			$postData = array('action'=>'storeAudit', 'store_id'=>$_SESSION['user']['store']['id']);
+			$url = ACTIVITY_TRACKER_API_URL;
+			$ch = curl_init();
+			curl_setopt_array($ch, array(CURLOPT_URL => $url, CURLOPT_TIMEOUT=>5000, CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true, CURLOPT_POSTFIELDS => $postData));
+			$result = curl_exec($ch);
+			$curl_errno = curl_errno($ch);
+			$curl_error = curl_error($ch);
+			curl_close($ch);
+			
+			if($curl_errno > 0){
+				$data['error'] = true;
+				$data['message'] = SERVER_DOWN_ERROR;
+			}else{
+				$res = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $result);
+				$response = json_decode($res, true);
 			}
-			//$this->commonView('operation');
+			//print_r($data);
+			$data['activity_data'] = $response;
+			require_once DIR.'/home/home.php';
+			$home = new Home();
+			$data['reconcilation'] = $home->reconcilation();
+			
+			require_once DIR.'/sales_register/sales_register.php';
+			$sr = new sales_register();
+			$data['data'] = $sr->getBills($this->getCDate(), $this->getCDate());
+			$data['last_ppc_bill'] = $sr->getLastPpcBill($this->getCDate());
+			
+			$this->commonView('header_html');
+			$this->commonView('navbar');
+			$this->view($data);
 			//$this->commonView('footer_inner');
 			$this->commonView('footer_html');
 			
