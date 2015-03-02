@@ -4,10 +4,6 @@
 		border: 1px solid #EEE;
 		border-bottom: 0;
 		}
-	.navbar {
-		margin-bottom: 1px;
-		}
-	
 	#wrapper {
 	margin:34px;
 	}
@@ -40,8 +36,10 @@
 	}
 ?>
 <div class="container"> 
+	<?php //$this->commonView('menu');
+	//require_once 'C:\inetpub\wwwroot\pos\common/menu.php';?>
 	
-	<div id="wrapper" style="margin-top:33px;">
+	<div id="wrapper" style="">
 		<div id="content">
 			<div class="c1">
 				<div class="pos">
