@@ -6,8 +6,7 @@
 		}
 		function index(){
 			$data = array('error'=>false, 'message' => '', 'data'=> array());
-			$response = array();
-			$postData = array('action'=>'storeAudit', 'store_id'=>$_SESSION['user']['store']['id']);
+			$postData = array('action'=>STORE_AUDIT, 'store_id'=>$_SESSION['user']['store']['id']);
 			$url = ACTIVITY_TRACKER_API_URL;
 			$ch = curl_init();
 			curl_setopt_array($ch, array(CURLOPT_URL => $url, CURLOPT_TIMEOUT=>5000, CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true, CURLOPT_POSTFIELDS => $postData));
@@ -15,15 +14,15 @@
 			$curl_errno = curl_errno($ch);
 			$curl_error = curl_error($ch);
 			curl_close($ch);
-			
+			$response = array();
 			if($curl_errno > 0){
 				$data['error'] = true;
-				$data['message'] = SERVER_DOWN_ERROR;
+				$data['message'] = INTERNET_ERROR;
 			}else{
 				$res = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $result);
 				$response = json_decode($res, true);
 			}
-			//print_r($data);
+			
 			$data['activity_data'] = $response;
 			require_once DIR.'/home/home.php';
 			$home = new Home();
