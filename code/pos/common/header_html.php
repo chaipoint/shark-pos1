@@ -9,8 +9,11 @@
 	</head>
 	<body>
 		<div id="ajaxfadediv"></div>
-<?php	if(@$error){
-		echo '<script>$(document).ready(function(){ db_error();});</script>';
+<?php
+	
+	if(@$error){
+		@$message = (!empty($message) ? $message : '');
+		echo '<script>$(document).ready(function(){ db_error("'.@$message.'");});</script>';
 	}
 ?>
 	<div class="modal fade" id="sync-modal" tabindex="-1" role="dialog" aria-hidden="true">
