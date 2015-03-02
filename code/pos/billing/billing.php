@@ -44,9 +44,12 @@
 				foreach($result['menu_items'] as $key => $Items){
 					if(!empty($Items['category']['id'])){
 						$catList[$Items['category']['id']] = $Items['category']['name']; 
-						$productList[$Items['category']['id']][] = $Items;
+						$productList[$Items['category']['id']][$Items['sequence']] = $Items;
 					}
 		 		}
+				foreach($productList as $key => $value){
+					 ksort($productList[$key]);
+				}
 				//$catList[100] = 'C@W';
 		 		ksort($catList);
 		 		$currectCat = array_keys($catList);
@@ -74,13 +77,13 @@
 				$this->view($data);
 			}
 			$this->commonView('operation');
-			$this->commonView('footer_inner');
+			//$this->commonView('footer_inner');
 			$this->commonView('footer_html');
 			
 		}
 
 		/* Function To Get Retail Customer Detail */
-		public function getRetailCustomer(){
+		/*public function getRetailCustomer(){
 			$return = array('error'=>false, 'message'=>'', 'data' => array());
 			if(array_key_exists('request_type', $_REQUEST) && $_REQUEST['request_type']==GET_RETAIL_CUSTOMER){
 				$resultRetailCustomer = $this->cDB->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_RETAIL_CUSTOMER_LIST)->setParam(array('key'=>$_REQUEST["customer_id"],'include_docs'=>'true'))->execute();
@@ -100,7 +103,7 @@
 				$return['message'] = REQUEST_TYPE_NOT_ALLOWED;
 			}
 			return $return;
-		}
+		}*/
 
 		public function rePrint(){
 				$return = array('error'=>false, 'message'=>'', 'data' => array());
@@ -130,21 +133,13 @@
 			
 			if(array_key_exists('rows', $resultCawProduct) && count($resultCawProduct['rows'])>0){
 				$rows = $resultCawProduct['rows'][0]['doc']['schedule'];
-				$day_number = date('N', strtotime(date('d-m-Y')));
 				$productList = array();
-				if(array_key_exists($day_number, $rows)){
-					foreach($rows[$day_number] as $key => $value){ 
-						if($this->in_array_r($value['name'] , $productList)){
-						}else{
-							$productList[100][] = $value;
+					foreach($rows as $key => $value){ 
+						foreach($value as $k=>$v){
+							$productList[100][] = $v;
 						}
 					} 
 					$return['data'] = json_encode($productList, true);
-				}else{
-					$return['error'] = true;
-					$return['message'] = 'NO ORDER SCHEDULE FOR CURRENT DAY';
-				}
-				
 			}else{
 				$return['error'] = true;
 				$return['message'] = 'Customer Not Found';
