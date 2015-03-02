@@ -66,6 +66,16 @@
 
 	  		}
 	  		
+			/* To Check Print Utility Exists Or Not */
+	  		/*$utilityCheck = file_exists(EXE_PATH);
+			$data['printUtility'] = ($utilityCheck ? 'true' : 'false');
+			if($utilityCheck){
+				$company_data = array();
+			    $company_data = $this->configData['company_details'];
+				$this->log->trace("COMPANY DETAILS TO BE PRINT \r\n".json_encode($company_data));
+				file_put_contents(COMPANY_DETAIL_TXT_PATH, json_encode($company_data,true));
+			}*/
+			
 			/* To Get Retail Customer*/
 	  		require_once DIR.'/customer/customer.php';
 	  		$cus = new Customer();
@@ -82,35 +92,13 @@
 			
 		}
 
-		/* Function To Get Retail Customer Detail */
-		/*public function getRetailCustomer(){
-			$return = array('error'=>false, 'message'=>'', 'data' => array());
-			if(array_key_exists('request_type', $_REQUEST) && $_REQUEST['request_type']==GET_RETAIL_CUSTOMER){
-				$resultRetailCustomer = $this->cDB->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_RETAIL_CUSTOMER_LIST)->setParam(array('key'=>$_REQUEST["customer_id"],'include_docs'=>'true'))->execute();
-				$this->log->trace('RETAIL CUSTOMER DETAILS'."\r\n".json_encode($resultRetailCustomer));
-				if(array_key_exists('rows', $resultRetailCustomer)){
-					$rows = $resultRetailCustomer['rows'];
-					foreach($rows as $key => $value){
-						$return['data']['name'] = $value['doc']['name']; 
-						$return['data']['phone'] = $value['doc']['phone']; 
-						$return['data']['address'] = $value['doc']['address'];
-						$return['data']['contact_person'] = $value['doc']['contact_person'];
-						$return['data']['email'] = $value['doc']['e_mail'];
-					}
-				}
-			}else{
-				$return['error'] = true;
-				$return['message'] = REQUEST_TYPE_NOT_ALLOWED;
-			}
-			return $return;
-		}*/
-
 		public function rePrint(){
 				$return = array('error'=>false, 'message'=>'', 'data' => array());
 				$bill = $_POST['doc'];
 				$billDataReturned = $this->getBillData($bill); 
 				if(!$billDataReturned['error']){
 	 				$billData = $billDataReturned['data'];
+					//$re = $this->printBill($billData);
 					$return['data'] = $billData;
 	 				return json_encode($return);
 	 			}else{
@@ -167,12 +155,12 @@
 							die();
 						}else{
 							$return['error'] = true;
-							$return['message'] = 'Enter Valid Coupan';
+							$return['message'] = INVALID_COUPON;
 						}
 					}
 				}else{
 					$return['error'] = true;
-					$return['message'] = 'No Coupan Exists For Your Store';
+					$return['message'] = NO_COUPON_FOUND;
 				}
 			}
 			
@@ -185,7 +173,7 @@
 				$billDetails = $this->cDB->getDocs($bill_id);
   				$this->log->trace('BILL DETAILS'."\r\n".json_encode($billDetails));
   				if(array_key_exists('error', $billDetails)){
-  					$return['message'] = ($billDetails['error'] == 'not_found' ? 'Bill Not Found' : ERROR.' '.$billDetails['error']);
+  					$return['message'] = ($billDetails['error'] == NOT_FOUND ? BILL_NOT_FOUND : ERROR.' '.$billDetails['error']);
   					$return['error'] = true;
   				}else{
  					$return['data'] = $billDetails;
@@ -243,7 +231,7 @@
 						$currentBillNo = '1' ;
 					}
 					if(is_numeric($currentBillNo)){
-						$mode = ($config['billing_mode']=='local' ? 'L' : 'C');
+						$mode = ($config['billing_mode']==LOCAL_BILLING_MODE ? LOCAL : CLOUD);
 						$_POST['bill'] = $_SESSION['user']['store']['code']."".$_SESSION['user']['counter']."".str_pad($currentBillNo, 4 , '0', STR_PAD_LEFT)."".$mode;
 						$_POST['bill_no'] = $currentBillNo;
 						$_POST['store_message'] = $_SESSION['user']['store']['store_message'];
@@ -251,6 +239,11 @@
 						$result = $this->cDB->saveDocument()->execute($_POST);
 						$this->log->trace("SAVE BILL RESULT \r\n".json_encode($result));
 						if(array_key_exists('ok', $result)){
+							/*if($_POST['utility_check']=='true'){
+								$res = $this->printBill($_POST);
+								$return['error'] = $res['error'];
+			                    $return['message'] = $res['message'];
+							}*/
 							$return['data'] = $_POST;
 						}
 					}else{

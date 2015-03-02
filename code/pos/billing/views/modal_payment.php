@@ -75,10 +75,12 @@
 									<select name="customer_name" class="form-control" id="customer_name">
 										<option value="">Select One</option>
 										<?php
-											foreach($customer as $key => $value){
-												?>
-												<option value="<?php echo $value['id'];?>"><?php echo $value['label'];?></option>
-												<?php
+										   if(is_array($customer) && count($customer)>0){
+												foreach($customer as $key => $value){
+										?>
+													<option value="<?php echo $value['id'];?>"><?php echo $value['label'];?></option>
+										<?php
+												}
 											}
 										?>										
 									</select>
