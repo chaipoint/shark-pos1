@@ -21,7 +21,7 @@
 				}
 			}else{
 				$data['error'] = false;
-				$data['message'] = 'No Customer Assign';
+				$data['message'] = NO_CUSTOMER_ASSIGN;
 			}
 			$data['customerList']=$customerList;
 			$this->commonView('header_html',array('error'=>$data['error']));
@@ -105,12 +105,12 @@
 						
 					}else{
 						$return['error'] = true;
-						$return['message'] = 'Approved Schedule Not Found';
+						$return['message'] = APPROVED_SCHEDULE_NOT_FOUND;
 					}
 			
 				}else{
 					$return['error'] = true;
-					$return['message'] = 'Approved Schedule Not Found';
+					$return['message'] = APPROVED_SCHEDULE_NOT_FOUND;
 				}
 			}else{
 				$return['error'] = true;
