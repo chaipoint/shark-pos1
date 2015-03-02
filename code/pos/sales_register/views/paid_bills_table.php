@@ -7,20 +7,15 @@
 <script type="text/javascript" src="<?php echo (JS.'dataTables.jqueryui.js');?>" ></script>
 <script type="text/javascript" src="<?php echo JS; ?>bootstrapValidator.js"></script>
 <script type="text/javascript" src="<?php echo (JS.'pos/sale.register.js');?>" ></script>
-<style>
-table.dataTable thead th {
-padding: 3px 0px 3px 5px;
-cursor: pointer;
-}
-</style>
+
 <?php //print_r($sales_data);?>
-<div class="panel panel-info" style="margin-top:3.7%"> 
+<div class="panel panel-info" style="width:88%"> 
       <div class="panel-heading col" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><a href="javascript:void(0)">Paid Bill Details
       <i class="glyphicon glyphicon-chevron-down pull-right"></i></a></div>
       <div id="collapseTwo" class="panel-collapse collapse in">
-        <div class="panel-body">
+        <div class="panel-body" >
 
-          <table id="active_bill_table" class="table table-striped table-bordered table-condensed table-hover" style="margin-bottom:5px;">
+          <table id="active_bill_table" class="table table-striped table-bordered table-condensed table-hover">
 	         <thead>
               <tr id="filter_active">
                 <th></th>

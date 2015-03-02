@@ -1,13 +1,8 @@
 <script src="<?php echo JS;?>pos/home.js"></script>
-<style>
-	.navbar{
-		margin-bottom:2px;
-	}
-	
-</style>
-<div class="container" >
-	<div class="wrapper" style="margin-top:48px;">		
-		<div id="ppa_card_tab_data" class="panel panel-info tabs_data" style='margin-left:-6px; margin-top:-12px;'>
+
+<div class="padded menu_div" style="min-height:450px;" >
+			
+		<div id="ppa_card_tab_data" class="panel panel-info tabs_data" style="width:60%">
 		<div class="panel-body tabbable">
 			<div class="col-lg-12" style="margin-left:-23px;">
 				<ul class="list-inline" role="tablist" id="shift_nav">
@@ -84,6 +79,6 @@
 				</div>
 			</div>
 		</div>
-	</div>
+
 </div>
 </div>

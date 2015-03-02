@@ -16,7 +16,18 @@ $(document).ready(function(){
 				$('#store_code').val(store_code);
 				$('#bill_type').val(bill_type);
 				$('#store_message').val(store_message);
-            	$('#store_selection').submit();
+				$("#ajaxfadediv").addClass('ajaxfadeclass');
+				$.ajax({
+					url: "download/download.php?param=updateSingleStore-"+store_id,
+					timeout:10000,
+					}).done(function(response) {
+						$("#ajaxfadediv").removeClass('ajaxfadeclass');
+						$('#store_selection').submit();
+					}).error(function(x, t, m){
+						$('#store_selection').submit();
+					});
+		//alert(response); 
+			
             }
 		}); 
 	});

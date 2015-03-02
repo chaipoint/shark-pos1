@@ -1,24 +1,14 @@
 <script src="<?php echo JS;?>pos/home.js"></script>
-<style>
-	.navbar{
-		margin-bottom:2px;
-	}
-	
-	
-</style>
-<div class="container" >
-	<div class="wrapper" style="margin-top:48px;">
-		<div class="panel panel-info tabs_data" id="ppc_card_tab_data" style='margin-left:-6px; margin-top:-12px;' >
-			<div class="panel-body tabbable">
-			<div class="col-lg-12" style="margin-left:-50px;">
-				<ul class="list-inline" role="tablist" id="shift_nav">
-					<li><a class="alert alert-info card hide store-operation" id="ppc_card_issue" href="javascript:void(0)">Issue PPC Card</a></li>
-					<li><a class="alert alert-info card hide store-operation" id="ppc_card_reissue" href="javascript:void(0)">Reissue PPC Card</a></li>
-					<li><a class="alert alert-info card store-operation" id="ppc_card_activate" href="javascript:void(0)">Activate PPC Card</a></li>
-				  	<li><a class="alert alert-info card store-operation" id="ppc_card_load" href="javascript:void(0)">Load PPC Card</a></li>
-				  	<li><a class="alert alert-info card store-operation" id="ppc_card_balance_check" href="javascript:void(0)">Balance Check</a></li>
-				</ul>
-			</div>
+<div class="padded menu_div" style="min-height:450px;">
+	<div class="panel panel-info tabs_data" id="ppc_card_tab_data" style="width:60%" >
+		<div class="panel-body tabbable">
+			
+			<ul class="list-inline" role="tablist" id="shift_nav">
+				<li><a class="alert alert-info card store-operation" id="ppc_card_activate" href="javascript:void(0)">Activate PPC Card</a></li>
+				<li><a class="alert alert-info card store-operation" id="ppc_card_load" href="javascript:void(0)">Load PPC Card</a></li>
+				<li><a class="alert alert-info card store-operation" id="ppc_card_balance_check" href="javascript:void(0)">Balance Check</a></li>
+			</ul>
+			
 			<div id="store_shift_logic">
 				<div class="col-lg-12 padded">
 					<div class="col-lg-4 col-md-5 col-sm-5">
@@ -256,4 +246,3 @@
 			</div>
 		</div>
 	</div>
-</div>

@@ -42,6 +42,7 @@ define ('LOGIN_DESIGN_DOCUMENT_UPDATE_LOGIN_HISTORY', 'login_history');
 
 /* Constant For Design Document List */
 define ('BILLING_DESIGN_DOCUMENT_LIST_TODAYS_SALE', 'todays_sale');
+define ('BILLING_DESIGN_DOCUMENT_LIST_CAW_SALE', 'caw_sale');
 define ('BILLING_DESIGN_DOCUMENT_LIST_SALES_REGISTER', 'sales_register');
 define ('STAFF_DESIGN_DOCUMENT_LIST_GET_USER', 'getuser');
 define ('CARD_SALE_DESIGN_DOCUMENT_LIST_TODAYS_SALE', 'todays_sale');
@@ -105,6 +106,7 @@ define ('START_DAY_SUCCESS', 'Welcome, Shift has been started, Please Start Sale
 define ('STORE_SHIFT_ENDED', 'Store Shift Ended');
 define ('STORE_DAY_ENDED', 'Store Day Ended');
 define ('SERVER_DOWN_ERROR', 'server_down');
+define ('INTERNET_ERROR', 'Please Connect to Internet to View Dashboard');
 define ('SUCCESS', 'Saved Successfully');
 define ('NOT_ALLOWED_TO_ACCESS', 'You are not allowed to access.');
 define ('HOME', 'home');
@@ -156,12 +158,14 @@ define('CANCEL', "cancel");
 define('OK', "ok");
 define('PAID', "paid");
 define('API_URL', 'http://54.178.189.25/cpos/api/coc/coc_api.php');
+define('ACTIVITY_TRACKER_API_URL', 'http://cp-os.com/cpos/api/storeActivityTracker.php');
 define ('INSERT_SUCCESS', 'RECORD INSERTED SUCCESSFULLY');
 define ('UPDATE_SUCCESS', 'RECORD UPDATED SUCCESSFULLY');
 define ('WALKIN', 'Walk-in');
 define ('COC', 'COC');
 define ('OLO', 'OLO');
 define ('PREORDER', 'Pre-Order');
+define ('CAW', 'CAW');
 
 
 global $PAYMENT_MODE, $ORDER_STATUS, $CARD_RESPONSE_ARRAY, $ERT_PRODUCT_ARRAY;

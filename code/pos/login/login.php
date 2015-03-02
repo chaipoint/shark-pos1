@@ -91,7 +91,7 @@
 										if($_POST['validateFor'] == SHIFT_DATA_PROTECTED_SCREEN){
 											require_once DIR.'/home/home.php';
 											$hm = new home();
-											$returnData = $hm->getShiftAndCashRe();
+											$returnData = $hm->reconcilation();
 										}
 									break;
 									default:

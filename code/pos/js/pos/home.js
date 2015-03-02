@@ -34,7 +34,7 @@ $(document).ready(function(){
 	});
 	
 	/* Function For Re-Print */
-	$('.reprint-bill').on('click', function(event){
+	$('#active_bill_table').on('click','.reprint-bill', function(event){
 		var doc = $(this).attr('id');
 		event.preventDefault();
 		$.ajax({
@@ -170,7 +170,7 @@ $(document).ready(function(){
 				url: "index.php?dispatch=billing.loadCard",
 				data : formData
 			}).done(function(response) {
-				alert(response);
+				//alert(response);
 				$("#ajaxfadediv").removeClass('ajaxfadeclass');
 				var IS_JSON = true;
 					try
@@ -281,7 +281,7 @@ $(document).ready(function(){
 			case 'day_end':
 				is_store_open = false;
 				active = 'day_start';
-				$('#logout').trigger('click');
+				//$('#logout').trigger('click');
 			break;
 			case 'shift_start':
 				is_shift_running = true;
@@ -305,7 +305,7 @@ $(document).ready(function(){
 		$("#ajaxfadediv").addClass('ajaxfadeclass');
 		$.ajax({
 			type: 'POST',
-			url: "index.php?dispatch=home.getShiftAndCashRe",
+			url: "index.php?dispatch=home.reconcilation",
 	  		data : {date:date} ,
 		}).done(function(response) {
 			$("#ajaxfadediv").removeClass('ajaxfadeclass');

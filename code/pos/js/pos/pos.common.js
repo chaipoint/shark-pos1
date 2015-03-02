@@ -18,8 +18,10 @@ var module = JSON.stringify(url.data.attr.query);
 
 $(document).ready(function(){
 	if(! navigator.onLine){
-		$('#data_sync').addClass('btn-danger').attr('id','');
-
+		$('#billing_sync').addClass('btn-danger').attr('id','');
+		$('#caw_sync').addClass('btn-danger').attr('id','');
+		$('#coc').addClass('btn-danger').attr('id','');
+		$('#olo').addClass('btn-danger').attr('id','');
 	}
 	$(document).on('click','#data_sync',function(){
 		if(! navigator.onLine){
@@ -69,6 +71,23 @@ $(document).ready(function(){
 	});
 	$('#olo').click(function(){
 		window.location.href = 'index.php?dispatch=orders.olo';
+	});
+	$('#caw').click(function(){
+		window.location.href = 'index.php?dispatch=caw.index';
+	});
+	
+	
+	$('#shift_data').click(function(){
+		$('.alert-danger').addClass('hide');
+		$('#dashboard_div').addClass('hide');
+		$('#reconcilation_div').removeClass('hide');
+		$('#report_div').addClass('hide');
+	});
+	$('#report_data').click(function(){
+		$('.alert-danger').addClass('hide');
+		$('#dashboard_div').addClass('hide');
+		$('#reconcilation_div').addClass('hide');
+		$('#report_div').removeClass('hide');
 	});
 	
 	if($('#shift_end').hasClass('alert-danger')){
@@ -173,6 +192,38 @@ $(document).ready(function(){
 				window.location.reload(true);
 			}
 			console.log(response);
+		}).error(function(x, t, m){
+			$("#ajaxfadediv").removeClass('ajaxfadeclass');
+			if(t==='timeout'){
+				console.log('timeout');
+				bootbox.alert('Sorry Timeout Occured! Please Conatact Admin', function(){
+					//$("#sync-modal").modal('hide');
+				});
+			}
+
+		});
+	});
+	
+	$(document).on('click', '#caw_sync',function(){ 
+		var store = $(this).data('store_id');
+		$("#ajaxfadediv").addClass('ajaxfadeclass');
+		$.ajax({
+			url: "download/download.php?param=updateSingleStore-"+store,
+			timeout:120000,
+		}).done(function(response) {
+		//alert(response); 
+			$("#ajaxfadediv").removeClass('ajaxfadeclass');
+			result = $.parseJSON(response);
+			var reload = false;
+			if(result.error){
+				bootbox.alert(result.message);
+			}else{
+				reload = true;
+			}
+			if(reload){
+				window.location.reload(true);
+			}
+			
 		}).error(function(x, t, m){
 			$("#ajaxfadediv").removeClass('ajaxfadeclass');
 			if(t==='timeout'){
@@ -541,8 +592,13 @@ $.fn.cKeyboard = function(){
 	});
 	return returnEle;
 }
-function db_error(){
-	bootbox.dialog({message:'<div class="text-center text-danger">OOPS! Some Problem Please Contact Admin.</div>'});
+function db_error(message){ alert
+	if(message){
+		var msg = message;
+	}else{
+		var msg = 'OOPS! Some Problem11 Please Contact Admin.';
+	}
+	bootbox.dialog({message:'<div class="text-center text-danger">'+msg+'</div>'});
 }
 function decimalAdjust(value, exp) {
 		var type = 'round';
@@ -762,6 +818,7 @@ caw_detail+="<table align='center' style='width:100%;text-align:left;'>";
 caw_detail+="<tr ><td style='text-align:left;'>Company Name: "+bill_array.customer.company_name+"</td></tr>";
 caw_detail+="<tr ><td style='text-align:left;'>Phone: "+bill_array.customer.phone_no+"</td></tr>";
 caw_detail+="<tr ><td style='text-align:left;'>Address: "+bill_array.customer.address+"</td></tr>";
+caw_detail+="<tr ><td style='text-align:left;'>DC Challan: "+bill_array.customer.challan_no+"</td></tr>";
 caw_detail+="</table>";
 caw_detail+=breakLine;
 }}
