@@ -8,7 +8,7 @@
 		values:- local|production
 */
 global $config;
-$config['operating_mode'] = 'production';
+$config['operating_mode'] = 'test';
 $config['billing_mode'] = 'local';
 
 /*
