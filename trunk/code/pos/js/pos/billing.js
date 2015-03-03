@@ -45,7 +45,7 @@ $(document).ready(function(){
 
 	var url = $.url(window.location);
 	order = url.param('order');
-	if(order && order > 0 && ! isNaN(order)){ alert('sdfsfsdfsdfsdfsdf');
+	if(order && order > 0 && ! isNaN(order)){ 
 		/*
 		*	PLEASE Don't Change This code Block Without Prior Permission
 		*/
