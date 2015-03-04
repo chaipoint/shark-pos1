@@ -466,6 +466,7 @@ $(document).ready(function(){  //alert(exeMode); alert(printUtility); return fal
 		
 		/* START -- Payment Using PPC NO  */
         $('#ppc').on('change', function() {
+			$(this).prop('type' , 'password');
         	var card_no = $.trim($(this).val());
            	var payment_type = $('#paid_by').val();
            	var total_amount = $('#twt').text();
@@ -867,7 +868,8 @@ $(document).ready(function(){  //alert(exeMode); alert(printUtility); return fal
 						bootbox.alert(result.message, function(){
 						window.location.reload(true);
 						}).find(".btn-primary").removeClass("btn-primary").addClass("btn-danger");
-					}else{
+					}else if(exeMode){
+						
 						if(!printUtility){bootbox.alert('Print Utility Not Exists').find(".btn-primary").removeClass("btn-primary").addClass("btn-danger");}
 						window.location='index.php?dispatch=billing.index';
 					}
