@@ -32,7 +32,7 @@ $(document).ready(function(){
 		},500);
 
 	});
-	
+	//alert(exeMode); alert(printUtility); return false; 
 	/* Function For Re-Print */
 	$('#active_bill_table').on('click','.reprint-bill', function(event){
 		var doc = $(this).attr('id');
@@ -46,7 +46,10 @@ $(document).ready(function(){
 			if(response1.error){
 				bootbox.alert(response1.message);
 			}else{
-				printBill(response, true);
+				if(!exeMode){
+						printBill(response, true);
+					}
+				
 				if(response1.message!=''){		
 					bootbox.alert(response1.message,function(){
 					window.location.reload(true);													
@@ -189,7 +192,10 @@ $(document).ready(function(){
 					bootbox.alert($res.data['message']);
 				}else{
 					if(formID=='store_ppc_card_load_form' || formID=='store_ppc_card_activate_form' || formID=='store_ppa_card_load_form'){
-						printBill(response, false);
+						if(!exeMode){
+							printBill(response, false);
+						}
+						//printBill(response, false);
 						bootbox.alert($res.data['message']+'.Your Balance is:'+$res.data['balance'], function(){
 							window.location.reload(true);
 						});

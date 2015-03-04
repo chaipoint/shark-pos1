@@ -13,7 +13,7 @@ var cawBill = null;
 var modifyBill = false;
 var popupKeyboard = null;
 
-$(document).ready(function(){ 
+$(document).ready(function(){  //alert(exeMode); alert(printUtility); return false;
 	
 	var url = $.url();
 	$(this).attr("title", "Shark |ChaiPoint POS| Billing"); 
@@ -842,7 +842,7 @@ $(document).ready(function(){
 			}
 			billDetails.reprint = 1;
 			billDetails.request_type = 'save_bill';
-			//billDetails.utility_check = printUtility;
+			billDetails.utility_check = printUtility;
 			console.log(billDetails);
 			$('#submit-sale').attr('disabled',true);
 			$("#ajaxfadediv").addClass('ajaxfadeclass');
@@ -852,18 +852,16 @@ $(document).ready(function(){
 		  		data : billDetails,
 			}).done(function(response) {
 				console.log(response);
-				//alert(response);
-				//return false;
 				$("#ajaxfadediv").removeClass('ajaxfadeclass');
 				result = $.parseJSON($.trim(response));
 				$('#submit-sale').attr('disabled',false);
-				var check = result.error;
+				//var check = result.error;
 				if(result.error){
 					bootbox.alert(result.message);
 				}else{
-					//resetBill(true);
-					//$intDiscount = 0;
-					printBill(response, false);
+					if(!exeMode){
+						printBill(response, false);
+					}
 					$('#payModal').modal('hide');
 					if(result.message!=''){
 						bootbox.alert(result.message, function(){
