@@ -99,7 +99,7 @@
 						</div>
 					</div>
 		</div>
-		<div id="footer" style="margin-top:220px;">
+		<!--<div id="footer" style="margin-top:220px;">
 		<div class="container" >
 			<p class="credit" style="font-size:10px;">
 				Copyright &copy; 2014 ChaiPoint <?php global $config; echo $config['version']; ?> <a
@@ -107,4 +107,4 @@
 					class="icon-question-sign"></i> </a>
 			</p>
 		</div>
-	</div>
+	</div>-->
