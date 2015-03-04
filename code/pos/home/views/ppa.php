@@ -1,12 +1,18 @@
+<style>
+.alert {
+	background-color:#00bb5e;
+	color:white;
+}
+</style>
 <script src="<?php echo JS;?>pos/home.js"></script>
 
 <div class="padded menu_div" style="min-height:450px;" >
 			
-		<div id="ppa_card_tab_data" class="panel panel-info tabs_data" style="width:60%">
+		<div id="ppa_card_tab_data" class="panel panel-info tabs_data" style="width:85%">
 		<div class="panel-body tabbable">
 			<div class="col-lg-12" style="margin-left:-23px;">
 				<ul class="list-inline" role="tablist" id="shift_nav">
-					<li><a class="alert alert-info card store-operation" href="javascript:void(0)" id="ppa_card_load">Load PPA Card</a></li>
+					<li><a class="alert alert-info card store-operation"  href="javascript:void(0)" id="ppa_card_load">Load PPA App</a></li>
 				  	<li><a class="alert alert-info card hide store-operation" href="javascript:void(0)" id="ppa_card_balance_check">Balance Check</a></li>
 				</ul>
 			</div>

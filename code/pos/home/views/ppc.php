@@ -1,6 +1,12 @@
+<style>
+.alert {
+	background-color: #00bb5e;
+	color:white;
+}
+</style>
 <script src="<?php echo JS;?>pos/home.js"></script>
 <div class="padded menu_div" style="min-height:450px;">
-	<div class="panel panel-info tabs_data" id="ppc_card_tab_data" style="width:60%" >
+	<div class="panel panel-info tabs_data" id="ppc_card_tab_data" style="width:85%" >
 		<div class="panel-body tabbable">
 			
 			<ul class="list-inline" role="tablist" id="shift_nav">
@@ -11,7 +17,7 @@
 			
 			<div id="store_shift_logic">
 				<div class="col-lg-12 padded">
-					<div class="col-lg-4 col-md-5 col-sm-5">
+					<div class="col-lg-5 col-md-5 col-sm-5">
 						<div class="alert alert-danger" id="error_message_card"><ul></ul></div>
 							<form id="store_ppc_card_issue_form"  class="card_form hide" action="" method="post" accept-charset="utf-8" class="separate-sections form-horizontal" autocomplete="off">
 								<input type="hidden" name="validateFor" value="card">
