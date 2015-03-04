@@ -63,6 +63,7 @@
 													$ch = curl_init();
 													curl_setopt($ch, CURLOPT_URL, 'http://api.timezonedb.com/?key=KE5HRDHLJVRW&zone=' . $zone . '&format=json');
 													curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+													curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3000);
 													curl_setopt($ch, CURLOPT_TIMEOUT, 5000); //timeout in seconds
 													$json = curl_exec($ch);
 													$curl_errno = curl_errno($ch);
