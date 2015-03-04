@@ -84,7 +84,7 @@
 								<span class="input-group-addon">
 									<i class="glyphicon glyphicon-open"></i> 
 								</span> 
-								<input type="text" readonly="readonly" name="counter_no" value="1" id="counter_no" class="input-sm form-control" placeholder="Counter Number" autocomplete="off"/>
+								<input type="text" readonly="readonly" name="counter_no" value="<?php global $config; echo $config['till_no']; ?>" id="counter_no" class="input-sm form-control" placeholder="Counter Number" autocomplete="off"/>
 							</div>
 
 							<div class="row padded">
