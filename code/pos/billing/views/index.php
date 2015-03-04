@@ -8,7 +8,7 @@
 	margin:34px;
 	}
 </style>
-<!--<script> var printUtility = <?php //echo $printUtility; ?>; </script>-->
+
 <script type="text/javascript" src="<?php echo JS;?>pos/billing.js"></script>
 <?php 
 	$script = "";
