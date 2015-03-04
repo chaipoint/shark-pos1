@@ -10,6 +10,7 @@
 global $config;
 $config['operating_mode'] = 'test';
 $config['billing_mode'] = 'local';
+$config['printing_mode'] = 'exe';
 
 /*
 	Operation Mode test Local Details
