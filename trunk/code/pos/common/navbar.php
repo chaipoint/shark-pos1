@@ -6,12 +6,17 @@ border-color: #0066cc;
 .navbar-inverse .navbar-nav > li > a {
 color: #007fff;
 }
-
+.navbar-inverse .navbar-nav:hover > li > a {
+color:black;
+}
+.navbar-nav.navbar-right:last-child {
+margin-right: 126px;
+}
 </style>	
 	
 		<div class="navbar navbar-static-top navbar-inverse">
 			<div class="container">
-				<div class="navbar-header">
+				<div class="navbar-header" style="margin-left:10px">
 				  <img src="<?php echo IMG?>logo.png" height="50px">
 				</div>
 				<ul class="nav navbar-nav">
@@ -19,8 +24,8 @@ color: #007fff;
 				</ul>
 				
 				<ul class="nav navbar-nav navbar-right">
-					<li><a><?php echo $_SESSION['user']['name']." (".$_SESSION['user']['title']['name'].") " ; 
-							      echo (array_key_exists('store', $_SESSION['user']) ? ','.$_SESSION['user']['store']['name'] : '');
+					<li><a><?php echo $_SESSION['user']['name']; 
+							     echo (array_key_exists('store', $_SESSION['user']) ? ','.$_SESSION['user']['store']['name'] : '');
 							?>
 						</a>
 					</li>

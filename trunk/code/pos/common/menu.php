@@ -1,8 +1,14 @@
 <style>
 .navbar {margin-bottom: 0px;}
-.menu_div {padding-top: 2px; padding-bottom: 0px;}
+.menu_div {padding-top: 2px; padding-bottom:9px;}
+.menu_div {
+	width: 980px;
+	margin: 0 auto;
+	padding: 0 0 9px 5px;
+	overflow: hidden;
+}
 </style>
-<div class="padded menu_div">
+<div class="padded menu_div col-xs-offset-1">
 	<?php 
 		/* To do Dynamic */
 		$walk_in = ((strpos($_SESSION['user']['store']['bill_type'], WALKIN) === false) ? 'hide' : '');    
