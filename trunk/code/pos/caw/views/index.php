@@ -16,13 +16,13 @@ outline: medium none;
 border: 0px;
 margin-top: -15px;
 top: 0;
-width: 200px;
+width : auto;
 font-size: 14px;
 font-weight:bold;
 }
 .customer-selection {
 color: #ffffff;
-background-color: #007fff;
+background-color: #00bb5e;
 border-color: #222222;
 }
 
@@ -35,7 +35,7 @@ color: white;
 <script src="<?php echo JS;?>pos/caw.js" type="text/javascript"></script>
 <div class="padded menu_div"  style="min-height:450px;">
 <?php if(!empty($customerList)) {?>
-	<div class="panel panel-info" style="width:88%"> 
+	<div class="panel panel-info" style="width:85%"> 
 		<div class="panel-heading">Select Your CAW</div>
 			<div class="col-md-16" id="login-box" >
 				<form name='customer_selection' id='customer_selection' action='index.php?dispatch=caw.schedule' method='post'>
