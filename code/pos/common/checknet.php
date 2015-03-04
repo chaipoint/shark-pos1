@@ -40,7 +40,6 @@
     -o-animation: blink 1s;
     -o-animation-iteration-count: infinite;
     height: 40px;
-    width: 34px;
     margin-left: 5px;
     margin-top: 1px;
 }
@@ -53,10 +52,16 @@
     -o-animation: blink 1s;
     -o-animation-iteration-count: infinite;
     height: 40px;
-    width: 34px;
     margin-left: -6px;
     margin-top: 1px;
 }
+
+.inactive {
+	height: 40px;
+	margin-left: -6px;
+    margin-top: 1px;
+}
+
 </style>
 <script src="../js/jquery.min.js"></script>
 <script>
@@ -64,7 +69,7 @@ $(document).ready(function(){
     $(function(){
 		window.setInterval(function(){
 		 	var result = checkInternet();
-			if(result==true){
+			if(result==true){ 
 				$('#internetYes').show();
 				$('#internetNo').hide();
 			}else{
@@ -91,16 +96,20 @@ $(document).ready(function(){
                     var $res = $.parseJSON(response);
                     if($res.data['cocOrder']){
                         beep(20000,3);
-                        $('#coc_notification').show();
+                        $('#cocYes').show();
+						$('#cocNo').hide();
                     }else {
-						$('#coc_notification').hide();
+						$('#cocNo').show();
+						$('#cocYes').hide();
 					}
 					
 					if($res.data['oloOrder']){
 						beep(20000,3);
-                        $('#olo_notification').show();
-					}else{
-						$('#olo_notification').hide();
+                        $('#oloYes').show();
+						$('#oloNo').hide();
+					}else{ //alert('sdf');
+						$('#oloNo').show();
+						$('#oloYes').hide();
 					}
                 }).error(function(x, t, m){
                     console.log(t);
@@ -111,15 +120,6 @@ $(document).ready(function(){
         });
 		
 		
-		
-		
-		
-		
-		
-		
-		
-    	
-
 });
 
 	function checkInternet(){ 
@@ -154,10 +154,12 @@ $(document).ready(function(){
     })();
 </script>
 <div style="">
-	<span style="display:none;float:left;width:40px;margin:0px 5px;" id="internetYes"><img src="../images/ok.png" class="con"></span>	
-	<span style="display:none;float:left;width:40px;margin:0px 5px;" id="internetNo"><img src="../images/not_ok.png" class="con"></span>
-	<span style="display:none;float:left;width:40px;margin:0px 5px;" id="olo_notification"><img src="../images/online.jpg" class="con1"></span>
-	<span style="display:none;float:left;width:40px;margin:0px 5px;" id="coc_notification"><img src="../images/noti.ico" class="con1"></span>
+	<span style="display:none;display:none;float:left;" id="internetYes"><img src="../images/internet_active.png" class="con"></span>	
+	<span style="display:none;float:left;" id="internetNo"><img src="../images/internet_inactive.png" class="inactive"></span>
+	<span style="display:none;float:left;margin:0px 54px;" id="oloYes"><img src="../images/active_olo.png" class="con1"></span>
+	<span style="display:none;float:left;margin:0px 54px;" id="oloNo"><img src="../images/inactive_olo.png" class="inactive"></span>	
+	<span style="display:none;float:left;" id="cocYes"><img src="../images/active_coc.png" class="con1"></span>
+	<span style="display:none;float:left;" id="cocNo"><img src="../images/inactive_coc.png" class="inactive"></span>
 </div>
 
 
