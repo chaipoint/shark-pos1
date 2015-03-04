@@ -9,8 +9,8 @@
 <script type="text/javascript" src="<?php echo (JS.'pos/sale.register.js');?>" ></script>
 
 <?php //print_r($sales_data);?>
-<div class="panel panel-info" style="width:88%"> 
-      <div class="panel-heading col" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><a href="javascript:void(0)">Paid Bill Details
+<div class="panel panel-info" style="width:85%"> 
+      <div class="panel-heading col" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo"><a href="javascript:void(0)">Sales Report
       <i class="glyphicon glyphicon-chevron-down pull-right"></i></a></div>
       <div id="collapseTwo" class="panel-collapse collapse in">
         <div class="panel-body" >
