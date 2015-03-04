@@ -116,7 +116,7 @@ define ('SALE_REGISTER_PROTECTED_SCREEN', 'sales_register');
 define ('DATA_SYNC_PROTECTED_SCREEN', 'data_sync');
 define ('SHIFT_DATA_PROTECTED_SCREEN', 'shift_data_tab');
 define ('ORDER_ALREADY_BILLED', 'Order Already Billed');
-define ('EXE_PATH', 'D:\utility\printBill.exe');
+define ('EXE_PATH', 'D:\utility');
 define ('COMPANY_DETAIL_TXT_PATH', 'D:\utility\company.txt');
 define ('BILL_DETAIL_TXT_PATH', 'D:\utility\bill.txt');
 define ('CARD_SALE_TXT_PATH', 'D:\utility\card_sale.txt');
