@@ -71,9 +71,9 @@ $(document).ready(function(){
 		$("div.ui-keyboard").hide();
 	});
 	
-	$('.card').click(function(){
-		$('.card').removeClass('active-btn');
-		$(this).addClass('active-btn');
+	$('.card').click(function(){ //alert('defsdfd');
+		$('.card').removeClass('active3');
+		$(this).addClass('active3');
 	});
 
 	/* Function To Save Petty Inward */

@@ -4,6 +4,8 @@
 	}
 	.alert-danger{
 		color:grey;
+		background-color:#efefef;
+		border-color :#efefef;
 	}
 </style>
 <script>var is_store_open = <?php echo $is_store_open; ?>;</script>
