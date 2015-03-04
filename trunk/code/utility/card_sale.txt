@@ -1,0 +1,1 @@
+{"cd_doc_type":"card_sale","card_no":"1000920010004371","card_type":"ppc","txn_no":"9786250","approval_code":"1183072","amount":"300","balance":"453.00","txn_type":"load","time":"2015-03-04 00:39:48","status":"paid","store_id":"48","store_name":"DLF Cyber Hub","staff_id":"229","staff_name":"Praveen Kumar","invoice_number":14,"shift":1,"bill":"L3110014L"}
