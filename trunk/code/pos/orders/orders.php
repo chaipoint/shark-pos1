@@ -171,7 +171,7 @@
 			$postData = array('action'=>'getNewOrder', 'store_id'=>$storeId);
 			$url = API_URL;
 			$ch = curl_init();
-			curl_setopt_array($ch, array(CURLOPT_URL => $url, CURLOPT_CONNECTTIMEOUT=>5, CURLOPT_TIMEOUT=>8,CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true, CURLOPT_POSTFIELDS => $postData));
+			curl_setopt_array($ch, array(CURLOPT_URL => $url, CURLOPT_CONNECTTIMEOUT=>2, CURLOPT_TIMEOUT=>4,CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true, CURLOPT_POSTFIELDS => $postData));
 			$response = curl_exec($ch);
 			curl_close($ch);
 			$response = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $response);
