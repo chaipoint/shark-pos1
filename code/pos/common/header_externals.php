@@ -1,3 +1,7 @@
+		<script> 
+		var exeMode = <?php global $config; echo ($config['printing_mode']=='exe' ? 'true' : 'false');?>;
+		var printUtility = <?php $utilityCheck = file_exists(EXE_PATH); echo ($utilityCheck ? 'true' : 'false'); ?>; 
+		</script>
 		<link rel="stylesheet" href="<?php echo CSS;?>bootstrap.css">
 		<script src="<?php echo JS;?>jquery.min.js"></script>
 		<link rel="stylesheet" href="<?php echo CSS;?>posajax.css">
