@@ -10,7 +10,7 @@
 
 		/* This Function Is Automatically Called When We Come On Billing Module */
 		function index(){ 
-			global $ERT_PRODUCT_ARRAY;
+			global $ERT_PRODUCT_ARRAY, $config;
 			if(array_key_exists('referer',$_GET) && $_GET['referer'] == HOME){
 			}else{
 				if(!array_key_exists('shift', $_SESSION['user']) || !array_key_exists('store', $_SESSION['user']) ){
@@ -67,15 +67,19 @@
 	  		}
 	  		
 			/* To Check Print Utility Exists Or Not */
-	  		/*$utilityCheck = file_exists(EXE_PATH);
-			$data['printUtility'] = ($utilityCheck ? 'true' : 'false');
-			if($utilityCheck){
-				$company_data = array();
-			    $company_data = $this->configData['company_details'];
-				$this->log->trace("COMPANY DETAILS TO BE PRINT \r\n".json_encode($company_data));
-				file_put_contents(COMPANY_DETAIL_TXT_PATH, json_encode($company_data,true));
-			}*/
 			
+			if($config['printing_mode']=='exe'){
+				$utilityCheck = file_exists(EXE_PATH);
+				$data['printUtility'] = ($utilityCheck ? 'true' : 'false');
+				if($utilityCheck){
+					$company_data = array();
+					$company_data = $this->configData['company_details'];
+					$this->log->trace("COMPANY DETAILS TO BE PRINT \r\n".json_encode($company_data));
+					file_put_contents(COMPANY_DETAIL_TXT_PATH, json_encode($company_data,true));
+				}
+			}else{
+				$data['printUtility'] = 'false';
+			}
 			/* To Get Retail Customer*/
 	  		require_once DIR.'/customer/customer.php';
 	  		$cus = new Customer();
@@ -93,15 +97,23 @@
 		}
 
 		public function rePrint(){
+				global $config;
 				$return = array('error'=>false, 'message'=>'', 'data' => array());
 				$bill = $_POST['doc'];
 				$billDataReturned = $this->getBillData($bill); 
 				if(!$billDataReturned['error']){
 	 				$billData = $billDataReturned['data'];
-					//$re = $this->printBill($billData);
-					$return['data'] = $billData;
-	 				return json_encode($return);
-	 			}else{
+					if($config['printing_mode']=='exe'){
+						$billData['reprint'] = 1;
+						$re = $this->printBill($billData);
+						return json_encode($re);
+					}
+					else{
+						$return['data'] = $billData;
+						return json_encode($return);
+					}
+					
+				}else{
 					$return['error'] = true;
 					$return['message'] = $billDataReturned['message'];
 					return json_encode($return);
@@ -243,11 +255,11 @@
 						$result = $this->cDB->saveDocument()->execute($_POST);
 						$this->log->trace("SAVE BILL RESULT \r\n".json_encode($result));
 						if(array_key_exists('ok', $result)){
-							/*if($_POST['utility_check']=='true'){
+							if($_POST['utility_check']=='true' && $config['printing_mode']=='exe'){
 								$res = $this->printBill($_POST);
 								$return['error'] = $res['error'];
 			                    $return['message'] = $res['message'];
-							}*/
+							}
 							$return['data'] = $_POST;
 						}
 					}else{
@@ -404,11 +416,12 @@
 					$saveData['staff_name'] = $_SESSION['user']['name'];
 					$saveData['invoice_number'] = $loadResponse['data']['invoice_number'];
 					$saveData['shift'] = $_SESSION['user']['shift'];
+					$saveData['bill'] = $loadResponse['data']['bill'];
 					$result = $this->cDB->saveDocument()->execute($saveData);
 					$path = file_exists(EXE_PATH);
 					if(array_key_exists('ok', $result) && $path){ 
 						file_put_contents(CARD_SALE_TXT_PATH, json_encode($saveData,true));
-        				exec(EXE_PATH,$output,$return_value);
+        				//exec(EXE_PATH,$output,$return_value);
 					}
 				}
 				$res = json_encode($loadResponse,true);
@@ -436,5 +449,22 @@
 			$res = json_encode($return);
 			return $res;
 		}
+		
+		/* Function To Print Out Bill  */
+        function printBill($data){ 
+        	$return = array('error'=>false,'message'=>'','data'=>array());
+			//$this->log->trace("BILL DETAILS TO BE PRINT \r\n".json_encode($data));
+        	$path = EXE_PATH;
+			if(!empty($data)) {
+				file_put_contents(BILL_DETAIL_TXT_PATH, json_encode($data,true));
+        		//exec($path,$output,$return_value);
+        		//$this->log->trace("EXE RESPONCE \r\n".json_encode($return_value));
+        		//$return['message'] = ($return_value=='1' ? 'Printer Not Found' : ($return_value=='2' ? 'File Missing' : ($return_value=='3' ? 'JSON Not Readable' : '')));
+				$return['message'] = '';
+     		}else{
+				$return['message'] = BILL_DATA_MISSING;
+			}
+			return $return;
+        }
 
     }
