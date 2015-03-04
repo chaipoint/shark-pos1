@@ -32,7 +32,7 @@
 <?php if(!@$error) {?>
 <div class="padded dashboard_div" id="dashboard_div" >
 	<span class="padded">Message From the office for you</span>
-	<div class="panel panel-info" style="min-height:80px;width:84%;margin-left:15px;background-color:#C8C8C8">
+	<div class="panel panel-info" style="min-height:80px;width:84%;margin-left:15px;background-color:#efefef">
 		<div class="panel-body">
 			<?php if(array_key_exists('data', $activity_data)){
 					if(array_key_exists('StoreMessage', $activity_data['data']) && count($activity_data['data']['StoreMessage'])>0) {
@@ -46,8 +46,8 @@
 	</div>
 	
 	<span class="padded">Activity Tracker of your Store</span>
-	<div class="panel panel-info" style="min-height:80px;width:84%;margin-left:15px;background-color:#C8C8C8">
-		<div class="panel-body">
+	<div class="panel panel-info" style="min-height:80px;width:84%;margin-left:15px;background-color:#efefef">
+		<div class="panel-body" style="margin-left:14%;">
 			<?php if(array_key_exists('data', $activity_data)){
 					if(array_key_exists('StoreActivity', $activity_data['data']) && count($activity_data['data']['StoreActivity'])>0) {
 						foreach($activity_data['data']['StoreActivity'] as $key => $value) {
@@ -61,8 +61,8 @@
 	</div>
 	
 	<span class="padded">Your Store Sales on <?php echo date('d-m-Y', strtotime("-1 days")); ?></span>
-	<div class="panel panel-info" style="min-height:80px;width:84%;margin-left:15px;background-color:#C8C8C8">
-		<div class="panel-body">
+	<div class="panel panel-info" style="min-height:80px;width:84%;margin-left:15px;background-color:#efefef">
+		<div class="panel-body" style="margin-left:14%;">
 			<span class="white-bg col-md-5" ><strong>Total Sales: XXXXX</strong></span>
 			<span class="white-bg col-md-5" style="margin-left:5px"><strong>Target Sales: XXXXX</strong></span>
 			</br>
@@ -89,7 +89,7 @@
 
 <?php list($first) = explode(',', $_SESSION['user']['store']['bill_type']); ?>
 <div class="padded dashboard_div" >
-		<button class="btn" id="dashboard">Dashboard</button>
+		<button class="btn" id="dashboard" style="margin-left:13px;">Dashboard</button>
 		<button class="btn" id="shift_data">Shift Data</button>
 		<button class="btn" id="report_data">Sales Reports</button>
 		<button class="btn" id="billing_sync">Data Sync</button>
