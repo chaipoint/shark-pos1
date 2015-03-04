@@ -7,6 +7,10 @@ display: inline-block;
 padding-right: 2px;
 padding-left: 1px;
 padding-top: 30px;
+margin-left:0px !important;
+}
+.list-inline > ul {
+margin-left:0px !important;
 }
 .btn3d {
 transition: all .08s linear;
@@ -22,7 +26,7 @@ font-weight:bold;
 }
 .store-selection {
 color: #ffffff;
-background-color: #007fff;
+background-color: #00bb5e;
 border-color: #222222;
 }
 
@@ -50,7 +54,7 @@ border-radius: 4px;
 			<div class="padded">
 				<div class="panel">
 					<div class="panel-body" style="padding-bottom:0;">
-						<div class="alert alert-info" id="error_message" style="width:87%; font-size:17px; color:black;">
+						<div class="alert alert-info" id="error_message" style="width:87.5%; font-size:17px; color:black;">
 							Select Your Store
 						</div>
 					

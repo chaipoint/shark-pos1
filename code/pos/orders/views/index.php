@@ -6,13 +6,13 @@
 	   padding-left:0px
 	}
 	.size {font-size:10px}
-	.bt-update-status {width:70%;margin-top:5%;}
-	.print {width:70%}
+	.bt-update-status {width:80%;margin-top:5%;}
+	.print {width:80%}
 	
 </style>
 <script type="text/javascript" src="<?php echo JS?>pos/coc.js"></script>
 <div class="padded menu_div"  style="min-height:450px;">
-<div class="panel panel-info" style="width:80%"> 
+<div class="panel panel-info" style="width:85%"> 
   
 	 <div class="panel-body tabbable">
         <ul class="nav nav-pills" role="tablist" style="margin-top:-13px;">
