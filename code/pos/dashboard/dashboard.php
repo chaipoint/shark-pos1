@@ -27,7 +27,7 @@
 			require_once DIR.'/home/home.php';
 			$home = new Home();
 			$data['reconcilation'] = $home->reconcilation();
-			
+			//echo '<pre>';print_r($data);echo '</pre>'; die();
 			require_once DIR.'/sales_register/sales_register.php';
 			$sr = new sales_register();
 			$data['data'] = $sr->getBills($this->getCDate(), $this->getCDate());
