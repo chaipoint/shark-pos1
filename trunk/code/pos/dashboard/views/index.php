@@ -63,11 +63,15 @@
 	<span class="padded">Your Store Sales on <?php echo date('d-m-Y', strtotime("-1 days")); ?></span>
 	<div class="panel panel-info" style="min-height:80px;width:84%;margin-left:15px;background-color:#efefef">
 		<div class="panel-body" style="margin-left:14%;">
-			<span class="white-bg col-md-5" ><strong>Total Sales: XXXXX</strong></span>
-			<span class="white-bg col-md-5" style="margin-left:5px"><strong>Target Sales: XXXXX</strong></span>
+			<span class="white-bg col-md-5" ><strong>Total Sales: <?php if(array_key_exists('data', $activity_data)){
+					if(array_key_exists('TotalSale', $activity_data['data'])){ echo $activity_data['data']['TotalSale']; ?><?php }}?></strong></span>
+			<span class="white-bg col-md-5" style="margin-left:5px"><strong>Target Sales: <?php if(array_key_exists('data', $activity_data)){
+					if(array_key_exists('TargetSale', $activity_data['data'])){ echo $activity_data['data']['TargetSale']; ?><?php }}?></strong></span>
 			</br>
-			<span class="white-bg col-md-5" style="margin-top:5px;"><strong>Total COGS: XXXXX</strong></span>
-			<span class="white-bg col-md-5" style="margin-top:5px;margin-left:5px"><strong>Gross Margin: XXX%</strong></span>
+			<span class="white-bg col-md-5" style="margin-top:5px;"><strong>Total COGS: <?php if(array_key_exists('data', $activity_data)){
+					if(array_key_exists('COGS', $activity_data['data'])){ echo $activity_data['data']['COGS']; ?><?php }}?></strong></span>
+			<span class="white-bg col-md-5" style="margin-top:5px;margin-left:5px"><strong>Gross Margin: <?php if(array_key_exists('data', $activity_data)){
+					if(array_key_exists('GrossMargin', $activity_data['data'])){ echo $activity_data['data']['GrossMargin']; ?><?php }}?></strong></span>
 		</div>
 	</div>
 	
