@@ -19,9 +19,15 @@
 				<li>
 					<div class="form-group">
 						<label  class="control-label" for="sales_reg_search">Date</label>&nbsp;&nbsp;&nbsp;&nbsp;
+						
 						<div class="input-group">
 							<input type="text" name="date" id="date" class="form-control datepicker" required data-provide="datepicker-inline" data-date-format="dd-MM-yyyy"  data-date-autoclose = "true" data-date-end-date="+0d" readonly/>
 						</div>
+						
+						<div class="input-group">
+							<input type="text" name="date" id="date" class="form-control datepicker" required data-provide="datepicker-inline" data-date-format="dd-MM-yyyy"  data-date-autoclose = "true" data-date-end-date="+0d" readonly/>
+						</div>
+						
 						<label  class="control-label" for="store">Store</label>&nbsp;&nbsp;&nbsp;&nbsp;
 						<div class="input-group">
 							<select name="store" id="store" class="form-control">
