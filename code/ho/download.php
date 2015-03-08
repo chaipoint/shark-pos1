@@ -4,11 +4,12 @@
 	$couch = new CouchPHP(); 
 	
 	if(!empty($_REQUEST['store'])){
-		$date = date('Y-m-d', strtotime($_REQUEST['date']));
+		$date1 = date('Y-m-d', strtotime($_REQUEST['date1']));
+		$date2 = date('Y-m-d', strtotime($_REQUEST['date2']));
 		$store = $_REQUEST['store'];
 		$csv = '';
 		$csv .= 'StoreId, StoreName, BillNo, BillDate, BillTime, ItemName, ItemQty, ItemPrice, SaleValue'. "\r";
-		$getRecord = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_BILL_BY_STORE)->setParam(array("include_docs"=>"true","key"=>'["'.$date.'", "'.$store.'"]'))->execute();
+		$getRecord = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_BILL_BY_STORE)->setParam(array("include_docs"=>"true","startkey"=>'["'.$date1.'", "'.$store.'"]', "endkey"=>'["'.$date2.'", "'.$store.'"]'))->execute();
 		if(array_key_exists('rows', $getRecord)){
 			foreach($getRecord['rows'] as $key=>$value){
 				$doc = $value['doc'];
