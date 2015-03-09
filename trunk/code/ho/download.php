@@ -9,7 +9,7 @@
 		$store = $_REQUEST['store'];
 		$csv = '';
 		$csv .= 'StoreId, StoreName, BillNo, NewBillNo, BillDate, BillTime, ItemName, ItemQty, ItemPrice, SaleValue'. "\r";
-		$getRecord = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_BILL_BY_STORE)->setParam(array("include_docs"=>"true","startkey"=>'["'.$date1.'", "'.$store.'"]', "endkey"=>'["'.$date2.'", "'.$store.'"]'))->execute();
+		$getRecord = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_BILL_BY_STORE)->setParam(array("include_docs"=>"true","startkey"=>'["'.$date1.'"]', "endkey"=>'["'.$date2.'", {}]'))->execute();
 		if(array_key_exists('rows', $getRecord)){
 			foreach($getRecord['rows'] as $key=>$value){
 				$doc = $value['doc'];
