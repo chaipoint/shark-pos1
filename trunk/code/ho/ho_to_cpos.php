@@ -237,6 +237,8 @@ function uploadBill(){
 			$docsData = array(	"_id"  => $doc['_id'],
 								"_rev" => $doc['_rev'],
 								"bill_no" => $doc['bill_no'],
+								"bill_seq" => $doc['bill'],
+								"dc_challan" => $doc['customer']['challan_no'],
 								"bill_time" => $doc['time']['created'], 
 								"store_id" => $doc['store_id'], 
 								"store_name" => $doc['store_name'], 
@@ -279,7 +281,7 @@ function uploadBill(){
 			            		"round_off" => $doc['round_off'],
 			            		"due_amount" => $doc['due_amount'],
 			            		"bill_status" => $doc['bill_status'],
-			            		"reprint" => $doc['reprint']
+								"reprint" => $doc['reprint']
 			            );
 			$logger->debug("INSERT ORDER ARRAY ".json_encode($docsData));
 			$db->func_array2insert("cp_pos_storeorders", $docsData);
@@ -288,7 +290,7 @@ function uploadBill(){
 			if($insertId > 0){
 				foreach ($doc['items'] as $itemKey => $itemVvalue) {
 					$pValue = $itemVvalue;
-					$productsArray[] = "('".$insertId."','".$pValue['bill_time'].",".$pValue['store_id']."','".$pValue['store_name']."','".$pValue['id']."','".$pValue['name']."','".$pValue['category_id']."','".$pValue['category_name']."', '".$pValue['recipe_id']."','".$pValue['qty']."','".$pValue['price']."','".$pValue['tax']."','".$pValue['priceBT']."','".$pValue['discount']."','".$pValue['discountAmount']."','".$pValue['taxAbleAmount']."','".$pValue['taxAmount']."','".$pValue['netAmount']."','".$pValue['priceAD']."','".$pValue['subTotal']."')";
+					$productsArray[] = "('".$insertId."','".$doc['time']['created']."','".$doc['store_id']."','".$doc['store_name']."','".$pValue['id']."','".$pValue['name']."','".$pValue['category_id']."','".$pValue['category_name']."', '".$pValue['recipe_id']."','".$pValue['qty']."','".$pValue['price']."','".$pValue['tax']."','".$pValue['priceBT']."','".$pValue['discount']."','".$pValue['discountAmount']."','".$pValue['taxAbleAmount']."','".$pValue['taxAmount']."','".$pValue['netAmount']."','".$pValue['priceAD']."','".$pValue['subTotal']."')";
 				}
 				$logger->debug("INSERT ORDER PRODUCT ARRAY ".json_encode($productsArray));		
 				if(count($productsArray) > 0){
