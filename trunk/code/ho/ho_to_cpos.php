@@ -220,6 +220,7 @@ function uploadShiftData(){
 
 /* Function To Upload Bill On CPOS*/
 function uploadBill(){
+	ini_set('display_errors', 1);
 	global $logger, $db;
 	$logger->debug("Calling Upload Bill Function");
 	$couch = new CouchPHP();
