@@ -237,8 +237,8 @@ function uploadBill(){
 			$docsData = array(	"_id"  => $doc['_id'],
 								"_rev" => $doc['_rev'],
 								"bill_no" => $doc['bill_no'],
-								"bill_seq" => (!empty($doc['bill']) ? $doc['bill'] : ''),
-								"dc_challan" => (!empty($doc['customer']['challan_no']) ? $doc['customer']['challan_no'] : ''),
+								//"bill_seq" => (!empty($doc['bill']) ? $doc['bill'] : ''),
+								//"dc_challan" => (!empty($doc['customer']['challan_no']) ? $doc['customer']['challan_no'] : ''),
 								"bill_time" => $doc['time']['created'], 
 								"store_id" => $doc['store_id'], 
 								"store_name" => $doc['store_name'], 
@@ -284,7 +284,8 @@ function uploadBill(){
 								"reprint" => $doc['reprint']
 			            );
 			$logger->debug("INSERT ORDER ARRAY ".json_encode($docsData));
-			$db->func_array2insert("cp_pos_storeorders", $docsData);
+			echo '<pre>';print_r($docsData);echo '</pre>'; die();
+			//$db->func_array2insert("cp_pos_storeorders", $docsData);
 			$insertId = $db->db_insert_id();	
 			$productsArray = array();
 			if($insertId > 0){
