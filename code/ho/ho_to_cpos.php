@@ -220,19 +220,17 @@ function uploadShiftData(){
 
 /* Function To Upload Bill On CPOS*/
 function uploadBill(){
-	ini_set('display_errors', 1);
+	//ini_set('display_errors', 1);
 	global $logger, $db;
 	$logger->debug("Calling Upload Bill Function");
 	$couch = new CouchPHP();
 	$html = array();
 	$no_bill = $unsuccessful = $successful = $counter = 0;
-	$billData = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_NO_MYSQL_ID)->setParam(array('include_docs'=>'true','limit'=>'500'))->execute();
-	//echo 'hi'; die();
-	//echo '<pre>';print_r($billData);echo '</pre>'; die();
- 	$logger->debug("URL to sccess data ".$couch->getLastUrl());
+	$billData = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_NO_MYSQL_ID)->setParam(array('include_docs'=>'true','limit'=>'1000'))->execute();
+	$logger->debug("URL to sccess data ".$couch->getLastUrl());
 
  	if(array_key_exists('rows', $billData)){ 
- 		foreach($billData['rows'] as $key => $value){ echo 'jiii';
+ 		foreach($billData['rows'] as $key => $value){ 
 			$doc = $value['doc'];
  			$docKey = $value['key'];
  			$dValue['doc'] = $doc;
@@ -291,7 +289,7 @@ function uploadBill(){
 			$insertId = $db->db_insert_id();	
 			$productsArray = array();
 			if($insertId > 0){
-				foreach ($doc['items'] as $itemKey => $itemVvalue) { echo 'hi';
+				foreach ($doc['items'] as $itemKey => $itemVvalue) { 
 					$pValue = $itemVvalue;
 					$productsArray[] = "('".$insertId."','".$doc['time']['created']."','".$doc['store_id']."','".$doc['store_name']."','".$pValue['id']."','".$pValue['name']."','".$pValue['category_id']."','".$pValue['category_name']."', '".$pValue['recipe_id']."','".$pValue['qty']."','".$pValue['price']."','".$pValue['tax']."','".$pValue['priceBT']."','".$pValue['discount']."','".$pValue['discountAmount']."','".$pValue['taxAbleAmount']."','".$pValue['taxAmount']."','".$pValue['netAmount']."','".$pValue['priceAD']."','".$pValue['subTotal']."')";
 				}
