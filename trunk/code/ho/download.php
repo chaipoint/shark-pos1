@@ -4,6 +4,7 @@
 	$couch = new CouchPHP(); 
 	
 	if(!empty($_REQUEST['store'])){
+		ini_set('memory_limit','256M');
 		$date1 = date('Y-m-d', strtotime($_REQUEST['date1']));
 		$date2 = date('Y-m-d', strtotime($_REQUEST['date2']));
 		$store = $_REQUEST['store'];
@@ -19,7 +20,7 @@
 			}
 		}
 		header("cache-control: private");
-        header('content-Disposition:attachment;filename=Bill_Wise_Report_'.$date.'.csv');
+        header('content-Disposition:attachment;filename=Bill_Wise_Report_From:'.$date1.'_To_'.$date2.'.csv');
         header('content-type: application/csv,UTF-8');
         header('content-length: ' . strlen($csv));
         header('content-Transfer-Encoding:binary');
