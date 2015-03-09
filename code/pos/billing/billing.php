@@ -23,14 +23,18 @@
 			$resultStoreMenu = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_MYSQL_ID)->setParam(array('include_docs'=>'true',"key"=>'"'.$_SESSION['user']['store']['id'].'"'))->execute();
 			$this->log->trace('LOGIN STORE DETAIL'."\r\n".json_encode($resultStoreMenu));
 			
-			$resultLastBill = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getView(BILLING_DESIGN_DOCUMENT_VIEW_BILL_BY_STORE_COUNTER)->setParam(array("descending"=>"true","startkey" => '["'.$this->getCDate().'", "'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]',"endkey" => '["'.$this->getCDate().'","'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]',"limit"=>"1"))->execute();
-			$this->log->trace('LAST BILL DETAILS'."\r\n".json_encode($resultLastBill));
-			//print_r($resultLastBill);
+			$store_id = $_SESSION['user']['store']['id'];
 			$lastBillNo = '';
 			$lastBillTime = '';
-			if(array_key_exists('rows', $resultLastBill) && count($resultLastBill['rows'])>0){
-				$lastBillNo = $resultLastBill['rows'][0]['value'] ;
-				$lastBillTime = $resultLastBill['rows'][0]['value'] ;	
+			
+			$lastBill = $this->cDB->getDocs(GENERATE_BILL);
+			$this->log->trace('LAST BILL DETAILS'."\r\n".json_encode($lastBill));
+			if(array_key_exists('bill_array', $lastBill) && count($lastBill['bill_array'])>0){
+				if(array_key_exists($_SESSION['user']['store']['id'], $lastBill['bill_array']) && $lastBill['bill_array'][$store_id]['date']== $this->getCDate()){
+					$lastBillNo = $lastBill['bill_array'][$store_id]['bill_no'] ;
+					$lastBillTime = $lastBill['bill_array'][$store_id]['date'] ;	
+				}
+					
 			}
 			
 			if(array_key_exists('cMessage', $resultStoreMenu)){
@@ -80,10 +84,12 @@
 			}else{
 				$data['printUtility'] = 'false';
 			}
-			/* To Get Retail Customer*/
+			
+			/* To Get Retail Customer */
 	  		require_once DIR.'/customer/customer.php';
 	  		$cus = new Customer();
 	  		$data['customer'] = $cus->retail_customer();
+			
 	  		$this->commonView('header_html',array('error'=>$data['error']));
 			$this->commonView('navbar');
 			$this->commonView('menu');
