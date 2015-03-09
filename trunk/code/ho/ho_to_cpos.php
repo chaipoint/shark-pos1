@@ -220,15 +220,15 @@ function uploadShiftData(){
 
 /* Function To Upload Bill On CPOS*/
 function uploadBill(){
-	echo 'sdfdgd'; die();
 	global $logger, $db;
 	$logger->debug("Calling Upload Bill Function");
 	$couch = new CouchPHP();
 	$html = array();
 	$no_bill = $unsuccessful = $successful = $counter = 0;
 	$billData = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_NO_MYSQL_ID)->setParam(array('include_docs'=>'true'))->execute();
+	echo '<pre>';print_r($billData);echo '</pre>'; die();
  	$logger->debug("URL to sccess data ".$couch->getLastUrl());
-echo '<pre>';print_r($billData);echo '</pre>'; die();
+
  	if(array_key_exists('rows', $billData)){ 
  		foreach($billData['rows'] as $key => $value){ echo 'jiii';
 			$doc = $value['doc'];
