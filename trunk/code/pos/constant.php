@@ -9,6 +9,7 @@ define ('STAFF_DESIGN_DOCUMENT', 'staff');
 define ('LOGIN_DESIGN_DOCUMENT', 'login');
 define ('CARD_SALE_DESIGN_DOCUMENT', 'card_sale');
 define ('PPC_DETAIL_DESIGN_DOCUMENT', 'ppc_detail');
+define ('GENERATE_BILL', 'generateBill');
 
 
 /* Constant For Design Document View */
