@@ -4,7 +4,6 @@
 	$couch = new CouchPHP(); 
 	
 	if(!empty($_REQUEST['store'])){
-		ini_set('memory_limit','256M');
 		$date1 = date('Y-m-d', strtotime($_REQUEST['date1']));
 		$date2 = date('Y-m-d', strtotime($_REQUEST['date2']));
 		$store = $_REQUEST['store'];
@@ -15,7 +14,7 @@
 			foreach($getRecord['rows'] as $key=>$value){
 				$doc = $value['doc'];
 				foreach ($doc['items'] as $itemKey => $itemValue) {
-					$csv .= "'".$doc['store_id']."' , '".$doc['store_name']."', '".$doc['bill']."', '".date('d-M-Y', strtotime($doc['time']['created']))."', '".date('h:i:s', strtotime($doc['time']['created']))."', '".$itemValue['name']."', '".$itemValue['qty']."', '".$itemValue['price']."', '".($itemValue['qty']*$itemValue['price'])."'". "\r";
+					$csv .= ''.$doc['store_id'].' , '.$doc['store_name'].', '.$doc['bill'].', '.date('d-M-Y', strtotime($doc['time']['created'])).', '.date('h:i:s', strtotime($doc['time']['created'])).', '.$itemValue['name'].', '.$itemValue['qty'].', '.$itemValue['price'].', '.($itemValue['qty']*$itemValue['price']).''. "\r";
 				}
 			}
 		}
