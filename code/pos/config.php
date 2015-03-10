@@ -5,10 +5,10 @@
 	@operating_mode is used in accessing URLs of production and test servers
 		values:- test|production
 	@billing_mode is used in accessing URLs of production and test servers
-		values:- local|production
+		values:- local|cloude
 */
 global $config;
-$config['operating_mode'] = 'test';
+$config['operating_mode'] = 'production';
 $config['billing_mode'] = 'local';
 $config['printing_mode'] = 'exe';
 $config['till_no'] = '1';
