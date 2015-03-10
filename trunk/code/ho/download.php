@@ -16,11 +16,11 @@
 		if(array_key_exists('rows', $getRecord)){
 			foreach($getRecord['rows'] as $key=>$value){
 				$doc = $value['doc'];
-				if($doc['bill_status']!='Cancelled'){
+				//if($doc['bill_status']!='Cancelled'){
 					foreach ($doc['items'] as $itemKey => $itemValue) {
 						$csv .= ''.$doc['store_id'].' , '.$doc['store_name'].', '.$doc['bill_no'].' ,'.$doc['bill'].', '.date('d-M-Y', strtotime($doc['time']['created'])).', '.date('h:i:s', strtotime($doc['time']['created'])).', '.$itemValue['name'].', '.$itemValue['qty'].', '.$itemValue['price'].', '.($itemValue['netAmount']).''. "\r";
 					}
-				}
+				//}
 			}
 		}
 		header("cache-control: private");
