@@ -126,7 +126,7 @@
         <div class="smallstat box col-lg-2 col-sm-4" style="width:130px;margin-left:8px;">
           <i class="glyphicon fa gray"></i>
           <span class="title">Total Sale</span>
-          <span class="value"><?php echo (($cashSale + $cashInDelivery + $ppcSale + $ppaSale) - $petty_expense) ;?></span>
+          <span class="value"><?php echo (($cashSale + $cashInDelivery + $ppcSale + $ppaSale + $creditSale) - $petty_expense) ;?></span>
         </div>
       
 
