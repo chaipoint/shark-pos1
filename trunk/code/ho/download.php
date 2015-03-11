@@ -16,17 +16,18 @@
 		
 		if(array_key_exists('rows', $getRecord)){
 			$billNo = array();
-			foreach($getRecord['rows'] as $key => $value){ echo 'hi';
+			$data = array();
+			foreach($getRecord['rows'] as $key => $value){ 
 				$doc = $value['doc'];
 				if($doc['parent']){
-					$billNo[$doc['bill_no']] = $doc['store_name'];
+					$billNo[$doc['store_name']] = $doc['bill_no'];
 				}else{
 					foreach ($doc['items'] as $itemKey => $itemValue) {
-						$csv .= ''.$doc['store_id'].' , '.$doc['store_name'].', '.$doc['bill_no'].' ,'.$doc['bill'].', '.date('d-M-Y', strtotime($doc['time']['created'])).', '.date('h:i:s', strtotime($doc['time']['created'])).', '.$itemValue['name'].', '.$itemValue['qty'].', '.$itemValue['price'].', '.($itemValue['netAmount']).''. "\r";
+						$daya[$doc['store_name']][$doc['bill_no']] = ''.$doc['store_id'].' , '.$doc['store_name'].', '.$doc['bill_no'].' ,'.$doc['bill'].', '.date('d-M-Y', strtotime($doc['time']['created'])).', '.date('h:i:s', strtotime($doc['time']['created'])).', '.$itemValue['name'].', '.$itemValue['qty'].', '.$itemValue['price'].', '.($itemValue['netAmount']).'';
 					}
 				}
 			}
-		} echo '<pre>';print_r($billNo);echo '</pre>'; die();
+		} echo '<pre>';print_r($billNo);print_r($data);echo '</pre>'; die();
 		header("cache-control: private");
         header('content-Disposition:attachment;filename=Bill_Wise_Report:'.$date1.'.csv');
         header('content-type: application/csv,UTF-8');
