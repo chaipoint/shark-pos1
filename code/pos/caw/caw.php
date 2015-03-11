@@ -65,8 +65,9 @@
 					
 					if(is_array($scheduleList) && count($scheduleList)>0){
 						$display = '';
+						$i=1;
 						foreach($scheduleList['product'] as $key => $value){
-							$display .= '<tr>
+							$display .= '<tr rowid='.$i.'>
 										<td class="text-center"><strong>'.$value[0]['production_start_time'].'</strong></td>
 										<td class="text-center"><strong>'.$value[0]['store_leaving_time'].'</strong></td>
 										<td class="text-center"><strong>'.$value[0]['onsite_time'].'</strong></td>
@@ -93,12 +94,13 @@
 										$display .='</tbody></table>
 										</td> '.(!array_key_exists($value[0]['onsite_time'], $challan_details) ?
 										'<td class="text-center">
-										<input type="text" class="challan" placeholder="Enter Challan No" /><br>
-										<button  class="btn btn-primary btn-sm generate-bill" data-customer_id="'.$customer_id.'"  data-order_details=\''.json_encode($productArray).'\'><i class="glyphicon glyphicon-list-alt"></i>&nbsp;Print Bill</button>
+										<input type="text" class="challan" id="challan_'.$i.'" placeholder="Enter Challan No" /><br>
+										<button  class="btn btn-primary btn-sm generate-bill" id="button_'.$i.'" data-customer_id="'.$customer_id.'"  data-order_details=\''.json_encode($productArray).'\'><i class="glyphicon glyphicon-list-alt"></i>&nbsp;Print Bill</button>
 										</td>' : 
 										"<td class='text-center'>".$challan_details[$value[0]['onsite_time']]."</td>" ).'
 									
 									</tr>';
+									$i++;
 						}
 						$return['data'] = $display;
 						$return['customer_name'] = $_POST['customer_name'];
