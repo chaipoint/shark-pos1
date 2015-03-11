@@ -150,7 +150,7 @@
 				$doc = $value['doc'];
 				if($doc['parent']){
 					if($doc['bill_status']=='Cancelled'){
-						
+						$data[$doc['store_name']] -= $doc['due_amount'];
 					}
 				}else{
 					if(array_key_exists($doc['store_name'], $data)){
