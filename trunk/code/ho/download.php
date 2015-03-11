@@ -23,7 +23,7 @@
 					$billNo[$doc['store_name']] = $doc['bill_no'];
 				}else{
 					foreach ($doc['items'] as $itemKey => $itemValue) {
-						$daya[$doc['store_name']][$doc['bill_no']] = ''.$doc['store_id'].' , '.$doc['store_name'].', '.$doc['bill_no'].' ,'.$doc['bill'].', '.date('d-M-Y', strtotime($doc['time']['created'])).', '.date('h:i:s', strtotime($doc['time']['created'])).', '.$itemValue['name'].', '.$itemValue['qty'].', '.$itemValue['price'].', '.($itemValue['netAmount']).'';
+						$data[$doc['store_name']][$doc['bill_no']] = ''.$doc['store_id'].' , '.$doc['store_name'].', '.$doc['bill_no'].' ,'.$doc['bill'].', '.date('d-M-Y', strtotime($doc['time']['created'])).', '.date('h:i:s', strtotime($doc['time']['created'])).', '.$itemValue['name'].', '.$itemValue['qty'].', '.$itemValue['price'].', '.($itemValue['netAmount']).'';
 					}
 				}
 			}
