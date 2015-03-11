@@ -20,7 +20,6 @@
 			foreach($getRecord['rows'] as $key => $value){ 
 				$doc = $value['doc'];
 				if($doc['parent']){
-					//$billNo[$doc['store_name']][$doc['bill_no']] = $doc['bill_no'];
 					if($doc['bill_status']=='Cancelled'){
 						unset($data[$doc['store_name']][$doc['bill_no']]);
 					}
@@ -30,7 +29,14 @@
 					}
 				}
 			}
-		} echo '<pre>';print_r($billNo);print_r($data);echo '</pre>'; die();
+		} 
+		if(is_array($data) && count($data)>0){
+			foreach($data as $key => $value){
+				$csv .= $value;
+			}
+		}
+		echo $csv;
+		echo '<pre>';print_r($billNo);print_r($data);echo '</pre>'; die();
 		header("cache-control: private");
         header('content-Disposition:attachment;filename=Bill_Wise_Report:'.$date1.'.csv');
         header('content-type: application/csv,UTF-8');
