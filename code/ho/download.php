@@ -32,7 +32,9 @@
 		} 
 		if(is_array($data) && count($data)>0){
 			foreach($data as $key => $value){
-				$csv .= $value;
+				foreach($value as $k=>$val){
+					$csv .= $val. "\r";
+				}
 			}
 		}
 		echo $csv;
