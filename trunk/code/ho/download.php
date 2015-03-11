@@ -19,7 +19,7 @@
 			foreach($getRecord['rows'] as $key => $value){ echo 'hi';
 				$doc = $value['doc'];
 				if($doc['parent']){
-					$billNo[$doc['bill_no']] = ['store_name'];
+					$billNo[$doc['bill_no']] = $doc['store_name'];
 				}else{
 					foreach ($doc['items'] as $itemKey => $itemValue) {
 						$csv .= ''.$doc['store_id'].' , '.$doc['store_name'].', '.$doc['bill_no'].' ,'.$doc['bill'].', '.date('d-M-Y', strtotime($doc['time']['created'])).', '.date('h:i:s', strtotime($doc['time']['created'])).', '.$itemValue['name'].', '.$itemValue['qty'].', '.$itemValue['price'].', '.($itemValue['netAmount']).''. "\r";
