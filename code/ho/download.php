@@ -21,11 +21,13 @@
 				$doc = $value['doc'];
 				if($doc['parent']){
 					if($doc['bill_status']=='Cancelled'){
-						unset($data[$doc['store_name']][$doc['bill_no']]);
+						foreach($doc['items'] as $itemKey => $itemValue){
+							unset($data[$doc['store_name']][$doc['bill_no'].'_'.$itemValue['id']]);
+						}
 					}
 				}else{
 					foreach ($doc['items'] as $itemKey => $itemValue) {
-						$data[$doc['store_name']][$doc['bill_no']] = ''.$doc['store_id'].' , '.$doc['store_name'].', '.$doc['bill_no'].' ,'.$doc['bill'].', '.date('d-M-Y', strtotime($doc['time']['created'])).', '.date('h:i:s', strtotime($doc['time']['created'])).', '.$itemValue['name'].', '.$itemValue['qty'].', '.$itemValue['price'].', '.($itemValue['netAmount']).'';
+						$data[$doc['store_name']][$doc['bill_no'].'_'.$itemValue['id']] = ''.$doc['store_id'].' , '.$doc['store_name'].', '.$doc['bill_no'].' ,'.$doc['bill'].', '.date('d-M-Y', strtotime($doc['time']['created'])).', '.date('h:i:s', strtotime($doc['time']['created'])).', '.$itemValue['name'].', '.$itemValue['qty'].', '.$itemValue['price'].', '.($itemValue['netAmount']).'';
 					}
 				}
 			}
