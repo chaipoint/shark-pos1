@@ -154,10 +154,10 @@
 					}
 				}else{
 					if(array_key_exists($doc['store_name'], $data)){
-						$data[$doc['store_name']]['amount'] += $doc['due_amount'];
+						$data[$doc['store_name']] += $doc['due_amount'];
 					}else{
-						$data[$doc['store_name']]['amount']=0;
-						$data[$doc['store_name']]['amount'] += $doc['due_amount'];
+						$data[$doc['store_name']]=0;
+						$data[$doc['store_name']] += $doc['due_amount'];
 					}
 					
 				}
