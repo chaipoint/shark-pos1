@@ -16,7 +16,7 @@
 		
 		if(array_key_exists('rows', $getRecord)){
 			$billNo = array();
-			foreach($getRecord['rows'] as $key => $value){
+			foreach($getRecord['rows'] as $key => $value){ echo 'hi';
 				$doc = $value['doc'];
 				if($doc['parent']){
 					$billNo[$doc['bill_no']] = ['store_name'];
