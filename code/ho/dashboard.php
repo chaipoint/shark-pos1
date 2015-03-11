@@ -165,19 +165,16 @@
 			
 		} 
 		arsort($data);
-		print_r($data);
-  /*$totalSale = 0;
-  if(array_key_exists('rows', $getSale) && count($getSale['rows'])>0){
-  $totalSale = $getSale['rows'][0]['value'];
-  } */
+		//print_r($data);
+  
 
-  $topStoreArray = array();
+  /*$topStoreArray = array();
   if(array_key_exists('rows', $topStore)) { 
        foreach ($topStore['rows'] as $key => $value) {
         $topStoreArray[$value['value']] = $value['key'][1] ;
        }
      }
-     krsort($topStoreArray);
+     krsort($topStoreArray);*/
 ?>
         <!--<h4>Today's Sale (Rs.<?php //echo $totalSale;?>)</h4>-->
 <!-- Default panel contents -->
@@ -205,7 +202,7 @@
             </thead>
           <tbody>
       <?php $i=1; 
-      if(is_array($topStoreArray)&& count($topStoreArray)>0) { 
+      /*if(is_array($topStoreArray)&& count($topStoreArray)>0) { 
        foreach ($topStoreArray as $key => $value) { if($value!=''){ ?>
          <tr>
            <td><?php echo $i;?></td>
@@ -220,7 +217,26 @@
            <td></td>
          </tr>
 
+    <?php } */
+	
+	if(is_array($data)&& count($data)>0) { 
+       foreach ($data as $key => $value) { if($value!=''){ ?>
+         <tr>
+           <td><?php echo $i;?></td>
+           <td><?php echo $key; ?></td>
+           <td><?php echo $value; ?></td>
+         </tr>
+      <?php $i++;}}} ?>
+      <?php for($j=$i;$j<=5;$j++) { ?>
+         <tr>
+           <td><?php echo $j;?></td>
+           <td></td>
+           <td></td>
+         </tr>
+
     <?php } ?>
+	
+	
             </tbody>
           </table>
 </div>
