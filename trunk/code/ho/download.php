@@ -39,8 +39,8 @@
 				}
 			}
 		}
-		echo $csv;
-		echo '<pre>';print_r($billNo);print_r($data);echo '</pre>'; die();
+		//echo $csv;
+		//echo '<pre>';print_r($billNo);print_r($data);echo '</pre>'; die();
 		header("cache-control: private");
         header('content-Disposition:attachment;filename=Bill_Wise_Report:'.$date1.'.csv');
         header('content-type: application/csv,UTF-8');
