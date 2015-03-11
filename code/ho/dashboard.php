@@ -197,7 +197,7 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th>Store Name<?php echo '<pre>';print_r($data);echo '</pre>';?></th>
+                <th>Store Name<?php print_r($data);?></th>
                 <th>Sale Amount(Rs)</th>
               </tr>
             </thead>
