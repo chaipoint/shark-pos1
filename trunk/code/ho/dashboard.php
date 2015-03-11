@@ -142,7 +142,28 @@
 		//$getSale = $couch->getDesign('billing')->getView('bill_by_date')->setParam(array("group"=>"true","startkey"=>'["'.date('Y-m-d').'"]',"endkey"=>'["'.date('Y-m-d').'",{}]'))->execute();
 		$topStore = $couch->getDesign('sales')->getView('top_store')->setParam(array("group"=>"true","startkey"=>'["'.$date.'"]',"endkey"=>'["'.$date.'",{}]'))->execute();
       
-
+		$getRecord = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_BILL_BY_STORE)->setParam(array("include_docs"=>"true","startkey"=>'["'.$date.'"]', "endkey"=>'["'.$date.'", {}]'))->execute();
+		
+		if(array_key_exists('rows', $getRecord)){
+			$data = array();
+			foreach($getRecord['rows'] as $key => $value){ 
+				$doc = $value['doc'];
+				if($doc['parent']){
+					if($doc['bill_status']=='Cancelled'){
+						
+					}
+				}else{
+					if(array_key_exists($doc['store_name'], $data)){
+						$data[$doc['store_name']] += $doc['due_amount'];
+					}else{
+						$data[$doc['store_name']]=0;
+						$data[$doc['store_name']] += $doc['due_amount'];
+					}
+					
+				}
+			}
+		} 
+		echo '<pre>';print_r($data);echo '</pre>';
   /*$totalSale = 0;
   if(array_key_exists('rows', $getSale) && count($getSale['rows'])>0){
   $totalSale = $getSale['rows'][0]['value'];
