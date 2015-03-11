@@ -36,19 +36,20 @@ $(document).ready(function(){
 /* Customer Selection Block End */
 
 	$("#schedule_table").on('click','.generate-bill',function(){
-		if($(this).prev('input').val()!=''){
-			var challan_no = $(this).prev('input').val();
+		var thisRow = $(this).closest("tr");
+		var currentRow = parseInt(thisRow.attr('rowid'));
+		
+		if($('#challan_'+currentRow).val()!=''){ 
+			var challan_no = $('#challan_'+currentRow).val();
 			var date = new Date();
 			var cawOrder = date.getMilliseconds();
-			var orderDetails = $(this).data('order_details');
+			var orderDetails = $('#button_'+currentRow).data('order_details');
 			orderDetails.challan_no = challan_no;
-			//alert(JSON.stringify(orderDetails));
-			//return false;
 			if(window.localStorage){
 				localStorage.setItem(cawOrder, JSON.stringify(orderDetails));
 				window.location = 'index.php?dispatch=billing&cawOrder='+cawOrder
 			}
-		}
+		} 
 	});
 	
 	keyboard.push($('.challan').cKeyboard());
