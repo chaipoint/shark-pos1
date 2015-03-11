@@ -13,16 +13,20 @@
 		$csv = '';
 		$csv .= 'StoreId, StoreName, BillNo, NewBillNo, BillDate, BillTime, ItemName, ItemQty, ItemPrice, SaleValue'. "\r";
 		$getRecord = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_BILL_BY_STORE)->setParam(array("include_docs"=>"true","startkey"=>'["'.$date1.'"]', "endkey"=>'["'.$date1.'", {}]'))->execute();
+		
 		if(array_key_exists('rows', $getRecord)){
-			foreach($getRecord['rows'] as $key=>$value){
+			$billNo = array();
+			foreach($getRecord['rows'] as $key => $value){
 				$doc = $value['doc'];
-				if(empty($doc['parent'])){
+				if($doc['parent']){
+					$billNo[$doc['bill_no']] = ['store_name'];
+				}else{
 					foreach ($doc['items'] as $itemKey => $itemValue) {
 						$csv .= ''.$doc['store_id'].' , '.$doc['store_name'].', '.$doc['bill_no'].' ,'.$doc['bill'].', '.date('d-M-Y', strtotime($doc['time']['created'])).', '.date('h:i:s', strtotime($doc['time']['created'])).', '.$itemValue['name'].', '.$itemValue['qty'].', '.$itemValue['price'].', '.($itemValue['netAmount']).''. "\r";
 					}
 				}
 			}
-		}
+		} echo '<pre>';print_r($billNo);echo '</pre>'; die();
 		header("cache-control: private");
         header('content-Disposition:attachment;filename=Bill_Wise_Report:'.$date1.'.csv');
         header('content-type: application/csv,UTF-8');
