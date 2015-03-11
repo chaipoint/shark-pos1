@@ -163,7 +163,7 @@
 				}
 			}
 		} 
-		echo '<pre>';print_r($data);echo '</pre>';
+		
   /*$totalSale = 0;
   if(array_key_exists('rows', $getSale) && count($getSale['rows'])>0){
   $totalSale = $getSale['rows'][0]['value'];
@@ -197,7 +197,7 @@
             <thead>
               <tr>
                 <th>#</th>
-                <th>Store Name</th>
+                <th>Store Name<?php echo '<pre>';print_r($data);echo '</pre>';?></th>
                 <th>Sale Amount(Rs)</th>
               </tr>
             </thead>
