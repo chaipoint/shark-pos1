@@ -139,8 +139,8 @@
         if(array_key_exists('sales_reg_search', $_GET)){
           $date = date('Y-m-d',strtotime($_GET['sales_reg_search']));
         }
-		//$getSale = $couch->getDesign('billing')->getView('bill_by_date')->setParam(array("group"=>"true","startkey"=>'["'.date('Y-m-d').'"]',"endkey"=>'["'.date('Y-m-d').'",{}]'))->execute();
-		$topStore = $couch->getDesign('sales')->getView('top_store')->setParam(array("group"=>"true","startkey"=>'["'.$date.'"]',"endkey"=>'["'.$date.'",{}]'))->execute();
+		
+		//$topStore = $couch->getDesign('sales')->getView('top_store')->setParam(array("group"=>"true","startkey"=>'["'.$date.'"]',"endkey"=>'["'.$date.'",{}]'))->execute();
       
 		$getRecord = $couch->getDesign('design_ho')->getView('bill_by_store')->setParam(array("include_docs"=>"true","startkey"=>'["'.$date.'"]', "endkey"=>'["'.$date.'", {}]'))->execute();
 		
