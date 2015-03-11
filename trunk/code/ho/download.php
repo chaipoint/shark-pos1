@@ -6,7 +6,7 @@
 	if(!empty($_REQUEST['date1'])){
 		set_time_limit(0);
         ini_set('memory_limit','1024M');
-		error_reporting(E_ALL);
+		//error_reporting(E_ALL);
 		$date1 = date('Y-m-d', strtotime($_REQUEST['date1']));
 		//$date2 = date('Y-m-d', strtotime($_REQUEST['date2']));
 		//$store = $_REQUEST['store'];
