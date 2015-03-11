@@ -162,9 +162,10 @@
 					
 				}
 			}
-			print_r($data);
+			
 		} 
-		
+		arsort($data);
+		print_r($data);
   /*$totalSale = 0;
   if(array_key_exists('rows', $getSale) && count($getSale['rows'])>0){
   $totalSale = $getSale['rows'][0]['value'];
