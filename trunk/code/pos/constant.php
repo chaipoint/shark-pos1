@@ -159,6 +159,7 @@ define('CANCEL', "cancel");
 define('OK', "ok");
 define('PAID', "paid");
 define('API_URL', 'http://54.178.189.25/cpos/api/coc/coc_api.php');
+define('TEST_API_URL', 'http://54.64.5.133/cpos/api/coc/coc_api.php');
 define('ACTIVITY_TRACKER_API_URL', 'http://cp-os.com/cpos/api/storeActivityTracker.php');
 define ('INSERT_SUCCESS', 'RECORD INSERTED SUCCESSFULLY');
 define ('UPDATE_SUCCESS', 'RECORD UPDATED SUCCESSFULLY');
