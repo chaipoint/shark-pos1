@@ -125,7 +125,7 @@
 					if($changeStatus['error']){
 						$return['error'] = true;
 						$return['message'] = $changeStatus['message'];
-					}else if($_POST['new_status']=='Confirmed'){ 
+					}/*else if($_POST['new_status']=='Confirmed'){ 
 							$data = array( 'From'   => PROVIDER_NUMBER,
 										   'To'    => $_POST['customer_phone'],
 						                   'Body'  => CONFIRMED_MESSAGE
@@ -138,7 +138,7 @@
 						                   'Body'  => DISPATCHED_MESSAGE
 				                         );
 				            call_api($data,$details);
-					}
+					}*/
 				}else{
 					$return['error'] = true;
 					$return['message'] = "Invalid Order";
