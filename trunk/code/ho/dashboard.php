@@ -220,7 +220,7 @@
     <?php } */
 	
 	if(is_array($data)&& count($data)>0) { 
-       foreach ($data as $key => $value) { if($value!=''){ ?>
+       foreach ($data as $key => $value) { if($key!=''){ ?>
          <tr>
            <td><?php echo $i;?></td>
            <td><?php echo $key; ?></td>
