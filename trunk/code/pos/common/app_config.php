@@ -164,6 +164,31 @@ session_start();
 				require_once $viewFile;
 			}		
 		}
+		public function getSessionData(){
+			global $config;
+			$return = array('error'=>false, 'message'=>'');
+			$getData = $this->cDB->getDocs($this->getCDate());
+			if(array_key_exists('error', $getData)){
+				$return['error'] = true;
+				$return['message'] = 'SESSION_EXPIRE'; 
+			}else{
+				$_SESSION['user']['server_date'] = $getData['user']['server_date'];
+				$_SESSION['user']['mysql_id'] = $getData['user']['mysql_id']; 
+				$_SESSION['user']['name'] = $getData['user']['name'];
+				$_SESSION['user']['counter'] = $config['till_no'];
+				$_SESSION['user']['shift'] = '1';
+				
+				$_SESSION['user']['location']['id'] = $getData['user']['location']['id']; ;
+				$_SESSION['user']['location']['name'] = $getData['user']['location']['name']; 
+				
+				$_SESSION['user']['store']['id'] = $getData['user']['store']['id'];
+				$_SESSION['user']['store']['name'] = $getData['user']['store']['name'];
+				$_SESSION['user']['store']['code'] = $getData['user']['store']['code'];
+				$_SESSION['user']['store']['bill_type'] = $getData['user']['store']['bill_type'];
+				$_SESSION['user']['store']['store_message'] = $getData['user']['store']['store_message'];
+			}
+			return $return ;
+		}
 		
 		public function getCDTime($format = '24'){
 			if($format == '24'){
