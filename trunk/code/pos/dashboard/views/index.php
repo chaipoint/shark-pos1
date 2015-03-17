@@ -77,7 +77,7 @@
 	
 </div>
 <?php } else {?>
-<div class="alert alert-danger text-center dashboard_div" style="width:60%;min-height:450px;"><?php echo INTERNET_ERROR;?></div>
+<div class="alert alert-danger text-center dashboard_div" style="width:55%;min-height:450px;margin-bottom:3px;"><?php echo INTERNET_ERROR;?></div>
 <?php }?>
 <div class="padded hide" id="reconcilation_div" style="min-height:400px;padding:5px;">
 	<?php
@@ -91,7 +91,12 @@
 	?>
 </div>
 
-<?php list($first) = explode(',', $_SESSION['user']['store']['bill_type']); ?>
+<?php 
+	if(empty($_SESSION['user']['store']['id'])){
+		$result = $this->getSessionData();
+	}
+	list($first) = explode(',', $_SESSION['user']['store']['bill_type']); 
+?>
 <div class="padded dashboard_div" >
 		<button class="btn" id="dashboard" style="margin-left:13px;">Dashboard</button>
 		<button class="btn" id="shift_data">Shift Data</button>

@@ -5,6 +5,12 @@
 			$this->log =  Logger::getLogger("CP-POS|DASHBOARD");
 		}
 		function index(){
+			if(!array_key_exists('id', $_SESSION['user']['store'])){
+				$result = $this->getSessionData();
+				if($result['error']){
+					header("LOCATION:index.php");
+				}
+			}
 			$data = array('error'=>false, 'message' => '', 'data'=> array());
 			$postData = array('action'=>STORE_AUDIT, 'store_id'=>$_SESSION['user']['store']['id']);
 			$url = ACTIVITY_TRACKER_API_URL;
