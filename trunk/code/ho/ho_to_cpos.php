@@ -291,7 +291,8 @@ function uploadBill(){
 			if($insertId > 0){
 				foreach ($doc['items'] as $itemKey => $itemVvalue) { 
 					$pValue = $itemVvalue;
-					$productsArray[] = "('".$insertId."','".$doc['time']['created']."','".$doc['store_id']."','".$doc['store_name']."','".$pValue['id']."','".$pValue['name']."','".$pValue['category_id']."','".$pValue['category_name']."', '".$pValue['recipe_id']."','".$pValue['qty']."','".$pValue['price']."','".$pValue['tax']."','".$pValue['priceBT']."','".$pValue['discount']."','".$pValue['discountAmount']."','".$pValue['taxAbleAmount']."','".$pValue['taxAmount']."','".$pValue['netAmount']."','".$pValue['priceAD']."','".$pValue['subTotal']."')";
+					$priceAD = (!empty($pValue['dis_price']) ? $pValue['dis_price'] : $pValue['priceAD']);
+					$productsArray[] = "('".$insertId."','".$doc['time']['created']."','".$doc['store_id']."','".$doc['store_name']."','".$pValue['id']."','".$pValue['name']."','".$pValue['category_id']."','".$pValue['category_name']."', '".$pValue['recipe_id']."','".$pValue['qty']."','".$pValue['price']."','".$pValue['tax']."','".$pValue['priceBT']."','".$pValue['discount']."','".$pValue['discountAmount']."','".$pValue['taxAbleAmount']."','".$pValue['taxAmount']."','".$pValue['netAmount']."','".$priceAD."','".$pValue['subTotal']."')";
 				}
 				$logger->debug("INSERT ORDER PRODUCT ARRAY ".json_encode($productsArray));		
 				if(count($productsArray) > 0){
