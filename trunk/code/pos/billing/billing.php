@@ -11,15 +11,18 @@
 		/* This Function Is Automatically Called When We Come On Billing Module */
 		function index(){ 
 			global $ERT_PRODUCT_ARRAY, $config;
+			$data = array('error' =>false, 'catList'=>array(), 'productList'=>array(), 'firstCat'=>0, 'config_data'=>array(), 'bill'=>array(), 'lastBillNo'=>'', 'lastBillTime'=>'');
+			
 			if(array_key_exists('referer',$_GET) && $_GET['referer'] == HOME){
-			}else{
-				if(!array_key_exists('shift', $_SESSION['user']) || !array_key_exists('store', $_SESSION['user']) ){
-					header("LOCATION:index.php");
+			}else if(!array_key_exists('shift', $_SESSION['user']) || !array_key_exists('store', $_SESSION['user']) ){
+					$result = $this->getSessionData();
+					if($result['error']){
+						header("LOCATION:index.php");
+					}
 				}
-			}
+			
 			
 			//Block sto get Configs and need to have a generic methode for that
-			$data = array('error' => false,'catList'=>array(),'productList'=>array(),'firstCat'=>0, 'config_data'=>array(),'bill'=>array(),'lastBillNo'=>'','lastBillTime'=>'');
 			$resultStoreMenu = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_MYSQL_ID)->setParam(array('include_docs'=>'true',"key"=>'"'.$_SESSION['user']['store']['id'].'"'))->execute();
 			$this->log->trace('LOGIN STORE DETAIL'."\r\n".json_encode($resultStoreMenu));
 			
@@ -30,7 +33,7 @@
 			$lastBill = $this->cDB->getDocs(GENERATE_BILL);
 			$this->log->trace('LAST BILL DETAILS'."\r\n".json_encode($lastBill));
 			if(array_key_exists('bill_array', $lastBill) && count($lastBill['bill_array'])>0){
-				if(array_key_exists($_SESSION['user']['store']['id'], $lastBill['bill_array']) && $lastBill['bill_array'][$store_id]['date']== $this->getCDate()){
+				if(array_key_exists($store_id, $lastBill['bill_array']) && $lastBill['bill_array'][$store_id]['date']== $this->getCDate()){
 					$lastBillNo = $lastBill['bill_array'][$store_id]['bill_no'] ;
 					$lastBillTime = $lastBill['bill_array'][$store_id]['date'] ;	
 				}
@@ -43,6 +46,7 @@
 				die;
 			}else{
 				$result = $resultStoreMenu['rows'][0]['doc'];
+				$tin_no = $resultStoreMenu['rows'][0]['doc']['tin_no'];
 				$catList = array();
 				$productList = array();
 				foreach($result['menu_items'] as $key => $Items){
@@ -71,13 +75,13 @@
 	  		}
 	  		
 			/* To Check Print Utility Exists Or Not */
-			
 			if($config['printing_mode']=='exe'){
 				$utilityCheck = file_exists(EXE_PATH);
 				$data['printUtility'] = ($utilityCheck ? 'true' : 'false');
 				if($utilityCheck){
 					$company_data = array();
 					$company_data = $this->configData['company_details'];
+					$company_data['TIN'] = $tin_no;
 					$this->log->trace("COMPANY DETAILS TO BE PRINT \r\n".json_encode($company_data));
 					file_put_contents(COMPANY_DETAIL_TXT_PATH, json_encode($company_data,true));
 				}
@@ -89,8 +93,7 @@
 	  		require_once DIR.'/customer/customer.php';
 	  		$cus = new Customer();
 	  		$data['customer'] = $cus->retail_customer();
-			
-	  		$this->commonView('header_html',array('error'=>$data['error']));
+			$this->commonView('header_html',array('error'=>$data['error']));
 			$this->commonView('navbar');
 			$this->commonView('menu');
 			if(!$data['error']){
@@ -156,17 +159,26 @@
 		/* Function To Validate Coupan Code */
 		public function getCoupanCode(){
 			$return = array('error'=>false, 'message'=>'', 'data' => array());
+			if(empty($_SESSION['user']['store']['id'])){
+				$result = $this->getSessionData();
+				if($result['error']){
+					$return['error'] = true;
+					$return['message'] = $result['message'];
+					return json_encode($return);
+				}
+			}
 			$getCoupanCode = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_MYSQL_ID)->setParam(array('include_docs'=>'true',"key"=>'"'.$_SESSION['user']['store']['id'].'"'))->execute();
 			$this->log->trace('STORE COUPAN DETAIL'."\r\n".json_encode($getCoupanCode));
 			if(array_key_exists('rows', $getCoupanCode) && count($getCoupanCode['rows'])>0){
-				if(array_key_exists('coupan_code', $getCoupanCode['rows'][0]['doc']) && count($getCoupanCode['rows'][0]['doc']['coupan_code'])){
-					$data = $getCoupanCode['rows'][0]['doc']['coupan_code'];
+				$doc = $getCoupanCode['rows'][0]['doc'];
+				if(array_key_exists('discount_coupon', $doc) && count($doc['discount_coupon'])>0){
+					$data = $getCoupanCode['rows'][0]['doc']['discount_coupon'];
 					foreach($data as $key => $value){
-						$curdate = strtotime(date('Y-m-d H:i:s'));
+						$curdate = strtotime(date('Y-m-d'));
 						$startdate = strtotime($value['start_date']);
 						$enddate = strtotime($value['end_date']);
-						if($value['coupan_code'] == $_REQUEST['coupan_code'] && $value['active']=='Y' && $startdate <= $curdate && $enddate >= $curdate){
-							$return['data']['discount_amount'] = $value['discount'];
+						if($value['coupon_code'] == $_REQUEST['coupan_code'] && ($value['business_type'] == $_REQUEST['business_type'] || $value['business_type']=='All') && $value['active']=='Y' && $startdate <= $curdate && $enddate >= $curdate){
+							$return['data']['discount_amount'] = $value['coupon_value'];
 							$return['error'] = false;
 							$return['message'] = '';
 							return json_encode($return);
@@ -201,23 +213,36 @@
 
 		/* Function To Save Bill Data */
 		function save(){
-			$return = array('error'=>false,'message'=>'','data'=>array());
 			global $config;
+			$return = array('error'=>false, 'message'=>'', 'data'=>array());
 			if($_SERVER['REQUEST_METHOD'] == 'POST'){
 				if(array_key_exists('request_type', $_POST) && $_POST['request_type'] == SAVE_BILL){
 					$this->log->trace("DATA \r\n".json_encode($_POST));
 					$_POST['cd_doc_type'] = BILLING_DOC_TYPE ;
-					$_POST['time'] = array('created'=>$this->getCDTime(), 'updated'=>$this->getCDTime());
+					
+					if(empty($_SESSION['user']['store']) || empty($_SESSION['user']['store']['id']) || empty($_SESSION['user']['store']['name'])){
+						$result = $this->getSessionData();
+						if($result['error']){
+							$return['error'] = true;
+							$return['message'] = $result['message'];
+							return json_encode($return);
+						}
+					}
 					$_POST['store_id'] = $_SESSION['user']['store']['id'];
 					$_POST['store_name'] = $_SESSION['user']['store']['name'];
-					$_POST['staff_id'] = $_SESSION['user'][$this->userIdField];
+					$_POST['staff_id'] = $_SESSION['user']['mysql_id'];
 					$_POST['staff_name'] = $_SESSION['user']['name'];
 					$_POST['location_id'] = $_SESSION['user']['location']['id'];
 					$_POST['location_name'] = $_SESSION['user']['location']['name'];
 					$_POST['reprint'] = 0;
 					$_POST['is_updated'] = 'N';
 					$_POST['card_no'] = NA;
-					$_POST['coupon_code'] = NA;
+					//$_POST['coupon_code'] = NA;
+					if($_SESSION['user']['server_date'] != $this->getCDate()){
+						$_POST['time'] = array('created'=>$_SESSION['user']['server_date'], 'updated'=>$_SESSION['user']['server_date']);
+					}else{
+						$_POST['time'] = array('created'=>$this->getCDTime(), 'updated'=>$this->getCDTime());
+					}
 					$_POST['counter'] = $_SESSION['user']['counter'];
 					$_POST['shift'] = $_SESSION['user']['shift'];
 
@@ -240,18 +265,8 @@
 						}
 					}
 
-					$currentBillNo = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getUpdate(BILLING_DESIGN_DOCUMENT_UPDATE_GET_BILL_NO,'generateBill')->setParam(array('date'=>$this->getCDate(), 'counter1'=>''.$_SESSION['user']['counter'].'','store_id'=>''.$_SESSION['user']['store']['id'].''))->execute();
+					$currentBillNo = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getUpdate(BILLING_DESIGN_DOCUMENT_UPDATE_GET_BILL_NO,'generateBill')->setParam(array('date'=>$_SESSION['user']['server_date'], 'counter1'=>''.$_SESSION['user']['counter'].'','store_id'=>''.$_SESSION['user']['store']['id'].''))->execute();
 					
-					//echo '<pre>';
-					//print_r($currentBillNo);
-					//echo '</pre>'; die();
-					/*$resultLastBill = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getView(BILLING_DESIGN_DOCUMENT_VIEW_BILL_BY_STORE_COUNTER)->setParam(array("descending"=>"true","startkey" => '["'.$this->getCDate().'", "'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]',"endkey" => '["'.$this->getCDate().'","'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]',"limit"=>"1"))->execute();
-					//$this->log->trace("GET CURRENT BILL NO \r\n".$resultLastBill);
-					if(array_key_exists('rows', $resultLastBill) && count($resultLastBill['rows'])>0){
-						$currentBillNo = $resultLastBill['rows'][0]['value']+1 ;
-					}else{
-						$currentBillNo = 1 ;
-					}*/
 					if(is_numeric($currentBillNo)){
 						$mode = ($config['billing_mode']==LOCAL_BILLING_MODE ? LOCAL : CLOUD);
 						$_POST['bill'] = $_SESSION['user']['store']['code']."".$_SESSION['user']['counter']."".str_pad($currentBillNo, 4 , '0', STR_PAD_LEFT)."".$mode;
@@ -357,6 +372,14 @@
 		/* Function To Bill Through PPA METHOD  */
 		public function ppaBill(){
 			$return = array('error'=>false,'message'=>'','data'=>array());
+			if(empty($_SESSION['user']['store']['id'])){
+				$result = $this->getSessionData();
+				if($result['error']){
+					$return['error'] = true;
+					$return['message'] = $result['message'];
+					return json_encode($return);
+				}
+			}
 			$dir =  dirname(__FILE__).'/../lib/api/ppa_api.php';
             require_once $dir;
             $storeDetails = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_MYSQL_ID)->setParam(array('include_docs'=>'true',"key"=>'"'.$_SESSION['user']['store']['id'].'"'))->execute();
@@ -378,6 +401,14 @@
         function loadCard(){
         	$return = array('error'=>false,'message'=>'','data'=>array());
         	$loadResponse = array();
+			if(empty($_SESSION['user']['store']['id'])){
+				$result = $this->getSessionData();
+				if($result['error']){
+					$return['error'] = true;
+					$return['message'] = $result['message'];
+					return json_encode($return);
+				}
+			}
         	if(array_key_exists('request_type', $_POST) && ($_POST['request_type'] == LOAD_PPA_CARD || $_POST['request_type'] == REWARD_REDEMPTION || $_POST['request_type'] == REWARD_CHECK)){
         		$dir =  dirname(__FILE__).'/../lib/api/ppa_api.php';
             	require_once $dir;

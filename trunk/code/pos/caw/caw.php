@@ -7,6 +7,11 @@
 		function index(){
 			if(!array_key_exists('user', $_SESSION)){
 				header("LOCATION:index.php");
+			}else if(!array_key_exists('id', $_SESSION['user']['store'])){
+				$result = $this->getSessionData();
+				if($result['error']){
+					header("LOCATION:index.php");
+				}
 			}
 			$data = array('error' => false, 'customerList'=>array());
 			$getCustomer = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_MYSQL_ID)->setParam(array('include_docs'=>'true', "key"=>'"'.$_SESSION['user']['store']['id'].'"'))->execute();
@@ -38,6 +43,14 @@
 		
 		function schedule(){
 			$return = array('error' => false, 'schedule'=>array());
+			if(empty($_SESSION['user']['store']['id'])){
+				$result = $this->getSessionData();
+				if($result['error']){
+					$return['error'] = true;
+					$return['message'] = $result['message'];
+					return json_encode($return);
+				}
+			}
 			if(!empty($_POST['customer_name'])){
 				$getScheduleData = $this->cDB->getDesign(CUSTOMERS_DESIGN_DOCUMENT)->getView(CUSTOMERS_DESIGN_DOCUMENT_VIEW_RETAIL_CUSTOMER_LIST)->setParam(array('include_docs'=>'true', 'key'=>'"'.$_REQUEST['customer_name'].'"'))->execute();
 				$this->log->trace('CUSTOMER DATA'."\r\n".json_encode($getScheduleData));
