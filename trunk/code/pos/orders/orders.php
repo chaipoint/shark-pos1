@@ -152,6 +152,14 @@
 		
 
 		function getCocOrder($status='',$order_type=''){
+			if(empty($_SESSION['user']['store']['id'])){
+				$result = $this->getSessionData();
+				if($result['error']){
+					$return['error'] = true;
+					$return['message'] = $result['message'];
+					return json_encode($return);
+				}
+			}
 			$status = (!empty($status) ? $status : 'New');
 			$order_type = (!empty($order_type) ? $order_type : 'COC');
 			$storeId = $_SESSION['user']['store']['id'];
@@ -167,6 +175,14 @@
 		}
 		
 		function getNewOrder(){
+			if(empty($_SESSION['user']['store']['id'])){
+				$result = $this->getSessionData();
+				if($result['error']){
+					$return['error'] = true;
+					$return['message'] = $result['message'];
+					return json_encode($return);
+				}
+			}
 			$storeId = $_SESSION['user']['store']['id'];
 			$postData = array('action'=>'getNewOrder', 'store_id'=>$storeId);
 			$url = API_URL;
