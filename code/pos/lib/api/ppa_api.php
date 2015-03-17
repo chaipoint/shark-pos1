@@ -3,6 +3,14 @@
 			global $CARD_RESPONSE_ARRAY, $config;
             $responseArray = $CARD_RESPONSE_ARRAY;
 			$return = array('error'=>false,'message'=>'','data'=>array());
+			if(empty($_SESSION['user']['store']['id'])){
+				$result = $this->getSessionData();
+				if($result['error']){
+					$return['error'] = true;
+					$return['message'] = $result['message'];
+					return json_encode($return);
+				}
+			}
     		$username = $details['username'];
     		$password = $details['password'];
     		$authorization = 'Basic '.base64_encode("$username:$password");
