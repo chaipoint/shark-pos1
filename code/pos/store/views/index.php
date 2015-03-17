@@ -51,6 +51,7 @@ border-radius: 4px;
 		 <input type='hidden' name='store_code' id='store_code' />
 		 <input type='hidden' name='bill_type' id='bill_type' />
 		 <input type='hidden' name='store_message' id='store_message' />
+		 <input type='hidden' name='tin_no' id='tin_no' />
 			<div class="padded">
 				<div class="panel">
 					<div class="panel-body" style="padding-bottom:0;">
@@ -60,7 +61,7 @@ border-radius: 4px;
 					
 						<ul class="list-unstyled list-inline" role="tablist" id="store_nav">
 							<?php foreach($storeList as $key => $value) { ?>
-							<li><a class="store-selection btn btn-default btn-lg btn3d" data-store_msg="<?php echo $value['store_message']; ?>" data-bill_type="<?php echo $value['bill_type'];?>" data-code="<?php echo $value['code']?>" id="<?php echo $value['id']; ?>"><?php echo $value['name']; ?></a></li>
+							<li><a class="store-selection btn btn-default btn-lg btn3d" data-store_tin="<?php echo $value['tin_no']; ?>" data-store_msg="<?php echo $value['store_message']; ?>" data-bill_type="<?php echo $value['bill_type'];?>" data-code="<?php echo $value['code']?>" id="<?php echo $value['id']; ?>"><?php echo $value['name']; ?></a></li>
 							<?php } ?>
 						</ul>
 					</div>
