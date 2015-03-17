@@ -7,6 +7,9 @@ class PpcAPI extends App_config {
 		private $configData;
 		public function initialize(){
 				global $config;
+				if(empty($_SESSION['user']['store']['id'])){
+					$this->getSessionData();
+				}
 				$OPM = $config['operating_mode'];
 				$configResult = $this->getConfig($this->cDB, array('ppc_api'));
 			    $this->configData = (count($configResult['data']) > 0) ? $configResult['data'] : array();
