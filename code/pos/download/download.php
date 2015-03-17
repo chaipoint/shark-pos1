@@ -1,7 +1,9 @@
 <?php
 $con = mysql_connect('54.178.189.25', 'root', 'mtf@9081');
+//$con = mysql_connect('54.64.5.133', 'root', 'root');
 if(!$con) die(mysql_errno());
 mysql_select_db('cabbeein_cpos', $con);
+//mysql_select_db('cpos', $con);
 
 require_once '../lib/log4php/Logger.php';
 require_once '../config.php';
@@ -230,7 +232,7 @@ function updateStaff($location){
 }
 
 /* Function To Download Store From CPOS */
-function updateStore($location_id){
+function updateStore($location_id){ 
     $couch = new CouchPHP();
 	$result = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_STORE_BY_MYSQL_ID)->setParam(array("include_docs"=>"true"))->execute();
 	$storeList = array();
@@ -244,7 +246,7 @@ function updateStore($location_id){
 	  	}
 	}
   
-	$getStoreNameQuery = "SELECT sm.id mysql_id, sm.name, sm.code,
+	$getStoreNameQuery = "SELECT sm.id mysql_id, sm.tin_no, sm.name, sm.code,
 	                      sm.type, sm.address, sm.phone_1, sm.phone_2, photo,
 	                      weekly_off, lm.id location_id, lm.name location_name,
 	                      sm.sms, sm.foe_allowed is_foe, sm.active, sm.store_time store_open_schedule,
@@ -273,10 +275,10 @@ function updateStore($location_id){
                             $updateArray[$i] = $storeDetails;
                             
                             if(array_key_exists($storeDetails['mysql_id'],$storeList)){
-							$updateArray[$i]['_id'] = $storeList[$storeDetails['mysql_id']]['_id'];
-                            $updateArray[$i]['_rev'] = $storeList[$storeDetails['mysql_id']]['_rev'];
-                            unset($_idList[$storeList[$storeDetails['mysql_id']]['_id']]);
-                            $updateCounter++;
+								$updateArray[$i]['_id'] = $storeList[$storeDetails['mysql_id']]['_id'];
+								$updateArray[$i]['_rev'] = $storeList[$storeDetails['mysql_id']]['_rev'];
+								unset($_idList[$storeList[$storeDetails['mysql_id']]['_id']]);
+								$updateCounter++;
 						    }
 
 							$updateArray[$i]['cd_doc_type'] = STORE_MASTER_DOC_TYPE;
@@ -398,21 +400,40 @@ function updateStore($location_id){
 								$updateArray[$i]['retail_customer'][$l]['type'] = $row['type'];
 								$l++;
 							}
+							
+							$getCoupon = "SELECT id, business_type, coupon_code, coupon_type, coupon_value,
+											from_dt, to_dt, active 
+											FROM `cp_store_discount` 
+											WHERE store_id = '".$storeDetails['mysql_id']."' AND active = 'Y'
+											";
+							$couponList = mysql_query($getCoupon);
+							$m = 0;
+							while ($row = mysql_fetch_assoc($couponList)) {
+								$updateArray[$i]['discount_coupon'][$m]['id'] = $row['id'];
+								$updateArray[$i]['discount_coupon'][$m]['business_type'] = $row['business_type']; 
+								$updateArray[$i]['discount_coupon'][$m]['coupon_code'] = $row['coupon_code'];
+								$updateArray[$i]['discount_coupon'][$m]['coupon_type'] = $row['coupon_type'];
+								$updateArray[$i]['discount_coupon'][$m]['coupon_value'] = $row['coupon_value'];
+								$updateArray[$i]['discount_coupon'][$m]['start_date'] = $row['from_dt'];
+								$updateArray[$i]['discount_coupon'][$m]['end_date'] = $row['to_dt'];
+								$updateArray[$i]['discount_coupon'][$m]['active'] = $row['active'];
+								$m++;
+							}
 				
 						$i++;
 					}
 			
-			if(count($_idList)>0){
-				foreach ($_idList as $key => $value) {
-				$res = $couch->deleteDoc($key)->setParam(array('rev'=>$value))->execute();
-				$i++;
-			}
-		} 
+			 
 	$insertCounter = $i-$updateCounter;
 	if (is_array($updateArray) && count($updateArray)>0){
+		if(count($_idList)>0){
+			foreach ($_idList as $key => $value) {
+				$res = $couch->deleteDoc($key)->setParam(array('rev'=>$value))->execute();
+				
+			}
+		}
 		$result=$couch->saveDocument(true)->execute(array("docs"=>$updateArray));
  		if(array_key_exists('error', $result)){
-  			
   			$html['error'] = true;
 			$html['update'] = false;
 			$html['msg'] = ERROR.' '.$result['error'];
@@ -512,7 +533,7 @@ function updateConfig(){
 			}
 		}
   
-		$getStoreNameQuery = "SELECT sm.id mysql_id, sm.name, sm.code,
+		$getStoreNameQuery = "SELECT sm.id mysql_id, sm.tin_no, sm.name, sm.code,
 							sm.type, sm.address, sm.phone_1, sm.phone_2, photo,
 							weekly_off, lm.id location_id, lm.name location_name,
 							sm.sms, sm.foe_allowed is_foe, sm.active, sm.store_time store_open_schedule,
@@ -657,16 +678,36 @@ function updateConfig(){
 				$updateArray[$i]['retail_customer'][$l]['type'] = $row['type'];
 				$l++;
 			}
-			$i++;
-		}
-		if(count($_idList)>0){
-			foreach ($_idList as $key => $value) {
-				$res = $couch->deleteDoc($key)->setParam(array('rev'=>$value))->execute();
-				$i++;
+			
+			$getCoupon = "SELECT id, business_type, coupon_code, coupon_type, coupon_value,
+						  from_dt, to_dt, active 
+						  FROM `cp_store_discount` 
+						  WHERE store_id = '".$storeDetails['mysql_id']."' AND active = 'Y'
+						  ";//AND from_dt >= CURDATE() AND to_dt <= CURDATE()//
+			$couponList = mysql_query($getCoupon);
+			$m = 0;
+			while ($row = mysql_fetch_assoc($couponList)) {
+				$updateArray[$i]['discount_coupon'][$m]['id'] = $row['id'];
+				$updateArray[$i]['discount_coupon'][$m]['business_type'] = $row['business_type']; 
+				$updateArray[$i]['discount_coupon'][$m]['coupon_code'] = $row['coupon_code'];
+				$updateArray[$i]['discount_coupon'][$m]['coupon_type'] = $row['coupon_type'];
+				$updateArray[$i]['discount_coupon'][$m]['coupon_value'] = $row['coupon_value'];
+				$updateArray[$i]['discount_coupon'][$m]['start_date'] = $row['from_dt'];
+				$updateArray[$i]['discount_coupon'][$m]['end_date'] = $row['to_dt'];
+				$updateArray[$i]['discount_coupon'][$m]['active'] = $row['active'];
+				$m++;
 			}
-		} 
+		$i++;
+		}
+		
 		$insertCounter = $i-$updateCounter;
 		if (is_array($updateArray) && count($updateArray)>0){
+			if(count($_idList)>0){
+				foreach ($_idList as $key => $value) {
+					$res = $couch->deleteDoc($key)->setParam(array('rev'=>$value))->execute();
+					//$i++;
+				}
+			} 
 			$result=$couch->saveDocument(true)->execute(array("docs"=>$updateArray));
 			if(array_key_exists('error', $result)){
 				$html['error'] = true;
