@@ -513,7 +513,7 @@ $.fn.cKeyboard = function(){
 							'default':['M T F 0 1 2 3 4 5 6 7 8 9 {Bksp}','{accept} {cancel}']
 						};
 					break;
-				case '#discount_input_box':
+				/*case '#discount_input_box':
 					options.layout = 'caustom';
 					options.usePreview = true;
 					options.customLayout = {
@@ -535,7 +535,7 @@ $.fn.cKeyboard = function(){
 							$("#discount-close").trigger('click');
 						}
 					};
-					break;
+					break;*/
 				case '#paid-amount':
 					options.layout = 'caustom';
 					options.customLayout = {

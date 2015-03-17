@@ -14,7 +14,6 @@ var modifyBill = false;
 var popupKeyboard = null;
 
 $(document).ready(function(){  //alert(exeMode); alert(printUtility); return false;
-	
 	var url = $.url();
 	$(this).attr("title", "Shark |ChaiPoint POS| Billing"); 
 	/*
@@ -235,29 +234,40 @@ $(document).ready(function(){  //alert(exeMode); alert(printUtility); return fal
 	
 	$('#apply_discount').click(function(){
 		var discount_code = $('#discount_input_box').val();
-		$("#ajaxfadediv").addClass('ajaxfadeclass');
-		$.ajax({
-			type: 'POST',
-			url: "index.php?dispatch=billing.getCoupanCode",
-			data : {'coupan_code':discount_code},
-			timeout:10000
-			}).done(function(response) {
-				//alert(response); 
-				$("#ajaxfadediv").removeClass('ajaxfadeclass');
-				$result = $.parseJSON(response);
-				if($result.error){
-					bootbox.alert($result.message);
-				}else if(!$result.error){
-					//bootbox.alert($result.message);
-					$intDiscount = $result.data['discount_amount'];
-					generateSalesTable();
-				}
-			});
-		$('#discount_input_box').val('');
+		var business_type = 'Walk-in';
+		var url = $.url(window.location);
+		var coc = url.param('order');
+		var caw = url.param('cawOrder');
+		if(coc){
+			business_type = 'COC';
+		}else if(caw){
+			business_type = 'CAW';
+		}
+		//alert(business_type);
+		if(discount_code){
+			$("#ajaxfadediv").addClass('ajaxfadeclass');
+			$.ajax({
+				type: 'POST',
+				url: "index.php?dispatch=billing.getCoupanCode",
+				data : {'coupan_code':discount_code, 'business_type':business_type},
+				timeout:10000
+				}).done(function(response) {
+					$("#ajaxfadediv").removeClass('ajaxfadeclass');
+					$result = $.parseJSON(response);
+					if($result.error){
+						bootbox.alert($result.message);
+					}else if(!$result.error){
+						//bootbox.alert($result.message);
+						$intDiscount = $result.data['discount_amount'];
+						generateSalesTable('','','apply_discount');
+						$('#coupon_code').val(discount_code);
+					}
+				});
+			//$('#discount_input_box').val('');
+		}
 	});
+	
 	//---START--- Initial Configurations on Load Of Page
-
-
 	//---START--- Categories Silder Starts
 	/*On Load of DOM Manages Categores Silder*/
 		$('.btn-category').bxSlider({
@@ -844,6 +854,7 @@ $(document).ready(function(){  //alert(exeMode); alert(printUtility); return fal
 			billDetails.reprint = 1;
 			billDetails.request_type = 'save_bill';
 			billDetails.utility_check = printUtility;
+			billDetails.coupon_code = $('#coupon_code').val();
 			console.log(billDetails);
 			$('#submit-sale').attr('disabled',true);
 			$("#ajaxfadediv").addClass('ajaxfadeclass');
@@ -892,7 +903,7 @@ $(document).ready(function(){  //alert(exeMode); alert(printUtility); return fal
 			$viewData = '<table class="table table-striped table-condensed table-hover protable small" width="100%" border="0" cellspacing="0" cellpadding="0">'+
 							'<thead>'+
 								'<tr class="active">'+
-									'<th>Product Name</th><th>Menu Price</th><th>Price Before Tax</th><th>Qty</th><th>Sub Total</th><th>Discount</th><th>Price After Discount</th><th>Tax %</th><th>Tax</th><th>Net Amount</th>'+
+									'<th>Product Name</th><th>Menu Price</th><th>Price After Discount</th><th>Price Before Tax</th><th>Qty</th><th>Tax %</th><th>Tax</th><th>Sub Total</th><th>Discount</th><th>Net Amount</th>'+
 								'</tr>'+
 							'</thead>'+
 						'<tbody>';
@@ -906,13 +917,14 @@ $(document).ready(function(){  //alert(exeMode); alert(printUtility); return fal
 				$viewData += '<tr class="text-right">'+
 								'<td class="text-left">'+data.name+'</td>'+
 								'<td>'+(parseFloat(data.price)).toFixed(2)+'</td>'+
+								'<td>'+(parseFloat(data.dis_price)).toFixed(2)+'</td>'+
 								'<td>'+(parseFloat(data.priceBT)).toFixed(2)+'</td>'+
 								'<td>'+data.qty+'</td>'+
-								'<td>'+((parseFloat(data.subTotal))).toFixed(2)+'</td>'+
-								'<td>'+(parseFloat(data.discountAmount)).toFixed(2)+'</td>'+
-								'<td>'+(parseFloat(data.priceAD)).toFixed(2)+'</td>'+
 								'<td>'+(((data.tax) ? data.tax : 0) * 100).toFixed(2)+'</td>'+
 								'<td>'+(parseFloat(data.taxAmount)).toFixed(2)+'</td>'+
+								
+								'<td>'+((parseFloat(data.subTotal))).toFixed(2)+'</td>'+
+								'<td>'+(parseFloat(data.discountAmount)).toFixed(2)+'</td>'+
 								'<td>'+(parseFloat(data.netAmount)).toFixed(2)+'</td>'+
 							'</tr>';
 							qty += parseInt(data.qty);
@@ -922,10 +934,11 @@ $(document).ready(function(){  //alert(exeMode); alert(printUtility); return fal
 							subTotalSum += ((parseFloat(data.subTotal)));
 							priceAfterDiscount += (parseFloat(data.priceAD));
 										console.log(data.priceBT);
+										//'+(priceAfterDiscount).toFixed(2)+'
 
 			});
 			$viewData += '</tbody>'+
-						'<tfoot><tr class="active"><th>Total</th><th></th><th></th><th class="text-right">'+qty+'</th><th class="text-right">'+subTotalSum.toFixed(2)+'</th><th class="text-right">'+(discountAmount).toFixed(2)+'</th><th class="text-right">'+(priceAfterDiscount).toFixed(2)+'</th><th></th><th class="text-right">'+(taxAmount).toFixed(2)+'</th><th class="text-right">'+(netAmount).toFixed(2)+'</th></tr></tfoot>'
+						'<tfoot><tr class="active"><th>Total</th><th></th><th></th><th class="text-right"></th><th class="text-right">'+qty+'</th><th class="text-right"></th><th class="text-right">'+(taxAmount).toFixed(2)+'</th><th class="text-right">'+subTotalSum.toFixed(2)+'</th><th class="text-right">'+(discountAmount).toFixed(2)+'</th><th class="text-right">'+(netAmount).toFixed(2)+'</th></tr></tfoot>'
 						+'</table>';
 
 			bootbox.dialog({
@@ -943,7 +956,7 @@ $(document).ready(function(){  //alert(exeMode); alert(printUtility); return fal
 		});
 	//---END--- Functions Work After Page Load via Events
 	popupKeyboard = $('#discount_input_box').cKeyboard();
-	$("#discount-close").click(function(){
+	$("#discount-close").click(function(){ alert('dfdsff');
 //		$("#discount-popover").toggle();
 		$intDiscount = 0;
 		$("#discount_input_box").val('');
@@ -963,16 +976,21 @@ $(document).ready(function(){  //alert(exeMode); alert(printUtility); return fal
 
 });
 function generateSalesTable(productId, qty, productData){
+	//alert(JSON.stringify(productId));alert(JSON.stringify(qty));alert(JSON.stringify(productData));
 	var addAtLast = false;
 	if(productData){
 		addAtLast = true;
+	}
+	var applyDiscount = false;
+	if(productData=='apply_discount'){ 
+		applyDiscount = true;
 	}
 	resetBill(false);
 	var productID = (productId) ? productId : 0;
 	var  newqty = 0;
 	if(productID && productID > 0){
 		var  newqty = isNaN(parseInt(qty)) ? 0 : qty;
-		if(! (productID in $billingItems)){
+		if(!(productID in $billingItems)){
 			$billingItems[productID] = new Object();
 			$billingItems[productID].category_id = selectedCat;
 			$billingItems[productID].category_name = catArray[selectedCat];
@@ -980,7 +998,13 @@ function generateSalesTable(productId, qty, productData){
 			$billingItems[productID].id = productID;
 			$billingItems[productID].name = productData.name;
 			$billingItems[productID].price = isNaN(productData.price * 1) ? 0 : productData.price;
-			$billingItems[productID].priceBT = decimalAdjust((productData.tax.rate) ? (productData.price - ( productData.price * parseFloat(productData.tax.rate) )) : $billingItems[productID].price , -2);
+			if($intDiscount!=0){ //alert('hi');
+				$billingItems[productID].dis_price = decimalAdjust(productData.price - (productData.price  * $intDiscount/100 ) , -2);
+			}else{
+				$billingItems[productID].dis_price = isNaN(productData.price * 1) ? 0 : productData.price;
+			}
+				$billingItems[productID].priceBT = decimalAdjust((productData.tax.rate) ? ($billingItems[productID].dis_price - ( $billingItems[productID].dis_price * parseFloat(productData.tax.rate) )) : $billingItems[productID].dis_price , -2);
+			
 			$billingItems[productID].taxAbleAmount = $billingItems[productID].priceBT;
 			$billingItems[productID].qty = newqty;
 			$billingItems[productID].tax = productData.tax.rate;
@@ -988,15 +1012,25 @@ function generateSalesTable(productId, qty, productData){
 		}else{
 			$billingItems[productID].qty = newqty;
 		}
+	} else if(applyDiscount){
+		//alert(JSON.stringify($billingItems));
+		for(var index in $billingItems){
+			$billingItems[index].dis_price = decimalAdjust($billingItems[index].price - ($billingItems[index].price  * $intDiscount/100 ) , -2);
+			$billingItems[index].priceBT = decimalAdjust(($billingItems[index].tax) ? ($billingItems[index].dis_price - ( $billingItems[index].dis_price * parseFloat($billingItems[index].tax) )) : $billingItems[index].dis_price , -2);
+			$billingItems[index].taxAbleAmount = $billingItems[index].priceBT;
+			//alert(JSON.stringify($billingItems));
+		}
 	}
 
 	var tableRows = '';
-
+	//alert(JSON.stringify($billingItems));
 	for(var index in $billingItems){
 			$billingItems[index].discount = $intDiscount;
 			$billingItems[index].subTotal = $billingItems[index].qty * $billingItems[index].priceBT;
-			$billingItems[index].discountAmount = $billingItems[index].subTotal * $billingItems[index].discount/100;
-			$billingItems[index].priceAD = $billingItems[index].subTotal - $billingItems[index].discountAmount;
+			//new$billingItems[index].discountAmount = $billingItems[index].subTotal * $billingItems[index].discount/100;
+			$billingItems[index].discountAmount = $billingItems[index].price * $billingItems[index].qty * $billingItems[index].discount/100;
+			//new$billingItems[index].priceAD = $billingItems[index].subTotal - $billingItems[index].discountAmount;
+			$billingItems[index].priceAD = $billingItems[index].subTotal ;
 			//$billingItems[index].taxAmount = ( $billingItems[index].price - $billingItems[index].taxAbleAmount ) * $billingItems[index].qty;
 			$billingItems[index].taxAmount = ($billingItems[index].price * $billingItems[index].qty * ($billingItems[index].tax)) - (($billingItems[index].price * $billingItems[index].qty * ($billingItems[index].tax)) * $billingItems[index].discount /100); 
 			$billingItems[index].netAmount = $billingItems[index].priceAD + $billingItems[index].taxAmount;
