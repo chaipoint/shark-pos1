@@ -86,7 +86,7 @@
 									<div id="totaldiv" style="background-color:#A9A9A9;">
 										<table id="totaltbl" class="table table-striped table-condensed totals" style="margin-bottom:10px;color:black;margin-top:-72px;">
 											<tbody>
-												<tr class="hide">
+												<tr class="">
 													<td width="25%" >Discount</td>
 													<td width="25%"> 
 														<div class="input-group">
