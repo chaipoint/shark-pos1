@@ -11,6 +11,15 @@
 				$_SESSION['user']['store']['code'] = $_POST['store_code'];
 				$_SESSION['user']['store']['bill_type'] = $_POST['bill_type'];
 				$_SESSION['user']['store']['store_message'] = $_POST['store_message'];
+				$_SESSION['user']['store']['tin_no'] = $_POST['tin_no'];
+				$data = array();
+				$data = $_SESSION;
+				$getRev = $this->cDB->getDocs($this->getCDate());
+				if(!array_key_exists('error', $getRev)){
+					$data['_rev'] = $getRev['_rev'];
+				}
+				$data['_id'] = $this->getCDate();
+				$this->cDB->saveDocument()->execute($data);
 			}
 			$result = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_SHIFT)->setParam(array("startkey" => '["'.$this->getCDate().'","'.$_SESSION['user']['store']['id'].'"]', "endkey" => '["'.$this->getCDate().'","'.$_SESSION['user']['store']['id'].'"]','include_docs'=>'true'))->execute();
 			if(!array_key_exists('rows', $result)){
@@ -99,6 +108,15 @@
 			$date = $this->getCDate();
 			if(array_key_exists('date', $_POST)){
 				$date = date('Y-m-d',strtotime($_POST['date']));		
+			}
+			
+			if(empty($_SESSION['user']['store']['id'])){
+				$result = $this->getSessionData();
+				if($result['error']){
+					$return['error'] = true;
+					$return['message'] = $result['message'];
+					return json_encode($return);
+				}
 			}
 			$returnData = array('error'=>false,'message'=>'','data'=>array());
 			$cash_reconciliation_insert = array();
