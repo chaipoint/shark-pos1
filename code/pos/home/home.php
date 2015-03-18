@@ -12,6 +12,7 @@
 				$_SESSION['user']['store']['bill_type'] = $_POST['bill_type'];
 				$_SESSION['user']['store']['store_message'] = $_POST['store_message'];
 				$_SESSION['user']['store']['tin_no'] = $_POST['tin_no'];
+				$_SESSION['user']['store']['stn_no'] = $_POST['stn_no'];
 				$data = array();
 				$data = $_SESSION;
 				$getRev = $this->cDB->getDocs($this->getCDate());
