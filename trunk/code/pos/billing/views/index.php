@@ -92,6 +92,7 @@
 														<div class="input-group">
 														<input type="text" class="form-control input-sm" style="height:22px;width:61px;margin-left:-52px;" id="discount_input_box" name="discount_input_box"/>
 														</div><span class="label label-default" style="margin-left:6px" id="apply_discount" >Apply</span>
+															<span class="label label-default hide" style="margin-left:6px" id="remove_discount" >Remove</span>
 													</td>
 													<td width="25%">Discount Amnt</td>
 													<td class="text_right" colspan="2"><span id="ds_con">0</span></td>

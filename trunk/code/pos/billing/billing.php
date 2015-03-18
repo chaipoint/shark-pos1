@@ -46,7 +46,8 @@
 				die;
 			}else{
 				$result = $resultStoreMenu['rows'][0]['doc'];
-				$tin_no = $resultStoreMenu['rows'][0]['doc']['tin_no'];
+				$tin_no = $result['tin_no'];
+				$stn_no = $result['stn_no'];
 				$catList = array();
 				$productList = array();
 				foreach($result['menu_items'] as $key => $Items){
@@ -82,6 +83,7 @@
 					$company_data = array();
 					$company_data = $this->configData['company_details'];
 					$company_data['TIN'] = $tin_no;
+					$company_data['STN'] = $stn_no;
 					$this->log->trace("COMPANY DETAILS TO BE PRINT \r\n".json_encode($company_data));
 					file_put_contents(COMPANY_DETAIL_TXT_PATH, json_encode($company_data,true));
 				}
@@ -237,7 +239,8 @@
 					$_POST['reprint'] = 0;
 					$_POST['is_updated'] = 'N';
 					$_POST['card_no'] = NA;
-					//$_POST['coupon_code'] = NA;
+					$_POST['TIN'] = $_SESSION['user']['store']['tin_no'];;
+					$_POST['STN'] = $_SESSION['user']['store']['stn_no'];;
 					if($_SESSION['user']['server_date'] != $this->getCDate()){
 						$_POST['time'] = array('created'=>$_SESSION['user']['server_date'], 'updated'=>$_SESSION['user']['server_date']);
 					}else{
@@ -461,6 +464,8 @@
         				//exec(EXE_PATH,$output,$return_value);
 					}
 				}
+				$loadResponse['data']['TIN'] = $_SESSION['user']['store']['tin_no'];
+				$loadResponse['data']['STN'] = $_SESSION['user']['store']['stn_no'];
 				$res = json_encode($loadResponse,true);
 				return $res;
 			}
