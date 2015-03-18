@@ -680,8 +680,8 @@ var company="Mountain Trail Foods Pvt. Ltd.";
 var companyAddress="#10\/1 2nd floor PT Street Basvangudi";
 var companyRegion="Bangalore-560004";
 var companyPhone="";
-var companyTin="TIN:1234567890123456";
-var companySTN="STN:1234567890123456";
+var companyTin="TIN:"+bill_array.TIN;//"TIN:1234567890123456";
+var companySTN="STN:"+bill_array.STN;//"STN:1234567890123456";
 var breakLine="--------------------------------------------------------------------------<br />";
 
 // -------------------------------------------------------store Detail
