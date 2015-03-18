@@ -186,6 +186,8 @@ session_start();
 				$_SESSION['user']['store']['code'] = $getData['user']['store']['code'];
 				$_SESSION['user']['store']['bill_type'] = $getData['user']['store']['bill_type'];
 				$_SESSION['user']['store']['store_message'] = $getData['user']['store']['store_message'];
+				$_SESSION['user']['store']['tin_no'] = $getData['user']['store']['tin_no'];
+				$_SESSION['user']['store']['stn_no'] = $getData['user']['store']['stn_no'];
 			}
 			return $return ;
 		}
