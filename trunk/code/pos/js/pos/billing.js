@@ -243,7 +243,7 @@ $(document).ready(function(){  //alert(exeMode); alert(printUtility); return fal
 		}else if(caw){
 			business_type = 'CAW';
 		}
-		//alert(business_type);
+		
 		if(discount_code){
 			$("#ajaxfadediv").addClass('ajaxfadeclass');
 			$.ajax({
@@ -257,15 +257,26 @@ $(document).ready(function(){  //alert(exeMode); alert(printUtility); return fal
 					if($result.error){
 						bootbox.alert($result.message);
 					}else if(!$result.error){
-						//bootbox.alert($result.message);
 						$intDiscount = $result.data['discount_amount'];
 						generateSalesTable('','','apply_discount');
 						$('#coupon_code').val(discount_code);
+						$('#apply_discount').addClass('hide');
+						$('#remove_discount').removeClass('hide');
 					}
 				});
 			//$('#discount_input_box').val('');
 		}
 	});
+	
+	$('#remove_discount').click(function(){
+		$intDiscount = 0;
+		generateSalesTable('', '' , 'apply_discount');
+		$('#apply_discount').removeClass('hide');
+		$('#remove_discount').addClass('hide');
+		$('#coupon_code').val('');
+		$('#discount_input_box').val('');
+	});
+	
 	
 	//---START--- Initial Configurations on Load Of Page
 	//---START--- Categories Silder Starts
@@ -1079,6 +1090,8 @@ function resetBill(refresh){
 		$('#payment').removeClass('hide');
 		$('.category-product').prop('disabled', false);
 		$('.category-selection').prop('disabled', false);
+		$('#apply_discount').removeClass('hide');
+		$('#remove_discount').addClass('hide');
 	}
 	$totalBillItems = 0;
 	$totalBillQty = 0;

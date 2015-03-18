@@ -8,6 +8,7 @@ $(document).ready(function(){
 		var bill_type = $(this).data('bill_type') ;
 		var store_message = $(this).data('store_msg') ;
 		var tin_no = $(this).data('store_tin') ;
+		var stn_no = $(this).data('store_stn') ;
 		//alert(store_message);//return false;
 		//alert(store_code);return false;
 		bootbox.confirm("Do You Want To Select  <b style='font-size:16px'>"+store_name+"?</b>", function(result) {
@@ -18,6 +19,7 @@ $(document).ready(function(){
 				$('#bill_type').val(bill_type);
 				$('#store_message').val(store_message);
 				$('#tin_no').val(tin_no);
+				$('#stn_no').val(stn_no);
 				$('#store_selection').submit();
 				
 				/*$("#ajaxfadediv").addClass('ajaxfadeclass');
