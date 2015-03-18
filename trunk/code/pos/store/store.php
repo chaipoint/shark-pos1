@@ -21,6 +21,7 @@
 					$storeList[$key]['bill_type'] = @$value['doc']['bill_type'];
 					$storeList[$key]['store_message'] = @$value['doc']['store_message'];
 					$storeList[$key]['tin_no'] = @$value['doc']['tin_no'];
+					$storeList[$key]['stn_no'] = @$value['doc']['stn_no'];
 				}
 			}
 			
