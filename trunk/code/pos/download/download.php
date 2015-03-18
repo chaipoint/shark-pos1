@@ -246,7 +246,7 @@ function updateStore($location_id){
 	  	}
 	}
   
-	$getStoreNameQuery = "SELECT sm.id mysql_id, sm.tin_no, sm.name, sm.code,
+	$getStoreNameQuery = "SELECT sm.id mysql_id, sm.tin_no, sm.stn_no , sm.name, sm.code,
 	                      sm.type, sm.address, sm.phone_1, sm.phone_2, photo,
 	                      weekly_off, lm.id location_id, lm.name location_name,
 	                      sm.sms, sm.foe_allowed is_foe, sm.active, sm.store_time store_open_schedule,
@@ -533,7 +533,7 @@ function updateConfig(){
 			}
 		}
   
-		$getStoreNameQuery = "SELECT sm.id mysql_id, sm.tin_no, sm.name, sm.code,
+		$getStoreNameQuery = "SELECT sm.id mysql_id, sm.tin_no, sm.stn_no, sm.name, sm.code,
 							sm.type, sm.address, sm.phone_1, sm.phone_2, photo,
 							weekly_off, lm.id location_id, lm.name location_name,
 							sm.sms, sm.foe_allowed is_foe, sm.active, sm.store_time store_open_schedule,
