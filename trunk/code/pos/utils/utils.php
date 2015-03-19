@@ -257,7 +257,7 @@
 				'language' => 'javascript', 
 				'views' => array(
 					"get_sale"=>array(
-						"map"=>"function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'card_sale'){ var created_date = (doc.time).split(' '); emit(created_date[0], null); } }",
+						"map"=>"function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'card_sale'){ var created_date = (doc.time).split(' '); emit([created_date[0],doc.store_id,doc.counter], null); } }",
 					)
 				),
 				'lists' => array( 
@@ -421,7 +421,7 @@
 				"language" => "javascript",
 				"views" => array(
 					"get_expense" => array(
-						"map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type=='petty_expense'){ emit(doc.expense_date, null); } }"
+						"map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type=='petty_expense'){ emit([doc.expense_date,doc.store_id,doc.counter], null); } }"
 					),
 					"expense_no_mysql_id" => array(
 						"map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'petty_expense' && !doc.mysql_id){ emit(doc.expense_date,null); } }"
@@ -430,7 +430,7 @@
 						"map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'petty_inward' && !doc.mysql_id){ emit(doc.inward_date,null); } }"
 					),
 					"get_inward" => array(
-						"map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type=='petty_inward'){ emit(doc.inward_date, doc.inward_amount); } }"
+						"map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type=='petty_inward'){ emit([doc.inward_date,doc.store_id,doc.counter], doc.inward_amount); } }"
 					)
 				)
 			);

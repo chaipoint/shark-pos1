@@ -80,7 +80,8 @@ $("#search_button").click(function(){
 						bootbox.alert(response.message);
 						}else{
 						bootbox.alert(response.message,function(){
-							window.location = "?dispatch=sales_register";													
+							//window.location = "?dispatch=sales_register";	
+							window.location.reload(true);
 						});
 					}
 				});

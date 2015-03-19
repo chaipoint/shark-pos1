@@ -130,16 +130,14 @@ $(document).ready(function(){  //alert(exeMode); alert(printUtility); return fal
 		var code = $(this).val();
 		var markused = 'false';
 		var request_type = 'reward_check';
-		$('#image_loading').removeClass('hide');
+		$("#ajaxfadediv").addClass('ajaxfadeclass');
 		$.ajax({
 			type: 'POST',
 			url: "index.php?dispatch=billing.loadCard",
 			data: {'request_type':request_type, 'code':code, 'markused':markused}
 		}).done(function(response) { 
 			console.log(response);
-			$('#image_loading').addClass('hide');  
-			
-
+			$("#ajaxfadediv").removeClass('ajaxfadeclass');  
 			$result = $.parseJSON($.trim(response));
 			if($result.error){
 				$('#redemption_code').val('').addClass('hide');
@@ -161,7 +159,7 @@ $(document).ready(function(){  //alert(exeMode); alert(printUtility); return fal
 					});
 				
 					var productData = productArray[productNewList[product].cat] [productNewList[product].seq];
-					$('#discount_input_box').val('100').prop('disabled',true);
+					$('#discount_input_box').val('').prop('disabled',true);
 					$intDiscount =  100;
 					$('#reward_redemption_code').val(code);
 					$('#card_invoice_no').val($result.data['invoice_number']);
@@ -685,6 +683,7 @@ $(document).ready(function(){  //alert(exeMode); alert(printUtility); return fal
 					$("#customer_type").val('coc');
 					$("#customer_type").prop('disabled',true);
 			}else if(cawBill){
+					$("#customer_type").append('<option value="caw">CAW</option>');
 					$("#customer_type").val('caw');
 					$("#customer_type").prop('disabled',true);
 					$("#paid-amount").prop('disabled',true);
@@ -1009,13 +1008,12 @@ function generateSalesTable(productId, qty, productData){
 			$billingItems[productID].id = productID;
 			$billingItems[productID].name = productData.name;
 			$billingItems[productID].price = isNaN(productData.price * 1) ? 0 : productData.price;
-			if($intDiscount!=0){ //alert('hi');
+			if($intDiscount!=0){ 
 				$billingItems[productID].dis_price = decimalAdjust(productData.price - (productData.price  * $intDiscount/100 ) , -2);
 			}else{
 				$billingItems[productID].dis_price = isNaN(productData.price * 1) ? 0 : productData.price;
 			}
-				$billingItems[productID].priceBT = decimalAdjust((productData.tax.rate) ? ($billingItems[productID].dis_price - ( $billingItems[productID].dis_price * parseFloat(productData.tax.rate) )) : $billingItems[productID].dis_price , -2);
-			
+			$billingItems[productID].priceBT = decimalAdjust((productData.tax.rate) ? ($billingItems[productID].dis_price - ( $billingItems[productID].dis_price * parseFloat(productData.tax.rate) )) : $billingItems[productID].dis_price , -2);
 			$billingItems[productID].taxAbleAmount = $billingItems[productID].priceBT;
 			$billingItems[productID].qty = newqty;
 			$billingItems[productID].tax = productData.tax.rate;
@@ -1024,25 +1022,19 @@ function generateSalesTable(productId, qty, productData){
 			$billingItems[productID].qty = newqty;
 		}
 	} else if(applyDiscount){
-		//alert(JSON.stringify($billingItems));
 		for(var index in $billingItems){
 			$billingItems[index].dis_price = decimalAdjust($billingItems[index].price - ($billingItems[index].price  * $intDiscount/100 ) , -2);
 			$billingItems[index].priceBT = decimalAdjust(($billingItems[index].tax) ? ($billingItems[index].dis_price - ( $billingItems[index].dis_price * parseFloat($billingItems[index].tax) )) : $billingItems[index].dis_price , -2);
 			$billingItems[index].taxAbleAmount = $billingItems[index].priceBT;
-			//alert(JSON.stringify($billingItems));
 		}
 	}
 
 	var tableRows = '';
-	//alert(JSON.stringify($billingItems));
 	for(var index in $billingItems){
 			$billingItems[index].discount = $intDiscount;
 			$billingItems[index].subTotal = $billingItems[index].qty * $billingItems[index].priceBT;
-			//new$billingItems[index].discountAmount = $billingItems[index].subTotal * $billingItems[index].discount/100;
 			$billingItems[index].discountAmount = $billingItems[index].price * $billingItems[index].qty * $billingItems[index].discount/100;
-			//new$billingItems[index].priceAD = $billingItems[index].subTotal - $billingItems[index].discountAmount;
 			$billingItems[index].priceAD = $billingItems[index].subTotal ;
-			//$billingItems[index].taxAmount = ( $billingItems[index].price - $billingItems[index].taxAbleAmount ) * $billingItems[index].qty;
 			$billingItems[index].taxAmount = ($billingItems[index].price * $billingItems[index].qty * ($billingItems[index].tax)) - (($billingItems[index].price * $billingItems[index].qty * ($billingItems[index].tax)) * $billingItems[index].discount /100); 
 			$billingItems[index].netAmount = $billingItems[index].priceAD + $billingItems[index].taxAmount;
 		if(productID != index){
