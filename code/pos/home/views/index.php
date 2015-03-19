@@ -2,7 +2,7 @@
 	.alert-info{
 		color:black;
 	}
-	.alert-danger{
+	.disable{
 		color:grey;
 		background-color:#efefef;
 		border-color :#efefef;
@@ -12,12 +12,12 @@
 <script>var is_shift_running = <?php echo $is_shift_running; ?>;</script>
 <script src="<?php echo JS;?>pos/home.js"></script>
 	<div>
-		<button class="alert <?php echo (($is_store_open=='true') ? 'alert-danger' : 'alert-info'); ?>  store-operation" id="day_start" style="margin-left:168px; width:30%; text-align:center;">Open Store</button>
-		<button class="alert <?php echo (($is_store_open=='true' && $is_shift_running=='false') ? 'alert-info' : 'alert-danger'); ?> store-operation" id="day_end" style="margin-left:184px; margin-right:20px; width:30%; text-align:center;">Close Store</button>
+		<button class="alert <?php echo (($is_store_open=='true') ? 'alert-danger disable' : 'alert-info'); ?>  store-operation" id="day_start" style="margin-left:168px; width:30%; text-align:center;">Open Store</button>
+		<button class="alert <?php echo (($is_store_open=='true' && $is_shift_running=='false') ? 'alert-info' : 'alert-danger disable'); ?> store-operation" id="day_end" style="margin-left:184px; margin-right:20px; width:30%; text-align:center;">Close Store</button>
 	</div>
 	<div style='margin-top:18px'>
-		<button class="alert <?php echo (($is_store_open=='true' && $is_shift_running=='false' ) ? 'alert-info' : 'alert-danger'); ?> store-operation" id="shift_start" style="margin-left:315px; width:15%; text-align:center;">Start My Shift</button>
-		<button class="alert <?php echo (($is_store_open=='true' && $is_shift_running=='true') ? 'alert-info' : 'alert-danger'); ?> store-operation" id="shift_end" style="margin-left:184px; margin-right:20px; width:15%; text-align:center;">End My Shift</button>
+		<button class="alert <?php echo (($is_store_open=='true' && $is_shift_running=='false' ) ? 'alert-info' : 'alert-danger disable'); ?> store-operation" id="shift_start" style="margin-left:315px; width:15%; text-align:center;">Start My Shift</button>
+		<button class="alert <?php echo (($is_store_open=='true' && $is_shift_running=='true') ? 'alert-info' : 'alert-danger disable'); ?> store-operation" id="shift_end" style="margin-left:184px; margin-right:20px; width:15%; text-align:center;">End My Shift</button>
 	</div>
 	<div class="panel panel-info" style="margin-left:168px;margin-right:184px;margin-top:20px;" id="store_shift_logic">
 		<div class="panel-body tabbable">
@@ -41,7 +41,7 @@
 							</div>
 							<div class="input-group padded">
 								<span class="input-group-addon">
-									<i class="glyphicon glyphicon-usd"></i> 
+									<img src="<?php echo IMG ?>inr.png"> 
 								</span> 
 								<input type="text" name="petty_cash" value="" id="petty_cash" class="input-sm form-control" placeholder="Petty Cash" autocomplete="off"/>
 							</div>
@@ -113,11 +113,11 @@
 								<span class="input-group-addon">
 									<i class="glyphicon glyphicon-lock"></i> 
 								</span> 
-								<input type="password" name="password" value="" class="input-sm form-control" placeholder="Password" autocomplete="off"/>
+								<input type="password" name="password" value="" class="input-sm/ form-control" placeholder="Password" autocomplete="off"/>
 							</div>
 							<div class="input-group padded">
 								<span class="input-group-addon">
-									<i class="glyphicon glyphicon-usd"></i> 
+									<img src="<?php echo IMG ?>inr.png"> 
 								</span> 
 								<input type="text" name="petty_cash_end" value="" id="petty_cash_end" class="input-sm form-control" placeholder="Petty Cash" autocomplete="off"/>
 							</div>
