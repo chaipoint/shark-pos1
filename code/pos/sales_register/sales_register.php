@@ -86,7 +86,7 @@
 
 		/* Function To Get Card Load Sale */
 		function getCardLoadSale($date){
-				$resultSale = $this->cDB->getDesign(CARD_SALE_DESIGN_DOCUMENT)->getView(CARD_SALE_DESIGN_DOCUMENT_VIEW_GET_SALE)->setParam(array("include_docs"=>"true","startkey"=>'"'.$date.'"',"endkey"=>'"'.$date.'"'))->execute();
+				$resultSale = $this->cDB->getDesign(CARD_SALE_DESIGN_DOCUMENT)->getView(CARD_SALE_DESIGN_DOCUMENT_VIEW_GET_SALE)->setParam(array("include_docs"=>"true","startkey" => '["'.$date.'", "'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]',"endkey" => '["'.$date.'","'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]'))->execute();
 				return $resultSale;
 		}
 		
@@ -102,20 +102,26 @@
 
 		/* Function To Get Petty Expense */
 		function getExpenseData($date1, $date2){
-				$resultExpenseList = $this->cDB->getDesign(PETTY_EXPENSE_DESIGN_DOCUMENT)->getView(PETTY_EXPENSE_DESIGN_DOCUMENT_VIEW_GET_EXPENSE)->setParam(array("include_docs"=>"true","startkey"=>'"'.$date1.'"',"endkey"=>'"'.$date2.'"'))->execute();
+				$resultExpenseList = $this->cDB->getDesign(PETTY_EXPENSE_DESIGN_DOCUMENT)->getView(PETTY_EXPENSE_DESIGN_DOCUMENT_VIEW_GET_EXPENSE)->setParam(array("include_docs"=>"true","descending"=>"true","startkey" => '["'.$date1.'", "'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]',"endkey" => '["'.$date2.'","'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]'))->execute();
 				return $resultExpenseList;
 		}
 
 		
 		/* Function To Get Todays Bill For Login Store */
 		function getBills($date1, $date2){
-				$resultBillList = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getList(BILLING_DESIGN_DOCUMENT_LIST_SALES_REGISTER,BILLING_DESIGN_DOCUMENT_VIEW_BILL_BY_STORE_COUNTER)->setParam(array("include_docs"=>"true","descending"=>"true","startkey" => '["'.$this->getCDate().'", "'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]',"endkey" => '["'.$this->getCDate().'","'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]'))->execute();
+				$resultBillList = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getList(BILLING_DESIGN_DOCUMENT_LIST_SALES_REGISTER,BILLING_DESIGN_DOCUMENT_VIEW_BILL_BY_STORE_COUNTER)->setParam(array("include_docs"=>"true","descending"=>"true","startkey" => '["'.$date1.'", "'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]',"endkey" => '["'.$date2.'","'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]'))->execute();
 				return 	$resultBillList;
 		}
 
 		/* Function To Save Petty Expense AND Petty Inward */
 		function save(){
 			$return = array('error'=>false,'message'=>'','data'=>array());
+			if(!array_key_exists('shift', $_SESSION['user']) || !array_key_exists('store', $_SESSION['user']) ){
+				$result = $this->getSessionData();
+				if($result['error']){
+					header("LOCATION:index.php");
+				}
+			}
 			if($_SERVER['REQUEST_METHOD'] == 'POST'){
 				$this->log->trace("DATA \r\n".json_encode($_POST));
 				if(array_key_exists('expense_head',$_POST)){
@@ -130,6 +136,7 @@
 				
 				if(array_key_exists('shift', $_SESSION['user']) && array_key_exists('store', $_SESSION['user'])){
 					$_POST['shift_no'] = $_SESSION['user']['shift'];
+					$_POST['counter'] = $_SESSION['user']['counter'];
 					$_POST['store_id'] = $_SESSION['user']['store']['id'];
 					$_POST['store_name'] = $_SESSION['user']['store']['name'];
 					$result = $this->cDB->saveDocument()->execute($_POST);
