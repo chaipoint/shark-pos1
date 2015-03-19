@@ -61,15 +61,12 @@
 							<td>
 								<select class="form-control" name="customer_type" id="customer_type">
 									<option value="walk_in">Walk In</option>
-									<option  value="caw">CAW</option>
+									<!--<option  value="caw">CAW</option>-->
 								</select>
 							</td>
 						</tr>
 						<tr class="row">
-							<td width="50%">Customer <!--<a href="#"
-									class="btn btn-primary btn-xs showCModal"><i
-										class="glyphicon glyphicon-plus-sign"></i> Add Customer </a>-->
-							</td>
+							<td width="50%">Customer </td>
 							<td width="50%">
 								<span class="inv_cus_con"> 
 									<input type="text" id="billing_customer" class="form-control" name="billing_customer" value="Walkin Client"/>	

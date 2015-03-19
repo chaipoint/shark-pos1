@@ -90,7 +90,7 @@
 													<td width="25%" >Discount</td>
 													<td width="25%"> 
 														<div class="input-group">
-														<input type="text" class="form-control input-sm" style="height:22px;width:61px;margin-left:-52px;" id="discount_input_box" name="discount_input_box"/>
+														<input type="text" class="form-control input-sm" style="height:22px;width:61px;margin-left:-32px;" id="discount_input_box" name="discount_input_box"/>
 														</div><span class="label label-default" style="margin-left:6px" id="apply_discount" >Apply</span>
 															<span class="label label-default hide" style="margin-left:6px" id="remove_discount" >Remove</span>
 													</td>
@@ -112,11 +112,11 @@
 													<td class="text_right"><span id="ts_con">0</span></td>
 												</tr>
 												<tr class="">
-													<td width="30%" class="text-left"><strong>Total Payable</strong></td>
-															<!--<td width="25%" class="text-left"> <button class='btn btn-sm btn-primary'  id='reward_redemption'>Reward</button> </td>-->
+													<td width="25%" class="text-left"> <button class='btn btn-sm btn-primary'  id='reward_redemption'>Reward</button> </td>
 													<td width="25%" class="text-left"><input type='text' class="form-control hide" name='redemption_code' placeholder='Scan Code' id='redemption_code' style="width:101px" /></td>
 													<td width="25%" id="image_loading" class="text-left hide"><img src="<?php echo IMG ?>loader.gif"></td>
-													<td width="30%" class="text-left"></td>
+													
+													<td width="30%" class="text-left"><strong>Total Payable</strong></td>
 													<td class="text_right"><strong><span id="total-payable">0</span></strong></td>
 												</tr>
 											</tbody>
@@ -128,7 +128,7 @@
 									<button type="button" class="btn btn-danger" id="cancel" style="width:134px;height:35px;line-height:13px"><?php if(!empty($_GET['bill_no'])){ echo 'Cancel';}else {echo 'Clear Items';}?></button>
 									<!--<button type="button" class="btn btn-info <?php echo (!empty($_GET['bill_no']) ? '' : 'hide'); ?>" id="print-can" style="width:100px;height:35px;;line-height:13px">Reprint</button>-->
 									<button type="button" class="btn btn-success <?php echo (!empty($_GET['bill_no']) ? 'hide' : ''); ?>" id="payment" style="margin-right: 90px; width: 130px;height:35px;line-height:13px;margin-right:0px;float:right; ">Print Bills</button>
-									<button type="button" class="btn btn-success hide" id="claim_reward" style="margin-right: 90px; width: 180px;height:40px;line-height:13px">Claim Reward</button>
+									<button type="button" class="btn btn-success hide" id="claim_reward" style="margin-right: 90px; width: 140px;height:35px;line-height:13px;margin-right:0px;float:right; ">Claim Reward</button>
 								</div>
 								
 							 </div>
