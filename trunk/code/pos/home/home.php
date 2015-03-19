@@ -46,8 +46,8 @@
 			
 			$data['shift_data'] = $result;
 			$data['total_shift'] = $totalShifts;
-			$configHead = $this->getConfig($this->cDB, 'head');
-			$data['head_data'] = $configHead['data']['head'];
+			/*$configHead = $this->getConfig($this->cDB, 'head');
+			$data['head_data'] = $configHead['data']['head'];*/
 			$data['shift'] = '';
 			$data['reconcilation'] = '';
 			
@@ -131,7 +131,7 @@
 			$shift_inward = 0;
 			$shift_expense = 0;
 			if(array_key_exists('shift', $_SESSION['user'])){
-				$resultInward = $this->cDB->getDesign(PETTY_EXPENSE_DESIGN_DOCUMENT)->getView(PETTY_EXPENSE_DESIGN_DOCUMENT_VIEW_GET_INWARD)->setParam(array('key'=>'"'.$date.'"','include_docs'=>'true'))->execute();
+				$resultInward = $this->cDB->getDesign(PETTY_EXPENSE_DESIGN_DOCUMENT)->getView(PETTY_EXPENSE_DESIGN_DOCUMENT_VIEW_GET_INWARD)->setParam(array("include_docs"=>"true", "descending"=>"true", "startkey" => '["'.$date.'", "'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]',"endkey" => '["'.$date.'","'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]'))->execute();
 				if(count($resultInward['rows'])>0){
 					foreach($resultInward['rows'] as $key => $value){
 						if($value['doc']['shift_no'] == $_SESSION['user']['shift']){
@@ -141,7 +141,7 @@
 					}
 				}
 
-				$resultExpense = $this->cDB->getDesign(PETTY_EXPENSE_DESIGN_DOCUMENT)->getView(PETTY_EXPENSE_DESIGN_DOCUMENT_VIEW_GET_EXPENSE)->setParam(array('key'=>'"'.$date.'"','include_docs'=>'true'))->execute();
+				$resultExpense = $this->cDB->getDesign(PETTY_EXPENSE_DESIGN_DOCUMENT)->getView(PETTY_EXPENSE_DESIGN_DOCUMENT_VIEW_GET_EXPENSE)->setParam(array("include_docs"=>"true","descending"=>"true","startkey" => '["'.$date.'", "'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]',"endkey" => '["'.$date.'","'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]'))->execute();
 				if(count($resultExpense['rows'])>0){
 					foreach($resultExpense['rows'] as $key => $value){
 						if($value['doc']['shift_no'] == $_SESSION['user']['shift']){
@@ -153,7 +153,7 @@
 			}
 
 			$shift_data = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_SHIFT)->setParam(array("startkey" => '["'.$date.'","'.$_SESSION['user']['store']['id'].'"]', "endkey" => '["'.$date.'","'.$_SESSION['user']['store']['id'].'"]','include_docs'=>'true'))->execute();
-			$card_sale = $this->cDB->getDesign(CARD_SALE_DESIGN_DOCUMENT)->getList(CARD_SALE_DESIGN_DOCUMENT_LIST_TODAYS_SALE, CARD_SALE_DESIGN_DOCUMENT_VIEW_GET_SALE)->setParam(array('key'=>'"'.$date.'"','include_docs'=>'true'))->execute();
+			$card_sale = $this->cDB->getDesign(CARD_SALE_DESIGN_DOCUMENT)->getList(CARD_SALE_DESIGN_DOCUMENT_LIST_TODAYS_SALE, CARD_SALE_DESIGN_DOCUMENT_VIEW_GET_SALE)->setParam(array("include_docs"=>"true", "startkey" => '["'.$date.'", "'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]',"endkey" => '["'.$date.'","'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]'))->execute();
 			$excess = "";
 			$tablesShiftData = '<div class="panel panel-success">
 									<div class="panel-heading">
