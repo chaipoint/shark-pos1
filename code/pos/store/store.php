@@ -112,7 +112,7 @@
 						$inward = 0;
 						$pettyExpence = 0;
 						if($_POST['mode'] == 'day_end' || $_POST['mode'] == 'shift_end'){
-							$resultInward = $this->cDB->getDesign(PETTY_EXPENSE_DESIGN_DOCUMENT)->getView(PETTY_EXPENSE_DESIGN_DOCUMENT_VIEW_GET_INWARD)->setParam(array('key'=>'"'.$this->getCDate().'"','include_docs'=>'true'))->execute();
+							$resultInward = $this->cDB->getDesign(PETTY_EXPENSE_DESIGN_DOCUMENT)->getView(PETTY_EXPENSE_DESIGN_DOCUMENT_VIEW_GET_INWARD)->setParam(array("include_docs"=>"true", "descending"=>"true", "startkey" => '["'.$this->getCDate().'", "'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]',"endkey" => '["'.$this->getCDate().'","'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]'))->execute();
 							if( count($resultInward['rows']) >0 ){
 								foreach($resultInward['rows'] as $iKey => $iValue){
 									if($iValue['doc']['shift_no'] == $result['rows'][0]['doc']['shift'][$totalShifts-1]['shift_no']){

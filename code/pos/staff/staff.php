@@ -7,7 +7,13 @@
 		
 		/* Function To Get Store Staff */
 		function getStaffList(){
-				$staffList = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_MYSQL_ID)->setParam(array("include_docs"=>"true"))->execute();
+				if(!array_key_exists('id', $_SESSION['user']['store'])){
+					$result = $this->getSessionData();
+					if($result['error']){
+						header("LOCATION:index.php");
+					}
+				}
+				$staffList = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_MYSQL_ID)->setParam(array("include_docs"=>"true","key"=>'"'.$_SESSION['user']['store']['id'].'"'))->execute();
 				$rows = $staffList['rows'][0]['doc']['store_staff'];
 				$staffList = array();
 				foreach($rows as $key => $value){

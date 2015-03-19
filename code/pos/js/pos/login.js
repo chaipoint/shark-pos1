@@ -5,10 +5,11 @@ $(document).ready(function(){
 			$('#username,#password').cKeyboard();
 			$("#error_message").hide();
 
-			$(document).on('submit',"#loginform, .store_shift",function(event){
+			$(document).on('submit',"#loginform, .store_shift",function(event){ 
 				event.preventDefault(); 	//Privents Form to Submit
 				var form = $(this);
 				var formID = form.attr('id');
+				//alert(formID);
 				var errorHolder = 'error_message_shift';
 				
 				if( formID == 'loginform'){
@@ -17,6 +18,7 @@ $(document).ready(function(){
 				$("#"+errorHolder).hide();
 				var msg = "";
 				var formData = form.serializeObject();
+				//alert(JSON.stringify(formData));
 				if( formID == 'loginform'){
 					
 					/*$.ajax({
@@ -59,16 +61,16 @@ $(document).ready(function(){
 					}
 					
 				}
-				if(formData.username1){
+				if(formData.username1!=undefined){ 
 					formData.username = formData.username1;
 				}
 				if(formData.username.trim() == ""){msg += "<li>Provide Username</li>";}
 				if(formData.password.trim() == ""){msg += "<li>Provide Password</li>"}
-
+					
 				switch(formID){
 						case 'store_day_start_form':
 							formData.mode = 'day_start';
-							if((formData.petty_cash).trim() == ""){msg += "<li>Provide Petty Cash</li>";}
+							if((formData.petty_cash).trim() == ""){ msg += "<li>Provide Petty Cash</li>";}
 							break;
 						case 'store_shift_start_form':
 							formData.mode = 'shift_start';
@@ -86,7 +88,7 @@ $(document).ready(function(){
 							if((formData.box_cash_end).trim() == ""){msg += "<li>Provide Box Cash</li>";}
 							break;
 				}					
-				if(msg){
+				if(msg){ 
 					$("#"+errorHolder).show();$("#"+errorHolder+" ul").html(msg);
 				}else{
 					$.ajax({

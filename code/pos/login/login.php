@@ -131,6 +131,8 @@
 								$userData['store']['code'] = $_SESSION['user']['store']['code'];
 								$userData['store']['bill_type'] = $_SESSION['user']['store']['bill_type'];
 								$userData['store']['store_message'] = $_SESSION['user']['store']['store_message'];
+								$userData['store']['tin_no'] = $_SESSION['user']['store']['tin_no'];
+								$userData['store']['stn_no'] = $_SESSION['user']['store']['stn_no'];
 								$userData['shift'] = (!empty($_SESSION['user']['shift']) ? $_SESSION['user']['shift'] : '');
 								$userData['counter'] = (!empty($_SESSION['user']['counter']) ? $_SESSION['user']['counter'] : '');
 								$_POST['login_id'] = $_SESSION['user']['mysql_id'];
