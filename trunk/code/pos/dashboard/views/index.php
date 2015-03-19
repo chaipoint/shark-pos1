@@ -19,12 +19,13 @@
 	line-height:36px;
 }
 .dashboard_div {
-	width: 980px;
+	width: 1050px;
 	margin: 0 auto;
 	padding: 0 0 9px 5px;
-	overflow: hidden;
+	
 }
 </style>
+<script src="<?php echo JS;?>pos/home.js"></script>
 <?php 
 //echo '<pre>';print_r($reconcilation);echo '</pre>';?>
 <!--<span class="label label-info">Devatha Plaza.. Your Data</span>-->
@@ -103,7 +104,20 @@
 		<button class="btn" id="report_data">Sales Reports</button>
 		<button class="btn" id="billing_sync">Data Sync</button>
 		<button class="btn" id="caw_sync" data-store_id="<?php echo $_SESSION['user']['store']['id'];?>">Get Latest Store Data</button>
-		
+		<div class="btn-group" >
+  			<button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
+				Petty Expense & Inward &nbsp;<span class="caret"></span>
+			</button>
+  			<ul class="dropdown-menu" role="menu">
+    			<li><a href="#" id="add_expense">Add Expense</a></li>
+    			<li><a href="#" id="view_expense">View Expense</a></li>
+				<li><a href="#" id="add_inward">Add Inward</a></li>
+			</ul>
+		</div>
 		<button class="btn" data-menu="<?php echo $first;?>" id="start_billing">Start Billing</button>
 		
+		
+		
 </div>
+<?php require_once DIR.'/sales_register/views/modal_expense.php';?>
+<?php require_once DIR.'/home/views/modal_inward.php';?>

@@ -33,12 +33,19 @@
 			require_once DIR.'/home/home.php';
 			$home = new Home();
 			$data['reconcilation'] = $home->reconcilation();
-			//echo '<pre>';print_r($data);echo '</pre>'; die();
+			
+			$configHead = $this->getConfig($this->cDB, 'head');
+			$data['head_data'] = $configHead['data']['head'];
+			
+			require_once DIR.'/staff/staff.php';
+			$st = new Staff();
+			$data['staff_list'] = $st->getStaffList();
+			
 			require_once DIR.'/sales_register/sales_register.php';
 			$sr = new sales_register();
 			$data['data'] = $sr->getBills($this->getCDate(), $this->getCDate());
 			$data['last_ppc_bill'] = $sr->getLastPpcBill($this->getCDate());
-			
+			$data['expense_data'] = $sr->getExpenseData($this->getCDate(), $this->getCDate());
 			$this->commonView('header_html');
 			$this->commonView('navbar');
 			$this->view($data);
