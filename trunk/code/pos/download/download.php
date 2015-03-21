@@ -361,7 +361,7 @@ function updateStore($location_id){
 
 							$updateArray[$i]['cd_doc_type'] = STORE_MASTER_DOC_TYPE;
 							$updateArray[$i]['address'] = $storeDetails['address'];
-							//$updateArray[$i]['bill_type'] = $storeDetails['billing_type'];
+							$updateArray[$i]['bill_type'] = $storeDetails['billing_type'];
 							$updateArray[$i]['store_message'] = $storeDetails['store_message'];
 							$updateArray[$i]['location']['id'] = $storeDetails['location_id'];
 							$updateArray[$i]['location']['name'] = $storeDetails['location_name'];
@@ -644,7 +644,7 @@ function updateConfig(){
 
 			$updateArray[$i]['cd_doc_type'] = STORE_MASTER_DOC_TYPE;
 			$updateArray[$i]['address'] = $storeDetails['address'];
-			//$updateArray[$i]['bill_type'] = $storeDetails['billing_type'];
+			$updateArray[$i]['bill_type'] = $storeDetails['billing_type'];
 			$updateArray[$i]['store_message'] = $storeDetails['store_message'];
 			$updateArray[$i]['location']['id'] = $storeDetails['location_id'];
 			$updateArray[$i]['location']['name'] = $storeDetails['location_name'];
