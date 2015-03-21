@@ -45,7 +45,7 @@ function updateCustomers(){
 	}
 
 	$cusQuery = "SELECT cm.id, cm.name, cm.address, cm.phone, cm.contact_person,
-				cm.e_mail, cm.location_id, cm.customer_id, cm.type, cm.note, GROUP_CONCAT(DISTINCT(isb.day)) day 
+				cm.e_mail, cm.location_id, cm.customer_id, cm.type, cm.billing_type, cm.note, GROUP_CONCAT(DISTINCT(isb.day)) day 
 				FROM customer_master cm 
 				LEFT JOIN isb_delivery isb ON isb.customer_id = cm.id AND isb.active = 'Y'
 				WHERE cm.active = 'Y' 
@@ -246,14 +246,14 @@ function updateStore(){
 	    $logger->trace("Array of Existing Store IN CouchDB: ".json_encode($storeList));
 	}
   
-	$getStoreNameQuery = "SELECT sm.id mysql_id, sm.name, sm.code,
+	$getStoreNameQuery = "SELECT sm.id mysql_id, sm.tin_no, sm.stn_no, sm.name, sm.code,
 	                      sm.type, sm.address, sm.phone_1, sm.phone_2, photo,
 	                      weekly_off, lm.id location_id, lm.name location_name,
 	                      sm.sms, sm.foe_allowed is_foe, sm.active, sm.store_time store_open_schedule,
-	                      sm.ppa_uid, sm.ppa_pwd, sm.ppc_uid, sm.ppc_pwd, sm.ppc_tid
+	                      sm.ppa_uid, sm.ppa_pwd, sm.ppc_uid, sm.ppc_pwd, sm.ppc_tid, sm.billing_type, sm.store_message
                           FROM store_master sm
                           LEFT JOIN  location_master lm ON lm.id = sm.location_id 
-                          WHERE sm.active = 'Y'";
+                          WHERE sm.active = 'Y' AND sm.type != 'WHO'";
 						$logger->trace("Query To Get All The Store From CPOS Database: ".($getStoreNameQuery));
 						$storeResult = mysql_query($getStoreNameQuery);
 	$getProductRecipe = "SELECT id, product_id, store_id 
@@ -283,6 +283,8 @@ function updateStore(){
 
 							$updateArray[$i]['cd_doc_type'] = STORE_MASTER_DOC_TYPE;
 							$updateArray[$i]['address'] = $storeDetails['address'];
+							$updateArray[$i]['bill_type'] = $storeDetails['billing_type'];
+							$updateArray[$i]['store_message'] = $storeDetails['store_message'];
 							$updateArray[$i]['location']['id'] = $storeDetails['location_id'];
 							$updateArray[$i]['location']['name'] = $storeDetails['location_name'];
 							$updateArray[$i]['ppa_details']['uid'] = $storeDetails['ppa_uid'];
@@ -303,7 +305,7 @@ function updateStore(){
 							unset($updateArray[$i]['ppc_tid']);
 							unset($updateArray[$i]['ppc_uid']);
 							unset($updateArray[$i]['ppc_pwd']);
-
+							unset($updateArray[$i]['billing_type']);
 							$selectSchedule = "SELECT * FROM  `cp_store_timings` WHERE store_id =".$storeDetails['mysql_id'];
 							$resultSchedule = mysql_query($selectSchedule);
 							while($rowSchedule = mysql_fetch_assoc($resultSchedule)){
@@ -329,10 +331,10 @@ function updateStore(){
 						
 							
 				    $products = "select pm.id, if(cpsp.display_name = '' or cpsp.display_name is null,
-				                 pm.display_name, cpsp.display_name) name, 
+				                 pm.display_name, cpsp.display_name) name, pm.sequence, 
 				                 cpsp.store_id, pm.code, if(cpsp.price is null, pm.price,if(cpsp.price = 0, 'R' , cpsp.price)) price, 
 				                 ctm.name tax, ctm.id tax_id,  crm.name category, crm.id as category_id, ctm.rate tax_rate, 
-                                 pm.packaging, pm.is_coc, pm.is_foe, pm.is_web, pm.product_image image
+                                 pm.packaging, pm.is_coc, pm.is_foe, pm.is_web, pm.product_image image, cpsp.base_price_per, cpsp.service_charge_per
 								 from product_master pm
 								 LEFT JOIN cp_product_store_price cpsp on cpsp.product_id = pm.id and cpsp.store_id = ".$storeDetails['mysql_id']." and cpsp.active = 'Y'
 						     	 LEFT JOIN cp_tax_master ctm on ctm.id = if(cpsp.price is null, pm.tax,cpsp.tax_rate)
@@ -347,12 +349,15 @@ function updateStore(){
 									if(is_numeric($productDetails['price'])){
 
 										$updateArray[$i]['menu_items'][$j]['mysql_id'] = $productDetails['id']; 
+										$updateArray[$i]['menu_items'][$j]['sequence'] = $productDetails['sequence'];
 										$updateArray[$i]['menu_items'][$j]['code'] = $productDetails['code'];
 										$updateArray[$i]['menu_items'][$j]['name'] = $productDetails['name'];
 										$updateArray[$i]['menu_items'][$j]['price'] = $productDetails['price'];
 										$updateArray[$i]['menu_items'][$j]['tax']['id'] = $productDetails['tax_id'];
 										$updateArray[$i]['menu_items'][$j]['tax']['name'] = $productDetails['tax'];
 										$updateArray[$i]['menu_items'][$j]['tax']['rate'] = $productDetails['tax_rate'];
+										$updateArray[$i]['menu_items'][$j]['base_price_per'] = $productDetails['base_price_per'];
+										$updateArray[$i]['menu_items'][$j]['service_charge_per'] = $productDetails['service_charge_per'];
 										$updateArray[$i]['menu_items'][$j]['category']['id'] = $productDetails['category_id'];
 										$updateArray[$i]['menu_items'][$j]['category']['name'] = $productDetails['category'];
 										$updateArray[$i]['menu_items'][$j]['packaging'] = $productDetails['packaging'];
@@ -382,6 +387,39 @@ function updateStore(){
 								$updateArray[$i]['store_staff'][$k]['title_id'] = $row['title_id'];
 								$updateArray[$i]['store_staff'][$k]['title_name'] = $row['title_name'];
 								$k++;
+							}
+							
+							$getCustomer = "SELECT isb.customer_id id, cm.name, cm.billing_type type 
+											FROM `isb_delivery` isb
+											LEFT JOIN customer_master cm ON cm.id = isb.customer_id
+											WHERE isb.store_id = '".$storeDetails['mysql_id']."' AND isb.active = 'Y'
+											GROUP BY isb.customer_id";
+							$customerList = mysql_query($getCustomer);
+							$l = 0;
+							while ($row = mysql_fetch_assoc($customerList)) {
+								$updateArray[$i]['retail_customer'][$l]['id'] = $row['id'];
+								$updateArray[$i]['retail_customer'][$l]['name'] = $row['name']; 
+								$updateArray[$i]['retail_customer'][$l]['type'] = $row['type'];
+								$l++;
+							}
+							
+							$getCoupon = "SELECT id, business_type, coupon_code, coupon_type, coupon_value,
+											from_dt, to_dt, active 
+											FROM `cp_store_discount` 
+											WHERE store_id = '".$storeDetails['mysql_id']."' AND active = 'Y'
+											";
+							$couponList = mysql_query($getCoupon);
+							$m = 0;
+							while ($row = mysql_fetch_assoc($couponList)) {
+								$updateArray[$i]['discount_coupon'][$m]['id'] = $row['id'];
+								$updateArray[$i]['discount_coupon'][$m]['business_type'] = $row['business_type']; 
+								$updateArray[$i]['discount_coupon'][$m]['coupon_code'] = $row['coupon_code'];
+								$updateArray[$i]['discount_coupon'][$m]['coupon_type'] = $row['coupon_type'];
+								$updateArray[$i]['discount_coupon'][$m]['coupon_value'] = $row['coupon_value'];
+								$updateArray[$i]['discount_coupon'][$m]['start_date'] = $row['from_dt'];
+								$updateArray[$i]['discount_coupon'][$m]['end_date'] = $row['to_dt'];
+								$updateArray[$i]['discount_coupon'][$m]['active'] = $row['active'];
+								$m++;
 							}
 				
 						$i++;
