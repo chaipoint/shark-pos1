@@ -38,9 +38,87 @@ switch ($argv[1]){
 	echo updateSingleStore($argv[2]);
 		break;
 		
+	case 'checkRepDoc':
+	echo checkRepDoc();
+		break;
+		
+	case 'checkit':
+	echo checkit();
+		break;
+		
 		
 }
+function checkit(){
+	$couch = new CouchPHP();
+	$target = $couch->getRemote();
+	$source = $couch->getUrl().$couch->getDB();
+	$ch = curl_init();
+	$insert=true;
+	$url = ($insert ? 'http://pos:pos@127.0.0.1:5984/_replicator' : 'http://pos:pos@127.0.0.1:5984/_replicator/store_replication');
+    
+	if($insert){
+		$postData = array('_id'=>'store_replication', 'source'=>$target, 'target'=>$source, 'filter'=>'doc_replication/store_replication', 'query_params'=>array("mysql_id"=>62), 'continuous'=>true);
+	}else {
+		$postData = array();
+	}
+	
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_HEADER, FALSE); 
+	if(count($postData)>0){
+		curl_setopt($ch, CURLOPT_POST, TRUE); 
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postData));
+    }        
+    curl_setopt($ch, CURLOPT_NOBODY, FALSE); // remove body 
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); 
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type:application/json"));
+    
+	$result = json_decode(curl_exec($ch), true); 
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE); 
+    curl_close($ch);
+	return $result;
 
+}
+function insertRepDoc($insert){
+	$couch = new CouchPHP();
+	$target = $couch->getRemote();
+	$source = $couch->getUrl().$couch->getDB();
+	$ch = curl_init();
+	$url = ($insert ? 'http://pos:pos@127.0.0.1:5984/_replicator' : 'http://pos:pos@127.0.0.1:5984/_replicator/billing_replication');
+    
+	if($insert){
+		$postData = array('_id'=>'billing_replication', 'source'=>$source, 'target'=>$target, 'filter'=>'doc_replication/bill_replication', 'continuous'=>true);
+	}else {
+		$postData = array();
+	}
+	
+	curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_HEADER, FALSE); 
+	if(count($postData)>0){
+		curl_setopt($ch, CURLOPT_POST, TRUE); 
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($postData));
+    }        
+    curl_setopt($ch, CURLOPT_NOBODY, FALSE); // remove body 
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE); 
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type:application/json"));
+    
+	$result = json_decode(curl_exec($ch), true); 
+    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE); 
+    curl_close($ch);
+	return $result;
+}
+
+function checkRepDoc(){
+	$result = insertRepDoc(false);
+	//echo '<pre>';
+	//print_r($result);
+	//echo '</pre>';
+	if(array_key_exists('error', $result) && $result['error']=='not_found'){
+		$result = insertRepDoc(true);
+	}elseif($result['_replication_state']=='error'){
+		$result = insertRepDoc(true);
+	}
+	return json_encode($result);
+}
 /* Function To Download Retail Customer From CPOS */
 function updateCustomers($location){
 	$couch = new CouchPHP();
@@ -283,7 +361,7 @@ function updateStore($location_id){
 
 							$updateArray[$i]['cd_doc_type'] = STORE_MASTER_DOC_TYPE;
 							$updateArray[$i]['address'] = $storeDetails['address'];
-							$updateArray[$i]['bill_type'] = $storeDetails['billing_type'];
+							//$updateArray[$i]['bill_type'] = $storeDetails['billing_type'];
 							$updateArray[$i]['store_message'] = $storeDetails['store_message'];
 							$updateArray[$i]['location']['id'] = $storeDetails['location_id'];
 							$updateArray[$i]['location']['name'] = $storeDetails['location_name'];
@@ -566,7 +644,7 @@ function updateConfig(){
 
 			$updateArray[$i]['cd_doc_type'] = STORE_MASTER_DOC_TYPE;
 			$updateArray[$i]['address'] = $storeDetails['address'];
-			$updateArray[$i]['bill_type'] = $storeDetails['billing_type'];
+			//$updateArray[$i]['bill_type'] = $storeDetails['billing_type'];
 			$updateArray[$i]['store_message'] = $storeDetails['store_message'];
 			$updateArray[$i]['location']['id'] = $storeDetails['location_id'];
 			$updateArray[$i]['location']['name'] = $storeDetails['location_name'];
