@@ -116,7 +116,27 @@ $(document).ready(function(){
                     return false;
                 })
 			}
-            },30000);
+            },30000); // 30 second
+        });
+		
+		$(function(){
+            window.setInterval(function(){ 
+			var host = 'http://'+"<?php echo $_SERVER['HTTP_HOST']; ?>";
+			if(navigator.onLine){
+                $.ajax({
+                    type: 'POST',
+					url: host+'/pos/download/download.php?param=checkRepDoc',
+					timeout:6000
+                }).done(function(response){  
+                    console.log(response);
+					//alert(response);return false;
+                    //var $res = $.parseJSON(response);
+                }).error(function(x, t, m){
+                    console.log(t);
+                    return false;
+                })
+			}
+            },10800000); // 3 hours
         });
 		
 		
