@@ -47,7 +47,11 @@ $(document).ready(function(){
 			window.location.href = 'index.php?dispatch=preorder.index';
 		}
 	});
-
+	
+	$('#download_couch').click(function(){
+		window.location.href = 'index.php?dispatch=utils.downloadCouch';
+	});
+	
 	$('#dashboard').click(function(){
 		window.location.href = 'index.php?dispatch=dashboard.index';
 	});
