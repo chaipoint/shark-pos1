@@ -16,7 +16,7 @@ var module = JSON.stringify(url.data.attr.query);
 	window.addEventListener("online", function(e) { window.location.reload(true);})
 }*/
 
-$(document).ready(function(){
+$(document).ready(function(){ 
 	if(! navigator.onLine){
 		$('#billing_sync').addClass('btn-danger').attr('id','');
 		$('#caw_sync').addClass('btn-danger').attr('id','');
@@ -211,7 +211,7 @@ $(document).ready(function(){
 			url: "download/download.php?param=updateSingleStore-"+store,
 			timeout:120000,
 		}).done(function(response) {
-		//alert(response); 
+			//alert(response); 
 			$("#ajaxfadediv").removeClass('ajaxfadeclass');
 			result = $.parseJSON(response);
 			var reload = false;
