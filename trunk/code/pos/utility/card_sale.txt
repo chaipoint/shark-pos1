@@ -1,0 +1,1 @@
+{"cd_doc_type":"card_sale","card_no":"1000920010011341","card_type":"ppc","txn_no":"74363156","approval_code":"2886397","amount":"120","balance":"154.00","txn_type":"load","time":"2015-03-04 18:36:05","status":"paid","store_id":"62","store_name":"Huda City Centre","staff_id":"851","staff_name":"Sanjay Saha","invoice_number":41,"shift":1,"bill":"L6210041L"}
