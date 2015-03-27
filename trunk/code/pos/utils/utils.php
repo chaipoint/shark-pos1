@@ -59,6 +59,27 @@
 			}
 			return  json_encode($return);
 		}
+		function downloadCouch(){
+			$files = array('C:\Program Files\Apache Software Foundation\CouchDB\var\lib\couchdb\sharkpos.couch','C:\Program Files (x86)\Apache Software Foundation\CouchDB\var\lib\couchdb\sharkpos.couch');
+			# create new zip opbject
+			$zip = new ZipArchive();
+			# create a temp file & open it
+			$tmp_file = tempnam('.','');
+			$zip->open($tmp_file, ZipArchive::CREATE);
+			# loop through each file
+			foreach($files as $file){
+				# download file
+				$download_file = file_get_contents($file);
+				#add it to the zip
+				$zip->addFromString(basename($file),$download_file);
+			}
+			# close zip
+			$zip->close();
+			# send the file to the browser as a download
+			header('Content-disposition: attachment; filename=sharkpos.zip');
+			header('Content-type: application/zip');
+			readfile($tmp_file);
+		}
 		function repRetailCustomers(){
 			//echo $_SESSION['user']['store']['location']['id'];
 			//echo '<pre>';
