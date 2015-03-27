@@ -71,7 +71,7 @@ $(document).ready(function(){
 		$("div.ui-keyboard").hide();
 	});
 	
-	$('.card').click(function(){ //alert('defsdfd');
+	$('.card').click(function(){ 
 		$('.card').removeClass('active3');
 		$(this).addClass('active3');
 	});
@@ -287,6 +287,7 @@ $(document).ready(function(){
 			case 'day_end':
 				is_store_open = false;
 				active = 'day_start';
+				window.location.reload(true);
 				//$('#logout').trigger('click');
 			break;
 			case 'shift_start':
