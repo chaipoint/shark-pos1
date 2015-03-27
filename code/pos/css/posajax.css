@@ -641,6 +641,10 @@ z-index:9999
   z-index:9999999998; 
   position:fixed;
   opacity: 0.8; 
+  background-image: url("../images/loading2.gif");
+  background-repeat:no-repeat;
+  background-attachment: fixed;
+  background-position: center;
 }
 
 .active3 {
