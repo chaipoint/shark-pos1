@@ -383,7 +383,7 @@ function updateStore($location_id){
 							unset($updateArray[$i]['ppc_tid']);
 							unset($updateArray[$i]['ppc_uid']);
 							unset($updateArray[$i]['ppc_pwd']);
-
+							unset($updateArray[$i]['billing_type']);
 							$selectSchedule = "SELECT * FROM  `cp_store_timings` WHERE store_id =".$storeDetails['mysql_id'];
 							$resultSchedule = mysql_query($selectSchedule);
 							while($rowSchedule = mysql_fetch_assoc($resultSchedule)){
@@ -412,7 +412,7 @@ function updateStore($location_id){
 				                 pm.display_name, cpsp.display_name) name, pm.sequence, 
 				                 cpsp.store_id, pm.code, if(cpsp.price is null, pm.price,if(cpsp.price = 0, 'R' , cpsp.price)) price, 
 				                 ctm.name tax, ctm.id tax_id,  crm.name category, crm.id as category_id, ctm.rate tax_rate, 
-                                 pm.packaging, pm.is_coc, pm.is_foe, pm.is_web, pm.product_image image
+                                 pm.packaging, pm.is_coc, pm.is_foe, pm.is_web, pm.product_image image, cpsp.base_price_per, cpsp.service_charge_per
 								 from product_master pm
 								 LEFT JOIN cp_product_store_price cpsp on cpsp.product_id = pm.id and cpsp.store_id = ".$storeDetails['mysql_id']." and cpsp.active = 'Y'
 						     	 LEFT JOIN cp_tax_master ctm on ctm.id = if(cpsp.price is null, pm.tax,cpsp.tax_rate)
@@ -434,6 +434,8 @@ function updateStore($location_id){
 										$updateArray[$i]['menu_items'][$j]['tax']['id'] = $productDetails['tax_id'];
 										$updateArray[$i]['menu_items'][$j]['tax']['name'] = $productDetails['tax'];
 										$updateArray[$i]['menu_items'][$j]['tax']['rate'] = $productDetails['tax_rate'];
+										$updateArray[$i]['menu_items'][$j]['base_price_per'] = $productDetails['base_price_per'];
+										$updateArray[$i]['menu_items'][$j]['service_charge_per'] = $productDetails['service_charge_per'];
 										$updateArray[$i]['menu_items'][$j]['category']['id'] = $productDetails['category_id'];
 										$updateArray[$i]['menu_items'][$j]['category']['name'] = $productDetails['category'];
 										$updateArray[$i]['menu_items'][$j]['packaging'] = $productDetails['packaging'];
@@ -665,6 +667,7 @@ function updateConfig(){
 			unset($updateArray[$i]['ppc_tid']);
 			unset($updateArray[$i]['ppc_uid']);
 			unset($updateArray[$i]['ppc_pwd']);
+			unset($updateArray[$i]['billing_type']);
 			$selectSchedule = "SELECT * FROM  `cp_store_timings` WHERE store_id =".$storeDetails['mysql_id'];
 			$resultSchedule = mysql_query($selectSchedule);
 			while($rowSchedule = mysql_fetch_assoc($resultSchedule)){
@@ -691,7 +694,7 @@ function updateConfig(){
 				                 pm.display_name, cpsp.display_name) name, pm.sequence, 
 				                 cpsp.store_id, pm.code, if(cpsp.price is null, pm.price,if(cpsp.price = 0, 'R' , cpsp.price)) price, 
 				                 ctm.name tax, ctm.id tax_id,  crm.name category, crm.id as category_id, ctm.rate tax_rate, 
-                                 pm.packaging, pm.is_coc, pm.is_foe, pm.is_web, pm.product_image image
+                                 pm.packaging, pm.is_coc, pm.is_foe, pm.is_web, pm.product_image image, cpsp.base_price_per, cpsp.service_charge_per  
 								 from product_master pm
 								 LEFT JOIN cp_product_store_price cpsp on cpsp.product_id = pm.id and cpsp.store_id = ".$storeDetails['mysql_id']." and cpsp.active = 'Y'
 						     	 LEFT JOIN cp_tax_master ctm on ctm.id = if(cpsp.price is null, pm.tax,cpsp.tax_rate)
@@ -712,6 +715,8 @@ function updateConfig(){
 					$updateArray[$i]['menu_items'][$j]['tax']['id'] = $productDetails['tax_id'];
 					$updateArray[$i]['menu_items'][$j]['tax']['name'] = $productDetails['tax'];
 					$updateArray[$i]['menu_items'][$j]['tax']['rate'] = $productDetails['tax_rate'];
+					$updateArray[$i]['menu_items'][$j]['base_price_per'] = $productDetails['base_price_per'];
+					$updateArray[$i]['menu_items'][$j]['service_charge_per'] = $productDetails['service_charge_per'];
 					$updateArray[$i]['menu_items'][$j]['category']['id'] = $productDetails['category_id'];
 					$updateArray[$i]['menu_items'][$j]['category']['name'] = $productDetails['category'];
 					$updateArray[$i]['menu_items'][$j]['packaging'] = $productDetails['packaging'];
@@ -865,10 +870,13 @@ function updateConfig(){
 					}
 				}else{
 					$html['error'] =true;
-					$html['message'] = 'No Customer Assign';
+					$html['message'] = 'No customers found for CAW. Remaining store data download successfully.';
 					
 				}
 			}
+		}else {
+			$html['error'] =true;
+			$html['message'] = 'Download failed. Please check your internet connection and try again.';
 		}
 		$result = json_encode($html);
 		mysql_close();
