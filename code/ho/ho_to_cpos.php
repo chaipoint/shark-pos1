@@ -296,7 +296,7 @@ function uploadBill(){
 				}
 				$logger->debug("INSERT ORDER PRODUCT ARRAY ".json_encode($productsArray));		
 				if(count($productsArray) > 0){
-					$insertProducst = 'INSERT INTO cp_pos_storeorders_products (order_id, bill_date, store_id, store_name, product_id, product_name, category_id, category_name, recipe_id, qty, price, tax, priceBT, discount, discount_amount, taxable_amount, tax_amount, net_amount, priceAD, subTotal) values '.implode(',',$productsArray);
+					echo $insertProducst = 'INSERT INTO cp_pos_storeorders_products (order_id, bill_date, store_id, store_name, product_id, product_name, category_id, category_name, recipe_id, qty, price, tax, priceBT, discount, discount_amount, taxable_amount, tax_amount, net_amount, priceAD, subTotal) values '.implode(',',$productsArray);
 					$res = $db->db_query($insertProducst);	
 				    $returnResult = $couch->getDesign('design_ho')->getUpdate('insert_mysql_id', $docsData['_id'])->setParam(array('mysql_id'=>$insertId))->execute();				
 				    if($res){				    	
