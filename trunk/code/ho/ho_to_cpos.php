@@ -222,15 +222,14 @@ function uploadShiftData(){
 function uploadBill(){
 	//ini_set('display_errors', 1);
 	global $logger, $db;
-	error_reporting(E_ALL);
 	$logger->debug("Calling Upload Bill Function");
 	$couch = new CouchPHP();
 	$html = array();
 	$no_bill = $unsuccessful = $successful = $counter = 0;
-	$billData = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_NO_MYSQL_ID)->setParam(array('include_docs'=>'true','limit'=>'100'))->execute();
+	$billData = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_NO_MYSQL_ID)->setParam(array('include_docs'=>'true','limit'=>'1000'))->execute();
 	$logger->debug("URL to sccess data ".$couch->getLastUrl());
-	//echo '<pre>';print_r($billData);echo '</pre>';
-	if(array_key_exists('rows', $billData)){ 
+
+ 	if(array_key_exists('rows', $billData)){ 
  		foreach($billData['rows'] as $key => $value){ 
 			$doc = $value['doc'];
  			$docKey = $value['key'];
@@ -239,8 +238,8 @@ function uploadBill(){
 			$docsData = array(	"_id"  => $doc['_id'],
 								"_rev" => $doc['_rev'],
 								"bill_no" => $doc['bill_no'],
-								//"bill_seq" => $doc['bill'],
-								//"dc_challan" => $doc['customer']['challan_no'],
+								"bill_seq" => $doc['bill'],
+								"dc_challan" => $doc['customer']['challan_no'],
 								"bill_time" => $doc['time']['created'], 
 								"store_id" => $doc['store_id'], 
 								"store_name" => $doc['store_name'], 
@@ -284,13 +283,9 @@ function uploadBill(){
 			            		"due_amount" => $doc['due_amount'],
 			            		"bill_status" => $doc['bill_status'],
 								"reprint" => $doc['reprint']
-			            ); 
-			print_r($docsData);
+			            );
 			$logger->debug("INSERT ORDER ARRAY ".json_encode($docsData));
-			$r = $db->func_array2insert("cp_pos_storeorders", $docsData);
-			echo $r;
-			echo 'yes';
-			print_r($db);
+			$db->func_array2insert("cp_pos_storeorders", $docsData);
 			$insertId = $db->db_insert_id();	
 			$productsArray = array();
 			if($insertId > 0){
@@ -301,7 +296,7 @@ function uploadBill(){
 				}
 				$logger->debug("INSERT ORDER PRODUCT ARRAY ".json_encode($productsArray));		
 				if(count($productsArray) > 0){
-					echo $insertProducst = 'INSERT INTO cp_pos_storeorders_products (order_id, bill_date, store_id, store_name, product_id, product_name, category_id, category_name, recipe_id, qty, price, tax, priceBT, discount, discount_amount, taxable_amount, tax_amount, net_amount, priceAD, subTotal) values '.implode(',',$productsArray);
+					$insertProducst = 'INSERT INTO cp_pos_storeorders_products (order_id, bill_date, store_id, store_name, product_id, product_name, category_id, category_name, recipe_id, qty, price, tax, priceBT, discount, discount_amount, taxable_amount, tax_amount, net_amount, priceAD, subTotal) values '.implode(',',$productsArray);
 					$res = $db->db_query($insertProducst);	
 				    $returnResult = $couch->getDesign('design_ho')->getUpdate('insert_mysql_id', $docsData['_id'])->setParam(array('mysql_id'=>$insertId))->execute();				
 				    if($res){				    	
