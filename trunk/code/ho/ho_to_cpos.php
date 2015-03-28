@@ -284,6 +284,7 @@ function uploadBill(){
 			            		"bill_status" => $doc['bill_status'],
 								"reprint" => $doc['reprint']
 			            );
+			print_r($docData);
 			$logger->debug("INSERT ORDER ARRAY ".json_encode($docsData));
 			$db->func_array2insert("cp_pos_storeorders", $docsData);
 			$insertId = $db->db_insert_id();	
