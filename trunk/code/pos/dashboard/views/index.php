@@ -64,7 +64,7 @@
 	<span class="padded">Your Store Sales on <?php echo date('d-m-Y', strtotime("-1 days")); ?></span>
 	<div class="panel panel-info" style="min-height:80px;width:84%;margin-left:15px;background-color:#efefef">
 		<div class="panel-body" style="margin-left:14%;">
-			<span class="white-bg col-md-5" ><strong>Total Sales: <?php if(array_key_exists('data', $activity_data)){
+			<span class="white-bg col-md-5" ><strong>Net Sale: <?php if(array_key_exists('data', $activity_data)){
 					if(array_key_exists('TotalSale', $activity_data['data'])){ echo $activity_data['data']['TotalSale']; ?><?php }}?></strong></span>
 			<span class="white-bg col-md-5" style="margin-left:5px"><strong>Target Sales: <?php if(array_key_exists('data', $activity_data)){
 					if(array_key_exists('TargetSale', $activity_data['data'])){ echo $activity_data['data']['TargetSale']; ?><?php }}?></strong></span>
@@ -96,7 +96,8 @@
 	if(empty($_SESSION['user']['store']['id'])){
 		$result = $this->getSessionData();
 	}
-	list($first) = explode(',', $_SESSION['user']['store']['bill_type']); 
+	list($first) = explode(',', $_SESSION['user']['store']['bill_type']);
+	//list($first) = explode('=', $first);
 ?>
 <div class="padded dashboard_div" >
 		<button class="btn" id="dashboard" style="margin-left:13px;">Dashboard</button>
