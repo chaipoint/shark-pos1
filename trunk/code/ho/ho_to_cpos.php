@@ -231,7 +231,7 @@ function uploadBill(){
 	$logger->debug("URL to sccess data ".$couch->getLastUrl());
 	//echo '<pre>';print_r($billData);echo '</pre>';
 	if(array_key_exists('rows', $billData)){ 
- 		foreach($billData['rows'] as $key => $value){ echo 'hello';
+ 		foreach($billData['rows'] as $key => $value){ 
 			$doc = $value['doc'];
  			$docKey = $value['key'];
  			$dValue['doc'] = $doc;
@@ -284,10 +284,12 @@ function uploadBill(){
 			            		"due_amount" => $doc['due_amount'],
 			            		"bill_status" => $doc['bill_status'],
 								"reprint" => $doc['reprint']
-			            ); echo 'hell1';
-			print_r($docData);
+			            ); 
+			print_r($docsData);
 			$logger->debug("INSERT ORDER ARRAY ".json_encode($docsData));
 			$db->func_array2insert("cp_pos_storeorders", $docsData);
+			echo 'yes';
+			print_r($db);
 			$insertId = $db->db_insert_id();	
 			$productsArray = array();
 			if($insertId > 0){
