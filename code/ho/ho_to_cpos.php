@@ -229,9 +229,8 @@ function uploadBill(){
 	$no_bill = $unsuccessful = $successful = $counter = 0;
 	$billData = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_NO_MYSQL_ID)->setParam(array('include_docs'=>'true','limit'=>'100'))->execute();
 	$logger->debug("URL to sccess data ".$couch->getLastUrl());
-	echo '<pre>';print_r($billData);echo '</pre>';
-	
- 	if(array_key_exists('rows', $billData)){ 
+	//echo '<pre>';print_r($billData);echo '</pre>';
+	if(array_key_exists('rows', $billData)){ 
  		foreach($billData['rows'] as $key => $value){ 
 			$doc = $value['doc'];
  			$docKey = $value['key'];
@@ -240,8 +239,8 @@ function uploadBill(){
 			$docsData = array(	"_id"  => $doc['_id'],
 								"_rev" => $doc['_rev'],
 								"bill_no" => $doc['bill_no'],
-								"bill_seq" => $doc['bill'],
-								"dc_challan" => $doc['customer']['challan_no'],
+								//"bill_seq" => $doc['bill'],
+								//"dc_challan" => $doc['customer']['challan_no'],
 								"bill_time" => $doc['time']['created'], 
 								"store_id" => $doc['store_id'], 
 								"store_name" => $doc['store_name'], 
