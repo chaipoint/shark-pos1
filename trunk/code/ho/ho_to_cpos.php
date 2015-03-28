@@ -287,7 +287,8 @@ function uploadBill(){
 			            ); 
 			print_r($docsData);
 			$logger->debug("INSERT ORDER ARRAY ".json_encode($docsData));
-			$db->func_array2insert("cp_pos_storeorders", $docsData);
+			$r = $db->func_array2insert("cp_pos_storeorders", $docsData);
+			echo $r;
 			echo 'yes';
 			print_r($db);
 			$insertId = $db->db_insert_id();	
