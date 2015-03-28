@@ -316,7 +316,7 @@ class Database{
 	 */
 	public function func_array2insert ($tbl, $arr, $is_replace = false) {
 		if(self::db_query(($is_replace?"REPLACE":"INSERT")." INTO $tbl (" . implode(", ", array_keys($arr)) . ") VALUES ('" . implode("', '", $arr) . "')"))
-		{	$query = ($is_replace?"REPLACE":"INSERT")." INTO $tbl (" . implode(", ", array_keys($arr)) . ") VALUES ('" . implode("', '", $arr) . "')");
+		{	$query = (($is_replace?"REPLACE":"INSERT")." INTO $tbl (" . implode(", ", array_keys($arr)) . ") VALUES ('" . implode("', '", $arr) . "')");
 			//return self::db_insert_id();
 			return $query;
 		}
