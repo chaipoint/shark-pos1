@@ -222,6 +222,7 @@ function uploadShiftData(){
 function uploadBill(){
 	//ini_set('display_errors', 1);
 	global $logger, $db;
+	error_reporting(E_ALL);
 	$logger->debug("Calling Upload Bill Function");
 	$couch = new CouchPHP();
 	$html = array();
@@ -229,6 +230,7 @@ function uploadBill(){
 	$billData = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_NO_MYSQL_ID)->setParam(array('include_docs'=>'true','limit'=>'100'))->execute();
 	$logger->debug("URL to sccess data ".$couch->getLastUrl());
 	echo '<pre>';print_r($billData);echo '</pre>';
+	
  	if(array_key_exists('rows', $billData)){ 
  		foreach($billData['rows'] as $key => $value){ 
 			$doc = $value['doc'];
