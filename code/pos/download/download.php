@@ -417,7 +417,7 @@ function updateStore($location_id){
 								 LEFT JOIN cp_product_store_price cpsp on cpsp.product_id = pm.id and cpsp.store_id = ".$storeDetails['mysql_id']." and cpsp.active = 'Y'
 						     	 LEFT JOIN cp_tax_master ctm on ctm.id = if(cpsp.price is null, pm.tax,cpsp.tax_rate)
 								 LEFT JOIN cp_reference_master crm on crm.id = pm.type 
-								 where  pm.active = 'Y'
+								 where  pm.active = 'Y' AND pm.price !=0 AND pm.location LIKE '%".$location_id."%' 
 								 order by  pm.id asc";
 							
 							$productList = mysql_query($products);
@@ -690,6 +690,9 @@ function updateConfig(){
 					$updateArray[$i]['schedule']['closing_time'][6] = $rowSchedule['closing_time'];
 				}
 			}
+			$getLocation = "SELECT location_id FROM store_master WHERE id = '".$storeDetails['mysql_id']."' ";
+			$locationResult = mysql_fetch_array(mysql_query($getLocation));
+			$locationId = $locationResult[0]['location_id'];
 			$products = "select pm.id, if(cpsp.display_name = '' or cpsp.display_name is null,
 				                 pm.display_name, cpsp.display_name) name, pm.sequence, 
 				                 cpsp.store_id, pm.code, if(cpsp.price is null, pm.price,if(cpsp.price = 0, 'R' , cpsp.price)) price, 
@@ -699,8 +702,9 @@ function updateConfig(){
 								 LEFT JOIN cp_product_store_price cpsp on cpsp.product_id = pm.id and cpsp.store_id = ".$storeDetails['mysql_id']." and cpsp.active = 'Y'
 						     	 LEFT JOIN cp_tax_master ctm on ctm.id = if(cpsp.price is null, pm.tax,cpsp.tax_rate)
 								 LEFT JOIN cp_reference_master crm on crm.id = pm.type 
-								 where  pm.active = 'Y'
+								 where  pm.active = 'Y' AND pm.price !=0 AND pm.location LIKE '%".$locationId."%'
 								 order by  pm.id asc";
+								 
 							
 			$productList = mysql_query($products);
 			$j = 0;
