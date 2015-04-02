@@ -417,7 +417,7 @@ function updateStore($location_id){
 								 LEFT JOIN cp_product_store_price cpsp on cpsp.product_id = pm.id and cpsp.store_id = ".$storeDetails['mysql_id']." and cpsp.active = 'Y'
 						     	 LEFT JOIN cp_tax_master ctm on ctm.id = if(cpsp.price is null, pm.tax,cpsp.tax_rate)
 								 LEFT JOIN cp_reference_master crm on crm.id = pm.type 
-								 where  pm.active = 'Y' AND pm.price !=0 AND pm.location LIKE '%".$location_id."%' 
+								 where  pm.active = 'Y' AND (pm.price !=0 || cpsp.price!=0) AND pm.location LIKE '%".$location_id."%' 
 								 order by  pm.id asc";
 							
 							$productList = mysql_query($products);
@@ -702,7 +702,7 @@ function updateConfig(){
 								 LEFT JOIN cp_product_store_price cpsp on cpsp.product_id = pm.id and cpsp.store_id = ".$storeDetails['mysql_id']." and cpsp.active = 'Y'
 						     	 LEFT JOIN cp_tax_master ctm on ctm.id = if(cpsp.price is null, pm.tax,cpsp.tax_rate)
 								 LEFT JOIN cp_reference_master crm on crm.id = pm.type 
-								 where  pm.active = 'Y' AND pm.price !=0 AND pm.location LIKE '%".$locationId."%'
+								 where  pm.active = 'Y' AND (pm.price !=0 || cpsp.price!=0) AND pm.location LIKE '%".$locationId."%'
 								 order by  pm.id asc";
 								 
 							
