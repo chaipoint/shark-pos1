@@ -87,11 +87,15 @@ $(document).ready(function(){
 		$('#reconcilation_div').removeClass('hide');
 		$('#report_div').addClass('hide');
 	});
-	$('#report_data').click(function(){
-		$('.alert-danger').addClass('hide');
-		$('#dashboard_div').addClass('hide');
-		$('#reconcilation_div').addClass('hide');
-		$('#report_div').removeClass('hide');
+	$('#report_data').click(function(){ 
+		if($(this).data('title_id')==4 || $(this).data('title_id')==6 ){ 
+			$('.alert-danger').addClass('hide');
+			$('#dashboard_div').addClass('hide');
+			$('#reconcilation_div').addClass('hide');
+			$('#report_div').removeClass('hide');
+		}else {
+			bootbox.alert('Not Authorised to See the Screen');
+		}
 	});
 	
 	if($('#shift_end').hasClass('alert-danger')){
