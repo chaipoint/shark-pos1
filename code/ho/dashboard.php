@@ -148,7 +148,7 @@ require_once 'common/header.php';
 		
 		$getRecord = $couch->getDesign('design_ho')->getView('bill_by_store')->setParam(array("include_docs"=>"true","startkey"=>'["'.$date.'"]', "endkey"=>'["'.$date.'", {}]'))->execute();
 		
-		print_r($getRecord);
+		//print_r($getRecord);
 		if(array_key_exists('rows', $getRecord)){
 			$data = array();
 			foreach($getRecord['rows'] as $key => $value){ 
