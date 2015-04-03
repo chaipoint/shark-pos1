@@ -1,4 +1,7 @@
-<?php require_once 'common/header.php';
+<?php 
+ini_set('memory_limit', '-1');
+
+require_once 'common/header.php';
       require_once 'common/couchdb.phpclass.php';
       $couch = new CouchPHP(); ?>
 
@@ -144,7 +147,7 @@
       //echo $date;
 		
 		$getRecord = $couch->getDesign('design_ho')->getView('bill_by_store')->setParam(array("include_docs"=>"true","startkey"=>'["'.$date.'"]', "endkey"=>'["'.$date.'", {}]'))->execute();
-		ini_set('memory_limit', '-1');
+		
 		print_r($getRecord);
 		if(array_key_exists('rows', $getRecord)){
 			$data = array();
