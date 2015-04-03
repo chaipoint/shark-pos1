@@ -10,7 +10,7 @@ color: #007fff;
 color:black;
 }
 .navbar-nav.navbar-right:last-child {
-margin-right: 126px;
+margin-right: 99px;
 }
 </style>	
 	
