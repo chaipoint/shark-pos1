@@ -142,7 +142,8 @@
 		
 		//$topStore = $couch->getDesign('sales')->getView('top_store')->setParam(array("group"=>"true","startkey"=>'["'.$date.'"]',"endkey"=>'["'.$date.'",{}]'))->execute();
       //echo $date;
-		$getRecord = $couch->getDesign('design_ho')->getView('bill_by_store')->setParam(array("include_docs"=>"true","startkey"=>'["'.$date.'"]', "endkey"=>'["'.$date.'", {}]'))->execute();
+		
+		$getRecord = $couch->getDesign('design_ho')->getView('bill_by_store')->setParam(array("include_docs"=>"true","startkey"=>'["'.$date.'"]', "endkey"=>'["'.$date.'", {}]','limit'=>'100'))->execute();
 		print_r($getRecord);
 		if(array_key_exists('rows', $getRecord)){
 			$data = array();
