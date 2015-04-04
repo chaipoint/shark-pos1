@@ -292,11 +292,12 @@ function uploadBill(){
 				foreach ($doc['items'] as $itemKey => $itemVvalue) { 
 					$pValue = $itemVvalue;
 					$priceAD = (!empty($pValue['dis_price']) ? $pValue['dis_price'] : $pValue['priceAD']);
-					$productsArray[] = "('".$insertId."','".$doc['time']['created']."','".$doc['store_id']."','".$doc['store_name']."','".$pValue['id']."','".$pValue['name']."','".$pValue['category_id']."','".$pValue['category_name']."', '".$pValue['recipe_id']."','".$pValue['qty']."','".$pValue['price']."','".$pValue['tax']."','".$pValue['priceBT']."','".$pValue['discount']."','".$pValue['discountAmount']."','".$pValue['taxAbleAmount']."','".$pValue['taxAmount']."','".$pValue['netAmount']."','".$priceAD."','".$pValue['subTotal']."')";
+					$priceBT = (!empty($pValue['priceBT']) ? $pValue['priceBT'] : $pValue['ABP']);
+					$productsArray[] = "('".$insertId."','".$doc['time']['created']."','".$doc['store_id']."','".$doc['store_name']."','".$pValue['id']."','".$pValue['name']."','".$pValue['category_id']."','".$pValue['category_name']."', '".$pValue['recipe_id']."','".$pValue['qty']."','".$pValue['price']."','".$pValue['tax']."','".$pValue['serviceTax']."','".$pValue['serviceTaxAmount']."','".$priceBT."','".$pValue['discount']."','".$pValue['discountAmount']."','".$pValue['taxAbleAmount']."','".$pValue['taxAmount']."','".$pValue['netAmount']."','".$priceAD."','".$pValue['subTotal']."')";
 				}
 				$logger->debug("INSERT ORDER PRODUCT ARRAY ".json_encode($productsArray));		
 				if(count($productsArray) > 0){
-					$insertProducst = 'INSERT INTO cp_pos_storeorders_products (order_id, bill_date, store_id, store_name, product_id, product_name, category_id, category_name, recipe_id, qty, price, tax, priceBT, discount, discount_amount, taxable_amount, tax_amount, net_amount, priceAD, subTotal) values '.implode(',',$productsArray);
+					$insertProducst = 'INSERT INTO cp_pos_storeorders_products (order_id, bill_date, store_id, store_name, product_id, product_name, category_id, category_name, recipe_id, qty, price, tax, service_tax, service_tax_amount, priceBT, discount, discount_amount, taxable_amount, tax_amount, net_amount, priceAD, subTotal) values '.implode(',',$productsArray);
 					$res = $db->db_query($insertProducst);	
 				    $returnResult = $couch->getDesign('design_ho')->getUpdate('insert_mysql_id', $docsData['_id'])->setParam(array('mysql_id'=>$insertId))->execute();				
 				    if($res){				    	
