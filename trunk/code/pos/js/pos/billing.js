@@ -1,11 +1,14 @@
 var $billingItems = new Object();
 var $totalBillItems = 0;
 var $totalTaxAmount = 0.0;
+var $totalVatTaxAmount = 0.0;
+var $totalServiceTaxAmount = 0.0;
 var $totalBillCostAfterTaxAD = 0.0;
 var $totalAmountWOT = 0.0;
 var $totalAmountWT = 0.0;
 var $totalBillQty = 0;
 var $intDiscount = 0;
+var serviceTax = 0;
 var $totalDiscountAmount = 0.0;
 var order = 0;
 var loadedBill = null;
@@ -13,7 +16,7 @@ var cawBill = null;
 var modifyBill = false;
 var popupKeyboard = null;
 
-$(document).ready(function(){  //alert(exeMode); alert(printUtility); return false;
+$(document).ready(function(){  
 	var url = $.url();
 	$(this).attr("title", "Shark |ChaiPoint POS| Billing"); 
 	/*
@@ -41,7 +44,17 @@ $(document).ready(function(){  //alert(exeMode); alert(printUtility); return fal
 
 
 	}
-
+	
+	/* Function To Add Discount */
+	$('#apply_discount').click(function(){ 
+		discount('add');
+	});
+	
+	/* Function To Remove Discount */
+	$('#remove_discount').click(function(){
+		discount('remove');
+	});
+	
 	var url = $.url(window.location);
 	order = url.param('order');
 	if(order && order > 0 && ! isNaN(order)){ 
@@ -50,8 +63,8 @@ $(document).ready(function(){  //alert(exeMode); alert(printUtility); return fal
 		*/
 		loadedBill = new Object();
 		var orderData = $.parseJSON(localStorage.getItem(order));
-		loadedBill = orderData;
-		
+		loadedBill = orderData;//alert(JSON.stringify(orderData));
+		//serviceTax = coc_tax;
 		if(orderData){
 			var productNewList = new Object();
 			$.each(productArray, function(index, data){
@@ -65,10 +78,14 @@ $(document).ready(function(){  //alert(exeMode); alert(printUtility); return fal
 			
 			$.each(orderData.products, function (index, data){
 				var productData = productArray[productNewList[data['id']].cat] [productNewList[data['id']].seq];
-				//$('#proajax button[category-product-sequence="'+productNewList[data['id']].seq+'"]').addClass('active-btn');
 				$('#proajax button[value="'+data['id']+'"]').addClass('active-btn');
 				generateSalesTable(data['id'], parseInt(data['qty']), productData);
+				
 			});
+			if(orderData['coupon_code']!=''){ //alert('hi');
+					$('#discount_input_box').val(orderData['coupon_code']);
+					$('#apply_discount').trigger('click');
+				}
 		}
 	}
 	
@@ -83,18 +100,20 @@ $(document).ready(function(){  //alert(exeMode); alert(printUtility); return fal
 		cawBill = new Object();
 		var orderData = $.parseJSON(localStorage.getItem(cawOrder));
 		cawBill = orderData;
+		
 		if(orderData){
 			$.ajax({
 				type: 'POST',
 				url: "index.php?dispatch=billing.getCawProduct",
 				data : {request_type:'getCawProduct', 'customer_id':orderData.mysql_id},
-			}).done(function(response) { //alert(response); return false;  
+			}).done(function(response) {   
 				console.log(response);
 				var $result = $.parseJSON(response);
 				if($result.error){ 
 					bootbox.alert($result.message);
 					return false;
 				}
+				
 				productArray = $.extend(true, productArray ,$.parseJSON($result.data));
 				console.log(productArray);
 				var productNewList = new Object();
@@ -230,52 +249,6 @@ $(document).ready(function(){  //alert(exeMode); alert(printUtility); return fal
 		
 	});
 	
-	$('#apply_discount').click(function(){
-		var discount_code = $('#discount_input_box').val();
-		var business_type = 'Walk-in';
-		var url = $.url(window.location);
-		var coc = url.param('order');
-		var caw = url.param('cawOrder');
-		if(coc){
-			business_type = 'COC';
-		}else if(caw){
-			business_type = 'CAW';
-		}
-		
-		if(discount_code){
-			$("#ajaxfadediv").addClass('ajaxfadeclass');
-			$.ajax({
-				type: 'POST',
-				url: "index.php?dispatch=billing.getCoupanCode",
-				data : {'coupan_code':discount_code, 'business_type':business_type},
-				timeout:10000
-				}).done(function(response) {
-					$("#ajaxfadediv").removeClass('ajaxfadeclass');
-					$result = $.parseJSON(response);
-					if($result.error){
-						bootbox.alert($result.message);
-					}else if(!$result.error){
-						$intDiscount = $result.data['discount_amount'];
-						generateSalesTable('','','apply_discount');
-						$('#coupon_code').val(discount_code);
-						$('#apply_discount').addClass('hide');
-						$('#remove_discount').removeClass('hide');
-					}
-				});
-			//$('#discount_input_box').val('');
-		}
-	});
-	
-	$('#remove_discount').click(function(){
-		$intDiscount = 0;
-		generateSalesTable('', '' , 'apply_discount');
-		$('#apply_discount').removeClass('hide');
-		$('#remove_discount').addClass('hide');
-		$('#coupon_code').val('');
-		$('#discount_input_box').val('');
-	});
-	
-	
 	//---START--- Initial Configurations on Load Of Page
 	//---START--- Categories Silder Starts
 	/*On Load of DOM Manages Categores Silder*/
@@ -370,6 +343,9 @@ $(document).ready(function(){  //alert(exeMode); alert(printUtility); return fal
 			});
 			delete $billingItems[pID];
 			generateSalesTable();
+			if($('#discount_input_box').val()){
+				$('#apply_discount').trigger('click');
+			}
 		});
 
 		$("#saletbl").on("change",".bill_qty_input",function(event){ 
@@ -377,6 +353,9 @@ $(document).ready(function(){  //alert(exeMode); alert(printUtility); return fal
 			newQty = isNaN(newQty) ? 0 : newQty;
 			var pID = $(this).closest('tr').attr('billing-product');
 			generateSalesTable(pID, newQty);
+			if($('#discount_input_box').val()){
+				$('#apply_discount').trigger('click');
+			}
 			event.preventDefault();
 		});
 
@@ -802,6 +781,8 @@ $(document).ready(function(){  //alert(exeMode); alert(printUtility); return fal
 
 			billDetails.total_qty = $totalBillQty;
 			billDetails.sub_total = $totalAmountWOT.toFixed(2);
+			billDetails.total_vat_tax = ($totalVatTaxAmount).toFixed(2);
+			billDetails.total_service_tax = ($totalServiceTaxAmount).toFixed(2);
 			billDetails.total_tax = ($totalTaxAmount).toFixed(2);
 			billDetails.discount = $intDiscount;
 			billDetails.total_discount = ($totalDiscountAmount).toFixed(2);
@@ -913,13 +894,14 @@ $(document).ready(function(){  //alert(exeMode); alert(printUtility); return fal
 			$viewData = '<table class="table table-striped table-condensed table-hover protable small" width="100%" border="0" cellspacing="0" cellpadding="0">'+
 							'<thead>'+
 								'<tr class="active">'+
-									'<th>Product Name</th><th>Menu Price</th><th>Price After Discount</th><th>Price Before Tax</th><th>Qty</th><th>Tax %</th><th>Tax</th><th>Sub Total</th><th>Discount</th><th>Net Amount</th>'+
+									'<th>Product Name</th><th>Menu Price</th><th>Price After Discount</th><th>Actual Base Price</th><th>Qty</th><th>Tax %</th><th>Tax</th><th>Service Tax%</th><th>Service Tax</th><th>Sub Total</th><th>Discount</th><th>Net Amount</th>'+
 								'</tr>'+
 							'</thead>'+
 						'<tbody>';
 						var qty = 0;
 						var netAmount = 0.0;
 						var taxAmount = 0.0;
+						var serviceTaxAmount = 0.0;
 						var discountAmount = 0.0;
 						var subTotalSum = 0.0;
 						var priceAfterDiscount = 0.0;
@@ -927,12 +909,13 @@ $(document).ready(function(){  //alert(exeMode); alert(printUtility); return fal
 				$viewData += '<tr class="text-right">'+
 								'<td class="text-left">'+data.name+'</td>'+
 								'<td>'+(parseFloat(data.price)).toFixed(2)+'</td>'+
-								'<td>'+(parseFloat(data.dis_price)).toFixed(2)+'</td>'+
-								'<td>'+(parseFloat(data.priceBT)).toFixed(2)+'</td>'+
+								'<td>'+(parseFloat(data.discount_price)).toFixed(2)+'</td>'+
+								'<td>'+(parseFloat(data.ABP)).toFixed(2)+'</td>'+
 								'<td>'+data.qty+'</td>'+
 								'<td>'+(((data.tax) ? data.tax : 0) * 100).toFixed(2)+'</td>'+
 								'<td>'+(parseFloat(data.taxAmount)).toFixed(2)+'</td>'+
-								
+								'<td>'+(parseFloat(data.serviceTax)).toFixed(2)+'</td>'+
+								'<td>'+(parseFloat(data.serviceTaxAmount)).toFixed(2)+'</td>'+
 								'<td>'+((parseFloat(data.subTotal))).toFixed(2)+'</td>'+
 								'<td>'+(parseFloat(data.discountAmount)).toFixed(2)+'</td>'+
 								'<td>'+(parseFloat(data.netAmount)).toFixed(2)+'</td>'+
@@ -940,15 +923,16 @@ $(document).ready(function(){  //alert(exeMode); alert(printUtility); return fal
 							qty += parseInt(data.qty);
 							netAmount += data.netAmount;
 							taxAmount += (data.taxAmount);
+							serviceTaxAmount += (data.serviceTaxAmount);
 							discountAmount += (data.discountAmount);
 							subTotalSum += ((parseFloat(data.subTotal)));
 							priceAfterDiscount += (parseFloat(data.priceAD));
-										console.log(data.priceBT);
+							
 										//'+(priceAfterDiscount).toFixed(2)+'
 
 			});
 			$viewData += '</tbody>'+
-						'<tfoot><tr class="active"><th>Total</th><th></th><th></th><th class="text-right"></th><th class="text-right">'+qty+'</th><th class="text-right"></th><th class="text-right">'+(taxAmount).toFixed(2)+'</th><th class="text-right">'+subTotalSum.toFixed(2)+'</th><th class="text-right">'+(discountAmount).toFixed(2)+'</th><th class="text-right">'+(netAmount).toFixed(2)+'</th></tr></tfoot>'
+						'<tfoot><tr class="active"><th>Total</th><th></th><th></th><th class="text-right"></th><th class="text-right">'+qty+'</th><th class="text-right"></th><th class="text-right">'+(taxAmount).toFixed(2)+'</th><th class="text-right"></th><th class="text-right">'+(serviceTaxAmount).toFixed(2)+'</th><th class="text-right">'+subTotalSum.toFixed(2)+'</th><th class="text-right">'+(discountAmount).toFixed(2)+'</th><th class="text-right">'+(netAmount).toFixed(2)+'</th></tr></tfoot>'
 						+'</table>';
 
 			bootbox.dialog({
@@ -981,12 +965,15 @@ $(document).ready(function(){  //alert(exeMode); alert(printUtility); return fal
 				var productID = productData.mysql_id;
 				var newQty = (productID in $billingItems) ? ($billingItems[productID].qty + 1) : 1;
 				generateSalesTable(productID, newQty, productData);
+				if($('#discount_input_box').val()){
+					discount('add', true);
+				}
 		});	
 
 
 });
-function generateSalesTable(productId, qty, productData){
-	//alert(JSON.stringify(productId));alert(JSON.stringify(qty));alert(JSON.stringify(productData));
+function generateSalesTable(productId, qty, productData){ 
+	
 	var addAtLast = false;
 	if(productData){
 		addAtLast = true;
@@ -996,6 +983,7 @@ function generateSalesTable(productId, qty, productData){
 		applyDiscount = true;
 	}
 	resetBill(false);
+	
 	var productID = (productId) ? productId : 0;
 	var  newqty = 0;
 	if(productID && productID > 0){
@@ -1008,35 +996,43 @@ function generateSalesTable(productId, qty, productData){
 			$billingItems[productID].id = productID;
 			$billingItems[productID].name = productData.name;
 			$billingItems[productID].price = isNaN(productData.price * 1) ? 0 : productData.price;
+			productData.service_tax = (productData.service_tax) ? productData.service_tax : 0;
+			
 			if($intDiscount!=0){ 
-				$billingItems[productID].dis_price = decimalAdjust(productData.price - (productData.price  * $intDiscount/100 ) , -2);
+				$billingItems[productID].discount_price = decimalAdjust(productData.price - (productData.price  * $intDiscount/100 ) , -2);
 			}else{
-				$billingItems[productID].dis_price = isNaN(productData.price * 1) ? 0 : productData.price;
+				$billingItems[productID].discount_price = isNaN(productData.price * 1) ? 0 : productData.price;
 			}
-			$billingItems[productID].priceBT = decimalAdjust((productData.tax.rate) ? ($billingItems[productID].dis_price - ( $billingItems[productID].dis_price * parseFloat(productData.tax.rate) )) : $billingItems[productID].dis_price , -2);
-			$billingItems[productID].taxAbleAmount = $billingItems[productID].priceBT;
+			
+			$billingItems[productID].ABP = decimalAdjust((productData.tax.rate) ? ($billingItems[productID].discount_price/((parseFloat(productData.tax.rate) * 100) + (parseFloat(productData.service_tax)) + 100)) * 100 : ($billingItems[productID].discount_price/((parseFloat(productData.service_tax)) + 100)) * 100 ,-2);
+			
+			$billingItems[productID].taxAbleAmount = $billingItems[productID].ABP;
 			$billingItems[productID].qty = newqty;
 			$billingItems[productID].tax = productData.tax.rate;
+			$billingItems[productID].serviceTax = parseFloat(productData.service_tax);
+			$billingItems[productID].discount = $intDiscount;
 
 		}else{
 			$billingItems[productID].qty = newqty;
 		}
 	} else if(applyDiscount){
 		for(var index in $billingItems){
-			$billingItems[index].dis_price = decimalAdjust($billingItems[index].price - ($billingItems[index].price  * $intDiscount/100 ) , -2);
-			$billingItems[index].priceBT = decimalAdjust(($billingItems[index].tax) ? ($billingItems[index].dis_price - ( $billingItems[index].dis_price * parseFloat($billingItems[index].tax) )) : $billingItems[index].dis_price , -2);
-			$billingItems[index].taxAbleAmount = $billingItems[index].priceBT;
+			$billingItems[index].discount_price = decimalAdjust($billingItems[index].price - ($billingItems[index].price  * $billingItems[index].discount/100 ) , -2);
+			$billingItems[index].ABP = decimalAdjust(($billingItems[index].tax) ? ($billingItems[index].discount_price/((parseFloat($billingItems[index].tax) * 100) + (parseFloat($billingItems[index].serviceTax)) + 100)) * 100 : ($billingItems[index].discount_price/((parseFloat($billingItems[index].serviceTax)) + 100)) * 100 ,-2);
+			$billingItems[index].taxAbleAmount = $billingItems[index].ABP;
 		}
-	}
+	 }
 
 	var tableRows = '';
-	for(var index in $billingItems){
-			$billingItems[index].discount = $intDiscount;
-			$billingItems[index].subTotal = $billingItems[index].qty * $billingItems[index].priceBT;
+	//alert(JSON.stringify($billingItems));
+	for(var index in $billingItems){ 
+			//$billingItems[index].discount = $intDiscount;
+			$billingItems[index].subTotal = $billingItems[index].qty * $billingItems[index].ABP;
 			$billingItems[index].discountAmount = $billingItems[index].price * $billingItems[index].qty * $billingItems[index].discount/100;
-			$billingItems[index].priceAD = $billingItems[index].subTotal ;
-			$billingItems[index].taxAmount = ($billingItems[index].price * $billingItems[index].qty * ($billingItems[index].tax)) - (($billingItems[index].price * $billingItems[index].qty * ($billingItems[index].tax)) * $billingItems[index].discount /100); 
-			$billingItems[index].netAmount = $billingItems[index].priceAD + $billingItems[index].taxAmount;
+			$billingItems[index].priceAD = $billingItems[index].discount_price ;
+			$billingItems[index].taxAmount = $billingItems[index].ABP * $billingItems[index].tax * $billingItems[index].qty;
+			$billingItems[index].serviceTaxAmount = $billingItems[index].ABP * $billingItems[index].serviceTax/100 * $billingItems[index].qty;
+			$billingItems[index].netAmount = $billingItems[index].subTotal + $billingItems[index].taxAmount + $billingItems[index].serviceTaxAmount;
 		if(productID != index){
 			tableRows +='<tr billing-product="'+index+'">'+
 				'<td style="width:9%"><span class="glyphicon glyphicon-remove-sign del_row" style="font-size:1.4em"></span></td>'+
@@ -1048,10 +1044,13 @@ function generateSalesTable(productId, qty, productData){
 		$totalBillQty += parseInt($billingItems[index].qty);
 		$totalAmountWOT += ($billingItems[index].subTotal);
 		$totalAmountWT += $billingItems[index].netAmount;
-		$totalTaxAmount += $billingItems[index].taxAmount;
+		$totalTaxAmount += $billingItems[index].taxAmount + $billingItems[index].serviceTaxAmount;
+		$totalVatTaxAmount += $billingItems[index].taxAmount;
+		$totalServiceTaxAmount += $billingItems[index].serviceTaxAmount;
 		$totalDiscountAmount += ($billingItems[index].discountAmount );
 
 	}
+	//alert(JSON.stringify($billingItems));
 	if(productID>0){
 			tableRows +='<tr billing-product="'+productID+'">'+
 				'<td style="width:9%"><span class="glyphicon glyphicon-remove-sign del_row" style="font-size:1.4em"></span></td>'+
@@ -1090,6 +1089,8 @@ function resetBill(refresh){
 	$totalAmountWOT = 0.0;
 	$totalAmountWT = 0.0;
 	$totalTaxAmount = 0.0;
+	$totalVatTaxAmount = 0.0;
+	$totalServiceTaxAmount = 0.0;
 	$totalDiscountAmount = 0.0;
 	$("#count").text($totalBillQty);		
 	$("#total").text($totalAmountWOT);
@@ -1109,4 +1110,109 @@ function getCawProduct(customer_id){
  alert(customer_id);
 }
 
-
+function discount(action, flag){
+	var discount_code = $('#discount_input_box').val();
+	var business_type = 227;
+	var channel_type = 230;
+	var bill_amount = $('#total-payable').text();
+	var url = $.url(window.location);
+	var coc = url.param('order');
+	var caw = url.param('cawOrder');
+	if(coc){
+		business_type = 228;
+		var orderData = $.parseJSON(localStorage.getItem(order));
+		channel_type = orderData['channel_id'];
+	}else if(caw){
+		business_type = 229;
+		channel_type = 231;
+	}
+		
+	if(discount_code && action){
+		$("#ajaxfadediv").addClass('ajaxfadeclass');
+		$.ajax({
+			type: 'POST',
+			url: "index.php?dispatch=billing.getCoupanCode",
+			data : {'coupan_code':discount_code, 'business_type':business_type, 'channel_type':channel_type, 'bill_amount':bill_amount},
+			timeout:10000
+		}).done(function(response) {
+				console.log($billingItems);
+				$("#ajaxfadediv").removeClass('ajaxfadeclass');
+				$result = $.parseJSON(response);
+				if($result.error && !flag){
+					bootbox.alert($result.message);
+				}else if(!$result.error && $result.data['is_product']=='N' && $result.data['discount_type']=='P' && action=='add'){
+					for(var index in $billingItems){
+						$billingItems[index].discount = $result.data['discount_value'];
+					}
+				}else if(!$result.error && $result.data['is_product']=='N' && $result.data['discount_type']=='P' && action=='remove'){
+					for(var index in $billingItems){
+						$billingItems[index].discount = 0;
+					}
+				}else if(!$result.error && $result.data['is_product']=='N' && $result.data['discount_type']=='V' && action=='add'){
+					for(var index in $billingItems){
+						$billingItems[index].discount = $result.data['discount_value'];
+					}
+				}else if(!$result.error && $result.data['is_product']=='N' && $result.data['discount_type']=='V' && action=='remove'){
+					for(var index in $billingItems){
+						$billingItems[index].discount = 0;
+					}
+				}else if(!$result.error && $result.data['is_product']=='Y'){
+						$data = $result.data['discount_data'];
+						for(var index in $data){
+							
+							if($data[index].product_id in $billingItems && $data[index].product_qty <= $billingItems[$data[index].product_id].qty && $data[index].product_discount_type == 'F' && action=='add'){
+								product_id = $data[index].free_productid;
+								var reminder = parseInt($billingItems[$data[index].product_id].qty/$data[index].product_qty);
+								var addobj = {};
+								addobj[product_id] = {"category_id":0, "category_name":'', "recipe_id":"", "id":$data[index].free_productid, "name":$data[index].free_productname, "price":0, "discount_price":0, "ABP":0, "taxAbleAmount":"", "qty":$data[index].free_productqty * reminder, "tax":"0", "serviceTax":"0", "discount":"100"};
+								$.extend($billingItems, addobj);
+								
+							}else if($data[index].product_id in $billingItems && $data[index].product_qty <= $billingItems[$data[index].product_id].qty && $data[index].product_discount_type == 'F' && action=='remove'){
+								product_id = $data[index].free_productid;
+								delete $billingItems[product_id];
+								
+							}else if($data[index].product_id in $billingItems && $data[index].product_qty > $billingItems[$data[index].product_id].qty && $data[index].product_discount_type == 'F' && action=='add'){
+								product_id = $data[index].free_productid;
+								delete $billingItems[product_id];
+								
+							}else if($data[index].product_id in $billingItems && $data[index].product_qty <= $billingItems[$data[index].product_id].qty && $data[index].product_discount_type == 'P' && action=='add'){
+								var reminder = parseInt($billingItems[$data[index].product_id].qty/$data[index].product_qty);
+								var discountAmount = $billingItems[$data[index].product_id].price * reminder * $data[index].product_discount/100;
+								//alert(reminder); alert(discountAmount);
+								$billingItems[$data[index].product_id].discount = $data[index].product_discount;
+							
+							}else if($data[index].product_id in $billingItems && $data[index].product_qty > $billingItems[$data[index].product_id].qty && $data[index].product_discount_type == 'P' && action=='add'){
+								$billingItems[$data[index].product_id].discount = 0;
+								
+							}else if($data[index].product_id in $billingItems && $data[index].product_qty <= $billingItems[$data[index].product_id].qty && $data[index].product_discount_type == 'P' && action=='remove'){
+								$billingItems[$data[index].product_id].discount = 0;
+							
+							}else if($data[index].product_id in $billingItems && $data[index].product_qty <= $billingItems[$data[index].product_id].qty && $data[index].product_discount_type == 'V' && action=='add'){
+								$billingItems[$data[index].product_id].price = $billingItems[$data[index].product_id].price - $data[index].product_discount;
+							
+							}else if($data[index].product_id in $billingItems && $data[index].product_qty > $billingItems[$data[index].product_id].qty && $data[index].product_discount_type == 'V' && action=='add'){
+								$billingItems[$data[index].product_id].price = parseInt($billingItems[$data[index].product_id].price) + parseInt($data[index].product_discount);
+							
+							}else if($data[index].product_id in $billingItems && $data[index].product_qty <= $billingItems[$data[index].product_id].qty && $data[index].product_discount_type == 'V' && action=='remove'){
+								$billingItems[$data[index].product_id].price = parseInt($billingItems[$data[index].product_id].price) + parseInt($data[index].product_discount);
+							
+							}
+							
+						}
+					}
+					generateSalesTable('','','apply_discount');
+					if(action=='add'){
+						$('#coupon_code').val(discount_code);
+						$('#apply_discount').addClass('hide');
+						$('#remove_discount').removeClass('hide');
+					}else if(action=='remove'){
+						$('#apply_discount').removeClass('hide');
+						$('#remove_discount').addClass('hide');
+						$('#coupon_code').val('');
+						$('#discount_input_box').val('');
+						
+					}
+				});
+			//$('#discount_input_box').val('');
+		}
+	}
