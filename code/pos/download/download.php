@@ -408,12 +408,12 @@ function updateStore($location_id){
 							}
 						
 							
-				    $products = "select pm.id, if(cpsp.display_name = '' or cpsp.display_name is null,
+				    $products = "SELECT pm.id, if(cpsp.display_name = '' or cpsp.display_name is null,
 				                 pm.display_name, cpsp.display_name) name, pm.sequence, 
 				                 cpsp.store_id, pm.code, if(cpsp.price is null, pm.price,if(cpsp.price = 0, 'R' , cpsp.price)) price, 
 				                 ctm.name tax, ctm.id tax_id,  crm.name category, crm.id as category_id, ctm.rate tax_rate, 
-                                 pm.packaging, pm.is_coc, pm.is_foe, pm.is_web, pm.product_image image, cpsp.base_price_per, cpsp.service_charge_per
-								 from product_master pm
+                                 pm.packaging, pm.is_coc, pm.is_foe, pm.is_web, pm.product_image image, IF(cpsp.service_tax_rate IS NULL,0,cpsp.service_tax_rate) service_tax_rate
+								 FROM product_master pm
 								 LEFT JOIN cp_product_store_price cpsp on cpsp.product_id = pm.id and cpsp.store_id = ".$storeDetails['mysql_id']." and cpsp.active = 'Y'
 						     	 LEFT JOIN cp_tax_master ctm on ctm.id = if(cpsp.price is null, pm.tax,cpsp.tax_rate)
 								 LEFT JOIN cp_reference_master crm on crm.id = pm.type 
@@ -434,8 +434,8 @@ function updateStore($location_id){
 										$updateArray[$i]['menu_items'][$j]['tax']['id'] = $productDetails['tax_id'];
 										$updateArray[$i]['menu_items'][$j]['tax']['name'] = $productDetails['tax'];
 										$updateArray[$i]['menu_items'][$j]['tax']['rate'] = $productDetails['tax_rate'];
-										$updateArray[$i]['menu_items'][$j]['base_price_per'] = $productDetails['base_price_per'];
-										$updateArray[$i]['menu_items'][$j]['service_charge_per'] = $productDetails['service_charge_per'];
+										$updateArray[$i]['menu_items'][$j]['service_tax'] = $productDetails['service_tax_rate'];
+										//$updateArray[$i]['menu_items'][$j]['service_charge_per'] = $productDetails['service_charge_per'];
 										$updateArray[$i]['menu_items'][$j]['category']['id'] = $productDetails['category_id'];
 										$updateArray[$i]['menu_items'][$j]['category']['name'] = $productDetails['category'];
 										$updateArray[$i]['menu_items'][$j]['packaging'] = $productDetails['packaging'];
@@ -481,22 +481,46 @@ function updateStore($location_id){
 								$l++;
 							}
 							
-							$getCoupon = "SELECT id, business_type, coupon_code, coupon_type, coupon_value,
-											from_dt, to_dt, active 
-											FROM `cp_store_discount` 
-											WHERE store_id = '".$storeDetails['mysql_id']."' AND active = 'Y'
-											";
-							$couponList = mysql_query($getCoupon);
-							$m = 0;
-							while ($row = mysql_fetch_assoc($couponList)) {
-								$updateArray[$i]['discount_coupon'][$m]['id'] = $row['id'];
-								$updateArray[$i]['discount_coupon'][$m]['business_type'] = $row['business_type']; 
-								$updateArray[$i]['discount_coupon'][$m]['coupon_code'] = $row['coupon_code'];
-								$updateArray[$i]['discount_coupon'][$m]['coupon_type'] = $row['coupon_type'];
-								$updateArray[$i]['discount_coupon'][$m]['coupon_value'] = $row['coupon_value'];
-								$updateArray[$i]['discount_coupon'][$m]['start_date'] = $row['from_dt'];
-								$updateArray[$i]['discount_coupon'][$m]['end_date'] = $row['to_dt'];
-								$updateArray[$i]['discount_coupon'][$m]['active'] = $row['active'];
+							$getCoupon = "SELECT * FROM `coupan_master` 
+										  WHERE store_id = '".$storeDetails['mysql_id']."' 
+						                  AND active = 'Y' ";
+			                $couponList = mysql_query($getCoupon);
+			                $m = 0;
+			
+			                while ($row = mysql_fetch_assoc($couponList)) { 
+								$updateArray[$i]['coupon_master'][$m]['id'] = $row['id'];
+								$updateArray[$i]['coupon_master'][$m]['coupon_code'] = $row['coupan_code'];
+								$updateArray[$i]['coupon_master'][$m]['start_date'] = $row['start_date'];
+								$updateArray[$i]['coupon_master'][$m]['end_date'] = $row['end_date'];
+								$updateArray[$i]['coupon_master'][$m]['start_time'] = $row['start_time'];
+								$updateArray[$i]['coupon_master'][$m]['end_time'] = $row['end_time'];
+								$updateArray[$i]['coupon_master'][$m]['start_price'] = $row['start_price'];
+								$updateArray[$i]['coupon_master'][$m]['end_price'] = $row['end_price'];
+								$updateArray[$i]['coupon_master'][$m]['biz_type'] = $row['biz_type'];
+								$updateArray[$i]['coupon_master'][$m]['channel'] = $row['channel'];
+								$updateArray[$i]['coupon_master'][$m]['week_days'] = $row['week_days'];
+								$updateArray[$i]['coupon_master'][$m]['is_product'] = $row['is_product'];
+								$updateArray[$i]['coupon_master'][$m]['coupon_type'] = $row['coupan_type'];
+								$updateArray[$i]['coupon_master'][$m]['discount_amount'] = $row['discount_amount'];
+								$updateArray[$i]['coupon_master'][$m]['active'] = $row['active'];
+								
+								$getCoupanDetails = "SELECT * FROM coupan_details WHERE coupan_code = '".$row['coupan_code']."' ";
+								$detailList = mysql_query($getCoupanDetails);
+								$n=0;
+								while ($row = mysql_fetch_assoc($detailList)) {
+									//$updateArray[$i]['coupon_detail']['coupon_code'][$m]['id'] = $row['id'];
+									$updateArray[$i]['coupon_detail'][$row['coupan_code']][$n]['coupon_code'] = $row['coupan_code'];
+									$updateArray[$i]['coupon_detail'][$row['coupan_code']][$n]['product_code'] = $row['product_code'];
+									$updateArray[$i]['coupon_detail'][$row['coupan_code']][$n]['product_id'] = $row['product_id'];
+									$updateArray[$i]['coupon_detail'][$row['coupan_code']][$n]['product_qty'] = $row['product_qty'];
+									$updateArray[$i]['coupon_detail'][$row['coupan_code']][$n]['product_discount_type'] = $row['product_discount_type'];
+									$updateArray[$i]['coupon_detail'][$row['coupan_code']][$n]['product_discount'] = $row['product_discount'];
+									$updateArray[$i]['coupon_detail'][$row['coupan_code']][$n]['free_productcode'] = $row['free_productcode'];
+									$updateArray[$i]['coupon_detail'][$row['coupan_code']][$n]['free_productid'] = $row['free_productid'];
+									$updateArray[$i]['coupon_detail'][$row['coupan_code']][$n]['free_productname'] = $row['free_productname'];
+									$updateArray[$i]['coupon_detail'][$row['coupan_code']][$n]['free_productqty'] = $row['free_productqty'];
+									$n++;
+								}
 								$m++;
 							}
 				
@@ -697,8 +721,8 @@ function updateConfig(){
 				                 pm.display_name, cpsp.display_name) name, pm.sequence, 
 				                 cpsp.store_id, pm.code, if(cpsp.price is null, pm.price,if(cpsp.price = 0, 'R' , cpsp.price)) price, 
 				                 ctm.name tax, ctm.id tax_id,  crm.name category, crm.id as category_id, ctm.rate tax_rate, 
-                                 pm.packaging, pm.is_coc, pm.is_foe, pm.is_web, pm.product_image image, cpsp.base_price_per, cpsp.service_charge_per  
-								 from product_master pm
+                                 pm.packaging, pm.is_coc, pm.is_foe, pm.is_web, pm.product_image image, IF(cpsp.service_tax_rate IS NULL,0,cpsp.service_tax_rate) service_tax_rate
+								 FROM product_master pm
 								 LEFT JOIN cp_product_store_price cpsp on cpsp.product_id = pm.id and cpsp.store_id = ".$storeDetails['mysql_id']." and cpsp.active = 'Y'
 						     	 LEFT JOIN cp_tax_master ctm on ctm.id = if(cpsp.price is null, pm.tax,cpsp.tax_rate)
 								 LEFT JOIN cp_reference_master crm on crm.id = pm.type 
@@ -719,8 +743,8 @@ function updateConfig(){
 					$updateArray[$i]['menu_items'][$j]['tax']['id'] = $productDetails['tax_id'];
 					$updateArray[$i]['menu_items'][$j]['tax']['name'] = $productDetails['tax'];
 					$updateArray[$i]['menu_items'][$j]['tax']['rate'] = $productDetails['tax_rate'];
-					$updateArray[$i]['menu_items'][$j]['base_price_per'] = $productDetails['base_price_per'];
-					$updateArray[$i]['menu_items'][$j]['service_charge_per'] = $productDetails['service_charge_per'];
+					$updateArray[$i]['menu_items'][$j]['service_tax'] = $productDetails['service_tax_rate'];
+					//$updateArray[$i]['menu_items'][$j]['service_charge_per'] = $productDetails['service_charge_per'];
 					$updateArray[$i]['menu_items'][$j]['category']['id'] = $productDetails['category_id'];
 					$updateArray[$i]['menu_items'][$j]['category']['name'] = $productDetails['category'];
 					$updateArray[$i]['menu_items'][$j]['packaging'] = $productDetails['packaging'];
@@ -766,24 +790,51 @@ function updateConfig(){
 				$l++;
 			}
 			
-			$getCoupon = "SELECT id, business_type, coupon_code, coupon_type, coupon_value,
-						  from_dt, to_dt, active 
-						  FROM `cp_store_discount` 
-						  WHERE store_id = '".$storeDetails['mysql_id']."' AND active = 'Y'
-						  ";//AND from_dt >= CURDATE() AND to_dt <= CURDATE()//
+			$getCoupon = "SELECT * FROM `coupan_master` 
+						  WHERE store_id = '".$storeDetails['mysql_id']."' 
+						  AND active = 'Y' ";
 			$couponList = mysql_query($getCoupon);
 			$m = 0;
-			while ($row = mysql_fetch_assoc($couponList)) {
-				$updateArray[$i]['discount_coupon'][$m]['id'] = $row['id'];
-				$updateArray[$i]['discount_coupon'][$m]['business_type'] = $row['business_type']; 
-				$updateArray[$i]['discount_coupon'][$m]['coupon_code'] = $row['coupon_code'];
-				$updateArray[$i]['discount_coupon'][$m]['coupon_type'] = $row['coupon_type'];
-				$updateArray[$i]['discount_coupon'][$m]['coupon_value'] = $row['coupon_value'];
-				$updateArray[$i]['discount_coupon'][$m]['start_date'] = $row['from_dt'];
-				$updateArray[$i]['discount_coupon'][$m]['end_date'] = $row['to_dt'];
-				$updateArray[$i]['discount_coupon'][$m]['active'] = $row['active'];
+			
+			while ($row = mysql_fetch_assoc($couponList)) { 
+				$updateArray[$i]['coupon_master'][$m]['id'] = $row['id'];
+				$updateArray[$i]['coupon_master'][$m]['coupon_code'] = $row['coupan_code'];
+				$updateArray[$i]['coupon_master'][$m]['start_date'] = $row['start_date'];
+				$updateArray[$i]['coupon_master'][$m]['end_date'] = $row['end_date'];
+				$updateArray[$i]['coupon_master'][$m]['start_time'] = $row['start_time'];
+				$updateArray[$i]['coupon_master'][$m]['end_time'] = $row['end_time'];
+				$updateArray[$i]['coupon_master'][$m]['start_price'] = $row['start_price'];
+				$updateArray[$i]['coupon_master'][$m]['end_price'] = $row['end_price'];
+				$updateArray[$i]['coupon_master'][$m]['biz_type'] = $row['biz_type'];
+				$updateArray[$i]['coupon_master'][$m]['channel'] = $row['channel'];
+				$updateArray[$i]['coupon_master'][$m]['week_days'] = $row['week_days'];
+				$updateArray[$i]['coupon_master'][$m]['is_product'] = $row['is_product'];
+				$updateArray[$i]['coupon_master'][$m]['coupon_type'] = $row['coupan_type'];
+				$updateArray[$i]['coupon_master'][$m]['discount_amount'] = $row['discount_amount'];
+				$updateArray[$i]['coupon_master'][$m]['active'] = $row['active'];
+				
+					$getCoupanDetails = "SELECT * FROM coupan_details WHERE coupan_code = '".$row['coupan_code']."' ";
+					$detailList = mysql_query($getCoupanDetails);
+					$n=0;
+					while ($row = mysql_fetch_assoc($detailList)) {
+						//$updateArray[$i]['coupon_detail']['coupon_code'][$m]['id'] = $row['id'];
+						$updateArray[$i]['coupon_detail'][$row['coupan_code']][$n]['coupon_code'] = $row['coupan_code'];
+						$updateArray[$i]['coupon_detail'][$row['coupan_code']][$n]['product_code'] = $row['product_code'];
+						$updateArray[$i]['coupon_detail'][$row['coupan_code']][$n]['product_id'] = $row['product_id'];
+						$updateArray[$i]['coupon_detail'][$row['coupan_code']][$n]['product_qty'] = $row['product_qty'];
+						$updateArray[$i]['coupon_detail'][$row['coupan_code']][$n]['product_discount_type'] = $row['product_discount_type'];
+						$updateArray[$i]['coupon_detail'][$row['coupan_code']][$n]['product_discount'] = $row['product_discount'];
+						$updateArray[$i]['coupon_detail'][$row['coupan_code']][$n]['free_productcode'] = $row['free_productcode'];
+						$updateArray[$i]['coupon_detail'][$row['coupan_code']][$n]['free_productid'] = $row['free_productid'];
+						$updateArray[$i]['coupon_detail'][$row['coupan_code']][$n]['free_productname'] = $row['free_productname'];
+						$updateArray[$i]['coupon_detail'][$row['coupan_code']][$n]['free_productqty'] = $row['free_productqty'];
+						$n++;
+						
+					
+					}
 				$m++;
 			}
+			
 		$i++;
 		}
 		
