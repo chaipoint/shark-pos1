@@ -4,14 +4,14 @@
 		function __construct(){
 			parent::__construct();
 			$this->log =  Logger::getLogger("CP-POS|BILLING");
-			$configResult = $this->getConfig($this->cDB, array('channel', 'bill_status', 'payment_mode', 'ppa_api', 'delivery_channel', 'company_details'));
+			$configResult = $this->getConfig($this->cDB, array('channel', 'biz_type', 'bill_status', 'payment_mode', 'ppa_api', 'delivery_channel', 'company_details'));
 			$this->configData = (count($configResult['data']) > 0) ? $configResult['data'] : array();
 		}
 
 		/* This Function Is Automatically Called When We Come On Billing Module */
 		function index(){ 
 			global $ERT_PRODUCT_ARRAY, $config;
-			$data = array('error' =>false, 'catList'=>array(), 'productList'=>array(), 'firstCat'=>0, 'config_data'=>array(), 'bill'=>array(), 'lastBillNo'=>'', 'lastBillTime'=>'');
+			$data = array('error' =>false, 'catList'=>array(), 'productList'=>array(), 'sales_tax'=>array(), 'firstCat'=>0, 'config_data'=>array(), 'bill'=>array(), 'lastBillNo'=>'', 'lastBillTime'=>'');
 			
 			if(array_key_exists('referer',$_GET) && $_GET['referer'] == HOME){
 			}else if(!array_key_exists('shift', $_SESSION['user']) || !array_key_exists('store', $_SESSION['user']) ){
@@ -48,6 +48,15 @@
 				$result = $resultStoreMenu['rows'][0]['doc'];
 				$tin_no = $result['tin_no'];
 				$stn_no = $result['stn_no'];
+				$billing_type = explode(',', $result['bill_type']);
+				/*$sales_tax = array();
+				
+				foreach($billing_type as $k=>$v){
+					$ex = explode('=', $v);
+					$sales_tax[$ex[0]] = @$ex[1];
+				}
+				*/
+				
 				$catList = array();
 				$productList = array();
 				foreach($result['menu_items'] as $key => $Items){
@@ -171,16 +180,42 @@
 			}
 			$getCoupanCode = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_MYSQL_ID)->setParam(array('include_docs'=>'true',"key"=>'"'.$_SESSION['user']['store']['id'].'"'))->execute();
 			$this->log->trace('STORE COUPAN DETAIL'."\r\n".json_encode($getCoupanCode));
+			
 			if(array_key_exists('rows', $getCoupanCode) && count($getCoupanCode['rows'])>0){
 				$doc = $getCoupanCode['rows'][0]['doc'];
-				if(array_key_exists('discount_coupon', $doc) && count($doc['discount_coupon'])>0){
-					$data = $getCoupanCode['rows'][0]['doc']['discount_coupon'];
+				if(array_key_exists('coupon_master', $doc) && count($doc['coupon_master'])>0){
+					$data = $getCoupanCode['rows'][0]['doc']['coupon_master'];
 					foreach($data as $key => $value){
 						$curdate = strtotime(date('Y-m-d'));
 						$startdate = strtotime($value['start_date']);
 						$enddate = strtotime($value['end_date']);
-						if($value['coupon_code'] == $_REQUEST['coupan_code'] && ($value['business_type'] == $_REQUEST['business_type'] || $value['business_type']=='All') && $value['active']=='Y' && $startdate <= $curdate && $enddate >= $curdate){
-							$return['data']['discount_amount'] = $value['coupon_value'];
+						
+						$curtime = strtotime(date('H:i:s'));
+						$starttime = strtotime($value['start_time']);
+						$endtime = strtotime($value['end_time']);
+						
+						$day_number = date('N', strtotime(date('d-m-Y')));
+						
+						if($startdate <= $curdate && $enddate >= $curdate 
+							&& $starttime <= $curtime && $endtime >= $curtime 
+								&& strpos($value['week_days'], $day_number) !== false 
+									&& strpos(','.$value['biz_type'].',' , ','.$_REQUEST['business_type'].',') !== FALSE
+									   && strpos(','.$value['channel'].',' , ','.$_REQUEST['channel_type'].',') !== FALSE
+										 &&	$value['active'] == 'Y'
+											&& $value['coupon_code'] == $_REQUEST['coupan_code'] 
+												&& $value['start_price'] <= $_REQUEST['bill_amount'] && $value['end_price'] >= $_REQUEST['bill_amount']){
+								if($value['is_product'] !='Y'){
+									$return['data']['is_product'] = $value['is_product'];
+									$return['data']['discount_type'] = $value['coupon_type'];
+									$return['data']['discount_value'] = $value['discount_amount'];
+								
+								}else if(array_key_exists('coupon_detail', $doc) && array_key_exists($_REQUEST['coupan_code'], $doc['coupon_detail']) ){
+									$return['data']['is_product'] = $value['is_product'];
+									$return['data']['discount_data'] = $doc['coupon_detail'][$_REQUEST['coupan_code']];
+								}
+												
+							//echo '<pre>';print_r($doc['coupon_detail']);echo '</pre>';	die();
+							//$return['data']['discount_amount'] = $value['coupon_value'];
 							$return['error'] = false;
 							$return['message'] = '';
 							return json_encode($return);
