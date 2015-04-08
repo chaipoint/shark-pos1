@@ -10,7 +10,7 @@
 </style>
 
 <script type="text/javascript" src="<?php echo JS;?>pos/billing.js"></script>
-<?php 
+<?php //echo '<pre>';print_r($sales_tax);echo '</pre>';die();
 	$script = "";
 	if(count($bill)>0){
 		$script .= "\n".'var due_amount = '.$bill['due_amount'].'; var doc = \''.$bill['_id']."';\nvar bill_status_id = ".$bill['bill_status_id'].";\n";
@@ -34,6 +34,12 @@
 			</script>
 		';
 	}
+	
+	
+	/*var walkin_tax = '.((array_key_exists('Walk-in', $sales_tax) && !empty($sales_tax['Walk-in'])) ? $sales_tax['Walk-in'] : 0).';
+				var coc_tax = '.((array_key_exists('COC', $sales_tax) && !empty($sales_tax['COC'])) ? $sales_tax['COC'] : 0).';
+				var olo_tax = '.((array_key_exists('OLO', $sales_tax) && !empty($sales_tax['OLO'])) ? $sales_tax['OLO'] : 0).';
+				var caw_tax = '.((array_key_exists('CAW', $sales_tax) && !empty($sales_tax['CAW'])) ? $sales_tax['CAW'] : 0).'; */
 ?>
 <div class="container"> 
 	<?php //$this->commonView('menu');
@@ -88,7 +94,7 @@
 											<tbody>
 												<tr class="">
 													<td width="25%" >Discount</td>
-													<td width="25%"> 
+													<td width="28%"> 
 														<div class="input-group">
 														<input type="text" class="form-control input-sm" style="height:22px;width:61px;margin-left:-32px;" id="discount_input_box" name="discount_input_box"/>
 														</div><span class="label label-default" style="margin-left:6px" id="apply_discount" >Apply</span>
