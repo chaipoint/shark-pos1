@@ -196,30 +196,40 @@
 						
 						$day_number = date('N', strtotime(date('d-m-Y')));
 						
-						if($startdate <= $curdate && $enddate >= $curdate 
-							&& $starttime <= $curtime && $endtime >= $curtime 
-								&& strpos($value['week_days'], $day_number) !== false 
-									&& strpos(','.$value['biz_type'].',' , ','.$_REQUEST['business_type'].',') !== FALSE
-									   && strpos(','.$value['channel'].',' , ','.$_REQUEST['channel_type'].',') !== FALSE
-										 &&	$value['active'] == 'Y'
-											&& $value['coupon_code'] == $_REQUEST['coupan_code'] 
-												&& $value['start_price'] <= $_REQUEST['bill_amount'] && $value['end_price'] >= $_REQUEST['bill_amount']){
-								if($value['is_product'] !='Y'){
-									$return['data']['is_product'] = $value['is_product'];
-									$return['data']['discount_type'] = $value['coupon_type'];
-									$return['data']['discount_value'] = $value['discount_amount'];
+						if(strtoupper($value['coupon_code']) == strtoupper($_REQUEST['coupan_code'])){
+						
+							if($startdate > $curdate || $enddate < $curdate || $starttime > $curtime || $endtime < $curtime  || strpos(','.$value['week_days'].',' , ','.$day_number.',') === FALSE ){
+								$return['error'] = true;
+								$return['message'] = 'Coupon Not Valid For Order Time';
+								return json_encode($return);
+							
+							}else if($value['start_price'] > $_REQUEST['bill_amount'] || $value['end_price'] < $_REQUEST['bill_amount']){
+								$return['error'] = true;
+								$return['message'] = 'Coupon Not Valid For Total Price';
+								return json_encode($return);
 								
-								}else if(array_key_exists('coupon_detail', $doc) && array_key_exists($_REQUEST['coupan_code'], $doc['coupon_detail']) ){
-									$return['data']['is_product'] = $value['is_product'];
-									$return['data']['discount_data'] = $doc['coupon_detail'][$_REQUEST['coupan_code']];
-								}
-												
-							//echo '<pre>';print_r($doc['coupon_detail']);echo '</pre>';	die();
-							//$return['data']['discount_amount'] = $value['coupon_value'];
-							$return['error'] = false;
-							$return['message'] = '';
-							return json_encode($return);
-							die();
+							}else if(strpos(','.$value['channel'].',' , ','.$_REQUEST['channel_type'].',') === FALSE || strpos(','.$value['biz_type'].',' , ','.$_REQUEST['business_type'].',') === FALSE){
+								$return['error'] = true;
+								$return['message'] = 'Coupon Not Valid From Here';
+								return json_encode($return);
+								
+							}else if($value['is_product'] !='Y') {
+								$return['data']['is_product'] = $value['is_product'];
+								$return['data']['discount_type'] = $value['coupon_type'];
+								$return['data']['discount_value'] = $value['discount_amount'];
+								$return['error'] = false;
+								$return['message'] = '';
+								return json_encode($return);
+							
+							}else if(array_key_exists('coupon_detail', $doc) && array_key_exists(strtoupper($_REQUEST['coupan_code']), $doc['coupon_detail'])){
+								$return['data']['is_product'] = $value['is_product'];
+								$return['data']['discount_data'] = $doc['coupon_detail'][strtoupper($_REQUEST['coupan_code'])];
+								$return['error'] = false;
+								$return['message'] = '';
+								return json_encode($return);
+							}
+						
+						
 						}else{
 							$return['error'] = true;
 							$return['message'] = INVALID_COUPON;
