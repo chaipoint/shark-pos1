@@ -200,17 +200,17 @@
 						
 							if($startdate > $curdate || $enddate < $curdate || $starttime > $curtime || $endtime < $curtime  || strpos(','.$value['week_days'].',' , ','.$day_number.',') === FALSE ){
 								$return['error'] = true;
-								$return['message'] = 'Coupon Not Valid For Order Time';
+								$return['message'] = 'Coupon has Expired. Confirm Validity.';
 								return json_encode($return);
 							
 							}else if($value['start_price'] > $_REQUEST['bill_amount'] || $value['end_price'] < $_REQUEST['bill_amount']){
 								$return['error'] = true;
-								$return['message'] = 'Coupon Not Valid For Total Price';
+								$return['message'] = 'Coupon Cannot be Applied on the Current Bill Value';
 								return json_encode($return);
 								
 							}else if(strpos(','.$value['channel'].',' , ','.$_REQUEST['channel_type'].',') === FALSE || strpos(','.$value['biz_type'].',' , ','.$_REQUEST['business_type'].',') === FALSE){
 								$return['error'] = true;
-								$return['message'] = 'Coupon Not Valid From Here';
+								$return['message'] = 'Coupon Not Defined for this Group';
 								return json_encode($return);
 								
 							}else if($value['is_product'] !='Y') {
@@ -483,7 +483,7 @@
 					$loadResponse = $ppc->ppcOperation($_POST, $_POST['request_type']);
 				}
 			}
-				if(!empty($loadResponse['data']) && $loadResponse['data']['success']=='True' && $loadResponse['data']['txn_type']!=BALANCE_CHECK && $loadResponse['data']['txn_type']!=REISSUE_PPC_CARD){
+				if(!empty($loadResponse['data']) && $loadResponse['data']['success']=='True' && $loadResponse['data']['txn_type']!=FREEBIE && $loadResponse['data']['txn_type']!=BALANCE_CHECK && $loadResponse['data']['txn_type']!=REISSUE_PPC_CARD){
 					$saveData = array();
 					$saveData['cd_doc_type'] = CARD_SALE_DOC_TYPE;
 					$saveData['card_no'] = $loadResponse['data']['card_number'];
