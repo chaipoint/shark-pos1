@@ -165,7 +165,12 @@ $(document).ready(function(){
 				$('#redemption_code').val('').addClass('hide');
 				bootbox.alert($result.data['message']);
 			}else if($result.data['success']=='True'){ 
-				var product = ertArray[$result.data['product_id']];
+				if($result.data['product_id']=='105,345'){
+					var product_id = 105;
+				}else{
+					var product_id = $result.data['product_id'];
+				}
+				var product = ertArray[product_id];
 				if(product!=undefined){
 					var productNewList = new Object();
 					$.each(productArray, function(index, data){
@@ -239,6 +244,7 @@ $(document).ready(function(){
 				$("#paid-amount").val(amountoBePaid);
 				$('#card_type').val('ppa');
 				$('#card_company').val('urbanPiper');
+				$('#card_txn_type').val($result.data['txn_type']);
 				$('#card_invoice_no').val($result.data['invoice_number']);
 				$('#submit-sale').trigger('click');
 			}else{
