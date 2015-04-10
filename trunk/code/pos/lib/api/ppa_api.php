@@ -29,12 +29,21 @@
                 $tuData = curl_exec($tuCurl); 
                 curl_close($tuCurl); 
                 $result = json_decode($tuData,true);
-                
+                //echo '<pre>';print_r($result); echo '</pre>';
                 $responseArray['success'] = $result['success'];
                 $responseArray['message'] = $result['message'];
                 $responseArray['product_id'] = $result['redemption_value'];
+				//$responseArray['txn_no'] = $result['approval_code'];
+                //$responseArray['approval_code'] = $result['approval_code'];
                 $responseArray['invoice_number'] = $invoiceNumber;
-                $responseArray['txn_type'] = BALANCE_CHECK;
+                $responseArray['txn_type'] = FREEBIE;
+				$responseArray['card_type'] = 'PPA';
+				$responseArray['store_message'] = $_SESSION['user']['store']['store_message'];
+				$responseArray['store_name'] = $_SESSION['user']['store']['name'];
+				$responseArray['staff_id'] = $_SESSION['user']['mysql_id'];
+				$responseArray['location_name'] = $_SESSION['user']['location']['name'];
+				$mode = ($config['billing_mode']=='local' ? 'L' : 'C');
+				$responseArray['bill'] = $_SESSION['user']['store']['code']."".$_SESSION['user']['counter']."".str_pad($invoiceNumber, 4 , '0', STR_PAD_LEFT)."".$mode;
                 $return['data'] = $responseArray;
                 return $return;
 
