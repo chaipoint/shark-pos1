@@ -291,7 +291,7 @@ function uploadBill(){
 			if($insertId > 0){
 				foreach ($doc['items'] as $itemKey => $itemVvalue) { 
 					$pValue = $itemVvalue;
-					$priceAD = (!empty($pValue['dis_price']) ? $pValue['dis_price'] : $pValue['priceAD']);
+					$priceAD = (!empty($pValue['discount_price']) ? $pValue['discount_price'] : $pValue['priceAD']);
 					$priceBT = (!empty($pValue['priceBT']) ? $pValue['priceBT'] : $pValue['ABP']);
 					$productsArray[] = "('".$insertId."','".$doc['time']['created']."','".$doc['store_id']."','".$doc['store_name']."','".$pValue['id']."','".$pValue['name']."','".$pValue['category_id']."','".$pValue['category_name']."', '".$pValue['recipe_id']."','".$pValue['qty']."','".$pValue['price']."','".$pValue['tax']."','".$pValue['serviceTax']."','".$pValue['serviceTaxAmount']."','".$priceBT."','".$pValue['discount']."','".$pValue['discountAmount']."','".$pValue['taxAbleAmount']."','".$pValue['taxAmount']."','".$pValue['netAmount']."','".$priceAD."','".$pValue['subTotal']."')";
 				}
