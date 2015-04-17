@@ -286,11 +286,12 @@
 					$_POST['card_no'] = NA;
 					$_POST['TIN'] = $_SESSION['user']['store']['tin_no'];;
 					$_POST['STN'] = $_SESSION['user']['store']['stn_no'];;
-					if($_SESSION['user']['server_date'] != $this->getCDate()){
+					/*if($_SESSION['user']['server_date'] != $this->getCDate()){
 						$_POST['time'] = array('created'=>$_SESSION['user']['server_date'], 'updated'=>$_SESSION['user']['server_date']);
 					}else{
 						$_POST['time'] = array('created'=>$this->getCDTime(), 'updated'=>$this->getCDTime());
-					}
+					}*/
+					$_POST['time'] = array('created'=>$this->getCDTime(), 'updated'=>$this->getCDTime());
 					$_POST['counter'] = $_SESSION['user']['counter'];
 					$_POST['shift'] = $_SESSION['user']['shift'];
 
@@ -313,7 +314,7 @@
 						}
 					}
 
-					$currentBillNo = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getUpdate(BILLING_DESIGN_DOCUMENT_UPDATE_GET_BILL_NO,'generateBill')->setParam(array('date'=>$_SESSION['user']['server_date'], 'counter1'=>''.$_SESSION['user']['counter'].'','store_id'=>''.$_SESSION['user']['store']['id'].''))->execute();
+					$currentBillNo = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getUpdate(BILLING_DESIGN_DOCUMENT_UPDATE_GET_BILL_NO,'generateBill')->setParam(array('date'=>$this->getCDate(), 'counter1'=>''.$_SESSION['user']['counter'].'','store_id'=>''.$_SESSION['user']['store']['id'].''))->execute();
 					
 					if(is_numeric($currentBillNo)){
 						$mode = ($config['billing_mode']==LOCAL_BILLING_MODE ? LOCAL : CLOUD);
