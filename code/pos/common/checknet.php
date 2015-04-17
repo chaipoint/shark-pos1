@@ -95,7 +95,7 @@ $(document).ready(function(){
 					//alert(response);return false;
                     var $res = $.parseJSON(response);
                     if($res.data['cocOrder']){
-                        beep(20000,3);
+                        //beep(20000,3);
                         $('#cocYes').show();
 						$('#cocNo').hide();
                     }else {
@@ -104,7 +104,7 @@ $(document).ready(function(){
 					}
 					
 					if($res.data['oloOrder']){
-						beep(20000,3);
+						//beep(20000,3);
                         $('#oloYes').show();
 						$('#oloNo').hide();
 					}else{ //alert('sdf');
@@ -116,7 +116,7 @@ $(document).ready(function(){
                     return false;
                 })
 			}
-            },30000); // 30 second
+            },10000); // 30 second
         });
 		
 		$(function(){
