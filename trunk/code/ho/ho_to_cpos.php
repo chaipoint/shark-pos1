@@ -240,6 +240,7 @@ function uploadBill(){
 								"bill_no" => $doc['bill_no'],
 								"bill_seq" => $doc['bill'],
 								"dc_challan" => $doc['customer']['challan_no'],
+								"challan_date" => $doc['customer']['onsite_time'],
 								"bill_time" => $doc['time']['created'], 
 								"store_id" => $doc['store_id'], 
 								"store_name" => $doc['store_name'], 
