@@ -1,9 +1,9 @@
 <?php
-//$con = mysql_connect('54.178.189.25', 'root', 'mtf@9081');
-$con = mysql_connect('54.64.5.133', 'root', 'root') or die(mysql_error());
+$con = mysql_connect('54.178.189.25', 'root', 'mtf@9081');
+//$con = mysql_connect('54.64.5.133', 'root', 'root') or die(mysql_error());
 if(!$con) die(mysql_errno());
-//mysql_select_db('cabbeein_cpos', $con);
-mysql_select_db('cpos', $con) or die(mysql_error());
+mysql_select_db('cabbeein_cpos', $con);
+//mysql_select_db('cpos', $con) or die(mysql_error());
 
 require_once '../lib/log4php/Logger.php';
 require_once '../config.php';
