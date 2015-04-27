@@ -49,14 +49,17 @@
 				$tin_no = $result['tin_no'];
 				$stn_no = $result['stn_no'];
 				$billing_type = explode(',', $result['bill_type']);
-				/*$sales_tax = array();
 				
-				foreach($billing_type as $k=>$v){
-					$ex = explode('=', $v);
-					$sales_tax[$ex[0]] = @$ex[1];
+				if(array_key_exists('cawOrder',$_GET) && is_numeric($_GET['cawOrder'])){
+					$customer_id = $_GET['cawOrder'];
+					$resultCawProduct = $this->cDB->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_RETAIL_CUSTOMER_LIST)->setParam(array('key'=>$customer_id,'include_docs'=>'true'))->execute();
+					$this->log->trace('CAW PRODUCT DETAILS'."\r\n".json_encode($resultCawProduct));
+					
+					if(array_key_exists('rows', $resultCawProduct) && count($resultCawProduct['rows'])>0){
+						$result = $resultCawProduct['rows'][0]['doc'];
+					}
 				}
-				*/
-				
+
 				$catList = array();
 				$productList = array();
 				foreach($result['menu_items'] as $key => $Items){
@@ -68,7 +71,7 @@
 				foreach($productList as $key => $value){
 					 ksort($productList[$key]);
 				}
-				//$catList[100] = 'C@W';
+				
 		 		ksort($catList);
 		 		$currectCat = array_keys($catList);
 	  			$firstCat = $currectCat[0];
@@ -77,7 +80,7 @@
 	  				$bill = $_GET['bill_no'];
 					$billDataReturned = $this->getBillData($bill); 
 					if(!$billDataReturned['error']){
-	 						$billData = $billDataReturned['data'];
+	 					$billData = $billDataReturned['data'];
 					}
 	  			}
 	  			$data = array('error'=>false, 'ertList'=>$ERT_PRODUCT_ARRAY, 'catList'=>$catList, 'productList'=>$productList, 'firstCat'=>$firstCat, 'config_data'=>$this->configData, 'bill'=>$billData, 'lastBillNo'=>$lastBillNo, 'lastBillTime'=>$lastBillTime);
@@ -152,14 +155,8 @@
 			$this->log->trace('CAW PRODUCT DETAILS'."\r\n".json_encode($resultCawProduct));
 			
 			if(array_key_exists('rows', $resultCawProduct) && count($resultCawProduct['rows'])>0){
-				$rows = $resultCawProduct['rows'][0]['doc']['schedule'];
-				$productList = array();
-					foreach($rows as $key => $value){ 
-						foreach($value as $k=>$v){
-							$productList[100][] = $v;
-						}
-					} 
-					$return['data'] = json_encode($productList, true);
+				unset($resultCawProduct['rows'][0]['doc']['menu_items']);
+				$return['data'] = $resultCawProduct['rows'][0]['doc']; 
 			}else{
 				$return['error'] = true;
 				$return['message'] = 'Customer Not Found';
@@ -286,12 +283,13 @@
 					$_POST['card_no'] = NA;
 					$_POST['TIN'] = $_SESSION['user']['store']['tin_no'];;
 					$_POST['STN'] = $_SESSION['user']['store']['stn_no'];;
+					
+
 					/*if($_SESSION['user']['server_date'] != $this->getCDate()){
 						$_POST['time'] = array('created'=>$_SESSION['user']['server_date'], 'updated'=>$_SESSION['user']['server_date']);
 					}else{
 						$_POST['time'] = array('created'=>$this->getCDTime(), 'updated'=>$this->getCDTime());
 					}*/
-					$_POST['time'] = array('created'=>$this->getCDTime(), 'updated'=>$this->getCDTime());
 					$_POST['counter'] = $_SESSION['user']['counter'];
 					$_POST['shift'] = $_SESSION['user']['shift'];
 
@@ -313,9 +311,20 @@
 								return $re;							
 						}
 					}
-
-					$currentBillNo = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getUpdate(BILLING_DESIGN_DOCUMENT_UPDATE_GET_BILL_NO,'generateBill')->setParam(array('date'=>$this->getCDate(), 'counter1'=>''.$_SESSION['user']['counter'].'','store_id'=>''.$_SESSION['user']['store']['id'].''))->execute();
 					
+					if($_POST['payment_type']=='caw' && $_POST['customer']['onsite_time'] != $this->getCDate()){
+						$LastBill = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getView(BILLING_DESIGN_DOCUMENT_VIEW_BILL_BY_STORE_COUNTER)->setParam(array("descending"=>"true","startkey" => '["'.$_POST['customer']['onsite_time'].'", "'.$_SESSION['user']['store']['id'].'" , "'.$_SESSION['user']['counter'].'"]', "endkey" => '["'.$_POST['customer']['onsite_time'].'","'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]',"limit"=>"1"))->execute();
+						if(array_key_exists('rows', $LastBill) && count($LastBill['rows'])>0){
+							$currentBillNo = $LastBill['rows'][0]['value']+1 ;
+						}else{
+							$currentBillNo = '1' ;
+						}
+						$_POST['time'] = array('created'=>$_POST['customer']['onsite_time'], 'updated'=>$_POST['customer']['onsite_time']);
+						
+					}else{ 
+						$currentBillNo = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getUpdate(BILLING_DESIGN_DOCUMENT_UPDATE_GET_BILL_NO,'generateBill')->setParam(array('date'=>$this->getCDate(), 'counter1'=>''.$_SESSION['user']['counter'].'','store_id'=>''.$_SESSION['user']['store']['id'].''))->execute();
+						$_POST['time'] = array('created'=>$this->getCDTime(), 'updated'=>$this->getCDTime());
+					}
 					if(is_numeric($currentBillNo)){
 						$mode = ($config['billing_mode']==LOCAL_BILLING_MODE ? LOCAL : CLOUD);
 						$_POST['bill'] = $_SESSION['user']['store']['code']."".$_SESSION['user']['counter']."".str_pad($currentBillNo, 4 , '0', STR_PAD_LEFT)."".$mode;
