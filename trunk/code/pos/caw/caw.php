@@ -41,7 +41,7 @@
 
 		}
 		
-		function schedule(){
+		/*function schedule(){
 			$return = array('error' => false, 'schedule'=>array());
 			if(empty($_SESSION['user']['store']['id'])){
 				$result = $this->getSessionData();
@@ -134,6 +134,6 @@
 			
 			return json_encode($return);
 		
-		}
+		}*/
 		
 	}
