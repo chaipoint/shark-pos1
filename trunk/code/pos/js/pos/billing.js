@@ -18,11 +18,19 @@ var popupKeyboard = null;
 
 $(document).ready(function(){  
 	var url = $.url();
-	$(this).attr("title", "Shark |ChaiPoint POS| Billing"); 
+	$(this).attr("title", "Shark |ChaiPoint POS| Billing");
+	
+	$('.datepicker').datepicker({
+		startDate: '-3d',
+    	endDate: '+1d',
+		dateFormat: 'yyyy-mm-dd'
+	}).datepicker('setDate',new Date());
+	console.log(new Date());
+
 	/*
 	*	PLEASE Don't Change This code Block Without Prior Permission
 	*/
-	if(Object.keys($billingItems).length > 0){
+	if(Object.keys($billingItems).length > 0){ 
 
 		/*Load Bill IF provided with doc_id*/
 		var button = (bill_status_id != 80) ? '<button id="paid_button" class="btn btn-primary">Paid</button>' : '' ;
@@ -63,8 +71,7 @@ $(document).ready(function(){
 		*/
 		loadedBill = new Object();
 		var orderData = $.parseJSON(localStorage.getItem(order));
-		loadedBill = orderData;//alert(JSON.stringify(orderData));
-		//serviceTax = coc_tax;
+		loadedBill = orderData;
 		if(orderData){
 			var productNewList = new Object();
 			$.each(productArray, function(index, data){
@@ -76,16 +83,22 @@ $(document).ready(function(){
 				});
 			});
 			
-			$.each(orderData.products, function (index, data){
+			$.each(orderData.products, function (index, data){ 
 				var productData = productArray[productNewList[data['id']].cat] [productNewList[data['id']].seq];
+				productData['price'] = data['cost'];
 				$('#proajax button[value="'+data['id']+'"]').addClass('active-btn');
 				generateSalesTable(data['id'], parseInt(data['qty']), productData);
 				
 			});
-			if(orderData['coupon_code']!=''){ //alert('hi');
-					$('#discount_input_box').val(orderData['coupon_code']);
-					$('#apply_discount').trigger('click');
-				}
+
+			$(".del_row").removeClass('del_row');
+			$('.bill_qty_input').prop('readonly',true).removeClass('bill_qty_input');
+			$('.category-selection').removeClass('category-selection');
+			$('.category-product').removeClass('category-product');
+			if(orderData['coupon_code']!=''){ 
+				$('#discount_input_box').val(orderData['coupon_code']);
+				$('#apply_discount').trigger('click');
+			}
 		}
 	}
 	
@@ -94,49 +107,20 @@ $(document).ready(function(){
 	cawOrder = url.param('cawOrder');
 	if(cawOrder && cawOrder > 0 && ! isNaN(cawOrder)){ 
 		
-		/*
-		*	PLEASE Don't Change This code Block Without Prior Permission
-		*/
-		cawBill = new Object();
-		var orderData = $.parseJSON(localStorage.getItem(cawOrder));
-		cawBill = orderData;
-		
-		if(orderData){
-			$.ajax({
-				type: 'POST',
-				url: "index.php?dispatch=billing.getCawProduct",
-				data : {request_type:'getCawProduct', 'customer_id':orderData.mysql_id},
-			}).done(function(response) {   
-				console.log(response);
-				var $result = $.parseJSON(response);
-				if($result.error){ 
-					bootbox.alert($result.message);
-					return false;
-				}
-				
-				productArray = $.extend(true, productArray ,$.parseJSON($result.data));
-				console.log(productArray);
-				var productNewList = new Object();
-				$.each(productArray, function(index, data){
-					var category = index;
-					$.each(data, function(pIndex, pData){
-						productNewList[pData.mysql_id]  = new Object();
-						productNewList[pData.mysql_id].cat = category;
-						productNewList[pData.mysql_id].seq = pIndex;
-					});
-				});
-				$.each(orderData.product, function (index, data){
-					var productData = productArray[productNewList[data['id']].cat] [productNewList[data['id']].seq];
-					$('#proajax button[value="'+data['id']+'"]').addClass('active-btn');
-					generateSalesTable(data['id'], parseInt(data['qty']), productData);
-				});
-				$('.bill_qty_input').prop('readonly', true);
-				$('.del_row').addClass('hide');
-				$('.category-product').prop('disabled', true);
-				$('.category-selection').prop('disabled', true);
-				
-			});
-		}
+		$.ajax({
+			type: 'POST',
+			url: "index.php?dispatch=billing.getCawProduct",
+			data : {request_type:'getCawProduct', 'customer_id':cawOrder},
+		}).done(function(response) {  
+			console.log(response);
+			var $result = $.parseJSON(response);
+			if($result.error){ 
+				bootbox.alert($result.message);
+				return false;
+			}
+			cawBill = new Object();
+			cawBill = $result['data'];
+		});
 	}
 
 	$('#reward_redemption').click(function(event){
@@ -667,11 +651,15 @@ $(document).ready(function(){
 					$("#bill_status_id").val(77);
 					$("#customer_type").val('coc');
 					$("#customer_type").prop('disabled',true);
-			}else if(cawBill){
+			}else if(cawBill){ 
+					$("#delivery_channel").val(75);
+					$("#delivery_channel_name").val(config_data.delivery_channel[75]);
+					$("#booking_channel").val(231);
+					$("#booking_channel_name").val(config_data.channel[231]);
 					$("#customer_type").append('<option value="caw">CAW</option>');
 					$("#customer_type").val('caw');
 					$("#customer_type").prop('disabled',true);
-					$("#paid-amount").prop('disabled',true);
+					//$("#paid-amount").prop('disabled',true);
 					$("#customer_name").val(cawBill.mysql_id);
 					$("#customer_name").prop('disabled',true);
 					$("#is_cod").val('N');
@@ -683,14 +671,14 @@ $(document).ready(function(){
 					$('#billing_customer').addClass('hide');
 					$('#customer_name').removeClass('hide');
 					$('#phone_number').val(cawBill.phone);
-					$('#billing_customer_address').val(cawBill.address);
+					$('#billing_customer_address').val(cawBill.billing_address);
 					$('#billing_customer_company_name').val(cawBill.name);
 					$("span#address").closest('tr').removeClass('hide');
-					$("span#address").text(cawBill.address);
+					$("span#address").text(cawBill.billing_address);
 					$("span#contact_person").closest('tr').removeClass('hide');
-					$("span#contact_person").text(cawBill.contact_person);
-					$("#challan_no").val(cawBill.challan_no);
-					$("#onsite_time").val(cawBill.onsite_time);
+					$("span#contact_person").text(cawBill.name);
+					$("#challan_no").closest('tr').removeClass('hide');
+					$("#onsite_time").closest('tr').removeClass('hide');
 			}
 			popupKeyboard = $('#paid-amount, #phone_number, #billing_customer').cKeyboard();
 
@@ -779,6 +767,17 @@ $(document).ready(function(){
 			if($('#customer_type').val()=='caw' && $('#customer_name').val()==''){
 				bootbox.alert('Please Select Customer Name');
 				return false;	
+			}
+
+			if(cawBill){
+				if(!$('#challan_no').val()){
+					bootbox.alert('Please Enter Challan No');
+				    return false;
+				}else if(!$('#onsite_time').val()){
+					bootbox.alert('Please Select Date');
+				    return false;
+				}
+
 			}
 			
 			var billDetails = new Object();
@@ -874,12 +873,11 @@ $(document).ready(function(){
 					$('#payModal').modal('hide');
 					if(result.message!=''){
 						bootbox.alert(result.message, function(){
-						window.location.reload(true);
+							window.location.reload(true);
 						}).find(".btn-primary").removeClass("btn-primary").addClass("btn-danger");
 					}else if(exeMode){
-						
 						if(!printUtility){bootbox.alert('Print Utility Not Exists').find(".btn-primary").removeClass("btn-primary").addClass("btn-danger");}
-						window.location='index.php?dispatch=billing.index';
+						window.location=(billDetails.payment_type=='caw') ? 'index.php?dispatch=caw.index' : 'index.php?dispatch=billing.index';
 					}
 					
 					resetBill(true);	
@@ -920,7 +918,7 @@ $(document).ready(function(){
 								'<td>'+data.qty+'</td>'+
 								'<td>'+(((data.tax) ? data.tax : 0) * 100).toFixed(2)+'</td>'+
 								'<td>'+(parseFloat(data.taxAmount)).toFixed(2)+'</td>'+
-								'<td>'+(parseFloat(data.serviceTax)).toFixed(2)+'</td>'+
+								'<td>'+(((data.serviceTax) ? data.serviceTax : 0) * 100).toFixed(2)+'</td>'+
 								'<td>'+(parseFloat(data.serviceTaxAmount)).toFixed(2)+'</td>'+
 								'<td>'+((parseFloat(data.subTotal))).toFixed(2)+'</td>'+
 								'<td>'+(parseFloat(data.discountAmount)).toFixed(2)+'</td>'+
@@ -956,7 +954,8 @@ $(document).ready(function(){
 		});
 	//---END--- Functions Work After Page Load via Events
 	popupKeyboard = $('#discount_input_box').cKeyboard();
-	$("#discount-close").click(function(){ alert('dfdsff');
+	popupKeyboard = $('#challan_no').cKeyboard();
+	$("#discount-close").click(function(){ 
 //		$("#discount-popover").toggle();
 		$intDiscount = 0;
 		$("#discount_input_box").val('');
@@ -1010,7 +1009,7 @@ function generateSalesTable(productId, qty, productData){
 				$billingItems[productID].discount_price = isNaN(productData.price * 1) ? 0 : productData.price;
 			}
 			
-			$billingItems[productID].ABP = decimalAdjust((productData.tax.rate) ? ($billingItems[productID].discount_price/((parseFloat(productData.tax.rate) * 100) + (parseFloat(productData.service_tax)) + 100)) * 100 : ($billingItems[productID].discount_price/((parseFloat(productData.service_tax)) + 100)) * 100 ,-2);
+			$billingItems[productID].ABP = decimalAdjust((productData.tax.rate) ? ($billingItems[productID].discount_price/((parseFloat(productData.tax.rate) * 100) + (parseFloat(productData.service_tax) * 100) + 100)) * 100 : ($billingItems[productID].discount_price/((parseFloat(productData.service_tax) * 100) + 100)) * 100 ,-2);
 			
 			$billingItems[productID].taxAbleAmount = $billingItems[productID].ABP;
 			$billingItems[productID].qty = newqty;
@@ -1024,7 +1023,7 @@ function generateSalesTable(productId, qty, productData){
 	} else if(applyDiscount){
 		for(var index in $billingItems){
 			$billingItems[index].discount_price = decimalAdjust($billingItems[index].price - ($billingItems[index].price  * $billingItems[index].discount/100 ) , -2);
-			$billingItems[index].ABP = decimalAdjust(($billingItems[index].tax) ? ($billingItems[index].discount_price/((parseFloat($billingItems[index].tax) * 100) + (parseFloat($billingItems[index].serviceTax)) + 100)) * 100 : ($billingItems[index].discount_price/((parseFloat($billingItems[index].serviceTax)) + 100)) * 100 ,-2);
+			$billingItems[index].ABP = decimalAdjust(($billingItems[index].tax) ? ($billingItems[index].discount_price/((parseFloat($billingItems[index].tax) * 100) + (parseFloat($billingItems[index].serviceTax)* 100) + 100)) * 100 : ($billingItems[index].discount_price/((parseFloat($billingItems[index].serviceTax)* 100) + 100)) * 100 ,-2);
 			$billingItems[index].taxAbleAmount = $billingItems[index].ABP;
 		}
 	 }
@@ -1037,7 +1036,7 @@ function generateSalesTable(productId, qty, productData){
 			$billingItems[index].discountAmount = $billingItems[index].price * $billingItems[index].qty * $billingItems[index].discount/100;
 			$billingItems[index].priceAD = $billingItems[index].discount_price ;
 			$billingItems[index].taxAmount = $billingItems[index].ABP * $billingItems[index].tax * $billingItems[index].qty;
-			$billingItems[index].serviceTaxAmount = $billingItems[index].ABP * $billingItems[index].serviceTax/100 * $billingItems[index].qty;
+			$billingItems[index].serviceTaxAmount = $billingItems[index].ABP * $billingItems[index].serviceTax * $billingItems[index].qty;
 			$billingItems[index].netAmount = $billingItems[index].subTotal + $billingItems[index].taxAmount + $billingItems[index].serviceTaxAmount;
 		if(productID != index){
 			tableRows +='<tr billing-product="'+index+'">'+
@@ -1140,7 +1139,7 @@ function discount(action, flag){
 			url: "index.php?dispatch=billing.getCoupanCode",
 			data : {'coupan_code':discount_code, 'business_type':business_type, 'channel_type':channel_type, 'bill_amount':bill_amount},
 			timeout:10000
-		}).done(function(response) {
+		}).done(function(response) { 
 				console.log($billingItems);
 				$("#ajaxfadediv").removeClass('ajaxfadeclass');
 				$result = $.parseJSON(response);
@@ -1155,9 +1154,11 @@ function discount(action, flag){
 						$billingItems[index].discount = 0;
 					}
 				}else if(!$result.error && $result.data['is_product']=='N' && $result.data['discount_type']=='V' && action=='add'){
-					for(var index in $billingItems){
+					bootbox.alert('Sorry, Coupon Can Not be Applied'); 
+					return false;
+					/*for(var index in $billingItems){
 						$billingItems[index].discount = $result.data['discount_value'];
-					}
+					}*/
 				}else if(!$result.error && $result.data['is_product']=='N' && $result.data['discount_type']=='V' && action=='remove'){
 					for(var index in $billingItems){
 						$billingItems[index].discount = 0;

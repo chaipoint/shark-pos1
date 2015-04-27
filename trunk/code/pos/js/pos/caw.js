@@ -7,8 +7,9 @@ $(document).ready(function(){
 		var customer_id = $(this).attr('id');
 		var customer_name = $(this).text() ;
 		var customer_type = $(this).data('type') ;
-			if(customer_type==1){
-				$('#customer_name').val(customer_name);
+			if(customer_type==1){ 
+				window.location = 'index.php?dispatch=billing&cawOrder='+customer_id
+				/*$('#customer_name').val(customer_name);
 				$('#customer_id').val(customer_id);
 				$.ajax({
 					type: 'POST',
@@ -28,14 +29,14 @@ $(document).ready(function(){
 						$('#schedule_table tbody').append($result.data);
 					}
 						
-				});
+				});*/
 			}else if(customer_type==2){
 				alert('type 2 customer');
 			}
 	});
 /* Customer Selection Block End */
 
-	$("#schedule_table").on('click','.generate-bill',function(){
+	/*$("#schedule_table").on('click','.generate-bill',function(){
 		var thisRow = $(this).closest("tr");
 		var currentRow = parseInt(thisRow.attr('rowid'));
 		
@@ -50,7 +51,7 @@ $(document).ready(function(){
 				window.location = 'index.php?dispatch=billing&cawOrder='+cawOrder
 			}
 		} 
-	});
+	});*/
 	
 	keyboard.push($('.challan').cKeyboard());
 
