@@ -437,7 +437,7 @@ function updateStore($location_id){
 						     	 LEFT JOIN cp_tax_master ctm on ctm.id = if(cpsp.tax_rate is null OR cpsp.tax_rate = 0, pm.tax, cpsp.tax_rate)
 						     	 LEFT JOIN cp_service_tax_master cstm on cstm.id = if(cpsp.service_tax_rate is null OR cpsp.service_tax_rate = 0, pm.service_tax_rate, cpsp.service_tax_rate)
 								 LEFT JOIN cp_reference_master crm on crm.id = pm.type 
-								 where  pm.active = 'Y' AND client_id = 0 AND (pm.price !=0 || cpsp.price!=0) AND pm.location LIKE '%".$location_id."%' 
+								 where  pm.active = 'Y' AND pm.is_caw = 'N' AND (pm.price !=0 || cpsp.price!=0) AND pm.location LIKE '%".$location_id."%' 
 								 order by  pm.id asc";
 							
 							$productList = mysql_query($products);
@@ -761,7 +761,7 @@ function updateConfig(){
 						     	 LEFT JOIN cp_tax_master ctm on ctm.id = if(cpsp.tax_rate is null OR cpsp.tax_rate = 0, pm.tax, cpsp.tax_rate)
 						     	 LEFT JOIN cp_service_tax_master cstm on cstm.id = if(cpsp.service_tax_rate is null OR cpsp.service_tax_rate = 0, pm.service_tax_rate, cpsp.service_tax_rate)
 								 LEFT JOIN cp_reference_master crm on crm.id = pm.type 
-								 where  pm.active = 'Y' AND client_id = 0 AND (pm.price !=0 || cpsp.price!=0) AND pm.location LIKE '%".$location_id."%' 
+								 where  pm.active = 'Y' AND pm.is_caw = 'N' AND (pm.price !=0 || cpsp.price!=0) AND pm.location LIKE '%".$location_id."%' 
 								 order by  pm.id asc";
 								 
 							
