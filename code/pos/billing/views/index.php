@@ -133,7 +133,7 @@
 								<div id="botbuttons" style="margin-top:-9px;">
 									<button type="button" class="btn btn-danger" id="cancel" style="width:134px;height:35px;line-height:13px"><?php if(!empty($_GET['bill_no'])){ echo 'Cancel';}else {echo 'Clear Items';}?></button>
 									<!--<button type="button" class="btn btn-info <?php echo (!empty($_GET['bill_no']) ? '' : 'hide'); ?>" id="print-can" style="width:100px;height:35px;;line-height:13px">Reprint</button>-->
-									<button type="button" class="btn btn-success <?php echo (!empty($_GET['bill_no']) ? 'hide' : ''); ?>" id="payment" style="margin-right: 90px; width: 130px;height:35px;line-height:13px;margin-right:0px;float:right; ">Print Bills</button>
+									<button type="button" class="btn btn-success <?php echo (!empty($_GET['bill_no']) ? 'hide' : ''); ?>" id="payment" style="margin-right: 90px; width: 130px;height:35px;line-height:13px;margin-right:0px;float:right; ">Print</button>
 									<button type="button" class="btn btn-success hide" id="claim_reward" style="margin-right: 90px; width: 140px;height:35px;line-height:13px;margin-right:0px;float:right; ">Claim Reward</button>
 								</div>
 								
