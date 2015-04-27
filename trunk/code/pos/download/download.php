@@ -1,9 +1,9 @@
 <?php
-$con = mysql_connect('54.178.189.25', 'root', 'mtf@9081');
-//$con = mysql_connect('54.64.5.133', 'root', 'root');
+//$con = mysql_connect('54.178.189.25', 'root', 'mtf@9081');
+$con = mysql_connect('54.64.5.133', 'root', 'root') or die(mysql_error());
 if(!$con) die(mysql_errno());
-mysql_select_db('cabbeein_cpos', $con);
-//mysql_select_db('cpos', $con);
+//mysql_select_db('cabbeein_cpos', $con);
+mysql_select_db('cpos', $con) or die(mysql_error());
 
 require_once '../lib/log4php/Logger.php';
 require_once '../config.php';
@@ -13,6 +13,7 @@ require_once '../constant.php';
 //$locationId = $argv[1]; /*Contain Location ID*/
 //$storeId_id = $argv[2]; /*Contain STORE ID*/
 //print_r($_REQUEST);
+
 $param=$_GET['param'];
 $arguments = explode("-", $param);
 $argv[1]=$arguments[0];
@@ -119,6 +120,7 @@ function checkRepDoc(){
 	}
 	return json_encode($result);
 }
+
 /* Function To Download Retail Customer From CPOS */
 function updateCustomers($location){
 	$couch = new CouchPHP();
@@ -127,20 +129,26 @@ function updateCustomers($location){
 	
 	if(array_key_exists('rows', $listRC)){
 		foreach ($listRC['rows'] as $rkey => $rvalue) {
-					$existingRC[$rvalue['doc']['mysql_id']]['_id'] = $rvalue['doc']['_id'];
-					$existingRC[$rvalue['doc']['mysql_id']]['_rev'] = $rvalue['doc']['_rev'];
-				}
+			$existingRC[$rvalue['doc']['mysql_id']]['_id'] = $rvalue['doc']['_id'];
+			$existingRC[$rvalue['doc']['mysql_id']]['_rev'] = $rvalue['doc']['_rev'];
+		}
 	}
 
-	$cusQuery = "SELECT cm.id, cm.name, cm.address, cm.phone, cm.contact_person,
+	/*$cusQuery = "SELECT cm.id, cm.name, cm.address, cm.phone, cm.contact_person,
 				cm.e_mail, cm.location_id, cm.customer_id, cm.type, cm.billing_type, cm.note, GROUP_CONCAT(DISTINCT(isb.day)) day 
 				FROM customer_master cm 
 				LEFT JOIN isb_delivery isb ON isb.customer_id = cm.id AND isb.active = 'Y'
 				WHERE cm.active = 'Y' AND cm.location_id = $location 
 				GROUP BY isb.customer_id
-				ORDER BY `cm`.`id` ASC";
-				
-	$result = mysql_query($cusQuery);
+				ORDER BY `cm`.`id` ASC";*/
+
+	$getCustomer = "SELECT id, name, code, phone, email, company_name, billing_address, billing_type,
+					consignee_address, prod_start_date, deactivate_date, vat, location_id,
+					cin, stn, pan
+					FROM client_master 
+					WHERE active = 'Y' AND location_id = ".$location."";
+
+	$result = mysql_query($getCustomer);
 	
 	$insertArray = array();
 	$updateCounter = 0;
@@ -149,74 +157,84 @@ function updateCustomers($location){
 	$i = 0;
 	
 	while($value=mysql_fetch_assoc($result)){
+
 		if(array_key_exists($value['id'], $existingRC)){
 			$value['_id'] = $existingRC[$value['id']]['_id'];
 			$value['_rev'] = $existingRC[$value['id']]['_rev'];
 			unset($existingRC[$value['id']]);
 			$updateCounter++;
+		
 		}else{
-		$insertCounter++;
-	}
+			$insertCounter++;
+		}
+		
 		$value['cd_doc_type'] = RETAIL_CUSTOMERS_DOC_TYPE;
 		$value['mysql_id'] = $value['id'];
-		$value['address'] = str_replace(array('"',"'"), ' ', $value['address']);
+		$value['billing_address'] = str_replace(array('"',"'"), ' ', $value['billing_address']);
+		$value['consignee_address'] = str_replace(array('"',"'"), ' ', $value['consignee_address']);
 		unset($value['id']);
 		$insertArray[$i] = $value;
-		$day = array();
-		$day = explode(',', $value['day']);
-		foreach($day as $inkey => $inValue){
-			$getProduct = "SELECT product_id id, cim.name, cim.code, isb.price, isb.qty, isb.pro_start_time, 
-							isb.st_leaving_time, isb.onsite_time, isb.tax tax_id,
-							ctm.name tax_name, ctm.rate tax_rate, cim.item_group_code category_id, crm.name as category_name
-							FROM `isb_delivery` isb
-							LEFT JOIN cp_item_master cim ON cim.id = isb.product_id AND cim.active = 'Y'
-							LEFT JOIN cp_tax_master ctm ON ctm.id = isb.tax AND ctm.active = 'Y'
-							LEFT JOIN cp_reference_master crm ON crm.id = cim.item_group_code AND crm.active = 'Y'
-							WHERE isb.active = 'Y' 
-							AND isb.customer_id = '".$value['mysql_id']."' AND isb.day = '".$inValue."'";
-			
-			$res = mysql_query($getProduct);
-			$dbResult = array();
-			while ($row = mysql_fetch_array($res)) {
-				$dbResult[] = $row;
+
+		$getProduct = "SELECT pm.id, if(cpsp.display_name = '' or cpsp.display_name is null,
+				       pm.display_name, cpsp.display_name) name, pm.sequence, 
+				       cpsp.store_id, pm.code, if(cpsp.price is null, pm.price,if(cpsp.price = 0, 'R' , cpsp.price)) price, 
+				       ctm.name tax, ctm.id tax_id,  crm.name category, crm.id as category_id, ctm.rate tax_rate, 
+                       pm.packaging, pm.is_coc, pm.is_foe, pm.is_web, pm.product_image image, cstm.rate service_tax_rate
+					     FROM product_master pm
+					   LEFT JOIN cp_product_store_price cpsp on cpsp.product_id = pm.id and cpsp.client_id = ".$value['mysql_id']." and cpsp.active = 'Y'
+					   LEFT JOIN cp_tax_master ctm on ctm.id = if(cpsp.tax_rate is null OR cpsp.tax_rate = 0, pm.tax , cpsp.tax_rate)
+					   LEFT JOIN cp_service_tax_master cstm ON cstm.id = if(cpsp.service_tax_rate is null OR cpsp.service_tax_rate = 0 , pm.service_tax_rate, cpsp.service_tax_rate)
+					   LEFT JOIN cp_reference_master crm on crm.id = pm.type 
+					   where  pm.active = 'Y' AND pm.is_caw = 'Y' AND (pm.price !=0 || cpsp.price!=0) AND pm.location LIKE '%".$value['location_id']."%' 
+					   order by  pm.id asc";
+							
+		$productList = mysql_query($getProduct);
+		$j = 0;
+		
+		while($innerRow = mysql_fetch_assoc($productList)){	
+			$productDetails = $innerRow;
+			if(is_numeric($productDetails['price'])){
+     			$insertArray[$i]['menu_items'][$j]['mysql_id'] = $productDetails['id'];
+				$insertArray[$i]['menu_items'][$j]['sequence'] = $productDetails['sequence'];
+				$insertArray[$i]['menu_items'][$j]['code'] = $productDetails['code'];
+				$insertArray[$i]['menu_items'][$j]['name'] = $productDetails['name'];
+				$insertArray[$i]['menu_items'][$j]['price'] = $productDetails['price'];
+				$insertArray[$i]['menu_items'][$j]['tax']['id'] = $productDetails['tax_id'];
+				$insertArray[$i]['menu_items'][$j]['tax']['name'] = $productDetails['tax'];
+				$insertArray[$i]['menu_items'][$j]['tax']['rate'] = $productDetails['tax_rate'];
+				$insertArray[$i]['menu_items'][$j]['service_tax'] = $productDetails['service_tax_rate'];
+				$insertArray[$i]['menu_items'][$j]['category']['id'] = $productDetails['category_id'];
+				$insertArray[$i]['menu_items'][$j]['category']['name'] = $productDetails['category'];
+				$insertArray[$i]['menu_items'][$j]['packaging'] = $productDetails['packaging'];
+				$insertArray[$i]['menu_items'][$j]['recipe_id'] = '';
+				/*if(array_key_exists($value['mysql_id'], $productRecipeArray) && array_key_exists($productDetails['id'], $productRecipeArray[$value['mysql_id']])){
+					$insertArray[$i]['menu_items'][$j]['recipe_id'] = $productRecipeArray[$value['mysql_id']][$productDetails['id']] ;
+				}*/
+				$insertArray[$i]['menu_items'][$j]['is_coc'] = $productDetails['is_coc'];
+				$insertArray[$i]['menu_items'][$j]['is_foe'] = $productDetails['is_foe'];
+				$insertArray[$i]['menu_items'][$j]['is_web'] = $productDetails['is_web'];
+				$insertArray[$i]['menu_items'][$j]['image'] = $productDetails['image'];
+				$j++;
 			}
-			$j=0;
-			
-			if(is_array($dbResult) && count($dbResult)>0){
-				foreach($dbResult as $k => $v){ 
-					$insertArray[$i]['schedule'][$inValue][$j]['mysql_id'] = $v['id'];
-					$insertArray[$i]['schedule'][$inValue][$j]['code'] = $v['code'];
-					$insertArray[$i]['schedule'][$inValue][$j]['name'] = $v['name'];
-					$insertArray[$i]['schedule'][$inValue][$j]['price'] = $v['price'];
-					$insertArray[$i]['schedule'][$inValue][$j]['qty'] = $v['qty'];
-					$insertArray[$i]['schedule'][$inValue][$j]['tax']['id'] = $v['tax_id'];
-					$insertArray[$i]['schedule'][$inValue][$j]['tax']['name'] = $v['tax_name'];
-					$insertArray[$i]['schedule'][$inValue][$j]['tax']['rate'] = $v['tax_rate'];
-					$insertArray[$i]['schedule'][$inValue][$j]['category']['id'] = $v['category_id'];
-					$insertArray[$i]['schedule'][$inValue][$j]['category']['name'] = $v['category_name'];
-					$insertArray[$i]['schedule'][$inValue][$j]['production_start_time'] = $v['pro_start_time'];
-					$insertArray[$i]['schedule'][$inValue][$j]['store_leaving_time'] = $v['st_leaving_time'];
-					$insertArray[$i]['schedule'][$inValue][$j]['onsite_time'] = $v['onsite_time'];
-					$j++;
-				}
-			}
-		}
-		$i++;
+        }
+	$i++;
 	}
+
 	if(count($existingRC)>0){
 		foreach($existingRC as $keyR => $valueR){
 			$res = $couch->deleteDoc($valueR['_id'])->setParam(array('rev'=>$valueR['_rev']))->execute();
 			$deleteCounter++;
 		}
 	}
+
 	$totalInsert = count($insertArray);
 	if($totalInsert > 0){
 		$result=$couch->saveDocument(true)->execute(array("docs"=>$insertArray));
   		if(array_key_exists('error', $result)){
-  				
-  				$html['error'] = true;
-				$html['update'] = false;
-				$html['msg'] = ERROR.' '.$result['error'];
+  			$html['error'] = true;
+			$html['update'] = false;
+			$html['msg'] = ERROR.' '.$result['error'];
+   		
    		}else{
   			//$logger->debug("Retail Customers Updated Successfully IN CouchDb");
   			$html['error'] = false;
@@ -226,8 +244,8 @@ function updateCustomers($location){
 			$html['data']['deleted'] = $deleteCounter;
   		}
 	}
+
 	$result = json_encode($html);
-	//$logger->debug("End OF updateStaff Function");
 	mysql_close();
 	return $result;
 }
@@ -411,13 +429,15 @@ function updateStore($location_id){
 				    $products = "SELECT pm.id, if(cpsp.display_name = '' or cpsp.display_name is null,
 				                 pm.display_name, cpsp.display_name) name, pm.sequence, 
 				                 cpsp.store_id, pm.code, if(cpsp.price is null, pm.price,if(cpsp.price = 0, 'R' , cpsp.price)) price, 
-				                 ctm.name tax, ctm.id tax_id,  crm.name category, crm.id as category_id, ctm.rate tax_rate, 
-                                 pm.packaging, pm.is_coc, pm.is_foe, pm.is_web, pm.product_image image, IF(cpsp.service_tax_rate IS NULL,0,cpsp.service_tax_rate) service_tax_rate
+				                 ctm.name tax, ctm.id tax_id,  crm.name category, crm.id as category_id, ctm.rate tax_rate,
+				                 cstm.rate service_tax_rate,  
+                                 pm.packaging, pm.is_coc, pm.is_foe, pm.is_web, pm.product_image image
 								 FROM product_master pm
 								 LEFT JOIN cp_product_store_price cpsp on cpsp.product_id = pm.id and cpsp.store_id = ".$storeDetails['mysql_id']." and cpsp.active = 'Y'
-						     	 LEFT JOIN cp_tax_master ctm on ctm.id = if(cpsp.price is null, pm.tax,cpsp.tax_rate)
+						     	 LEFT JOIN cp_tax_master ctm on ctm.id = if(cpsp.tax_rate is null OR cpsp.tax_rate = 0, pm.tax, cpsp.tax_rate)
+						     	 LEFT JOIN cp_service_tax_master cstm on cstm.id = if(cpsp.service_tax_rate is null OR cpsp.service_tax_rate = 0, pm.service_tax_rate, cpsp.service_tax_rate)
 								 LEFT JOIN cp_reference_master crm on crm.id = pm.type 
-								 where  pm.active = 'Y' AND (pm.price !=0 || cpsp.price!=0) AND pm.location LIKE '%".$location_id."%' 
+								 where  pm.active = 'Y' AND client_id = 0 AND (pm.price !=0 || cpsp.price!=0) AND pm.location LIKE '%".$location_id."%' 
 								 order by  pm.id asc";
 							
 							$productList = mysql_query($products);
@@ -467,7 +487,7 @@ function updateStore($location_id){
 								$k++;
 							}
 							
-							$getCustomer = "SELECT isb.customer_id id, cm.name, cm.billing_type type 
+							/*$getCustomer = "SELECT isb.customer_id id, cm.name, cm.billing_type type 
 											FROM `isb_delivery` isb
 											LEFT JOIN customer_master cm ON cm.id = isb.customer_id
 											WHERE isb.store_id = '".$storeDetails['mysql_id']."' AND isb.active = 'Y'
@@ -478,6 +498,18 @@ function updateStore($location_id){
 								$updateArray[$i]['retail_customer'][$l]['id'] = $row['id'];
 								$updateArray[$i]['retail_customer'][$l]['name'] = $row['name']; 
 								$updateArray[$i]['retail_customer'][$l]['type'] = $row['type'];
+								$l++;
+							}*/
+
+							$getCustomer = "SELECT id, name, billing_type
+											FROM client_master 
+											WHERE store = '".$storeDetails['mysql_id']."' AND active = 'Y' ";
+							$customerList = mysql_query($getCustomer);
+							$l = 0;
+							while ($row = mysql_fetch_assoc($customerList)) {
+								$updateArray[$i]['retail_customer'][$l]['id'] = $row['id'];
+								$updateArray[$i]['retail_customer'][$l]['name'] = $row['name']; 
+								$updateArray[$i]['retail_customer'][$l]['type'] = $row['billing_type'];
 								$l++;
 							}
 							
@@ -646,7 +678,8 @@ function updateConfig(){
 							LEFT JOIN  location_master lm ON lm.id = sm.location_id 
 							WHERE sm.active = 'Y' AND sm.type != 'WHO' AND sm.id = $store";
 						
-		$storeResult = mysql_query($getStoreNameQuery);
+		$storeResult = mysql_query($getStoreNameQuery) or die(mysql_error());
+
 		$getProductRecipe = "SELECT id, product_id, store_id FROM cp_recipes_master WHERE active = 'Y'";
 		$recipesResult = mysql_query($getProductRecipe);
 		$productRecipeArray = array();
@@ -717,16 +750,18 @@ function updateConfig(){
 			$getLocation = "SELECT location_id FROM store_master WHERE id = '".$storeDetails['mysql_id']."' ";
 			$locationResult = mysql_fetch_array(mysql_query($getLocation));
 			$locationId = $locationResult[0]['location_id'];
-			$products = "select pm.id, if(cpsp.display_name = '' or cpsp.display_name is null,
+		    $products = "SELECT pm.id, if(cpsp.display_name = '' or cpsp.display_name is null,
 				                 pm.display_name, cpsp.display_name) name, pm.sequence, 
 				                 cpsp.store_id, pm.code, if(cpsp.price is null, pm.price,if(cpsp.price = 0, 'R' , cpsp.price)) price, 
-				                 ctm.name tax, ctm.id tax_id,  crm.name category, crm.id as category_id, ctm.rate tax_rate, 
-                                 pm.packaging, pm.is_coc, pm.is_foe, pm.is_web, pm.product_image image, IF(cpsp.service_tax_rate IS NULL,0,cpsp.service_tax_rate) service_tax_rate
+				                 ctm.name tax, ctm.id tax_id,  crm.name category, crm.id as category_id, ctm.rate tax_rate,
+				                 cstm.rate service_tax_rate,  
+                                 pm.packaging, pm.is_coc, pm.is_foe, pm.is_web, pm.product_image image
 								 FROM product_master pm
 								 LEFT JOIN cp_product_store_price cpsp on cpsp.product_id = pm.id and cpsp.store_id = ".$storeDetails['mysql_id']." and cpsp.active = 'Y'
-						     	 LEFT JOIN cp_tax_master ctm on ctm.id = if(cpsp.price is null, pm.tax,cpsp.tax_rate)
+						     	 LEFT JOIN cp_tax_master ctm on ctm.id = if(cpsp.tax_rate is null OR cpsp.tax_rate = 0, pm.tax, cpsp.tax_rate)
+						     	 LEFT JOIN cp_service_tax_master cstm on cstm.id = if(cpsp.service_tax_rate is null OR cpsp.service_tax_rate = 0, pm.service_tax_rate, cpsp.service_tax_rate)
 								 LEFT JOIN cp_reference_master crm on crm.id = pm.type 
-								 where  pm.active = 'Y' AND (pm.price !=0 || cpsp.price!=0) AND pm.location LIKE '%".$locationId."%'
+								 where  pm.active = 'Y' AND client_id = 0 AND (pm.price !=0 || cpsp.price!=0) AND pm.location LIKE '%".$location_id."%' 
 								 order by  pm.id asc";
 								 
 							
@@ -775,18 +810,15 @@ function updateConfig(){
 				$k++;
 			}
 							
-			$getCustomer = "SELECT isb.customer_id id, cm.name, cm.billing_type type 
-							FROM `isb_delivery_confirm` isbc
-							LEFT JOIN isb_delivery isb ON isb.id = isbc.isb_delivery_id
-							LEFT JOIN customer_master cm ON cm.id = isb.customer_id AND isb.active = 'Y'
-							WHERE isbc.store_id = '".$storeDetails['mysql_id']."' AND isbc.date = '".$date."'
-							GROUP BY isb.customer_id";
+			$getCustomer = "SELECT id, name, billing_type
+							FROM client_master 
+							WHERE store = '".$storeDetails['mysql_id']."' AND active = 'Y' ";
 			$customerList = mysql_query($getCustomer);
 			$l = 0;
 			while ($row = mysql_fetch_assoc($customerList)) {
 				$updateArray[$i]['retail_customer'][$l]['id'] = $row['id'];
 				$updateArray[$i]['retail_customer'][$l]['name'] = $row['name']; 
-				$updateArray[$i]['retail_customer'][$l]['type'] = $row['type'];
+				$updateArray[$i]['retail_customer'][$l]['type'] = $row['billing_type'];
 				$l++;
 			}
 			
@@ -873,53 +905,70 @@ function updateConfig(){
 						}
 					}
 					
-					$getCustomer = "SELECT cm.name customer_name, cm.address, cm.phone, cm.contact_person,
-									cm.e_mail, cm.type, cm.billing_type, isb.customer_id mysql_id,
-									cim.id, cim.code, cim.name product_name, isb.price, isbc.qty,
-									isb.tax, ctm.name tax_name, ctm.rate, cim.item_group_code category_id,
-									crm.name AS category_name, isbc.pro_start_time, isbc.str_leaving_time,
-									isbc.onsite_time
-									FROM  `isb_delivery_confirm` isbc
-									LEFT JOIN isb_delivery isb ON isb.id = isbc.isb_delivery_id
-									LEFT JOIN customer_master cm ON cm.id = isb.customer_id
-									LEFT JOIN cp_item_master cim ON cim.id = isbc.product_id
-									LEFT JOIN cp_tax_master ctm ON ctm.id = isb.tax
-									LEFT JOIN cp_reference_master crm ON crm.id = cim.item_group_code
-									WHERE isbc.store_id = '".$store."'
-									AND DATE( isbc.date ) = '".$date."'";
-					$result = mysql_query($getCustomer);
-					$data = array();
-					$i=0;
-		
-					while($value=mysql_fetch_assoc($result)){
-						$data[$value['mysql_id']]['name'] = $value['customer_name'];
-						$data[$value['mysql_id']]['address'] = $value['address'];
-						$data[$value['mysql_id']]['phone'] = $value['phone'];
-						$data[$value['mysql_id']]['contact_person'] = $value['contact_person'];
-						$data[$value['mysql_id']]['e_mail'] = $value['e_mail'];
-						$data[$value['mysql_id']]['type'] = $value['type'];
-						$data[$value['mysql_id']]['billing_type'] = $value['billing_type'];
-						$data[$value['mysql_id']]['cd_doc_type'] = RETAIL_CUSTOMERS_DOC_TYPE;
-						$data[$value['mysql_id']]['mysql_id'] = $value['mysql_id'];
-						$data[$value['mysql_id']]['schedule_date'] = date('Y-m-d');
-						$data[$value['mysql_id']]['schedule'][$value['onsite_time']][$i]['mysql_id'] = $value['id'];
-						$data[$value['mysql_id']]['schedule'][$value['onsite_time']][$i]['code'] = $value['code'];
-						$data[$value['mysql_id']]['schedule'][$value['onsite_time']][$i]['name'] = $value['product_name'];
-						$data[$value['mysql_id']]['schedule'][$value['onsite_time']][$i]['price'] = $value['price'];
-						$data[$value['mysql_id']]['schedule'][$value['onsite_time']][$i]['qty'] = $value['qty'];
-						$data[$value['mysql_id']]['schedule'][$value['onsite_time']][$i]['tax']['id'] = $value['tax'];
-						$data[$value['mysql_id']]['schedule'][$value['onsite_time']][$i]['tax']['name'] = $value['tax_name'];
-						$data[$value['mysql_id']]['schedule'][$value['onsite_time']][$i]['tax']['rate'] = $value['rate'];
-						$data[$value['mysql_id']]['schedule'][$value['onsite_time']][$i]['category']['id'] = $value['category_id'];	
-						$data[$value['mysql_id']]['schedule'][$value['onsite_time']][$i]['category']['name'] = $value['category_name'];
-						$data[$value['mysql_id']]['schedule'][$value['onsite_time']][$i]['production_start_time'] = $value['pro_start_time'];
-						$data[$value['mysql_id']]['schedule'][$value['onsite_time']][$i]['store_leaving_time'] = $value['str_leaving_time'];
-						$data[$value['mysql_id']]['schedule'][$value['onsite_time']][$i]['onsite_time'] = $value['onsite_time'];
-						$i++;		
-					}
+					$getCustomer = "SELECT id, name, code, phone, email, company_name, billing_address, billing_type,
+									consignee_address, prod_start_date, deactivate_date, vat, location_id,
+									cin, stn, pan
+									FROM client_master 
+									WHERE active = 'Y' AND store = ".$store."";
 
-					if(is_array($data) && count($data)>0){
-						foreach($data as $key=>$val){
+					$result = mysql_query($getCustomer);
+					$insertArray = array();
+					$i = 0;
+	
+					while($value=mysql_fetch_assoc($result)){
+						
+						$value['cd_doc_type'] = RETAIL_CUSTOMERS_DOC_TYPE;
+						$value['mysql_id'] = $value['id'];
+						$value['billing_address'] = str_replace(array('"',"'"), ' ', $value['billing_address']);
+						$value['consignee_address'] = str_replace(array('"',"'"), ' ', $value['consignee_address']);
+						unset($value['id']);
+						$insertArray[$i] = $value;
+
+						$getProduct = "SELECT pm.id, if(cpsp.display_name = '' or cpsp.display_name is null,
+				       					pm.display_name, cpsp.display_name) name, pm.sequence, 
+				       					cpsp.store_id, pm.code, if(cpsp.price is null, pm.price,if(cpsp.price = 0, 'R' , cpsp.price)) price,
+				       					ctm.name tax, ctm.id tax_id,  crm.name category, crm.id as category_id, ctm.rate tax_rate, 
+                       					pm.packaging, pm.is_coc, pm.is_foe, pm.is_web, pm.product_image image, cstm.rate service_tax_rate
+					     				FROM product_master pm
+					   					LEFT JOIN cp_product_store_price cpsp on cpsp.product_id = pm.id and cpsp.client_id = ".$value['mysql_id']." and cpsp.active = 'Y'
+					   					LEFT JOIN cp_tax_master ctm on ctm.id = if(cpsp.tax_rate is null OR cpsp.tax_rate = 0 , pm.tax, cpsp.tax_rate)
+					   					LEFT JOIN cp_service_tax_master cstm ON cstm.id = if(cpsp.service_tax_rate is null OR cpsp.service_tax_rate = 0, pm.service_tax_rate, cpsp.service_tax_rate)
+					   					LEFT JOIN cp_reference_master crm on crm.id = pm.type 
+					   					where  pm.active = 'Y' AND pm.is_caw = 'Y' AND (pm.price !=0 || cpsp.price!=0) AND pm.location LIKE '%".$value['location_id']."%' 
+					   					order by  pm.id asc";
+							
+						$productList = mysql_query($getProduct);
+						$j = 0;
+		
+						while($innerRow = mysql_fetch_assoc($productList)){	
+							$productDetails = $innerRow;
+							if(is_numeric($productDetails['price'])){
+     							$insertArray[$i]['menu_items'][$j]['mysql_id'] = $productDetails['id'];
+								$insertArray[$i]['menu_items'][$j]['sequence'] = $productDetails['sequence'];
+								$insertArray[$i]['menu_items'][$j]['code'] = $productDetails['code'];
+								$insertArray[$i]['menu_items'][$j]['name'] = $productDetails['name'];
+								$insertArray[$i]['menu_items'][$j]['price'] = $productDetails['price'];
+								$insertArray[$i]['menu_items'][$j]['tax']['id'] = $productDetails['tax_id'];
+								$insertArray[$i]['menu_items'][$j]['tax']['name'] = $productDetails['tax'];
+								$insertArray[$i]['menu_items'][$j]['tax']['rate'] = $productDetails['tax_rate'];
+								$insertArray[$i]['menu_items'][$j]['service_tax'] = $productDetails['service_tax_rate'];
+								$insertArray[$i]['menu_items'][$j]['category']['id'] = $productDetails['category_id'];
+								$insertArray[$i]['menu_items'][$j]['category']['name'] = $productDetails['category'];
+								$insertArray[$i]['menu_items'][$j]['packaging'] = $productDetails['packaging'];
+								$insertArray[$i]['menu_items'][$j]['recipe_id'] = '';
+								$insertArray[$i]['menu_items'][$j]['is_coc'] = $productDetails['is_coc'];
+								$insertArray[$i]['menu_items'][$j]['is_foe'] = $productDetails['is_foe'];
+								$insertArray[$i]['menu_items'][$j]['is_web'] = $productDetails['is_web'];
+								$insertArray[$i]['menu_items'][$j]['image'] = $productDetails['image'];
+								$j++;
+							}
+        				}
+					$i++;
+				}
+
+					
+					if(is_array($insertArray) && count($insertArray)>0){
+						foreach($insertArray as $key=>$val){
 							$couch->saveDocument()->execute($val);
 						}
 					}
