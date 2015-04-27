@@ -48,8 +48,8 @@
 				<input type="hidden" name="card_approval_code" id="card_approval_code">
 				<input type="hidden" name="card_balance" id="card_balance">
 				<input type="hidden" name="card_invoice_no" id="card_invoice_no">
-				<input type="hidden" name="challan_no" id="challan_no"/>
-				<input type="hidden" name="onsite_time" id="onsite_time"/>
+				<!--<input type="hidden" name="challan_no" id="challan_no"/>
+				<input type="hidden" name="onsite_time" id="onsite_time"/>-->
 				<input type="hidden" name="coupon_code" id="coupon_code"/>
 				<input type="hidden" name="reward_redemption_code" id="reward_redemption_code">
 
@@ -100,7 +100,22 @@
 								<span class="inv_cus_con" id="contact_person"> </span>
 							</td>
 						</tr>
-
+						<tr class='row hide' > 
+							<td width="50%">DC Challan</td>
+							<td width="50%">
+								<input type="text" class="form-control" required  name="challan_no" id="challan_no"/>
+							</td>
+						</tr>
+						
+						<tr class='row hide' > 
+							<td width="50%">Bill Date</td>
+							<td width="50%">
+								<style>.datepicker-dropdown {z-index:99999999 !important}</style>
+								<input type="text" class="form-control datepicker" required  data-date-format="yyyy-mm-dd" name="onsite_time" id="onsite_time"/>
+							</td>
+						</tr>
+						
+				
 						<tr class="row">
 							<td width="50%">Phone Number <!--<a href="#"
 									class="btn btn-primary btn-xs showCModal"><i
