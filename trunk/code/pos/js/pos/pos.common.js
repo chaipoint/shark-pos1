@@ -111,7 +111,8 @@ $(document).ready(function(){
 	$(function(){
 		window.setInterval(function(){
 		 var result = checkInternet();
-		 if(result==true){
+		 var param = (url.param('dispatch')).split('.'); //alert(param[1]);
+		 if(result==true && param[1]!=undefined){
 			$('.payment-type-bt[data-value="ppc"]').attr('disabled',false);
 			$('.payment-type-bt[data-value="ppa"]').attr('disabled',false);
 		 }else{
