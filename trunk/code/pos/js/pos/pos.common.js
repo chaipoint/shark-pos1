@@ -220,7 +220,7 @@ $(document).ready(function(){
 			url: "download/download.php?param=updateSingleStore-"+store,
 			timeout:120000,
 		}).done(function(response) {
-			//alert(response); 
+			//alert(response);  return false;
 			$("#ajaxfadediv").removeClass('ajaxfadeclass');
 			result = $.parseJSON(response);
 			var reload = false;
