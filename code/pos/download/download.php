@@ -10,6 +10,7 @@ require_once '../config.php';
 require_once '../common/couchdb_phpclass.php';
 require_once '../constant.php';
 
+
 //$locationId = $argv[1]; /*Contain Location ID*/
 //$storeId_id = $argv[2]; /*Contain STORE ID*/
 //print_r($_REQUEST);
@@ -329,6 +330,7 @@ function updateStaff($location){
 
 /* Function To Download Store From CPOS */
 function updateStore($location_id){ 
+	global $config;
     $couch = new CouchPHP();
 	$result = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_STORE_BY_MYSQL_ID)->setParam(array("include_docs"=>"true"))->execute();
 	$storeList = array();
@@ -352,8 +354,7 @@ function updateStore($location_id){
                           WHERE sm.active = 'Y' AND sm.type != 'WHO' AND sm.location_id = $location_id";
 						
 	$storeResult = mysql_query($getStoreNameQuery);
-	$getProductRecipe = "SELECT id, product_id, store_id 
-						 FROM cp_recipes_master WHERE active = 'Y'";
+	$getProductRecipe = "SELECT id, product_id, store_id FROM cp_recipes_master WHERE active = 'Y'";
 						
 						$recipesResult = mysql_query($getProductRecipe);
 						$productRecipeArray = array();
@@ -383,9 +384,21 @@ function updateStore($location_id){
 							$updateArray[$i]['store_message'] = $storeDetails['store_message'];
 							$updateArray[$i]['location']['id'] = $storeDetails['location_id'];
 							$updateArray[$i]['location']['name'] = $storeDetails['location_name'];
-							$updateArray[$i]['ppa_details']['uid'] = $storeDetails['ppa_uid'];
-							$updateArray[$i]['ppa_details']['pwd'] = $storeDetails['ppa_pwd'];
-							$updateArray[$i]['ppc_details']['tid'] = $storeDetails['ppc_tid'];
+							$ppa_uid = explode(',', $storeDetails['ppa_uid']);
+							$ppa_pwd = explode(',', $storeDetails['ppa_pwd']);
+							$ppc_tid = explode(',', $storeDetails['ppc_tid']);
+							
+							if($config['till_no'] ==1){
+								$updateArray[$i]['ppa_details']['uid'] = $ppa_uid[0];
+								$updateArray[$i]['ppa_details']['pwd'] = $ppa_pwd[0];
+								$updateArray[$i]['ppc_details']['tid'] = $ppc_tid[0];
+				
+							}elseif($config['till_no'] ==2){
+								$updateArray[$i]['ppa_details']['uid'] = $ppa_uid[1];
+								$updateArray[$i]['ppa_details']['pwd'] = $ppa_pwd[1];
+								$updateArray[$i]['ppc_details']['tid'] = $ppc_tid[1];
+							}
+							
 							$updateArray[$i]['ppc_details']['uid'] = $storeDetails['ppc_uid'];
 							$updateArray[$i]['ppc_details']['pwd'] = $storeDetails['ppc_pwd'];
 							
@@ -655,7 +668,8 @@ function updateConfig(){
 	return $result;
 }
 	
-	function updateSingleStore($store){ 
+	function updateSingleStore($store){
+		global $config;
 		$date = date('Y-m-d');
 		$couch = new CouchPHP();
 		$result = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_STORE_BY_MYSQL_ID)->setParam(array("include_docs"=>"true", 'key'=>'"'.$store.'"'))->execute();
@@ -707,9 +721,20 @@ function updateConfig(){
 			$updateArray[$i]['store_message'] = $storeDetails['store_message'];
 			$updateArray[$i]['location']['id'] = $storeDetails['location_id'];
 			$updateArray[$i]['location']['name'] = $storeDetails['location_name'];
-			$updateArray[$i]['ppa_details']['uid'] = $storeDetails['ppa_uid'];
-			$updateArray[$i]['ppa_details']['pwd'] = $storeDetails['ppa_pwd'];
-			$updateArray[$i]['ppc_details']['tid'] = $storeDetails['ppc_tid'];
+			$ppa_uid = explode(',', $storeDetails['ppa_uid']);
+			$ppa_pwd = explode(',', $storeDetails['ppa_pwd']);
+			$ppc_tid = explode(',', $storeDetails['ppc_tid']);
+			if($config['till_no'] ==1){
+				$updateArray[$i]['ppa_details']['uid'] = $ppa_uid[0];
+				$updateArray[$i]['ppa_details']['pwd'] = $ppa_pwd[0];
+				$updateArray[$i]['ppc_details']['tid'] = $ppc_tid[0];
+				
+			}elseif($config['till_no'] ==2){
+				$updateArray[$i]['ppa_details']['uid'] = $ppa_uid[1];
+				$updateArray[$i]['ppa_details']['pwd'] = $ppa_pwd[1];
+				$updateArray[$i]['ppc_details']['tid'] = $ppc_tid[1];
+			}
+			
 			$updateArray[$i]['ppc_details']['uid'] = $storeDetails['ppc_uid'];
 			$updateArray[$i]['ppc_details']['pwd'] = $storeDetails['ppc_pwd'];
 			$updateArray[$i]['phone'][] = $updateArray[$i]['phone_1'];
