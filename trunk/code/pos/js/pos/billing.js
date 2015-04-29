@@ -115,8 +115,11 @@ $(document).ready(function(){
 			console.log(response);
 			var $result = $.parseJSON(response);
 			if($result.error){ 
-				bootbox.alert($result.message);
-				return false;
+				bootbox.alert($result.message, function(){
+					window.location.href = '?dispatch=caw.index';
+				});
+				//return false;
+				
 			}
 			cawBill = new Object();
 			cawBill = $result['data'];
@@ -1203,6 +1206,20 @@ function discount(action, flag){
 							}else if($data[index].product_id in $billingItems && $data[index].product_qty <= $billingItems[$data[index].product_id].qty && $data[index].product_discount_type == 'V' && action=='remove'){
 								$billingItems[$data[index].product_id].price = parseInt($billingItems[$data[index].product_id].price) + parseInt($data[index].product_discount);
 							
+							}else if($data[index].product_id in $billingItems && $data[index].product_qty <= $billingItems[$data[index].product_id].qty && $data[index].product_discount_type == 'C' && action=='add'){
+								if(!$billingItems[$data[index].product_id].original_price){
+									$billingItems[$data[index].product_id].original_price = $billingItems[$data[index].product_id].price;
+								} 
+								$billingItems[$data[index].product_id].price = $data[index].product_discount;
+								//alert(JSON.stringify($billingItems));
+							
+							}else if($data[index].product_id in $billingItems && $data[index].product_qty > $billingItems[$data[index].product_id].qty && $data[index].product_discount_type == 'C' && action=='add'){
+								$billingItems[$data[index].product_id].price = ($billingItems[$data[index].product_id].original_price ? $billingItems[$data[index].product_id].original_price : $billingItems[$data[index].product_id].price);
+								
+							
+							}else if($data[index].product_id in $billingItems && $data[index].product_qty <= $billingItems[$data[index].product_id].qty && $data[index].product_discount_type == 'C' && action=='remove'){
+								$billingItems[$data[index].product_id].price = $billingItems[$data[index].product_id].original_price;
+								
 							}
 							
 						}
