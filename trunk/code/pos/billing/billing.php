@@ -159,7 +159,7 @@
 				$return['data'] = $resultCawProduct['rows'][0]['doc']; 
 			}else{
 				$return['error'] = true;
-				$return['message'] = 'Customer Not Found';
+				$return['message'] = 'Customer Data Not Found.Please get Latest Store Data';
 			}
 			return $return;
 		}
