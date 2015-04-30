@@ -2,7 +2,7 @@
 require_once 'common/couchdb.phpclass.php';
 $param = $_GET['param'];
 
-switch ($argv[1]){
+switch ($param){
 	case 'init':
 		echo init();
 		break;
