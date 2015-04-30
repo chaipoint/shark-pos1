@@ -16,7 +16,7 @@ switch ($param){
 function deleteDoc(){
 	$couch = new CouchPHP();
 	$deleteArray = array();
-	$result = $couch->getDesign(BILLING_DESIGN_DOCUMENT)->getView(BILLING_DESIGN_DOCUMENT_VIEW_HANDLE_UPDATED_BILLS)->setParam(array("startkey" => '["2015-01-01"]',"endkey" => '["2015-01-31",{},{},{}]'))->execute();
+	$result = $couch->getDesign('billing')->getView('handle_updated_bills')->setParam(array("startkey" => '["2015-01-01"]',"endkey" => '["2015-01-31",{},{},{}]'))->execute();
 	$i=0;
 	echo '<pre>';print_r($result);echo '</pre>';die();
 	foreach($result['rows'] as $key => $value){
