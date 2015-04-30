@@ -1,7 +1,33 @@
 <?php 
 require_once 'common/couchdb.phpclass.php';
+$param = $_GET['param'];
 
-echo init();
+switch ($argv[1]){
+	case 'init':
+		echo init();
+		break;
+
+	case 'deleteDoc' :
+		echo deleteDoc();
+		break;
+}
+//echo init();
+function deleteDoc(){
+	$couch = new CouchPHP();
+	$deleteArray = array();
+	$result = $couch->getDesign(BILLING_DESIGN_DOCUMENT)->getView(BILLING_DESIGN_DOCUMENT_VIEW_HANDLE_UPDATED_BILLS)->setParam(array("startkey" => '["2015-01-01"]',"endkey" => '["2015-01-31",{},{},{}]'))->execute();
+	$i=0;
+	echo '<pre>';print_r($result);echo '</pre>';die();
+	foreach($result['rows'] as $key => $value){
+		$deleteArray[$i]["_id"] = $value['id'];
+		$deleteArray[$i]["_rev"] = $value['value'];
+		$deleteArray[$i]["_deleted"] = true;
+		$i++;
+	}
+	//$res = $couch->saveDocument(true)->execute(array("docs"=>$deleteArray));
+	echo'<pre>'; print_r($deleteArray); echo'</pre>';
+		
+}
 function init(){
       $couch = new CouchPHP();
       $designDocs = array();
