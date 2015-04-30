@@ -1,5 +1,6 @@
 <?php 
 require_once 'common/couchdb.phpclass.php';
+require_once 'common/constant.php';
 $param = $_GET['param'];
 
 switch ($param){
