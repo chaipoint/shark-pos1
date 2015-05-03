@@ -62,19 +62,21 @@
 
 				$catList = array();
 				$productList = array();
+				if(array_key_exists('menu_items', $result) && count($result['menu_items'])>0){
 				foreach($result['menu_items'] as $key => $Items){
 					if(!empty($Items['category']['id'])){
 						$catList[$Items['category']['id']] = $Items['category']['name']; 
 						$productList[$Items['category']['id']][$Items['sequence']] = $Items;
 					}
 		 		}
+				}
 				foreach($productList as $key => $value){
 					 ksort($productList[$key]);
 				}
 				
 		 		ksort($catList);
 		 		$currectCat = array_keys($catList);
-	  			$firstCat = $currectCat[0];
+	  			$firstCat = @$currectCat[0];
 				$billData = array();
 	  			if(array_key_exists('bill_no', $_GET) && ! empty($_GET['bill_no'])){
 	  				$bill = $_GET['bill_no'];
