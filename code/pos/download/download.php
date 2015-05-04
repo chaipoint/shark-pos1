@@ -19,6 +19,7 @@ $param=$_GET['param'];
 $arguments = explode("-", $param);
 $argv[1]=$arguments[0];
 $argv[2]=(!empty($arguments[1]) ? $arguments[1] : '');
+
 switch ($argv[1]){
 	case 'updateConfig':
 	echo updateConfig();
@@ -48,9 +49,9 @@ switch ($argv[1]){
 	echo checkit();
 		break;
 		
-		
 }
-function checkit(){
+
+/*function checkit(){
 	$couch = new CouchPHP();
 	$target = $couch->getRemote();
 	$source = $couch->getUrl().$couch->getDB();
@@ -58,8 +59,12 @@ function checkit(){
 	$insert=true;
 	$url = ($insert ? 'http://pos:pos@127.0.0.1:5984/_replicator' : 'http://pos:pos@127.0.0.1:5984/_replicator/store_replication');
     
+	$username = 'pos';
+    $password = 'pos';
+	$authorization = 'Basic '.base64_encode("$username:$password");
+	
 	if($insert){
-		$postData = array('_id'=>'store_replication', 'source'=>$target, 'target'=>$source, 'filter'=>'doc_replication/store_replication', 'query_params'=>array("mysql_id"=>62), 'continuous'=>true);
+		$postData = array('_id'=>'store_replication', 'source'=>array("url"=>"http://54.178.189.25:5984/sharkho","headers"=>array("Authorization" =>$authorization)), 'target'=>"http://localhost:5984/sharkpos", 'filter'=>'doc_replication/store_replication', "continuous":true);
 	}else {
 		$postData = array();
 	}
@@ -79,7 +84,7 @@ function checkit(){
     curl_close($ch);
 	return $result;
 
-}
+}*/
 function insertRepDoc($insert){
 	$couch = new CouchPHP();
 	$target = $couch->getRemote();
@@ -134,18 +139,9 @@ function updateCustomers($location){
 			$existingRC[$rvalue['doc']['mysql_id']]['_rev'] = $rvalue['doc']['_rev'];
 		}
 	}
-
-	/*$cusQuery = "SELECT cm.id, cm.name, cm.address, cm.phone, cm.contact_person,
-				cm.e_mail, cm.location_id, cm.customer_id, cm.type, cm.billing_type, cm.note, GROUP_CONCAT(DISTINCT(isb.day)) day 
-				FROM customer_master cm 
-				LEFT JOIN isb_delivery isb ON isb.customer_id = cm.id AND isb.active = 'Y'
-				WHERE cm.active = 'Y' AND cm.location_id = $location 
-				GROUP BY isb.customer_id
-				ORDER BY `cm`.`id` ASC";*/
-
 	$getCustomer = "SELECT id, name, code, phone, email, company_name, billing_address, billing_type,
 					consignee_address, prod_start_date, deactivate_date, vat, location_id,
-					cin, stn, pan
+					cin, stn, pan, store
 					FROM client_master 
 					WHERE active = 'Y' AND location_id = ".$location."";
 
@@ -182,7 +178,7 @@ function updateCustomers($location){
 				       ctm.name tax, ctm.id tax_id,  crm.name category, crm.id as category_id, ctm.rate tax_rate, 
                        pm.packaging, pm.is_coc, pm.is_foe, pm.is_web, pm.product_image image, cstm.rate service_tax_rate
 					     FROM product_master pm
-					   LEFT JOIN cp_product_store_price cpsp on cpsp.product_id = pm.id and cpsp.client_id = ".$value['mysql_id']." and cpsp.active = 'Y'
+					   LEFT JOIN cp_product_store_price cpsp on cpsp.product_id = pm.id and cpsp.client_id = ".$value['mysql_id']." and cpsp.store_id = ".$value['store']." and cpsp.active = 'Y'
 					   LEFT JOIN cp_tax_master ctm on ctm.id = if(cpsp.tax_rate is null OR cpsp.tax_rate = 0, pm.tax , cpsp.tax_rate)
 					   LEFT JOIN cp_service_tax_master cstm ON cstm.id = if(cpsp.service_tax_rate is null OR cpsp.service_tax_rate = 0 , pm.service_tax_rate, cpsp.service_tax_rate)
 					   LEFT JOIN cp_reference_master crm on crm.id = pm.type 
@@ -772,10 +768,10 @@ function updateConfig(){
 					$updateArray[$i]['schedule']['closing_time'][6] = $rowSchedule['closing_time'];
 				}
 			}
-			$getLocation = "SELECT location_id FROM store_master WHERE id = '".$storeDetails['mysql_id']."' ";
+			/*$getLocation = "SELECT location_id FROM store_master WHERE id = '".$storeDetails['mysql_id']."' ";
 			$locationResult = mysql_fetch_array(mysql_query($getLocation));
-			$locationId = $locationResult[0]['location_id'];
-		    $products = "SELECT pm.id, if(cpsp.display_name = '' or cpsp.display_name is null,
+			$locationId = $locationResult[0]['location_id'];*/
+			$products = "SELECT pm.id, if(cpsp.display_name = '' or cpsp.display_name is null,
 				                 pm.display_name, cpsp.display_name) name, pm.sequence, 
 				                 cpsp.store_id, pm.code, if(cpsp.price is null, pm.price,if(cpsp.price = 0, 'R' , cpsp.price)) price, 
 				                 ctm.name tax, ctm.id tax_id,  crm.name category, crm.id as category_id, ctm.rate tax_rate,
@@ -786,7 +782,7 @@ function updateConfig(){
 						     	 LEFT JOIN cp_tax_master ctm on ctm.id = if(cpsp.tax_rate is null OR cpsp.tax_rate = 0, pm.tax, cpsp.tax_rate)
 						     	 LEFT JOIN cp_service_tax_master cstm on cstm.id = if(cpsp.service_tax_rate is null OR cpsp.service_tax_rate = 0, pm.service_tax_rate, cpsp.service_tax_rate)
 								 LEFT JOIN cp_reference_master crm on crm.id = pm.type 
-								 where  pm.active = 'Y' AND pm.is_caw = 'N' AND (pm.price !=0 || cpsp.price!=0) AND pm.location LIKE '%".$location_id."%' 
+								 where  pm.active = 'Y' AND pm.is_caw = 'N' AND (pm.price !=0 || cpsp.price!=0) AND pm.location LIKE '%".$storeDetails['location_id']."%' 
 								 order by  pm.id asc";
 								 
 							
@@ -932,7 +928,7 @@ function updateConfig(){
 					
 					$getCustomer = "SELECT id, name, code, phone, email, company_name, billing_address, billing_type,
 									consignee_address, prod_start_date, deactivate_date, vat, location_id,
-									cin, stn, pan
+									cin, stn, pan, store
 									FROM client_master 
 									WHERE active = 'Y' AND store = ".$store."";
 
@@ -955,7 +951,7 @@ function updateConfig(){
 				       					ctm.name tax, ctm.id tax_id,  crm.name category, crm.id as category_id, ctm.rate tax_rate, 
                        					pm.packaging, pm.is_coc, pm.is_foe, pm.is_web, pm.product_image image, cstm.rate service_tax_rate
 					     				FROM product_master pm
-					   					LEFT JOIN cp_product_store_price cpsp on cpsp.product_id = pm.id and cpsp.client_id = ".$value['mysql_id']." and cpsp.active = 'Y'
+					   					LEFT JOIN cp_product_store_price cpsp on cpsp.product_id = pm.id and cpsp.client_id = ".$value['mysql_id']." and cpsp.store_id = ".$value['store']." and cpsp.active = 'Y'
 					   					LEFT JOIN cp_tax_master ctm on ctm.id = if(cpsp.tax_rate is null OR cpsp.tax_rate = 0 , pm.tax, cpsp.tax_rate)
 					   					LEFT JOIN cp_service_tax_master cstm ON cstm.id = if(cpsp.service_tax_rate is null OR cpsp.service_tax_rate = 0, pm.service_tax_rate, cpsp.service_tax_rate)
 					   					LEFT JOIN cp_reference_master crm on crm.id = pm.type 
