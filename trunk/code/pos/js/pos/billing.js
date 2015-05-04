@@ -72,6 +72,7 @@ $(document).ready(function(){
 		loadedBill = new Object();
 		var orderData = $.parseJSON(localStorage.getItem(order));
 		loadedBill = orderData;
+		//alert(JSON.stringify(loadedBill));
 		if(orderData){
 			var productNewList = new Object();
 			$.each(productArray, function(index, data){
@@ -83,18 +84,22 @@ $(document).ready(function(){
 				});
 			});
 			
-			$.each(orderData.products, function (index, data){ 
-				var productData = productArray[productNewList[data['id']].cat] [productNewList[data['id']].seq];
-				productData['price'] = data['cost'];
-				$('#proajax button[value="'+data['id']+'"]').addClass('active-btn');
-				generateSalesTable(data['id'], parseInt(data['qty']), productData);
-				
+			$.each(orderData.products, function (index, data){
+				if(data['id'] in productArray){
+					var productData = productArray[productNewList[data['id']].cat] [productNewList[data['id']].seq];
+					productData['price'] = data['cost'];
+					//productData['service_tax'] = 0.0249;
+					selectedCat = productData['category']['id'];
+					$('#proajax button[value="'+data['id']+'"]').addClass('active-btn');
+					generateSalesTable(data['id'], parseInt(data['qty']), productData);
+				}
 			});
 
 			$(".del_row").removeClass('del_row');
 			$('.bill_qty_input').prop('readonly',true).removeClass('bill_qty_input');
 			$('.category-selection').removeClass('category-selection');
 			$('.category-product').removeClass('category-product');
+			//alert(orderData['coupon_code']);
 			if(orderData['coupon_code']!=''){ 
 				$('#discount_input_box').val(orderData['coupon_code']);
 				$('#apply_discount').trigger('click');
@@ -111,7 +116,7 @@ $(document).ready(function(){
 			type: 'POST',
 			url: "index.php?dispatch=billing.getCawProduct",
 			data : {request_type:'getCawProduct', 'customer_id':cawOrder},
-		}).done(function(response) {  
+		}).done(function(response) {   
 			console.log(response);
 			var $result = $.parseJSON(response);
 			if($result.error){ 
@@ -981,7 +986,7 @@ $(document).ready(function(){
 
 });
 function generateSalesTable(productId, qty, productData){ 
-	
+	//alert(JSON.stringify(productData));
 	var addAtLast = false;
 	if(productData){
 		addAtLast = true;
