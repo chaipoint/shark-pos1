@@ -85,7 +85,8 @@ $(document).ready(function(){
 			});
 			
 			$.each(orderData.products, function (index, data){
-				if(data['id'] in productArray){
+			//alert(JSON.stringify(productNewList));
+				if(data['id'] in productNewList){
 					var productData = productArray[productNewList[data['id']].cat] [productNewList[data['id']].seq];
 					productData['price'] = data['cost'];
 					//productData['service_tax'] = 0.0249;
