@@ -1,6 +1,8 @@
 <?php 
 require_once 'common/couchdb.phpclass.php';
 require_once 'constant.php';
+require_once 'common/logger.php';
+	
 $param = $_GET['param'];
 echo $param;
 switch ($param){
@@ -23,8 +25,76 @@ function cardSale(){
 	$no_bill = $unsuccessful = $successful = $counter = 0;
 	echo 'sdf';
 	$billData = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_CARD_NO_MYSQL_ID)->setParam(array('include_docs'=>'true'))->execute();
-	echo '<pre>'; print_r($billData); echo '</pre>'; die();
+	//echo '<pre>'; print_r($billData); echo '</pre>'; die();
 	//$logger->debug("URL to sccess data ".$couch->getLastUrl());
+	if(array_key_exists('rows', $billData)){ 
+ 		foreach($billData['rows'] as $key => $value){ 
+			$doc = $value['doc'];
+ 			$docKey = $value['key'];
+ 			$dValue['doc'] = $doc;
+			if(empty($doc['mysql_id'])){
+			$docsData = array(	"_id"  => $doc['_id'],
+								"_rev" => $doc['_rev'],
+								"bill_no" => $doc['invoice_number'],
+								"bill_seq" => $doc['bill'],
+								"bill_time" => $doc['time'],
+								"store_id" => $doc['store_id'],
+								"store_name" => $doc['store_name'],
+								"counter" => $doc['counter'],
+								"shift" => $doc['shift'],
+								"staff_id" => $doc['staff_id'],
+								"staff_name" => $doc['staff_name'],4
+								"card_no" => $doc['card_no'],
+								"card_type" => $doc['card_type'],
+								"txn_type" => $doc['txn_type'], 
+								"txn_no" => $doc['txn_no'], 
+								"amount" => $doc['amount'],
+								"approval_code" => $doc['approval_code'],
+								"status" => $doc['status'],
+							);
+			
+			$logger->debug("INSERT ORDER ARRAY ".json_encode($docsData));
+			$db->func_array2insert("cp_pos_cardsale", $docsData);
+			$insertId = $db->db_insert_id();	
+			if($insertId > 0){
+				$returnResult = $couch->getDesign('design_ho')->getUpdate('insert_mysql_id', $docsData['_id'])->setParam(array('mysql_id'=>$insertId))->execute();				
+				if($returnResult){				    	
+					$successful = 1;
+				}else{
+				    $unsuccessful = 1;
+				}
+			}
+		}else{
+			$no_bill = 1;
+		}
+ 	$counter++;}}
+	
+	if($successful==1){
+		$logger->debug("Success: Bill Uplaoded Successfully");
+  		
+  		$html['error'] = false;
+		$html['update'] = true;
+		$html['msg'] = "$counter Bill ".DATA_UPLOADED."";
+    } else if($unsuccessful==1){
+
+    	$logger->debug("ERROR: Some Error! Please Contact Admin");
+  		$html['error'] = true;
+		$html['update'] = false;
+		$html['msg'] = ERROR;
+
+    }else{
+
+    	$logger->debug("ERROR: NO Bill To Be Upload");
+  		$html['error'] = true;
+		$html['update'] = false;
+		$html['msg'] = NO_DATA_AVAILABLE_ERROR;
+    }
+	
+	$result = json_encode($html,true);
+	$logger->debug("End OF Uplaod Bill Function");
+	echo $result;
+	
+	
 
 
 }
