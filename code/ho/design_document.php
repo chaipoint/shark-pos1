@@ -51,7 +51,7 @@ function cardSale(){
 								"txn_no" => $doc['txn_no'], 
 								"amount" => $doc['amount'],
 								"approval_code" => $doc['approval_code'],
-								"status" => $doc['status'],
+								"status" => $doc['status']
 							);
 			print_r($docsData);
 			//$logger->debug("INSERT ORDER ARRAY ".json_encode($docsData));
