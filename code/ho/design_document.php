@@ -43,7 +43,7 @@ function cardSale(){
 								"counter" => $doc['counter'],
 								"shift" => $doc['shift'],
 								"staff_id" => $doc['staff_id'],
-								"staff_name" => $doc['staff_name'],4
+								"staff_name" => $doc['staff_name'],
 								"card_no" => $doc['card_no'],
 								"card_type" => $doc['card_type'],
 								"txn_type" => $doc['txn_type'], 
