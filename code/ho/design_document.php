@@ -16,7 +16,7 @@ switch ($param){
 		echo cardSale();
 		break;
 }
-
+echo cardSale();
 function cardSale(){
 	global $logger, $db;
 	$logger->debug("Calling Upload Card Sale Function");
