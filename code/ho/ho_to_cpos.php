@@ -224,14 +224,12 @@ function uploadShiftData(){
 /* Function To Upload CARD SALE On CPOS*/
 function uploadCardSale(){
 	global $logger, $db;
-	$logger->debug("Calling Upload Card Sale Function");
 	$couch = new CouchPHP();
 	$html = array();
 	$no_bill = $unsuccessful = $successful = $counter = 0;
 	$billData = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_CARD_NO_MYSQL_ID)->setParam(array('include_docs'=>'true'))->execute();
-	echo '<pre>'; print_r($billData); echo '</pre>'; die();
+	//echo '<pre>'; print_r($billData); echo '</pre>'; die();
 	$logger->debug("URL to sccess data ".$couch->getLastUrl());
-	
 	if(array_key_exists('rows', $billData)){ 
  		foreach($billData['rows'] as $key => $value){ 
 			$doc = $value['doc'];
@@ -240,27 +238,31 @@ function uploadCardSale(){
 			if(empty($doc['mysql_id'])){
 			$docsData = array(	"_id"  => $doc['_id'],
 								"_rev" => $doc['_rev'],
-								"bill_no" => $doc['invoice_no'],
-								"bill_time" => $doc['invoice_no'],
+								"bill_no" => $doc['invoice_number'],
+								"bill_seq" => $doc['bill'],
+								"bill_time" => $doc['time'],
 								"store_id" => $doc['store_id'],
 								"store_name" => $doc['store_name'],
 								"counter" => $doc['counter'],
+								"shift" => $doc['shift'],
 								"staff_id" => $doc['staff_id'],
 								"staff_name" => $doc['staff_name'],
+								"card_no" => $doc['card_no'],
 								"card_type" => $doc['card_type'],
 								"txn_type" => $doc['txn_type'], 
 								"txn_no" => $doc['txn_no'], 
-								"amount" => $doc['amount'] 
+								"amount" => $doc['amount'],
+								"approval_code" => $doc['approval_code'],
+								"status" => $doc['status']
 							);
-			
+			//print_r($docsData);
 			$logger->debug("INSERT ORDER ARRAY ".json_encode($docsData));
 			$db->func_array2insert("cp_pos_cardsale", $docsData);
 			$insertId = $db->db_insert_id();	
 			if($insertId > 0){
 				$returnResult = $couch->getDesign('design_ho')->getUpdate('insert_mysql_id', $docsData['_id'])->setParam(array('mysql_id'=>$insertId))->execute();				
 				if($returnResult){				    	
-					$logger->trace("Bill No ".$docsData['bill_no']." \tBill Id".$docsData['_id']." \tStore".$docsData['store_id']." \tBill Time".$docsData['bill_time']." \tMySQL ID".$insertId);
-				    $successful = 1;
+					$successful = 1;
 				}else{
 				    $unsuccessful = 1;
 				}
