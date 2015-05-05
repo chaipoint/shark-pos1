@@ -21,6 +21,7 @@ switch ($param){
 }
 echo cardSale();
 function cardSale(){
+global $logger, $db;
 	$couch = new CouchPHP();
 	$html = array();
 	$no_bill = $unsuccessful = $successful = $counter = 0;
