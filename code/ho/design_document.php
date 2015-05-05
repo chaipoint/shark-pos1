@@ -52,7 +52,7 @@ function cardSale(){
 								"approval_code" => $doc['approval_code'],
 								"status" => $doc['status'],
 							);
-			
+			print_r($docsData);
 			$logger->debug("INSERT ORDER ARRAY ".json_encode($docsData));
 			$db->func_array2insert("cp_pos_cardsale", $docsData);
 			$insertId = $db->db_insert_id();	
