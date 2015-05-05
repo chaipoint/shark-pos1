@@ -35,6 +35,7 @@
                 <li class="divider"></li>
                 <!--<li class="dropdown-header">Nav header</li>-->
                 <li><a href="javascript:void(0);" id="bill_synk">Upload Bill</a></li>
+				<li><a href="javascript:void(0);" id="card_synk">Upload Card Sale</a></li>
                 <li><a href="javascript:void(0);" id="updated_bill_synk">Upload Updated Bill</a></li>
                 <li><a href="javascript:void(0);" id="petty_expense_synk">Upload Petty Expense</a></li>
                 <li><a href="javascript:void(0);" id="shift_data_synk">Upload Shift Data</a></li>
