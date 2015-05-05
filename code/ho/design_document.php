@@ -24,7 +24,7 @@ function cardSale(){
 	$html = array();
 	$no_bill = $unsuccessful = $successful = $counter = 0;
 	echo 'sdf';
-	$billData = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_CARD_NO_MYSQL_ID)->setParam(array('include_docs'=>'true','limit'=>'1000'))->execute();
+	$billData = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_NO_MYSQL_ID)->setParam(array('include_docs'=>'true','limit'=>'1000'))->execute();
 	echo '<pre>'; print_r($billData); echo '</pre>'; die();
 	$logger->debug("URL to sccess data ".$couch->getLastUrl());
 
