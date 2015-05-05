@@ -31,6 +31,10 @@
 		case "uploadShiftData":
 		echo uploadShiftData();
 		break;
+		
+		case "uploadCardSale":
+		echo uploadCardSale();
+		break;
 }
 
 /* Function To Upload Shift Data On CPOS*/
@@ -217,10 +221,83 @@ function uploadShiftData(){
 		$logger->debug("End Of Uplaod Shift Data Function");
 		return $result;
 }
+/* Function To Upload CARD SALE On CPOS*/
+function uploadCardSale(){
+	global $logger, $db;
+	$logger->debug("Calling Upload Card Sale Function");
+	$couch = new CouchPHP();
+	$html = array();
+	$no_bill = $unsuccessful = $successful = $counter = 0;
+	$billData = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_CARD_NO_MYSQL_ID)->setParam(array('include_docs'=>'true','limit'=>'1000'))->execute();
+	echo '<pre>'; print_r($billData); echo '</pre>'; die();
+	$logger->debug("URL to sccess data ".$couch->getLastUrl());
+	
+	if(array_key_exists('rows', $billData)){ 
+ 		foreach($billData['rows'] as $key => $value){ 
+			$doc = $value['doc'];
+ 			$docKey = $value['key'];
+ 			$dValue['doc'] = $doc;
+			if(empty($doc['mysql_id'])){
+			$docsData = array(	"_id"  => $doc['_id'],
+								"_rev" => $doc['_rev'],
+								"invoice_no" => $doc['invoice_no'],
+								"store_id" => $doc['store_id'],
+								"card_type" => $doc['customer']['challan_no'],
+								"txn_type" => $doc['time']['created'], 
+								"txn_no" => $doc['store_id'], 
+								"amount" => $doc['store_name'], 
+								"staff_id" => $doc['staff_id']
+							);
+			
+			$logger->debug("INSERT ORDER ARRAY ".json_encode($docsData));
+			$db->func_array2insert("cp_pos_cardsale", $docsData);
+			$insertId = $db->db_insert_id();	
+			if($insertId > 0){
+				$returnResult = $couch->getDesign('design_ho')->getUpdate('insert_mysql_id', $docsData['_id'])->setParam(array('mysql_id'=>$insertId))->execute();				
+				if($returnResult){				    	
+					$logger->trace("Bill No ".$docsData['bill_no']." \tBill Id".$docsData['_id']." \tStore".$docsData['store_id']." \tBill Time".$docsData['bill_time']." \tMySQL ID".$insertId);
+				    $successful = 1;
+				}else{
+				    $unsuccessful = 1;
+				}
+			}
+		}else{
+			$no_bill = 1;
+		}
+ 	$counter++;}}
+	
+	if($successful==1){
+		$logger->debug("Success: Bill Uplaoded Successfully");
+  		
+  		$html['error'] = false;
+		$html['update'] = true;
+		$html['msg'] = "$counter Bill ".DATA_UPLOADED."";
+    } else if($unsuccessful==1){
+
+    	$logger->debug("ERROR: Some Error! Please Contact Admin");
+  		$html['error'] = true;
+		$html['update'] = false;
+		$html['msg'] = ERROR;
+
+    }else{
+
+    	$logger->debug("ERROR: NO Bill To Be Upload");
+  		$html['error'] = true;
+		$html['update'] = false;
+		$html['msg'] = NO_DATA_AVAILABLE_ERROR;
+    }
+	
+	$result = json_encode($html,true);
+	$logger->debug("End OF Uplaod Bill Function");
+	return $result;
+ }
+	
+
+
 
 /* Function To Upload Bill On CPOS*/
 function uploadBill(){
-	//ini_set('display_errors', 1);
+	
 	global $logger, $db;
 	$logger->debug("Calling Upload Bill Function");
 	$couch = new CouchPHP();
@@ -240,7 +317,6 @@ function uploadBill(){
 								"bill_no" => $doc['bill_no'],
 								"bill_seq" => $doc['bill'],
 								"dc_challan" => $doc['customer']['challan_no'],
-								"challan_date" => $doc['customer']['onsite_time'],
 								"bill_time" => $doc['time']['created'], 
 								"store_id" => $doc['store_id'], 
 								"store_name" => $doc['store_name'], 

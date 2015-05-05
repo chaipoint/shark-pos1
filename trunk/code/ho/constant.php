@@ -13,6 +13,7 @@ define ('DESIGN_HO_DESIGN_DOCUMENT_VIEW_STORE_BY_MYSQL_ID', 'store_by_mysql_id')
 define ('DESIGN_HO_DESIGN_DOCUMENT_VIEW_CONFIG_LIST', 'config_list');
 define ('DESIGN_HO_DESIGN_DOCUMENT_VIEW_STORE_SHIFT', 'store_shift');
 define ('DESIGN_HO_DESIGN_DOCUMENT_VIEW_NO_MYSQL_ID', 'no_mysql_id');
+define ('DESIGN_HO_DESIGN_DOCUMENT_VIEW_CARD_NO_MYSQL_ID', 'card_no_mysql_id');
 define ('DESIGN_HO_DESIGN_DOCUMENT_VIEW_HANDLE_UPDATED_BILLS', 'handle_updated_bills');
 define ('PETTY_EXPENSE_DESIGN_DOCUMENT_VIEW_GET_EXPENSE', 'get_expense');
 define ('PETTY_EXPENSE_DESIGN_DOCUMENT_VIEW_GET_INWARD', 'get_inward');
