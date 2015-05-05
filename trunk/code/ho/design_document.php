@@ -1,4 +1,5 @@
 <?php 
+include_once 'common/connection.php' ;
 require_once 'common/couchdb.phpclass.php';
 require_once 'constant.php';
 require_once 'common/logger.php';
