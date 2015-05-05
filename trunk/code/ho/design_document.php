@@ -1,8 +1,8 @@
 <?php 
 include_once 'common/connection.php' ;
-require_once 'common/couchdb.phpclass.php';
-require_once 'constant.php';
-require_once 'common/logger.php';
+	require_once 'common/couchdb.phpclass.php';
+	require_once 'common/logger.php';
+	require_once 'constant.php';
 	
 $param = $_GET['param'];
 echo $param;
@@ -54,8 +54,9 @@ function cardSale(){
 								"status" => $doc['status'],
 							);
 			print_r($docsData);
-			$logger->debug("INSERT ORDER ARRAY ".json_encode($docsData));
+			//$logger->debug("INSERT ORDER ARRAY ".json_encode($docsData));
 			$db->func_array2insert("cp_pos_cardsale", $docsData);
+			echo 'dsfsdfsdfsdf';
 			$insertId = $db->db_insert_id();	
 			if($insertId > 0){
 				$returnResult = $couch->getDesign('design_ho')->getUpdate('insert_mysql_id', $docsData['_id'])->setParam(array('mysql_id'=>$insertId))->execute();				
@@ -71,28 +72,28 @@ function cardSale(){
  	$counter++;}}
 	
 	if($successful==1){
-		$logger->debug("Success: Bill Uplaoded Successfully");
+		//$logger->debug("Success: Bill Uplaoded Successfully");
   		
   		$html['error'] = false;
 		$html['update'] = true;
 		$html['msg'] = "$counter Bill ".DATA_UPLOADED."";
     } else if($unsuccessful==1){
 
-    	$logger->debug("ERROR: Some Error! Please Contact Admin");
+    	//$logger->debug("ERROR: Some Error! Please Contact Admin");
   		$html['error'] = true;
 		$html['update'] = false;
 		$html['msg'] = ERROR;
 
     }else{
 
-    	$logger->debug("ERROR: NO Bill To Be Upload");
+    	//$logger->debug("ERROR: NO Bill To Be Upload");
   		$html['error'] = true;
 		$html['update'] = false;
 		$html['msg'] = NO_DATA_AVAILABLE_ERROR;
     }
 	
 	$result = json_encode($html,true);
-	$logger->debug("End OF Uplaod Bill Function");
+	//$logger->debug("End OF Uplaod Bill Function");
 	echo $result;
 	
 	
