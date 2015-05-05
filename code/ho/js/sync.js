@@ -127,6 +127,27 @@ $('#bill_synk').on('click',function(){
 	});
 });
 
+/* Function To Upload Bill Data */
+$('#card_synk').on('click',function(){
+ $('#progress').show();
+  $.ajax({
+	 type: 'POST',
+	 url: "ho_to_cpos.php",
+	 data : {'action':'uploadCardSale'}
+
+  }).done(function(response) {
+	 var $res =  $.parseJSON(response); //Parse result of response
+	 console.log(response);
+	 $('#progress').hide();
+	 if($res.error){ //If Their Exists any problem in Update then show errors
+	    bootbox.alert($res.msg); 
+	 }else{
+		 bootbox.alert($res.msg); 
+	}
+	
+	});
+});
+
 /* Function To Upload Updated Bill Data */
 $('#updated_bill_synk').on('click',function(){
  $('#progress').show();
