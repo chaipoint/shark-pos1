@@ -7,7 +7,7 @@ $(document).ready(function(){
 		var customer_id = $(this).attr('id');
 		var customer_name = $(this).text() ;
 		var customer_type = $(this).data('type') ;
-			if(customer_type==1){ 
+			if(customer_type==1 || customer_type==2){ 
 				window.location = 'index.php?dispatch=billing&cawOrder='+customer_id
 				/*$('#customer_name').val(customer_name);
 				$('#customer_id').val(customer_id);
@@ -30,8 +30,6 @@ $(document).ready(function(){
 					}
 						
 				});*/
-			}else if(customer_type==2){
-				alert('type 2 customer');
 			}
 	});
 /* Customer Selection Block End */
