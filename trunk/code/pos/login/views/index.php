@@ -94,18 +94,19 @@
 											</div>
 										</div>
 									</form>
-									</div>
-							</div>
+									</div> 
+							</div>Shark version <?php global $config; echo $config['version']; ?>
 							
 						</div>
-					</div>
+					</div> 
 		</div>
+		<!--<div align="center" class="" style="width:18%;margin-left:41%;background:;color:black">Shark version 2.1</div>-->
 		<!--<div id="footer" style="margin-top:220px;">
 		<div class="container" >
 			<p class="credit" style="font-size:10px;">
-				Copyright &copy; 2014 ChaiPoint <?php global $config; echo $config['version']; ?> <a
+				Shark version <?php global $config; echo $config['version']; ?> <a
 					target="_blank" class="tip" title="Help"><i
 					class="icon-question-sign"></i> </a>
 			</p>
-		</div>
-	</div>-->
+		</div>-->
+	</div>
