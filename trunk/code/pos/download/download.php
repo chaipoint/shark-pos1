@@ -85,7 +85,7 @@ switch ($argv[1]){
 	return $result;
 
 }*/
-function insertRepDoc($insert){
+function insertRepDoc($insert){ 
 	$couch = new CouchPHP();
 	$target = $couch->getRemote();
 	$source = $couch->getUrl().$couch->getDB();
@@ -109,7 +109,7 @@ function insertRepDoc($insert){
     curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type:application/json"));
     
 	$result = json_decode(curl_exec($ch), true); 
-    $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE); 
+	$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE); 
     curl_close($ch);
 	return $result;
 }
