@@ -107,7 +107,7 @@ define ('START_DAY_SUCCESS', 'Welcome, Shift has been started, Please Start Sale
 define ('STORE_SHIFT_ENDED', 'Store Shift Ended');
 define ('STORE_DAY_ENDED', 'Store Day Ended');
 define ('SERVER_DOWN_ERROR', 'server_down');
-define ('INTERNET_ERROR', 'Please Connect to Internet to View Dashboard');
+define ('INTERNET_ERROR', 'Could not reach CPOS server.Please try again.');
 define ('SUCCESS', 'Saved Successfully');
 define ('NOT_ALLOWED_TO_ACCESS', 'You are not allowed to access.');
 define ('HOME', 'home');
