@@ -175,7 +175,7 @@
 			$postData = array('action'=>'getCocOrder', 'store_id'=>$storeId, 'status'=>$status, 'order_type'=>$order_type);
 			$url = API_URL;
 			$ch = curl_init();
-			curl_setopt_array($ch, array(CURLOPT_URL => $url, CURLOPT_CONNECTTIMEOUT=>10, CURLOPT_TIMEOUT=>10, CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true, CURLOPT_POSTFIELDS => $postData));
+			curl_setopt_array($ch, array(CURLOPT_URL => $url, CURLOPT_CONNECTTIMEOUT=>12, CURLOPT_TIMEOUT=>12, CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true, CURLOPT_POSTFIELDS => $postData));
 			$response = curl_exec($ch);
 			curl_close($ch);
 			$response = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $response);
