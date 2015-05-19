@@ -79,7 +79,7 @@ $(document).ready(function(){
 		},1000);
 	});
     
-    
+   // beep();
         $(function(){
             window.setInterval(function(){ 
 			var host = 'http://'+"<?php echo $_SERVER['HTTP_HOST']; ?>";
@@ -92,22 +92,21 @@ $(document).ready(function(){
                     timeout:6000
                 }).done(function(response){  
                     console.log(response);
-					//alert(response);return false;
-                    var $res = $.parseJSON(response);
+					var $res = $.parseJSON(response);
                     if($res.data['cocOrder']){
-                        //beep(20000,3);
                         $('#cocYes').show();
 						$('#cocNo').hide();
+						beep();
                     }else {
 						$('#cocNo').show();
 						$('#cocYes').hide();
 					}
 					
 					if($res.data['oloOrder']){
-						//beep(20000,3);
-                        $('#oloYes').show();
+						$('#oloYes').show();
 						$('#oloNo').hide();
-					}else{ //alert('sdf');
+						beep();
+					}else{ 
 						$('#oloNo').show();
 						$('#oloYes').hide();
 					}
@@ -136,7 +135,7 @@ $(document).ready(function(){
                     return false;
                 })
 			}
-            },10800000); // 3 hours
+            },3600000); // 1 hour
         });
 		
 		
@@ -150,28 +149,31 @@ $(document).ready(function(){
 		}
 	}
 
-    var beep = (function () {
-        var ctx = new(window.audioContext || window.webkitAudioContext);
-        return function (duration, type, finishedCallback) {
-            duration = +duration;
-             // Only 0-4 are valid types.
-            type = (type % 5) || 0;
+    //if you have another AudioContext class use that one, as some browsers have a limit
+var audioCtx = new (window.AudioContext || window.AudioContext || window.audioContext);
 
-            if (typeof finishedCallback != "function") {
-                finishedCallback = function () {};
-            }
+//All arguments are optional:
 
-            var osc = ctx.createOscillator();
-            osc.type = type;
-            osc.connect(ctx.destination);
-            osc.noteOn(0);
-            setTimeout(function () {
-                osc.noteOff(0);
-                finishedCallback();
-            }, duration);
+//duration of the tone in milliseconds. Default is 500
+//frequency of the tone in hertz. default is 440
+//volume of the tone. Default is 1, off is 0.
+//type of tone. Possible values are sine, square, sawtooth, triangle, and custom. Default is sine.
+//callback to use on end of tone
+function beep(duration, frequency, volume, type, callback) {
+    var oscillator = audioCtx.createOscillator();
+    var gainNode = audioCtx.createGain();
 
-        };
-    })();
+    oscillator.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    if (volume){gainNode.gain.value = volume;};
+    if (frequency){oscillator.frequency.value = frequency;}
+    if (type){oscillator.type = type;}
+    if (callback){oscillator.onended = callback;}
+
+    oscillator.start();
+    setTimeout(function(){oscillator.stop()}, (duration ? duration : 10000));
+};
 </script>
 <div style="">
 	<span style="display:none;display:none;float:left;" id="internetYes"><img src="../images/internet_active.png" class="con"></span>	
