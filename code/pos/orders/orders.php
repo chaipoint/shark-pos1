@@ -11,9 +11,14 @@
 			if(array_key_exists('status', $_GET) && !empty($_GET['status'])){
 				$status = $_GET['status'];
 			}
+			
 			$getData = $this->getCocOrder($status , COC);
-			if(!$getData['error']){
+			
+			if(!empty($getData) && !$getData['error']){
 				$actionButtons = $this->actionButton($status);
+			}else{
+				$getData['error'] = true;
+				$getData['message'] = 'Could not reach CPOS server.Please try again.';
 			}
 	    	$billArray = array();
 	    	$resultGetBill = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getView(BILLING_DESIGN_DOCUMENT_VIEW_HANDLE_UPDATED_BILLS)->setParam(array("include_docs"=>"true","descending"=>"true","endkey" => '["'.$this->getCDate().'"]',"startkey" => '["'.$this->getCDate().'",{},{},{}]'))->execute();
@@ -24,7 +29,7 @@
 	    		} 
 	    	} 
 	    
-			$this->commonView('header_html',array('error'=>$getData['error']));
+			$this->commonView('header_html',array('error'=>$getData['error'], 'message'=>$getData['message']));
 			$this->commonView('navbar');
 			$this->commonView('menu');
 			if(!$getData['error']){
@@ -41,9 +46,13 @@
 				$status = $_GET['status'];
 			}
 			$getData = $this->getCocOrder($status , OLO);
-			if(!$getData['error']){
+			if(!empty($getData) && !$getData['error']){
 				$actionButtons = $this->actionButton($status);
+			}else{
+				$getData['error'] = true;
+				$getData['message'] = 'Could not reach CPOS server.Please try again.';
 			}
+			
 	    	$billArray = array();
 	    	$resultGetBill = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getView(BILLING_DESIGN_DOCUMENT_VIEW_HANDLE_UPDATED_BILLS)->setParam(array("include_docs"=>"true","descending"=>"true","endkey" => '["'.$this->getCDate().'"]',"startkey" => '["'.$this->getCDate().'",{},{},{}]'))->execute();
 	    	if(array_key_exists('rows', $resultGetBill) && count($resultGetBill['rows'])>0){
@@ -53,7 +62,7 @@
 	    		} 
 	    	} 
 	    
-			$this->commonView('header_html',array('error'=>$getData['error']));
+			$this->commonView('header_html',array('error'=>$getData['error'], 'message'=>$getData['message']));
 			$this->commonView('navbar');
 			$this->commonView('menu');
 			if(!$getData['error']){
@@ -122,9 +131,9 @@
 					$_POST['orderId'] = $order;
 					$_POST['action'] = 'changeOrderStatus';
 					$changeStatus = $this->changeOrderStatus($_POST);
-					if($changeStatus['error']){
+					if($changeStatus['error'] || empty($changeStatus)){
 						$return['error'] = true;
-						$return['message'] = $changeStatus['message'];
+						$return['message'] = ERROR;
 					}/*else if($_POST['new_status']=='Confirmed'){ 
 							$data = array( 'From'   => PROVIDER_NUMBER,
 										   'To'    => $_POST['customer_phone'],
@@ -164,14 +173,14 @@
 			$order_type = (!empty($order_type) ? $order_type : 'COC');
 			$storeId = $_SESSION['user']['store']['id'];
 			$postData = array('action'=>'getCocOrder', 'store_id'=>$storeId, 'status'=>$status, 'order_type'=>$order_type);
-			$url = API_URL;
+			$url = TEST_API_URL;
 			$ch = curl_init();
-			curl_setopt_array($ch, array(CURLOPT_URL => $url, CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true, CURLOPT_POSTFIELDS => $postData));
+			curl_setopt_array($ch, array(CURLOPT_URL => $url, CURLOPT_CONNECTTIMEOUT=>10, CURLOPT_TIMEOUT=>10, CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true, CURLOPT_POSTFIELDS => $postData));
 			$response = curl_exec($ch);
 			curl_close($ch);
 			$response = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $response);
 			$data = json_decode($response, true);
-			return $data;
+			return $data;;;
 		}
 		
 		function getNewOrder(){
@@ -185,7 +194,7 @@
 			}
 			$storeId = $_SESSION['user']['store']['id'];
 			$postData = array('action'=>'getNewOrder', 'store_id'=>$storeId);
-			$url = API_URL;
+			$url = TEST_API_URL;
 			$ch = curl_init();
 			curl_setopt_array($ch, array(CURLOPT_URL => $url, CURLOPT_CONNECTTIMEOUT=>2, CURLOPT_TIMEOUT=>4,CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true, CURLOPT_POSTFIELDS => $postData));
 			$response = curl_exec($ch);
@@ -200,7 +209,7 @@
 				$return = array('error'=>true, 'message'=>VALID_INPUT_ERROR);
 				return $return;
 			}
-			$url = API_URL;
+			$url = TEST_API_URL;
 			$ch = curl_init();
 			curl_setopt_array($ch, array(CURLOPT_URL => $url, CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true, CURLOPT_POSTFIELDS => $postData));
 			$response = curl_exec($ch);
@@ -225,6 +234,7 @@
 					break;
 				case 'Dispatched':
 					$actionButtons .= '<button class="btn btn-sm btn-success bt-update-status" data-new_status="Delivered" data-current_status="'.$status.'">Delivered</button>';
+					$actionButtons .= '<button class="btn btn-sm btn-danger bt-update-status" data-new_status="Cancelled" data-current_status="'.$status.'"><i class="glyphicon glyphicon-trash"></i>&nbsp;Cancel</button>&nbsp;&nbsp;';
 					break;
 				case 'Delivered':
 					$actionButtons .= '<button class="btn btn-sm btn-success bt-update-status" data-new_status="Paid" data-current_status="'.$status.'">Paid</button>';
