@@ -23,6 +23,7 @@ $(document).ready(function(){
      }
 	});
 
+	
 	$('.bt-update-status').click(function(){
 		var ajax = true;
 		var data = new Object();
@@ -39,7 +40,7 @@ $(document).ready(function(){
 			var ajax = false;
 
 			bootbox.dialog({
-			message:'<div class="form-group"><textarea  name="cancel_reason" id="cancel_reason" class="form-control"></textarea></div>',
+			message:'<div class="form-group"><select name="cancel_reason" id="cancel_reason" class="form-control" onchange="MyFunction($(this).val())"><option value="">Select Reason</option><option value="Food not available">Food not available</option><option value="Store closed">Store closed</option><option value="Out of delivery area">Out of delivery area</option><option value="Customer not reachable">Customer not reachable</option><option value="Cancelled due to delayed delivery">Cancelled due to delayed delivery</option><option value="Duplicate entries">Duplicate entries</option><option value="Address not found">Address not found</option><option value="other">Others – pl specify</option></select><textarea name="cancel_reason1" id="cancel_reason1" class="form-control hide" style="margin-top:15px"></textarea></div>',
 			title:"Order Cancel Reason",
 			buttons:{
 				main:{
@@ -47,7 +48,10 @@ $(document).ready(function(){
 					className:"btn-success btn-sm",
 					callback:function(){
 							var textArea = $('#cancel_reason');
-							var reason = $.trim(textArea.val()); 
+							var reason = $.trim(textArea.val());
+							if(reason=='other'){
+								reason = $('#cancel_reason1').val();
+							}
 							if( reason == '' ){
 								textArea.closest('.form-group').addClass('has-error');
 								return false;
@@ -98,6 +102,8 @@ $(document).ready(function(){
 		}
 
 	});
+	
+	
 });
 
 function changeStatus(data){ 
@@ -122,4 +128,13 @@ function changeStatus(data){
 					$('#tot-amt').text(parseFloat($('#tot-amt').text().replace(',', '')) - parseFloat((data.net_amount).replace(',', '')));
 				}
 			});	
+}
+
+function MyFunction(val){
+	if(val=='other'){
+		$('#cancel_reason1').removeClass('hide');
+	}else{
+		$('#cancel_reason1').addClass('hide');
+	}
+
 }

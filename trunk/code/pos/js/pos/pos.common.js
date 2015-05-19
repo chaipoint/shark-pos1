@@ -24,7 +24,7 @@ $(document).ready(function(){
 		$('#olo').addClass('btn-danger').attr('id','');
 	}
 	$(document).on('click','#data_sync',function(){
-		if(! navigator.onLine){
+		if(!navigator.onLine){
 			alert("No Internet Connection Available");
 			return  false;
 		}
@@ -82,11 +82,16 @@ $(document).ready(function(){
 	
 	
 	$('#shift_data').click(function(){
-		$('.alert-danger').addClass('hide');
-		$('#dashboard_div').addClass('hide');
-		$('#reconcilation_div').removeClass('hide');
-		$('#report_div').addClass('hide');
+		if($(this).data('title_id')==4 || $(this).data('title_id')==6 ){
+			$('.alert-danger').addClass('hide');
+			$('#dashboard_div').addClass('hide');
+			$('#reconcilation_div').removeClass('hide');
+			$('#report_div').addClass('hide');
+		}else {
+			bootbox.alert('Not Authorised to See the Screen');
+		}
 	});
+	
 	$('#report_data').click(function(){ 
 		if($(this).data('title_id')==4 || $(this).data('title_id')==6 ){ 
 			$('.alert-danger').addClass('hide');
@@ -107,7 +112,7 @@ $(document).ready(function(){
 		$('#dashboard').show();
 	}
 	
-	
+	/* Check Internet  */
 	$(function(){
 		window.setInterval(function(){
 		 var result = checkInternet();
@@ -119,10 +124,29 @@ $(document).ready(function(){
 			$('.payment-type-bt[data-value="ppc"]').attr('disabled',true);
 			$('.payment-type-bt[data-value="ppa"]').attr('disabled',true);
 		 }
-		},1000);
+		},1000);   // Every 1 sec
+	});
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	/* Check Internet  */
+	$(function(){
+		window.setInterval(function(){
+		 var result = checkInternet();
+		 if(result==false){
+			bootbox.alert('You are not connected to internet. Ensure your system date is correct');
+		 }
+		},600000);   // Every 10 min
 	});
 
-
+	
+	
 	/*For Login Concept*/
 	$(".require_valid_user").click(function(){
 		var id = $(this).attr('id');
@@ -141,7 +165,7 @@ $(document).ready(function(){
 	});
 
 
-	$(".sync-bt").click(function(){ 
+	/*$(".sync-bt").click(function(){ 
 		var msgHolder = $(this).closest('.modal-body');
 		$("#loading_image").removeClass('hide');
 		$("#ajaxfadediv").addClass('ajaxfadeclass');
@@ -176,15 +200,15 @@ $(document).ready(function(){
 			}
 
 		});
-	});
+	});*/
 	
 	
 	$("#billing_sync").click(function(){
-		//alert('hello'); //return false;
+		//alert('hello'); return false;
 		$("#loading_image").removeClass('hide');
 		$("#ajaxfadediv").addClass('ajaxfadeclass');
 		$.ajax({
-			url: "index.php?dispatch=utils.sync&mode=billing_sync_bt",
+			url: "download/download.php?param=checkRepDoc",
 			timeout:120000,
 		}).done(function(response) {
 			//alert(response);
@@ -602,13 +626,17 @@ $.fn.cKeyboard = function(){
 	});
 	return returnEle;
 }
-function db_error(message){ alert
+function db_error(message){ 
 	if(message){
 		var msg = message;
 	}else{
-		var msg = 'OOPS! Some Problem11 Please Contact Admin.';
+		var msg = 'OOPS! Some Problem Please Contact Admin.';
 	}
-	bootbox.dialog({message:'<div class="text-center text-danger">'+msg+'</div>'});
+	bootbox.dialog({message:'<div class="text-center text-danger form-group">'+msg+'<button style="margin-top:20px" onclick="refresh()" type="submit" class="btn btn-lg btn-success">Refresh</button></div>'});
+}
+function refresh (){
+	window.location.reload(true);
+
 }
 function decimalAdjust(value, exp) {
 		var type = 'round';
@@ -647,33 +675,7 @@ function checkInternet(){
 	}
 }
 
-  var beep = (function () {
-    var ctx = new(window.audioContext || window.webkitAudioContext);
-    return function (duration, type, finishedCallback) {
-
-        duration = +duration;
-
-        // Only 0-4 are valid types.
-        type = (type % 5) || 0;
-
-        if (typeof finishedCallback != "function") {
-            finishedCallback = function () {};
-        }
-
-        var osc = ctx.createOscillator();
-
-        osc.type = type;
-
-        osc.connect(ctx.destination);
-        osc.noteOn(0);
-
-        setTimeout(function () {
-            osc.noteOff(0);
-            finishedCallback();
-        }, duration);
-
-    };
-})();
+ 
 
 function printBill(responce_array, p){
 //alert(p);
