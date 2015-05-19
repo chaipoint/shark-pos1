@@ -173,7 +173,7 @@
 			$order_type = (!empty($order_type) ? $order_type : 'COC');
 			$storeId = $_SESSION['user']['store']['id'];
 			$postData = array('action'=>'getCocOrder', 'store_id'=>$storeId, 'status'=>$status, 'order_type'=>$order_type);
-			$url = TEST_API_URL;
+			$url = API_URL;
 			$ch = curl_init();
 			curl_setopt_array($ch, array(CURLOPT_URL => $url, CURLOPT_CONNECTTIMEOUT=>10, CURLOPT_TIMEOUT=>10, CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true, CURLOPT_POSTFIELDS => $postData));
 			$response = curl_exec($ch);
@@ -194,7 +194,7 @@
 			}
 			$storeId = $_SESSION['user']['store']['id'];
 			$postData = array('action'=>'getNewOrder', 'store_id'=>$storeId);
-			$url = TEST_API_URL;
+			$url = API_URL;
 			$ch = curl_init();
 			curl_setopt_array($ch, array(CURLOPT_URL => $url, CURLOPT_CONNECTTIMEOUT=>2, CURLOPT_TIMEOUT=>4,CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true, CURLOPT_POSTFIELDS => $postData));
 			$response = curl_exec($ch);
@@ -209,7 +209,7 @@
 				$return = array('error'=>true, 'message'=>VALID_INPUT_ERROR);
 				return $return;
 			}
-			$url = TEST_API_URL;
+			$url = API_URL;
 			$ch = curl_init();
 			curl_setopt_array($ch, array(CURLOPT_URL => $url, CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true, CURLOPT_POSTFIELDS => $postData));
 			$response = curl_exec($ch);
