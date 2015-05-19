@@ -101,7 +101,7 @@
 ?>
 <div class="padded dashboard_div" >
 		<button class="btn" id="dashboard" style="margin-left:13px;">Dashboard</button>
-		<button class="btn" id="shift_data">Shift Data</button>
+		<button class="btn" data-title_id="<?php echo $_SESSION['user']['title']['id'];  ?>" <?php echo (($_SESSION['user']['title']['id']=='4' || $_SESSION['user']['title']['id']=='6')  ? '' :'style="opacity:.65"') ; ?> id="shift_data">Shift Data</button>
 		<button class="btn" data-title_id="<?php echo $_SESSION['user']['title']['id'];  ?>" <?php echo (($_SESSION['user']['title']['id']=='4' || $_SESSION['user']['title']['id']=='6')  ? '' :'style="opacity:.65"') ; ?> id="report_data">Sales Reports</button>
 		<button class="btn" id="billing_sync">Data Sync</button>
 		<button class="btn" id="caw_sync" data-store_id="<?php echo $_SESSION['user']['store']['id'];?>">Get Latest Store Data</button>

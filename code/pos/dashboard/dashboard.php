@@ -15,7 +15,7 @@
 			$postData = array('action'=>STORE_AUDIT, 'store_id'=>$_SESSION['user']['store']['id']);
 			$url = ACTIVITY_TRACKER_API_URL;
 			$ch = curl_init();
-			curl_setopt_array($ch, array(CURLOPT_URL => $url, CURLOPT_CONNECTTIMEOUT=>3, CURLOPT_TIMEOUT=>5, CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true, CURLOPT_POSTFIELDS => $postData));
+			curl_setopt_array($ch, array(CURLOPT_URL => $url, CURLOPT_CONNECTTIMEOUT=>4, CURLOPT_TIMEOUT=>5, CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true, CURLOPT_POSTFIELDS => $postData));
 			$result = curl_exec($ch);
 			$curl_errno = curl_errno($ch);
 			$curl_error = curl_error($ch);
