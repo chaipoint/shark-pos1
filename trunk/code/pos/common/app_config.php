@@ -32,12 +32,12 @@ session_start();
 			require_once 'couchdb_phpclass.php';
 			$this->cDB = new CouchPHP();
 			$this->return = array('error'=>false,'message'=>'','data'=>array());
-			$appVersion = $this->getConfig($this->cDB, 'app_version');
+			/*$appVersion = $this->getConfig($this->cDB, 'app_version');
 			if(count($appVersion['data'])>0){
 				$config['version'] = $appVersion['data']['app_version']['version'];
 			}else{
 				$config['version'] = '1.0';
-			}
+			}*/
 			
 			/*Set all Config things like application base folder and Others Directory as URL, CSS, JS*/
 			$this->app 	= 	dirname($_SERVER['SCRIPT_NAME']);	
