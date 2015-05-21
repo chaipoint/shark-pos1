@@ -642,6 +642,9 @@ $(document).ready(function(){
 					$("span#city").closest('tr').removeClass('hide');
 					$("span#city").text(loadedBill.city);
 					$("#billing_customer_locality").val(loadedBill.locality);
+					$("#billing_customer_building").val(loadedBill.building);
+					$("#billing_customer_floor").val(loadedBill.floor);
+					$("#billing_customer_flat").val(loadedBill.flat);
 					$("span#locality").closest('tr').removeClass('hide');
 					$("span#locality").text(loadedBill.locality);
 					$("#billing_customer_sub_locality").val(loadedBill.sublocality);
@@ -830,6 +833,9 @@ $(document).ready(function(){
 			billDetails.customer.city = $("#billing_customer_city").val();
 			billDetails.customer.locality = $("#billing_customer_locality").val();
 			billDetails.customer.sub_locality = $("#billing_customer_sub_locality").val();
+			billDetails.customer.building = $("#billing_customer_building").val();
+			billDetails.customer.floor = $("#billing_customer_floor").val();
+			billDetails.customer.flat = $("#billing_customer_flat").val();
 			billDetails.customer.land_mark = $("#billing_customer_landmark").val();
 			billDetails.customer.phone_no = $("#phone_number").val();
 			billDetails.customer.company_name = $("#billing_customer_company_name").val();
