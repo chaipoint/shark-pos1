@@ -226,23 +226,26 @@
 				case 'New':
 					$actionButtons .= '<button class="btn btn-sm btn-success bt-update-status" data-new_status="Confirmed" data-current_status="'.$status.'"><i class="glyphicon glyphicon-ok"></i>&nbsp;Confirm</button>&nbsp;&nbsp;';
 						$actionButtons .= '<button class="btn btn-sm btn-danger bt-update-status" data-new_status="Cancelled" data-current_status="'.$status.'"><i class="glyphicon glyphicon-trash"></i>&nbsp;Cancel</button>&nbsp;&nbsp;';
+					$print = '<button class="btn btn-primary btn-sm generate-bill"  data-order-id="%s"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;Print Bill</button>';
 					break;
 				case 'Confirmed':
 					$actionButtons .= '<button class="btn btn-sm btn-success bt-update-status" data-new_status="Dispatched" data-current_status="'.$status.'"><i class="glyphicon glyphicon-ok"></i>&nbsp;Dispatch</button>&nbsp;&nbsp;';
 		            	$actionButtons .= '<button class="btn btn-sm btn-danger bt-update-status" data-new_status="Cancelled" data-current_status="'.$status.'"><i class="glyphicon glyphicon-trash"></i>&nbsp;Cancel</button>&nbsp;&nbsp;';
-						$print = '<button class="btn btn-primary btn-sm generate-bill"  data-order-id="%s"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;Bill</button>';
+						$print = '<button class="btn btn-primary btn-sm generate-bill"  data-order-id="%s"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;Print Bill</button>';
 					break;
 				case 'Dispatched':
 					$actionButtons .= '<button class="btn btn-sm btn-success bt-update-status" data-new_status="Delivered" data-current_status="'.$status.'">Delivered</button>';
 					$actionButtons .= '<button class="btn btn-sm btn-danger bt-update-status" data-new_status="Cancelled" data-current_status="'.$status.'"><i class="glyphicon glyphicon-trash"></i>&nbsp;Cancel</button>&nbsp;&nbsp;';
+					$print = '<button class="btn btn-primary btn-sm generate-bill"  data-order-id="%s"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;Print Bill</button>';
 					break;
 				case 'Delivered':
 					$actionButtons .= '<button class="btn btn-sm btn-success bt-update-status" data-new_status="Paid" data-current_status="'.$status.'">Paid</button>';
+					$print = '<button class="btn btn-primary btn-sm generate-bill"  data-order-id="%s"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;Print Bill</button>';
 					 break;
 				case 'Paid':
 					case 'Cancelled':
 				}
-					$actionButtons .= '</div><div style="margin-top:5px;" class="btn-group-horizontal"><button class="btn-sm btn btn-default print"><i class="glyphicon glyphicon-print"></i>&nbsp;Print</button>&nbsp;&nbsp;'.$print.'</div>';
+					$actionButtons .= '</div><div style="margin-top:5px;" class="btn-group-horizontal">'.$print.'</div>';
 				return $actionButtons;
 			
 		}
