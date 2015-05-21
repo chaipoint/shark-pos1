@@ -38,6 +38,9 @@
 				<input type="hidden" name="billing_customer_sub_locality" id="billing_customer_sub_locality">
 				<input type="hidden" name="billing_customer_landmark" id="billing_customer_landmark">
 				<input type="hidden" name="billing_customer_company_name" id="billing_customer_company_name">
+				<input type="hidden" name="billing_customer_building" id="billing_customer_building">
+				<input type="hidden" name="billing_customer_floor" id="billing_customer_floor">
+				<input type="hidden" name="billing_customer_flat" id="billing_customer_flat">
 				<input type="hidden" name="billing_customer_address" id="billing_customer_address">
 				<input type="hidden" name="card_number" id="card_number">
 				<input type="hidden" name="card_type" id="card_type">
