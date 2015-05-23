@@ -65,7 +65,7 @@ function uploadShiftData(){
 		foreach($rows as $key => $value){ 
 			if(array_key_exists($value['id'], $dbList)){ 
 				if($dbList[$value['id']]['_rev'] !== $value['doc']['_rev']){ 
-					echo $updateQuery = "UPDATE cp_pos_day_data 
+					$updateQuery = "UPDATE cp_pos_day_data 
 									SET end_time = '".$value['doc']['day']['end_time']."', 
 									end_staff_id = '".$value['doc']['day']['end_login_id']."',
 									end_full_cash = '".$value['doc']['day']['end_fullcash']."', 
@@ -78,10 +78,10 @@ function uploadShiftData(){
 					$db->db_query($updateQuery);
 					$logger->debug("Day Id Updated  ".$value['id']." on ".$value['id']." with total shifts ".count($value['doc']['shift']));
 					$reconciliationInsert = array();
-					echo $getDayId = "SELECT id FROM cp_pos_day_data WHERE _id = '".$value['id']."'";
+					$getDayId = "SELECT id FROM cp_pos_day_data WHERE _id = '".$value['id']."'";
 					$resultDayId = $db->func_query($getDayId);
 					$dayId = $resultDayId[0]['id'];
-					echo $deleteCashReconciliation = "DELETE FROM cp_pos_cash_reconciliation WHERE day_id = '".$dayId."'";
+					$deleteCashReconciliation = "DELETE FROM cp_pos_cash_reconciliation WHERE day_id = '".$dayId."'";
 					$logger->debug("Delete Cash Reconciliation WHERE day id :  ".$dayId);
 					$db->db_query($deleteCashReconciliation);
 					if(count($value['doc']['day']['cash_reconciliation'])>0){
@@ -109,7 +109,7 @@ function uploadShiftData(){
 						if(array_key_exists('ppaLoad', $value['doc']['day']['cash_reconciliation'])){
 							$reconciliationInsert[] = "('".$value['doc']['store_id']."',".$dayId.",'ppaLoad','".$value['doc']['day']['cash_reconciliation']['ppaLoad']."','".$value['doc']['login_time']."','Y')";
 						}
-						echo $insertReconciliation = "INSERT INTO cp_pos_cash_reconciliation(store_id, day_id, head, amount, created_date, active) values ".implode(",", $reconciliationInsert); 
+						$insertReconciliation = "INSERT INTO cp_pos_cash_reconciliation(store_id, day_id, head, amount, created_date, active) values ".implode(",", $reconciliationInsert); 
 						$db->db_query($insertReconciliation);
 					}
 					
@@ -122,7 +122,7 @@ function uploadShiftData(){
 					if(count($shiftList)>0){
 						foreach($value['doc']['shift'] as $shKey => $shValue){
 							if(array_key_exists($shValue['shift_no'], $shiftList)){ 
-								$upsQuery = "UPDATE cp_pos_shift_data 
+								echo $upsQuery = "UPDATE cp_pos_shift_data 
 											 SET end_time = '".$shValue['end_time']."', 
 											 end_petty_cash = '".$shValue['end_petty_cash']."', 
 											 opening_cash_inbox = '".$shValue['opening_cash_inbox']."',
@@ -135,15 +135,15 @@ function uploadShiftData(){
 											 WHERE id=".$shiftList[$shValue['shift_no']];
 								$db->db_query($upsQuery);
 							}else{
-								$insertQuery = "INSERT INTO cp_pos_shift_data (pos_day_id, start_time, end_time, staff_id, end_petty_cash, opening_cash_inbox, end_cash_inbox, counter_no, shift_no, opening_petty_cash, petty_expense, closing_petty_cash, inward_petty_cash, cash_denomination) values ";
+								echo $insertQuery = "INSERT INTO cp_pos_shift_data (pos_day_id, start_time, end_time, staff_id, end_petty_cash, opening_cash_inbox, end_cash_inbox, counter_no, shift_no, opening_petty_cash, petty_expense, closing_petty_cash, inward_petty_cash, cash_denomination) values ";
 								$insertQuery .= "(".$dbList[$value['id']]['id'].",'".$shValue['start_time']."','".$shValue['end_time']."',".$shValue['start_login_id'].",'".$shValue['end_petty_cash']."','".$shValue['opening_cash_inbox']."','".$shValue['end_cash_inbox']."',".$shValue['counter_no'].",".$shValue['shift_no'].",'".$shValue['petty_cash_balance']['opening_petty_cash']."', '".$shValue['petty_cash_balance']['petty_expense']."','".$shValue['petty_cash_balance']['closing_petty_cash']."','".$shValue['petty_cash_balance']['inward_petty_cash']."','10:".$shValue['cash_denomination']['qty_10'].",20:".$shValue['cash_denomination']['qty_20'].",50:".$shValue['cash_denomination']['qty_50'].",100:".$shValue['cash_denomination']['qty_100'].",500:".$shValue['cash_denomination']['qty_500'].",sodex:".$shValue['cash_denomination']['qty_sodex'].",ticket_restaurent:".$shValue['cash_denomination']['qty_ticket_res']."')";								
 								$db->db_query($insertQuery);
 							}
 						}
 					}
 				}
-			}else{ 
-				$insretArray = array('_id' => $value['doc']['_id'] , 
+			}else{ echo 'else'; 
+				echo $insretArray = array('_id' => $value['doc']['_id'] , 
 						'_rev' => $value['doc']['_rev'], 
 						'store_id' => $value['doc']['store_id'], 
 						'start_time' => $value['doc']['day']['start_time'], 
