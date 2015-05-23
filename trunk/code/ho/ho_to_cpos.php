@@ -113,7 +113,7 @@ function uploadShiftData(){
 						$db->db_query($insertReconciliation);
 					}
 					
-				echo 	$selectShiftData = "SELECT id, shift_no FROM cp_pos_shift_data WHERE pos_day_id = ".$dbList[$value['id']]['id'];
+					$selectShiftData = "SELECT id, shift_no FROM cp_pos_shift_data WHERE pos_day_id = ".$dbList[$value['id']]['id'];
 					$resultSelectData = $db->func_query($selectShiftData);
 					$shiftList = array();
 					foreach($resultSelectData as $sKey => $sValue){
@@ -122,7 +122,7 @@ function uploadShiftData(){
 					if(count($shiftList)>0){
 						foreach($value['doc']['shift'] as $shKey => $shValue){
 							if(array_key_exists($shValue['shift_no'], $shiftList)){ 
-								echo $upsQuery = "UPDATE cp_pos_shift_data 
+								$upsQuery = "UPDATE cp_pos_shift_data 
 											 SET end_time = '".$shValue['end_time']."', 
 											 end_petty_cash = '".$shValue['end_petty_cash']."', 
 											 opening_cash_inbox = '".$shValue['opening_cash_inbox']."',
@@ -137,15 +137,15 @@ function uploadShiftData(){
 							}else{
 								$insertQuery = "INSERT INTO cp_pos_shift_data (pos_day_id, start_time, end_time, staff_id, end_petty_cash, opening_cash_inbox, end_cash_inbox, counter_no, shift_no, opening_petty_cash, petty_expense, closing_petty_cash, inward_petty_cash, cash_denomination) values ";
 								$insertQuery .= "('".$dbList[$value['id']]['id']."','".$shValue['start_time']."','".$shValue['end_time']."','".$shValue['start_login_id']."','".$shValue['end_petty_cash']."','".$shValue['opening_cash_inbox']."','".$shValue['end_cash_inbox']."','".$shValue['counter_no']."','".$shValue['shift_no']."','".$shValue['petty_cash_balance']['opening_petty_cash']."', '".$shValue['petty_cash_balance']['petty_expense']."','".$shValue['petty_cash_balance']['closing_petty_cash']."','".$shValue['petty_cash_balance']['inward_petty_cash']."','10:".$shValue['cash_denomination']['qty_10'].",20:".$shValue['cash_denomination']['qty_20'].",50:".$shValue['cash_denomination']['qty_50'].",100:".$shValue['cash_denomination']['qty_100'].",500:".$shValue['cash_denomination']['qty_500'].",sodex:".$shValue['cash_denomination']['qty_sodex'].",ticket_restaurent:".$shValue['cash_denomination']['qty_ticket_res']."')";								
-								echo $insertQuery;
+								//echo $insertQuery;
 								$db->db_query($insertQuery);
 								
 							}
 						}
 					}
 				}
-			}else{ echo 'else'; 
-				echo $insretArray = array('_id' => $value['doc']['_id'] , 
+			}else{ 
+				$insretArray = array('_id' => $value['doc']['_id'] , 
 						'_rev' => $value['doc']['_rev'], 
 						'store_id' => $value['doc']['store_id'], 
 						'start_time' => $value['doc']['day']['start_time'], 
