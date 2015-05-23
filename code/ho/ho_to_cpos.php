@@ -137,8 +137,9 @@ function uploadShiftData(){
 							}else{
 								$insertQuery = "INSERT INTO cp_pos_shift_data (pos_day_id, start_time, end_time, staff_id, end_petty_cash, opening_cash_inbox, end_cash_inbox, counter_no, shift_no, opening_petty_cash, petty_expense, closing_petty_cash, inward_petty_cash, cash_denomination) values ";
 								$insertQuery .= "(".$dbList[$value['id']]['id'].",'".$shValue['start_time']."','".$shValue['end_time']."',".$shValue['start_login_id'].",'".$shValue['end_petty_cash']."','".$shValue['opening_cash_inbox']."','".$shValue['end_cash_inbox']."',".$shValue['counter_no'].",".$shValue['shift_no'].",'".$shValue['petty_cash_balance']['opening_petty_cash']."', '".$shValue['petty_cash_balance']['petty_expense']."','".$shValue['petty_cash_balance']['closing_petty_cash']."','".$shValue['petty_cash_balance']['inward_petty_cash']."','10:".$shValue['cash_denomination']['qty_10'].",20:".$shValue['cash_denomination']['qty_20'].",50:".$shValue['cash_denomination']['qty_50'].",100:".$shValue['cash_denomination']['qty_100'].",500:".$shValue['cash_denomination']['qty_500'].",sodex:".$shValue['cash_denomination']['qty_sodex'].",ticket_restaurent:".$shValue['cash_denomination']['qty_ticket_res']."')";								
-								$db->db_query($insertQuery);
 								echo $insertQuery;
+								$db->db_query($insertQuery);
+								
 							}
 						}
 					}
