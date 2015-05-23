@@ -65,7 +65,7 @@ function uploadShiftData(){
 		foreach($rows as $key => $value){ 
 			if(array_key_exists($value['id'], $dbList)){ 
 				if($dbList[$value['id']]['_rev'] !== $value['doc']['_rev']){ 
-					$updateQuery = "UPDATE cp_pos_day_data 
+					echo $updateQuery = "UPDATE cp_pos_day_data 
 									SET end_time = '".$value['doc']['day']['end_time']."', 
 									end_staff_id = '".$value['doc']['day']['end_login_id']."',
 									end_full_cash = '".$value['doc']['day']['end_fullcash']."', 
