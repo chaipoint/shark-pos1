@@ -19,7 +19,7 @@ switch ($param){
 		echo cardSale();
 		break;
 }
-//echo cardSale();
+echo cardSale();
 function cardSale(){
 global $logger, $db;
 	$couch = new CouchPHP();
