@@ -114,8 +114,9 @@ function deleteDoc(){
 		$deleteArray[$i]["_deleted"] = true;
 		$i++;
 	}
+	
 	//$res = $couch->saveDocument(true)->execute(array("docs"=>$deleteArray));
-	//echo'<pre>'; print_r($deleteArray); echo'</pre>';
+	echo'<pre>'; print_r($deleteArray); echo'</pre>';
 		
 }
 function init(){
