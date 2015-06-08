@@ -1,8 +1,6 @@
 <?php 
-include_once 'common/connection.php' ;
+	include_once 'common/connection.php' ;
 	require_once 'common/couchdb.phpclass.php';
-	require_once 'common/logger.php';
-	require_once 'constant.php';
 	
 $param = $_GET['param'];
 echo $param;
