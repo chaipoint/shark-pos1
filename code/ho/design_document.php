@@ -20,7 +20,7 @@ switch ($param){
 		break;
 }
 //echo cardSale();
-function cardSale(){
+/*function cardSale(){
 global $logger, $db;
 	$couch = new CouchPHP();
 	$html = array();
@@ -100,15 +100,16 @@ global $logger, $db;
 	
 
 
-}
+}*/
 //echo init();
-function deleteDoc(){ echo 'Hello';
+function deleteDoc(){ echo 'Hello2';
 	$couch = new CouchPHP();
 	$deleteArray = array();
 	$result = $couch->getDesign('billing')->getView('handle_updated_bills')->setParam(array("startkey" => '["2015-02-01"]',"endkey" => '["2015-02-28",{},{},{}]'))->execute();
 	$i=0;
+	echo '<pre>';print_r($result);echo '</pre>';
 	echo 'gjhgjgjhgh';
-	echo '<pre>';print_r($result);echo '</pre>';//die();
+	
 	foreach($result['rows'] as $key => $value){
 		$deleteArray[$i]["_id"] = $value['id'];
 		$deleteArray[$i]["_rev"] = $value['value'];
