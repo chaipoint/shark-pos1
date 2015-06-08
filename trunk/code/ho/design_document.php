@@ -23,7 +23,7 @@ switch ($param){
 function deleteDoc(){
 	$couch = new CouchPHP();
 	$deleteArray = array();
-	$result = $couch->getDesign('billing')->getView('handle_updated_bills')->setParam(array("startkey" => '["2015-02-01"]',"endkey" => '["2015-02-28",{},{},{}]'))->execute();
+	$result = $couch->getDesign('billing')->getView('handle_updated_bills')->setParam(array("startkey" => '["2015-06-01"]',"endkey" => '["2015-06-28",{},{},{}]'))->execute();
 	print_r($result);
 	$i=0;
 	//echo '<pre>';print_r($result);echo '</pre>';die();
