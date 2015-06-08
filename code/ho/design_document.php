@@ -19,8 +19,8 @@ switch ($param){
 		echo cardSale();
 		break;
 }
-//echo cardSale();
-/*function cardSale(){
+echo cardSale();
+function cardSale(){
 global $logger, $db;
 	$couch = new CouchPHP();
 	$html = array();
@@ -100,24 +100,22 @@ global $logger, $db;
 	
 
 
-}*/
+}
 //echo init();
-function deleteDoc(){ echo 'Hello2';
+function deleteDoc(){
 	$couch = new CouchPHP();
 	$deleteArray = array();
 	$result = $couch->getDesign('billing')->getView('handle_updated_bills')->setParam(array("startkey" => '["2015-02-01"]',"endkey" => '["2015-02-28",{},{},{}]'))->execute();
 	$i=0;
-	echo '<pre>';print_r($result);echo '</pre>';
-	echo 'gjhgjgjhgh';
-	
+	echo '<pre>';print_r($result);echo '</pre>';die();
 	foreach($result['rows'] as $key => $value){
 		$deleteArray[$i]["_id"] = $value['id'];
 		$deleteArray[$i]["_rev"] = $value['value'];
 		$deleteArray[$i]["_deleted"] = true;
 		$i++;
 	}
-	echo'<pre>'; print_r($deleteArray); echo'</pre>'; die();
-	$res = $couch->saveDocument(true)->execute(array("docs"=>$deleteArray));
+	//$res = $couch->saveDocument(true)->execute(array("docs"=>$deleteArray));
+	//echo'<pre>'; print_r($deleteArray); echo'</pre>';
 		
 }
 function init(){
