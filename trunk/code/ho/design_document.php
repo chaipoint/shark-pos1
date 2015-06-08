@@ -1,4 +1,4 @@
-<?php 
+<?php error_reporting(E_ALL); 
 	include_once 'common/connection.php' ;
 	require_once 'common/couchdb.phpclass.php';
 	
@@ -19,6 +19,7 @@ switch ($param){
 }
 
 function deleteDoc(){
+
 	$couch = new CouchPHP();
 	$deleteArray = array();
 	$result = $couch->getDesign('billing')->getView('handle_updated_bills')->setParam(array("startkey" => '["2015-06-01"]',"endkey" => '["2015-06-28",{},{},{}]'))->execute();
