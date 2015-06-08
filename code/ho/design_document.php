@@ -107,16 +107,15 @@ function deleteDoc(){
 	$deleteArray = array();
 	$result = $couch->getDesign('billing')->getView('handle_updated_bills')->setParam(array("startkey" => '["2015-01-01"]',"endkey" => '["2015-01-31",{},{},{}]'))->execute();
 	$i=0;
-	echo '<pre>';print_r($result);echo '</pre>';die();
+	//echo '<pre>';print_r($result);echo '</pre>';//die();
 	foreach($result['rows'] as $key => $value){
 		$deleteArray[$i]["_id"] = $value['id'];
 		$deleteArray[$i]["_rev"] = $value['value'];
 		$deleteArray[$i]["_deleted"] = true;
 		$i++;
 	}
-	
-	//$res = $couch->saveDocument(true)->execute(array("docs"=>$deleteArray));
 	echo'<pre>'; print_r($deleteArray); echo'</pre>';
+	$res = $couch->saveDocument(true)->execute(array("docs"=>$deleteArray));
 		
 }
 function init(){
