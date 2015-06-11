@@ -13,6 +13,7 @@
 			global $ERT_PRODUCT_ARRAY, $config;
 			$data = array('error' =>false, 'catList'=>array(), 'productList'=>array(), 'sales_tax'=>array(), 'firstCat'=>0, 'config_data'=>array(), 'bill'=>array(), 'lastBillNo'=>'', 'lastBillTime'=>'');
 			
+			/* check Session */
 			if(array_key_exists('referer',$_GET) && $_GET['referer'] == HOME){
 			}else if(!array_key_exists('shift', $_SESSION['user']) || !array_key_exists('store', $_SESSION['user']) ){
 					$result = $this->getSessionData();
@@ -39,7 +40,7 @@
 				}
 					
 			}
-			
+			/* check error while fetching data from Couch */
 			if(array_key_exists('cMessage', $resultStoreMenu)){
 				$data['error'] = true;
 				header("Location:index.php?error=true");
@@ -48,8 +49,16 @@
 				$result = $resultStoreMenu['rows'][0]['doc'];
 				$tin_no = $result['tin_no'];
 				$stn_no = $result['stn_no'];
-				$billing_type = explode(',', $result['bill_type']);
+				$service_tax = array();
 				
+				//$billing_type = explode(',', $result['bill_type']);
+				/*foreach($billing_type as $key => $value){
+					$ex = explode('=', $value);
+					$service_tax[$ex[0]] = $ex[1]; 
+				}*/
+				//echo '<pre>'; print_r($service_tax); echo '</pre>'; die();
+				
+				/* check CAW customer */
 				if(array_key_exists('cawOrder',$_GET) && is_numeric($_GET['cawOrder'])){
 					$customer_id = $_GET['cawOrder'];
 					$resultCawProduct = $this->cDB->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_RETAIL_CUSTOMER_LIST)->setParam(array('key'=>$customer_id,'include_docs'=>'true'))->execute();
@@ -62,6 +71,7 @@
 
 				$catList = array();
 				$productList = array();
+				/* creating array of menu item and category  */
 				if(array_key_exists('menu_items', $result) && count($result['menu_items'])>0){
 				foreach($result['menu_items'] as $key => $Items){
 					if(!empty($Items['category']['id'])){
@@ -70,6 +80,7 @@
 					}
 		 		}
 				}
+				/* to show item according to sequence  */
 				foreach($productList as $key => $value){
 					 ksort($productList[$key]);
 				}
@@ -78,6 +89,8 @@
 		 		$currectCat = array_keys($catList);
 	  			$firstCat = @$currectCat[0];
 				$billData = array();
+				
+				/* For coc order  */
 	  			if(array_key_exists('bill_no', $_GET) && ! empty($_GET['bill_no'])){
 	  				$bill = $_GET['bill_no'];
 					$billDataReturned = $this->getBillData($bill); 
@@ -85,7 +98,7 @@
 	 					$billData = $billDataReturned['data'];
 					}
 	  			}
-	  			$data = array('error'=>false, 'ertList'=>$ERT_PRODUCT_ARRAY, 'catList'=>$catList, 'productList'=>$productList, 'firstCat'=>$firstCat, 'config_data'=>$this->configData, 'bill'=>$billData, 'lastBillNo'=>$lastBillNo, 'lastBillTime'=>$lastBillTime);
+	  			$data = array('error'=>false, 'ertList'=>$ERT_PRODUCT_ARRAY, 'catList'=>$catList, 'productList'=>$productList, 'firstCat'=>$firstCat, 'config_data'=>$this->configData, 'bill'=>$billData, 'lastBillNo'=>$lastBillNo, 'lastBillTime'=>$lastBillTime, 'service_tax'=>$service_tax);
 
 	  		}
 	  		
@@ -155,7 +168,7 @@
 			$customer_id = $_POST['customer_id'];
 			$resultCawProduct = $this->cDB->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_RETAIL_CUSTOMER_LIST)->setParam(array('key'=>$customer_id,'include_docs'=>'true'))->execute();
 			$this->log->trace('CAW PRODUCT DETAILS'."\r\n".json_encode($resultCawProduct));
-			
+			/* To Check product exists or not for this customer  */
 			if(array_key_exists('rows', $resultCawProduct) && count($resultCawProduct['rows'])>0){
 				unset($resultCawProduct['rows'][0]['doc']['menu_items']);
 				$return['data'] = $resultCawProduct['rows'][0]['doc']; 
@@ -169,6 +182,7 @@
 		/* Function To Validate Coupan Code */
 		public function getCoupanCode(){
 			$return = array('error'=>false, 'message'=>'', 'data' => array());
+			/* To Check Session  */
 			if(empty($_SESSION['user']['store']['id'])){
 				$result = $this->getSessionData();
 				if($result['error']){
@@ -177,13 +191,16 @@
 					return json_encode($return);
 				}
 			}
+			
 			$getCoupanCode = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_MYSQL_ID)->setParam(array('include_docs'=>'true',"key"=>'"'.$_SESSION['user']['store']['id'].'"'))->execute();
 			$this->log->trace('STORE COUPAN DETAIL'."\r\n".json_encode($getCoupanCode));
 			
+			/* To Check coupon exists or not   */
 			if(array_key_exists('rows', $getCoupanCode) && count($getCoupanCode['rows'])>0){
 				$doc = $getCoupanCode['rows'][0]['doc'];
 				if(array_key_exists('coupon_master', $doc) && count($doc['coupon_master'])>0){
 					$data = $getCoupanCode['rows'][0]['doc']['coupon_master'];
+					/* Iterate COUPON MASTER DOC   */
 					foreach($data as $key => $value){
 						$curdate = strtotime(date('Y-m-d'));
 						$startdate = strtotime($value['start_date']);
@@ -194,24 +211,24 @@
 						$endtime = strtotime($value['end_time']);
 						
 						$day_number = date('N', strtotime(date('d-m-Y')));
-						
+						/* check coupon code   */
 						if(strtoupper($value['coupon_code']) == strtoupper($_REQUEST['coupan_code'])){
-						
+							/* check date    */
 							if($startdate > $curdate || $enddate < $curdate || $starttime > $curtime || $endtime < $curtime  || strpos(','.$value['week_days'].',' , ','.$day_number.',') === FALSE ){
 								$return['error'] = true;
 								$return['message'] = 'Coupon has Expired. Confirm Validity.';
 								return json_encode($return);
-							
+							/* check price */
 							}else if($value['start_price'] > $_REQUEST['bill_amount'] || $value['end_price'] < $_REQUEST['bill_amount']){
 								$return['error'] = true;
 								$return['message'] = 'Coupon Cannot be Applied on the Current Bill Value';
 								return json_encode($return);
-								
+							/* check channel */	
 							}else if(strpos(','.$value['channel'].',' , ','.$_REQUEST['channel_type'].',') === FALSE || strpos(','.$value['biz_type'].',' , ','.$_REQUEST['business_type'].',') === FALSE){
 								$return['error'] = true;
 								$return['message'] = 'Coupon Not Defined for this Group';
 								return json_encode($return);
-								
+							/* check product */
 							}else if($value['is_product'] !='Y') {
 								$return['data']['is_product'] = $value['is_product'];
 								$return['data']['discount_type'] = $value['coupon_type'];
@@ -219,7 +236,7 @@
 								$return['error'] = false;
 								$return['message'] = '';
 								return json_encode($return);
-							
+							/* check product in coupon details doc */
 							}else if(array_key_exists('coupon_detail', $doc) && array_key_exists(strtoupper($_REQUEST['coupan_code']), $doc['coupon_detail'])){
 								$return['data']['is_product'] = $value['is_product'];
 								$return['data']['discount_data'] = $doc['coupon_detail'][strtoupper($_REQUEST['coupan_code'])];
