@@ -208,7 +208,7 @@ $(document).ready(function(){
 		$("#loading_image").removeClass('hide');
 		$("#ajaxfadediv").addClass('ajaxfadeclass');
 		$.ajax({
-			url: "index.php?dispatch=utils.sync&mode=billing_sync_bt",
+			url: "download/download.php?param=checkRepDoc",
 			timeout:120000,
 		}).done(function(response) {
 			//alert(response);
