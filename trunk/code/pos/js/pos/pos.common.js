@@ -632,7 +632,13 @@ function db_error(message){
 	}else{
 		var msg = 'OOPS! Some Problem Please Contact Admin.';
 	}
-	bootbox.dialog({message:'<div class="text-center text-danger form-group">'+msg+'<button style="margin-top:20px" onclick="refresh()" type="submit" class="btn btn-lg btn-success">Refresh</button></div>'});
+	bootbox.dialog({message:''+msg+'', title:'Server Error!', buttons:{ danger: {
+		label: "OK",
+		className: "btn-danger",
+		callback: function() { 
+			window.location.href = 'index.php?dispatch=billing.index';
+		}
+    }}});
 }
 function refresh (){
 	window.location.reload(true);
