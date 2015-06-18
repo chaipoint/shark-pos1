@@ -202,6 +202,8 @@
 			$response = preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $response);
 			$data = json_decode($response, true);
 			return $data;
+			
+			
 		}
 
 		function changeOrderStatus($postData){
