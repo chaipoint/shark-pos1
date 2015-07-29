@@ -133,12 +133,15 @@
 			$this->commonView('footer_html');
 			
 		}
-
+		
+		/* Function to get re-print */
 		public function rePrint(){
 				global $config;
 				$return = array('error'=>false, 'message'=>'', 'data' => array());
 				$bill = $_POST['doc'];
-				$billDataReturned = $this->getBillData($bill); 
+				$billDataReturned = $this->getBillData($bill);
+				
+				/* Check error while fetching data from Couch */
 				if(!$billDataReturned['error']){
 	 				$billData = $billDataReturned['data'];
 					if($config['printing_mode']=='exe'){
@@ -279,10 +282,11 @@
 			global $config;
 			$return = array('error'=>false, 'message'=>'', 'data'=>array());
 			if($_SERVER['REQUEST_METHOD'] == 'POST'){
+				/* check request type */ 
 				if(array_key_exists('request_type', $_POST) && $_POST['request_type'] == SAVE_BILL){
 					$this->log->trace("DATA \r\n".json_encode($_POST));
 					$_POST['cd_doc_type'] = BILLING_DOC_TYPE ;
-					
+					/* check Session */
 					if(empty($_SESSION['user']['store']) || empty($_SESSION['user']['store']['id']) || empty($_SESSION['user']['store']['name'])){
 						$result = $this->getSessionData();
 						if($result['error']){
@@ -311,7 +315,8 @@
 					}*/
 					$_POST['counter'] = $_SESSION['user']['counter'];
 					$_POST['shift'] = $_SESSION['user']['shift'];
-
+					
+					/* Check for order already billed or not  */
 					if( $_POST['order_no'] > 0 ){
 						$orderNO = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getView(BILLING_DESIGN_DOCUMENT_VIEW_BILL_BY_ORDER)->setParam(array('key'=> '"'.$_POST['order_no'].'"' ))->execute();
 						$this->log->trace("GET ORDER DETAILS \r\n".json_encode($orderNO));
@@ -331,6 +336,7 @@
 						}
 					}
 					
+					/* Allow billing for old date if payment type is caw  */
 					if($_POST['payment_type']=='caw' && $_POST['customer']['onsite_time'] != $this->getCDate()){
 						$LastBill = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getView(BILLING_DESIGN_DOCUMENT_VIEW_BILL_BY_STORE_COUNTER)->setParam(array("descending"=>"true","startkey" => '["'.$_POST['customer']['onsite_time'].'", "'.$_SESSION['user']['store']['id'].'" , "'.$_SESSION['user']['counter'].'"]', "endkey" => '["'.$_POST['customer']['onsite_time'].'","'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]',"limit"=>"1"))->execute();
 						if(array_key_exists('rows', $LastBill) && count($LastBill['rows'])>0){
@@ -344,6 +350,8 @@
 						$currentBillNo = $this->cDB->getDesign(BILLING_DESIGN_DOCUMENT)->getUpdate(BILLING_DESIGN_DOCUMENT_UPDATE_GET_BILL_NO,'generateBill')->setParam(array('date'=>$this->getCDate(), 'counter1'=>''.$_SESSION['user']['counter'].'','store_id'=>''.$_SESSION['user']['store']['id'].''))->execute();
 						$_POST['time'] = array('created'=>$this->getCDTime(), 'updated'=>$this->getCDTime());
 					}
+					
+					/* Check bill no type  */
 					if(is_numeric($currentBillNo)){
 						$mode = ($config['billing_mode']==LOCAL_BILLING_MODE ? LOCAL : CLOUD);
 						$_POST['bill'] = $_SESSION['user']['store']['code']."".$_SESSION['user']['counter']."".str_pad($currentBillNo, 4 , '0', STR_PAD_LEFT)."".$mode;
@@ -364,6 +372,7 @@
 						$return['error'] = true;
 						$return['message'] = ERROR;
 					}
+				/* Update order condition  */
 				}elseif(array_key_exists('request_type', $_POST) && $_POST['request_type'] == UPDATE_BILL){
 					$billDataReturned = $this->getBillData($_POST['doc']);
 					if($billDataReturned['error']){
@@ -449,6 +458,7 @@
 		/* Function To Bill Through PPA METHOD  */
 		public function ppaBill(){
 			$return = array('error'=>false,'message'=>'','data'=>array());
+			/* Check session  */
 			if(empty($_SESSION['user']['store']['id'])){
 				$result = $this->getSessionData();
 				if($result['error']){
@@ -478,6 +488,7 @@
         function loadCard(){
         	$return = array('error'=>false,'message'=>'','data'=>array());
         	$loadResponse = array();
+			/* Check session  */
 			if(empty($_SESSION['user']['store']['id'])){
 				$result = $this->getSessionData();
 				if($result['error']){
@@ -486,6 +497,7 @@
 					return json_encode($return);
 				}
 			}
+			/* Check for request type  */
         	if(array_key_exists('request_type', $_POST) && ($_POST['request_type'] == LOAD_PPA_CARD || $_POST['request_type'] == REWARD_REDEMPTION || $_POST['request_type'] == REWARD_CHECK)){
         		$dir =  dirname(__FILE__).'/../lib/api/ppa_api.php';
             	require_once $dir;
@@ -500,7 +512,7 @@
             		$invoiceNumber = $this->cDB->getDesign(PPC_DETAIL_DESIGN_DOCUMENT)->getUpdate(PPC_DETAIL_DESIGN_DOCUMENT_UPDATE_GET_BILL_NO,'generateppcBill')->setParam(array('date'=>$this->getCDate()))->execute();;
             	}
             	$loadResponse = ppa_api($config_data, $_POST, $_POST['request_type'], $invoiceNumber);
-            
+				/* Check for request type  */
             }else if(array_key_exists('request_type', $_POST) && ($_POST['request_type'] == LOAD_PPC_CARD || $_POST['request_type'] == ACTIVATE_PPC_CARD || $_POST['request_type'] == ISSUE_PPC_CARD || $_POST['request_type'] == GET_CUSTOMER_INFO || $_POST['request_type'] == BALANCE_CHECK_PPC_CARD )){
             	$dir =  dirname(__FILE__).'/../lib/svc/ppc_api.php';
                 require_once $dir;
@@ -511,7 +523,7 @@
                 }else{
 					$loadResponse = $ppc->ppcOperation($_POST, $_POST['request_type']);
 				}
-			}
+			}	/* Check response data  */
 				if(!empty($loadResponse['data']) && $loadResponse['data']['success']=='True' && $loadResponse['data']['txn_type']!=FREEBIE && $loadResponse['data']['txn_type']!=BALANCE_CHECK && $loadResponse['data']['txn_type']!=REISSUE_PPC_CARD){
 					$saveData = array();
 					$saveData['cd_doc_type'] = CARD_SALE_DOC_TYPE;
