@@ -671,6 +671,7 @@ function updateConfig(){
 		$result = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_STORE_BY_MYSQL_ID)->setParam(array("include_docs"=>"true", 'key'=>'"'.$store.'"'))->execute();
 		$storeList = array();
 		$_idList = array();
+		$lctn=1;
 		if(array_key_exists('rows', $result)){
 			$docs = $result['rows'];
 			foreach($docs as $dKey => $dValue){
@@ -710,7 +711,7 @@ function updateConfig(){
                 unset($_idList[$storeList[$storeDetails['mysql_id']]['_id']]);
                 $updateCounter++;
 			}
-
+			$lctn=$storeDetails['location_id'];
 			$updateArray[$i]['cd_doc_type'] = STORE_MASTER_DOC_TYPE;
 			$updateArray[$i]['address'] = $storeDetails['address'];
 			$updateArray[$i]['bill_type'] = $storeDetails['billing_type'];
@@ -1004,7 +1005,9 @@ function updateConfig(){
 			$html['message'] = 'Download failed. Please check your internet connection and try again.';
 		}
 		$result = json_encode($html);
-		mysql_close();
+		$rst=updateStaff($lctn);
+		//mysql_close();
+		
 		return $result;
 		
 	}
