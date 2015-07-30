@@ -49,6 +49,28 @@ switch ($argv[1]){
 	echo checkit();
 		break;
 		
+	case 'deleteDoc':
+	echo deleteDoc();
+		break;
+		
+}
+/*Function to delete document */
+function deleteDoc(){
+	$couch = new CouchPHP();
+	$deleteArray = array();
+	/*query to get all document for give date */
+	$result = $couch->getDesign('billing')->getView('handle_updated_bills')->setParam(array("startkey" => '["2015-05-01"]',"endkey" => '["2015-06-30",{},{},{}]'))->execute();
+	
+	$i=0;
+	/* create array of doc to be delete */
+	foreach($result['rows'] as $key => $value){
+		$deleteArray[$i]["_id"] = $value['id'];
+		$deleteArray[$i]["_rev"] = $value['value'];
+		$deleteArray[$i]["_deleted"] = true;
+		$i++;
+	}
+	$couch->saveDocument(true)->execute(array("docs"=>$deleteArray));
+	$couch->compact();
 }
 
 /*function checkit(){
@@ -85,13 +107,15 @@ switch ($argv[1]){
 	return $result;
 
 }*/
+
+/*Function to insert Replication document  */
 function insertRepDoc($insert){ 
 	$couch = new CouchPHP();
 	$target = $couch->getRemote();
 	$source = $couch->getUrl().$couch->getDB();
 	$ch = curl_init();
 	$url = ($insert ? 'http://pos:pos@127.0.0.1:5984/_replicator' : 'http://pos:pos@127.0.0.1:5984/_replicator/billing_replication');
-    
+    /* check for insert or update */
 	if($insert){
 		$postData = array('_id'=>'billing_replication', 'source'=>$source, 'target'=>$target, 'filter'=>'doc_replication/bill_replication', 'continuous'=>true);
 	}else {
@@ -114,11 +138,10 @@ function insertRepDoc($insert){
 	return $result;
 }
 
+/*Function to check Replication document State */
 function checkRepDoc(){
 	$result = insertRepDoc(false);
-	//echo '<pre>';
-	//print_r($result);
-	//echo '</pre>';
+	/* check for error or not funcd key   */
 	if(array_key_exists('error', $result) && $result['error']=='not_found'){
 		$result = insertRepDoc(true);
 	}elseif($result['_replication_state']=='error'){
@@ -131,14 +154,17 @@ function checkRepDoc(){
 function updateCustomers($location){
 	$couch = new CouchPHP();
     $existingRC = array(); 
+	/*query to get existing Retail Customer    */
 	$listRC = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getview(DESIGN_HO_DESIGN_DOCUMENT_VIEW_RETAIL_CUSTOMER_LIST)->setParam(array('include_docs'=>'true'))->execute();
 	
+	/* create array of existing retail customer  */
 	if(array_key_exists('rows', $listRC)){
 		foreach ($listRC['rows'] as $rkey => $rvalue) {
 			$existingRC[$rvalue['doc']['mysql_id']]['_id'] = $rvalue['doc']['_id'];
 			$existingRC[$rvalue['doc']['mysql_id']]['_rev'] = $rvalue['doc']['_rev'];
 		}
 	}
+	/*query to get all Retail Customer from CPOS database   */
 	$getCustomer = "SELECT id, name, code, phone, email, company_name, billing_address, billing_type,
 					consignee_address, prod_start_date, deactivate_date, vat, location_id,
 					cin, stn, pan, store
@@ -154,7 +180,7 @@ function updateCustomers($location){
 	$i = 0;
 	
 	while($value=mysql_fetch_assoc($result)){
-
+		/* Check for existing customer   */
 		if(array_key_exists($value['id'], $existingRC)){
 			$value['_id'] = $existingRC[$value['id']]['_id'];
 			$value['_rev'] = $existingRC[$value['id']]['_rev'];
@@ -171,7 +197,8 @@ function updateCustomers($location){
 		$value['consignee_address'] = str_replace(array('"',"'"), ' ', $value['consignee_address']);
 		unset($value['id']);
 		$insertArray[$i] = $value;
-
+		
+		/* query to get all caw menu item     */
 		$getProduct = "SELECT pm.id, if(cpsp.display_name = '' or cpsp.display_name is null,
 				       pm.display_name, cpsp.display_name) name, pm.sequence, 
 				       cpsp.store_id, pm.code, if(cpsp.price is null, pm.price,if(cpsp.price = 0, 'R' , cpsp.price)) price, 
@@ -216,7 +243,7 @@ function updateCustomers($location){
         }
 	$i++;
 	}
-
+	/* check for existing customer array and delete if any     */
 	if(count($existingRC)>0){
 		foreach($existingRC as $keyR => $valueR){
 			$res = $couch->deleteDoc($valueR['_id'])->setParam(array('rev'=>$valueR['_rev']))->execute();
@@ -250,10 +277,12 @@ function updateCustomers($location){
 /* Function To Download Staff From CPOS*/
 function updateStaff($location){
 	$couch = new CouchPHP();
+	/*query to get existing Staff FROM couchdb  */
 	$result = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_STAFF_BY_MYSQL_ID)->setParam(array("include_docs"=>"true"))->execute();
 	
 	$itemList = array();
 	$_idList = array();
+	/* create array of existing staff */
     if(array_key_exists('rows', $result)){
 		$docs = $result['rows'];
 		foreach($docs as $dKey => $dValue){
@@ -263,7 +292,7 @@ function updateStaff($location){
       
 	}
 	
- 	
+ 	/* query to get all the staff from CPOS database  */
  	$getStaff = "SELECT   sm.id mysql_id, sm.name, sm.username, sm.code,
 	    	      sm.password, sm.address, sm.photo, sm.email,sm.phone_1,
 		          sm.phone_2,lm.id location_id, lm.name location_name,tm.id title_id,
@@ -280,6 +309,7 @@ function updateStaff($location){
 	
 	while($row = mysql_fetch_assoc($result)){
 	  $updateArray[$i] = $row;
+	  /*check for existing staff  */
 	  if(array_key_exists($row['mysql_id'],$itemList)){
       	$updateArray[$i]['_id'] = $itemList[$row['mysql_id']]['_id'];
       	$updateArray[$i]['_rev'] = $itemList[$row['mysql_id']]['_rev'];
@@ -299,6 +329,7 @@ function updateStaff($location){
 	  $i++;
 	  
 	}
+	/* check existing staff array and delete if any */
 	if(count($_idList)>0){
 		foreach ($_idList as $key => $value) {
 			$res = $couch->deleteDoc($key)->setParam(array('rev'=>$value))->execute();
@@ -306,6 +337,7 @@ function updateStaff($location){
 		}
 	}
     $insertCounter = $i-$updateCounter;	
+	/* check update array and save if any  */
 	if(is_array($updateArray) && count($updateArray)>0){
 		$result = $couch->saveDocument(true)->execute(array("docs"=>$updateArray));
 		if(array_key_exists('error', $result)){
@@ -328,10 +360,11 @@ function updateStaff($location){
 function updateStore($location_id){ 
 	global $config;
     $couch = new CouchPHP();
+	/*query to get existing Store data FROM couchdb  */
 	$result = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_STORE_BY_MYSQL_ID)->setParam(array("include_docs"=>"true"))->execute();
 	$storeList = array();
 	$_idList = array();
-
+	/* create array of existing store */
     if(array_key_exists('rows', $result)){
 		$docs = $result['rows'];
 		 foreach($docs as $dKey => $dValue){
@@ -339,7 +372,7 @@ function updateStore($location_id){
 	    $_idList[$dValue['doc']['_id']] = $dValue['doc']['_rev'];	
 	  	}
 	}
-  
+    /* query to get store data from CPOS database */
 	$getStoreNameQuery = "SELECT sm.id mysql_id, sm.tin_no, sm.stn_no , sm.name, sm.code,
 	                      sm.type, sm.address, sm.phone_1, sm.phone_2, photo,
 	                      weekly_off, lm.id location_id, lm.name location_name,
@@ -350,10 +383,12 @@ function updateStore($location_id){
                           WHERE sm.active = 'Y' AND sm.type != 'WHO' AND sm.location_id = $location_id";
 						
 	$storeResult = mysql_query($getStoreNameQuery);
+	/* query to get all product RECIPE from CPOS database */
 	$getProductRecipe = "SELECT id, product_id, store_id FROM cp_recipes_master WHERE active = 'Y'";
 						
 						$recipesResult = mysql_query($getProductRecipe);
 						$productRecipeArray = array();
+						/*create array of product recipe  */
 						while($row = mysql_fetch_assoc($recipesResult)){
 							$productRecipeArray[$row['store_id']][$row['product_id']] = $row['id'];
 						}
@@ -362,7 +397,7 @@ function updateStore($location_id){
 						$i = 0;
 						$updateCounter = 0;
 						$insertCounter = 0;
-						
+						/*create array of store data to be updated  */
 					    while($row = mysql_fetch_assoc($storeResult)){
                             $storeDetails = $row;
                             $updateArray[$i] = $storeDetails;
@@ -383,7 +418,7 @@ function updateStore($location_id){
 							$ppa_uid = explode(',', $storeDetails['ppa_uid']);
 							$ppa_pwd = explode(',', $storeDetails['ppa_pwd']);
 							$ppc_tid = explode(',', $storeDetails['ppc_tid']);
-							
+							/* check till no for ppa deatils  */
 							if($config['till_no'] ==1){
 								$updateArray[$i]['ppa_details']['uid'] = $ppa_uid[0];
 								$updateArray[$i]['ppa_details']['pwd'] = $ppa_pwd[0];
@@ -411,6 +446,8 @@ function updateStore($location_id){
 							unset($updateArray[$i]['ppc_uid']);
 							unset($updateArray[$i]['ppc_pwd']);
 							unset($updateArray[$i]['billing_type']);
+							
+							/* query to get details of store opening and closing   */
 							$selectSchedule = "SELECT * FROM  `cp_store_timings` WHERE store_id =".$storeDetails['mysql_id'];
 							$resultSchedule = mysql_query($selectSchedule);
 							while($rowSchedule = mysql_fetch_assoc($resultSchedule)){
@@ -434,7 +471,7 @@ function updateStore($location_id){
 								}
 							}
 						
-							
+					/* query to get all menu item from CPOS data */	
 				    $products = "SELECT pm.id, if(cpsp.display_name = '' or cpsp.display_name is null,
 				                 pm.display_name, cpsp.display_name) name, pm.sequence, 
 				                 cpsp.store_id, pm.code, if(cpsp.price is null, pm.price,if(cpsp.price = 0, 'R' , cpsp.price)) price, 
@@ -451,6 +488,7 @@ function updateStore($location_id){
 							
 							$productList = mysql_query($products);
 							$j = 0;
+							/* creating array of menu item  */
 							while($innerRow = mysql_fetch_assoc($productList)){	
 								$productDetails = $innerRow;
 									if(is_numeric($productDetails['price'])){
@@ -479,7 +517,7 @@ function updateStore($location_id){
 										$j++;
 									}
                                 }
-
+							/* query to get store staff  */
                         	$getStaff = "SELECT ss.staff_id id, sm.code, sm.name name, sm.title_id, tm.name title_name  FROM store_staff ss
 										 LEFT JOIN staff_master sm ON sm.id = ss.staff_id 
 										 LEFT JOIN title_master tm ON tm.id = sm.title_id 
@@ -487,6 +525,7 @@ function updateStore($location_id){
 							
 							$staffList = mysql_query($getStaff);
 							$k = 0;
+							/* creating array of store staff  */
 							while ($row = mysql_fetch_assoc($staffList)) {
 								$updateArray[$i]['store_staff'][$k]['mysql_id'] = $row['id'];
 								$updateArray[$i]['store_staff'][$k]['code'] = $row['code']; 
@@ -496,38 +535,26 @@ function updateStore($location_id){
 								$k++;
 							}
 							
-							/*$getCustomer = "SELECT isb.customer_id id, cm.name, cm.billing_type type 
-											FROM `isb_delivery` isb
-											LEFT JOIN customer_master cm ON cm.id = isb.customer_id
-											WHERE isb.store_id = '".$storeDetails['mysql_id']."' AND isb.active = 'Y'
-											GROUP BY isb.customer_id";
-							$customerList = mysql_query($getCustomer);
-							$l = 0;
-							while ($row = mysql_fetch_assoc($customerList)) {
-								$updateArray[$i]['retail_customer'][$l]['id'] = $row['id'];
-								$updateArray[$i]['retail_customer'][$l]['name'] = $row['name']; 
-								$updateArray[$i]['retail_customer'][$l]['type'] = $row['type'];
-								$l++;
-							}*/
-
+							/* query to get store retail customer  */
 							$getCustomer = "SELECT id, name, billing_type
 											FROM client_master 
 											WHERE store = '".$storeDetails['mysql_id']."' AND active = 'Y' ";
 							$customerList = mysql_query($getCustomer);
 							$l = 0;
+							/* creating array of store customer  */
 							while ($row = mysql_fetch_assoc($customerList)) {
 								$updateArray[$i]['retail_customer'][$l]['id'] = $row['id'];
 								$updateArray[$i]['retail_customer'][$l]['name'] = $row['name']; 
 								$updateArray[$i]['retail_customer'][$l]['type'] = $row['billing_type'];
 								$l++;
 							}
-							
+							/* query to get store coupon  */
 							$getCoupon = "SELECT * FROM `coupan_master` 
 										  WHERE store_id = '".$storeDetails['mysql_id']."' 
 						                  AND active = 'Y' ";
 			                $couponList = mysql_query($getCoupon);
 			                $m = 0;
-			
+							/* creating array of store coupon  */
 			                while ($row = mysql_fetch_assoc($couponList)) { 
 								$updateArray[$i]['coupon_master'][$m]['id'] = $row['id'];
 								$updateArray[$i]['coupon_master'][$m]['coupon_code'] = $row['coupan_code'];
@@ -570,7 +597,9 @@ function updateStore($location_id){
 			
 			 
 	$insertCounter = $i-$updateCounter;
+	
 	if (is_array($updateArray) && count($updateArray)>0){
+	/* check existing store and delete if any  */
 		if(count($_idList)>0){
 			foreach ($_idList as $key => $value) {
 				$res = $couch->deleteDoc($key)->setParam(array('rev'=>$value))->execute();
@@ -598,18 +627,20 @@ function updateStore($location_id){
 /* Function To Download Configration Setting From CPOS */
 function updateConfig(){ 
 	$couch = new CouchPHP();
+	/*query to get configration data from couchdb   */
 	$result = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_CONFIG_LIST)->setParam(array('include_docs'=>'true','limit'=>1))->execute();
 	$categoryList = array();
 	$updateArray = array();
     if(array_key_exists('rows', $result)){
 		$docs = $result['rows'];
+		/* creating array of config data  */
 		foreach($docs as $dKey => $dValue){
 			$updateArray['_id'] = $dValue['doc']['_id'];
 			$updateArray['_rev'] = $dValue['doc']['_rev'];
 	  	}
 	   
 	}
-	
+	/*query to get configration data from CPOS database   */
     $getConfigDetail = 'SELECT mode, GROUP_CONCAT(id) AS id, GROUP_CONCAT(name) AS name, GROUP_CONCAT(code) AS code 
                         FROM `cp_reference_master` 
                         WHERE is_pos = "Y" 
@@ -619,7 +650,7 @@ function updateConfig(){
     $result = mysql_query($getConfigDetail);
 	$updateCounter = 0;
 	$i = 0;
-	
+	/* creating array of config data  */
 	while($row = mysql_fetch_assoc($result)){
        	$updateArray['cd_doc_type'] = CONFIG_MASTER_DOC_TYPE;
 		$idexplode = explode(',', $row['id']);
@@ -663,23 +694,25 @@ function updateConfig(){
 	mysql_close();
 	return $result;
 }
-	
+	/*Funtion to get latest store data  */
 	function updateSingleStore($store){
 		global $config;
 		$date = date('Y-m-d');
 		$couch = new CouchPHP();
+		/*query to get existing Store data FROM couchdb  */
 		$result = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_STORE_BY_MYSQL_ID)->setParam(array("include_docs"=>"true", 'key'=>'"'.$store.'"'))->execute();
 		$storeList = array();
 		$_idList = array();
 		$lctn=1;
 		if(array_key_exists('rows', $result)){
 			$docs = $result['rows'];
+			/* create array of existing store */
 			foreach($docs as $dKey => $dValue){
 				$storeList[$dValue['doc']['mysql_id']] = $dValue['doc'];
 				$_idList[$dValue['doc']['_id']] = $dValue['doc']['_rev'];	
 			}
 		}
-  
+		/* query to get store data from CPOS database */
 		$getStoreNameQuery = "SELECT sm.id mysql_id, sm.tin_no, sm.stn_no, sm.name, sm.code,
 							sm.type, sm.address, sm.phone_1, sm.phone_2, photo,
 							weekly_off, lm.id location_id, lm.name location_name,
@@ -690,10 +723,11 @@ function updateConfig(){
 							WHERE sm.active = 'Y' AND sm.type != 'WHO' AND sm.id = $store";
 						
 		$storeResult = mysql_query($getStoreNameQuery) or die(mysql_error());
-
+		/* query to get all product RECIPE from CPOS database */
 		$getProductRecipe = "SELECT id, product_id, store_id FROM cp_recipes_master WHERE active = 'Y'";
 		$recipesResult = mysql_query($getProductRecipe);
 		$productRecipeArray = array();
+		/*create array of product recipe  */
 		while($row = mysql_fetch_assoc($recipesResult)){
 			$productRecipeArray[$row['store_id']][$row['product_id']] = $row['id'];
 		}
@@ -702,6 +736,7 @@ function updateConfig(){
 		$i = 0;
 		$updateCounter = 0;
 		$insertCounter = 0;
+		/*create array of store data to be updated  */
 		while($row = mysql_fetch_assoc($storeResult)){
 			$storeDetails = $row;
             $updateArray[$i] = $storeDetails;
@@ -721,6 +756,7 @@ function updateConfig(){
 			$ppa_uid = explode(',', $storeDetails['ppa_uid']);
 			$ppa_pwd = explode(',', $storeDetails['ppa_pwd']);
 			$ppc_tid = explode(',', $storeDetails['ppc_tid']);
+			/* check till no for ppa deatils  */
 			if($config['till_no'] ==1){
 				$updateArray[$i]['ppa_details']['uid'] = $ppa_uid[0];
 				$updateArray[$i]['ppa_details']['pwd'] = $ppa_pwd[0];
@@ -747,6 +783,7 @@ function updateConfig(){
 			unset($updateArray[$i]['ppc_uid']);
 			unset($updateArray[$i]['ppc_pwd']);
 			unset($updateArray[$i]['billing_type']);
+			/* query to get details of store opening and closing   */
 			$selectSchedule = "SELECT * FROM  `cp_store_timings` WHERE store_id =".$storeDetails['mysql_id'];
 			$resultSchedule = mysql_query($selectSchedule);
 			while($rowSchedule = mysql_fetch_assoc($resultSchedule)){
@@ -769,9 +806,8 @@ function updateConfig(){
 					$updateArray[$i]['schedule']['closing_time'][6] = $rowSchedule['closing_time'];
 				}
 			}
-			/*$getLocation = "SELECT location_id FROM store_master WHERE id = '".$storeDetails['mysql_id']."' ";
-			$locationResult = mysql_fetch_array(mysql_query($getLocation));
-			$locationId = $locationResult[0]['location_id'];*/
+			
+			/* query to get all menu item from CPOS data */	
 			$products = "SELECT pm.id, if(cpsp.display_name = '' or cpsp.display_name is null,
 				                 pm.display_name, cpsp.display_name) name, pm.sequence, 
 				                 cpsp.store_id, pm.code, if(cpsp.price is null, pm.price,if(cpsp.price = 0, 'R' , cpsp.price)) price, 
@@ -789,6 +825,7 @@ function updateConfig(){
 							
 			$productList = mysql_query($products);
 			$j = 0;
+			/* creating array of menu item  */
 			while($innerRow = mysql_fetch_assoc($productList)){	
 				$productDetails = $innerRow;
 				if(is_numeric($productDetails['price'])){
@@ -815,7 +852,7 @@ function updateConfig(){
 					$updateArray[$i]['menu_items'][$j]['image'] = $productDetails['image'];
 					$j++;
 				}
-			}
+			}/* query to get store staff  */
 			$getStaff = "SELECT ss.staff_id id, sm.code, sm.name name, sm.title_id, tm.name title_name  FROM store_staff ss
 						LEFT JOIN staff_master sm ON sm.id = ss.staff_id 
 						LEFT JOIN title_master tm ON tm.id = sm.title_id 
@@ -823,6 +860,7 @@ function updateConfig(){
 							
 			$staffList = mysql_query($getStaff);
 			$k = 0;
+			/* creating array of store staff  */
 			while ($row = mysql_fetch_assoc($staffList)) {
 				$updateArray[$i]['store_staff'][$k]['mysql_id'] = $row['id'];
 				$updateArray[$i]['store_staff'][$k]['code'] = $row['code']; 
@@ -831,25 +869,26 @@ function updateConfig(){
 				$updateArray[$i]['store_staff'][$k]['title_name'] = $row['title_name'];
 				$k++;
 			}
-							
+			/* query to get store retail customer  */			
 			$getCustomer = "SELECT id, name, billing_type
 							FROM client_master 
 							WHERE store = '".$storeDetails['mysql_id']."' AND active = 'Y' ";
 			$customerList = mysql_query($getCustomer);
 			$l = 0;
+			/* creating array of store customer  */
 			while ($row = mysql_fetch_assoc($customerList)) {
 				$updateArray[$i]['retail_customer'][$l]['id'] = $row['id'];
 				$updateArray[$i]['retail_customer'][$l]['name'] = $row['name']; 
 				$updateArray[$i]['retail_customer'][$l]['type'] = $row['billing_type'];
 				$l++;
 			}
-			
+			/* query to get store coupon  */
 			$getCoupon = "SELECT * FROM `coupan_master` 
 						  WHERE store_id = '".$storeDetails['mysql_id']."' 
 						  AND active = 'Y' ";
 			$couponList = mysql_query($getCoupon);
 			$m = 0;
-			
+			/* creating array of store coupon  */
 			while ($row = mysql_fetch_assoc($couponList)) { 
 				$updateArray[$i]['coupon_master'][$m]['id'] = $row['id'];
 				$updateArray[$i]['coupon_master'][$m]['coupon_code'] = $row['coupan_code'];
@@ -894,6 +933,7 @@ function updateConfig(){
 		
 		$insertCounter = $i-$updateCounter;
 		if (is_array($updateArray) && count($updateArray)>0){
+			/* check existing store and delete if any  */
 			if(count($_idList)>0){
 				foreach ($_idList as $key => $value) {
 					$res = $couch->deleteDoc($key)->setParam(array('rev'=>$value))->execute();
