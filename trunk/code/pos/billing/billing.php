@@ -23,7 +23,7 @@
 				}
 			
 			
-			//Block sto get Configs and need to have a generic methode for that
+			//Block to get Configs and need to have a generic methode for that
 			$resultStoreMenu = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_MYSQL_ID)->setParam(array('include_docs'=>'true',"key"=>'"'.$_SESSION['user']['store']['id'].'"'))->execute();
 			$this->log->trace('LOGIN STORE DETAIL'."\r\n".json_encode($resultStoreMenu));
 			
@@ -33,6 +33,7 @@
 			
 			$lastBill = $this->cDB->getDocs(GENERATE_BILL);
 			$this->log->trace('LAST BILL DETAILS'."\r\n".json_encode($lastBill));
+			/* To get last bill details  */
 			if(array_key_exists('bill_array', $lastBill) && count($lastBill['bill_array'])>0){
 				if(array_key_exists($store_id, $lastBill['bill_array']) && $lastBill['bill_array'][$store_id]['date']== $this->getCDate()){
 					$lastBillNo = $lastBill['bill_array'][$store_id]['bill_no'] ;
@@ -58,7 +59,7 @@
 				}*/
 				//echo '<pre>'; print_r($service_tax); echo '</pre>'; die();
 				
-				/* check CAW customer */
+				/* check CAW customer in GET and if found get all menu item of that customer */
 				if(array_key_exists('cawOrder',$_GET) && is_numeric($_GET['cawOrder'])){
 					$customer_id = $_GET['cawOrder'];
 					$resultCawProduct = $this->cDB->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_RETAIL_CUSTOMER_LIST)->setParam(array('key'=>$customer_id,'include_docs'=>'true'))->execute();
@@ -144,6 +145,7 @@
 				/* Check error while fetching data from Couch */
 				if(!$billDataReturned['error']){
 	 				$billData = $billDataReturned['data'];
+					/* check printing mode and if mode is exe than call print EXE  */
 					if($config['printing_mode']=='exe'){
 						$billData['reprint'] = 1;
 						$re = $this->printBill($billData);
@@ -268,6 +270,7 @@
 				$return = array('error'=>false, 'message'=>'', 'data' => array());
 				$billDetails = $this->cDB->getDocs($bill_id);
   				$this->log->trace('BILL DETAILS'."\r\n".json_encode($billDetails));
+				/* Check error while fetching data from Couch */
   				if(array_key_exists('error', $billDetails)){
   					$return['message'] = ($billDetails['error'] == NOT_FOUND ? BILL_NOT_FOUND : ERROR.' '.$billDetails['error']);
   					$return['error'] = true;
@@ -351,7 +354,7 @@
 						$_POST['time'] = array('created'=>$this->getCDTime(), 'updated'=>$this->getCDTime());
 					}
 					
-					/* Check bill no type  */
+					/* Check bill no type and allow only numeric type  */
 					if(is_numeric($currentBillNo)){
 						$mode = ($config['billing_mode']==LOCAL_BILLING_MODE ? LOCAL : CLOUD);
 						$_POST['bill'] = $_SESSION['user']['store']['code']."".$_SESSION['user']['counter']."".str_pad($currentBillNo, 4 , '0', STR_PAD_LEFT)."".$mode;
@@ -388,6 +391,7 @@
 							$billDataReturned['data']['bill_status_id'] = $_POST['bill_status_id'];
 							$billDataReturned['data']['time']['updated'] = $this->getCDTime();
 							$billDataReturned['data']['cancel_reason'] = array_key_exists('cancel_reason', $_POST) ? $_POST['cancel_reason'] : '';
+							/*check if payment type is PPC and get details of last ppc transaction   */
 							if($billDataReturned['data']['payment_type']==PPC){
 								$data = array();
 								$data['amount'] = $billDataReturned['data']['card']['redeem_amount'];
@@ -400,6 +404,7 @@
                					require_once $dir;
                 				$ppc = new PpcAPI();
                 				$cancelResponse = $ppc->cancel($data, CANCEL_REDEEM);
+								/* check cancel action perform successfully or not  */
                 				if($cancelResponse['data']['success']=='False'){
                 					$return['error'] = true;
                 					$return['message'] = $cancelResponse['data']['message'];
@@ -469,6 +474,7 @@
 			}
 			$dir =  dirname(__FILE__).'/../lib/api/ppa_api.php';
             require_once $dir;
+			/* query to get ppa details  */
             $storeDetails = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_MYSQL_ID)->setParam(array('include_docs'=>'true',"key"=>'"'.$_SESSION['user']['store']['id'].'"'))->execute();
 			$result = $storeDetails['rows'][0]['doc'];
 			$config_data = $this->configData['ppa_api'];
@@ -560,11 +566,13 @@
 		/* Function To Cancel Card Load Transaction */
 		function cancelLoad(){
 			$return = array('error'=>false,'message'=>'','data'=>array());
+			/* Check for request type  */
 			if(array_key_exists('request_type', $_POST) && ($_POST['request_type'] == CANCEL_LOAD)){
 				$dir =  dirname(__FILE__).'/../lib/svc/ppc_api.php';
                 require_once $dir;
                 $ppc = new PpcAPI();
                 $cancelResponse = $ppc->cancel($_POST, $_POST['request_type']);
+				/* Check action perform successfuly  */
                 if($cancelResponse['data']['success']=='False'){
 					$return['error'] = true;
                 	$return['message'] = $cancelResponse['data']['message'];
@@ -584,6 +592,7 @@
         	$return = array('error'=>false,'message'=>'','data'=>array());
 			//$this->log->trace("BILL DETAILS TO BE PRINT \r\n".json_encode($data));
         	$path = EXE_PATH;
+			/* Check for data  */
 			if(!empty($data)) {
 				file_put_contents(BILL_DETAIL_TXT_PATH, json_encode($data,true));
         		//exec($path,$output,$return_value);
