@@ -5,6 +5,7 @@
 			$this->log =  Logger::getLogger("CP-POS|DASHBOARD");
 		}
 		function index(){
+			/* check Session */
 			if(!array_key_exists('id', $_SESSION['user']['store'])){
 				$result = $this->getSessionData();
 				if($result['error']){
@@ -15,6 +16,7 @@
 			$postData = array('action'=>STORE_AUDIT, 'store_id'=>$_SESSION['user']['store']['id']);
 			$url = ACTIVITY_TRACKER_API_URL;
 			$ch = curl_init();
+			/* curl request to get store Details(store sale, store activity, store messgae)  */
 			curl_setopt_array($ch, array(CURLOPT_URL => $url, CURLOPT_CONNECTTIMEOUT=>4, CURLOPT_TIMEOUT=>5, CURLOPT_RETURNTRANSFER => true, CURLOPT_POST => true, CURLOPT_POSTFIELDS => $postData));
 			$result = curl_exec($ch);
 			$curl_errno = curl_errno($ch);
@@ -32,6 +34,7 @@
 			$data['activity_data'] = $response;
 			require_once DIR.'/home/home.php';
 			$home = new Home();
+			/* get reconcilation data */
 			$data['reconcilation'] = $home->reconcilation();
 			
 			$configHead = $this->getConfig($this->cDB, 'head');
@@ -39,6 +42,7 @@
 			
 			require_once DIR.'/staff/staff.php';
 			$st = new Staff();
+			/* get staff list */
 			$data['staff_list'] = $st->getStaffList();
 			
 			require_once DIR.'/sales_register/sales_register.php';
