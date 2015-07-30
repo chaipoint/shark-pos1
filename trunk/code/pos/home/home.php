@@ -3,7 +3,9 @@
 		function __construct(){
 			parent::__construct();
 		}
+		/* This function is automatically called when we come on Home Module */
 		public function index(){
+			/*Check store id in POST data and if found unset existing session */
 			if(array_key_exists('store_id', $_POST)){
 				unset($_SESSION['user']['store']);
 				$_SESSION['user']['store']['name'] = $_POST['store_name'];
@@ -15,6 +17,7 @@
 				$_SESSION['user']['store']['stn_no'] = $_POST['stn_no'];
 				$data = array();
 				$data = $_SESSION;
+				/* save session data in couchdb   */
 				$getRev = $this->cDB->getDocs($this->getCDate());
 				if(!array_key_exists('error', $getRev)){
 					$data['_rev'] = $getRev['_rev'];
@@ -22,6 +25,7 @@
 				$data['_id'] = $this->getCDate();
 				$this->cDB->saveDocument()->execute($data);
 			}
+			/* get shift data  */
 			$result = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_SHIFT)->setParam(array("startkey" => '["'.$this->getCDate().'","'.$_SESSION['user']['store']['id'].'"]', "endkey" => '["'.$this->getCDate().'","'.$_SESSION['user']['store']['id'].'"]','include_docs'=>'true'))->execute();
 			if(!array_key_exists('rows', $result)){
 				header("LOCATION:index.php?error=true");
@@ -31,8 +35,10 @@
 			$data['is_store_open'] = 'false';
 			$data['is_shift_running'] = 'false';
 			$totalShifts = 0;
+			/* Check for shift no */
 			if(count($result['rows']) == 1){
 				$totalShifts = count($result['rows'][0]['doc']['shift']);
+				/* Check if shift end or not */
 				if(empty($result['rows'][0]['doc']['day']['end_time'])){
 					$data['is_store_open'] = 'true';
 					if($totalShifts != 0 && empty($result['rows'][0]['doc']['shift'][$totalShifts-1]['end_time'])){
@@ -84,6 +90,7 @@
 			$this->commonView('footer_html');
 		}
 		
+		/*Function to show ppc screen  */
 		function ppc(){
 			$this->commonView('header_html');
 			$this->commonView('navbar');
@@ -94,6 +101,7 @@
 			$this->commonView('footer_html');
 		}
 		
+		/*Function to show ppa screen  */
 		function ppa(){
 			$this->commonView('header_html');
 			$this->commonView('navbar');
@@ -110,7 +118,7 @@
 			if(array_key_exists('date', $_POST)){
 				$date = date('Y-m-d',strtotime($_POST['date']));		
 			}
-			
+			/*Check session  */
 			if(empty($_SESSION['user']['store']['id'])){
 				$result = $this->getSessionData();
 				if($result['error']){
@@ -127,9 +135,12 @@
 			$minus = 0;
 			require_once DIR.'/sales_register/sales_register.php';
 			$sr = new sales_register();
+			/* get Bill data  */
 			$sales_reg = $sr->getBills($date, $date);
 			$shift_inward = 0;
 			$shift_expense = 0;
+			
+			/* check store shift open or not  */
 			if(array_key_exists('shift', $_SESSION['user'])){
 				$resultInward = $this->cDB->getDesign(PETTY_EXPENSE_DESIGN_DOCUMENT)->getView(PETTY_EXPENSE_DESIGN_DOCUMENT_VIEW_GET_INWARD)->setParam(array("include_docs"=>"true", "descending"=>"true", "startkey" => '["'.$date.'", "'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]',"endkey" => '["'.$date.'","'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]'))->execute();
 				if(count($resultInward['rows'])>0){
@@ -140,7 +151,7 @@
 
 					}
 				}
-
+				/* Get Expense Data  */
 				$resultExpense = $this->cDB->getDesign(PETTY_EXPENSE_DESIGN_DOCUMENT)->getView(PETTY_EXPENSE_DESIGN_DOCUMENT_VIEW_GET_EXPENSE)->setParam(array("include_docs"=>"true","descending"=>"true","startkey" => '["'.$date.'", "'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]',"endkey" => '["'.$date.'","'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]'))->execute();
 				if(count($resultExpense['rows'])>0){
 					foreach($resultExpense['rows'] as $key => $value){
@@ -151,8 +162,9 @@
 					}
 				}
 			}
-
+			/* Get Shift Data  */
 			$shift_data = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_SHIFT)->setParam(array("startkey" => '["'.$date.'","'.$_SESSION['user']['store']['id'].'"]', "endkey" => '["'.$date.'","'.$_SESSION['user']['store']['id'].'"]','include_docs'=>'true'))->execute();
+			/* Get ppa and ppc sale  */
 			$card_sale = $this->cDB->getDesign(CARD_SALE_DESIGN_DOCUMENT)->getList(CARD_SALE_DESIGN_DOCUMENT_LIST_TODAYS_SALE, CARD_SALE_DESIGN_DOCUMENT_VIEW_GET_SALE)->setParam(array("include_docs"=>"true", "startkey" => '["'.$date.'", "'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]',"endkey" => '["'.$date.'","'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]'))->execute();
 			$excess = "";
 			$tablesShiftData = '<div class="panel panel-success">
@@ -177,6 +189,7 @@
 											</thead>
     										<tbody>';
 		   	$total = 0;
+			/*check shift data  */
     		if(count($shift_data['rows'])){
 				$shifts = $shift_data['rows'][0]['doc']['shift'];
 				$day = $shift_data['rows'][0]['doc']['day'];
@@ -195,7 +208,8 @@
 			    	$shift_in = 0;
 			    	$shift_ex = 0;
 			   		$cashSum = 0;
-			   
+				
+				/*Iterate shift array to calculate CASH RECONCILATION  */
 				foreach($shifts as $key => $values){
 				    $inw = (empty($values['petty_cash_balance']['inward_petty_cash']) ? $shift_inward : $values['petty_cash_balance']['inward_petty_cash']);
 				    $exp = (empty($values['petty_cash_balance']['petty_expense']) ? $shift_expense : $values['petty_cash_balance']['petty_expense']);
@@ -225,6 +239,7 @@
 						$cash_reconciliation_insert['shift_'.$values['shift_no'].'_excess_cash'] = ($values['end_cash_inbox']!='' ? $saleCashVeriance + $pettyCashVeriance : 0);
 						$excess_in_box	+= $cash_reconciliation_insert['shift_'.$values['shift_no'].'_excess_cash'];
 				}
+				/* if shift ended than calculate end_petty_cash, end_fullcash   */
 				if(!empty($shift_data['rows'][0]['doc']['day']['end_time'])){
 					$tablesShiftData .='<tr><td style="font-size:9px">DAY END</td>
 				    	<td class="text-center"></td>
@@ -243,7 +258,8 @@
 			$returnData['data']['shift_table'] = $tablesShiftData;
 			
 			$cash_reconciliation_table = '<div class="panel panel-success"><div class="panel-heading"><h4 class="panel-title">Cash Reconciliation</h4></div><div class="panel-body"><table class="table table-condensed table-bordered"><thead><tr><th style="font-size:12px;text-align:left;">Description</th><th style="font-size:12px">Value</th></tr></thead><tbody>';
-    		foreach($sales_reg['payment_type']['amount'] as $pKey => $pValue){
+    		/* calculate total cash according to payment type  */
+			foreach($sales_reg['payment_type']['amount'] as $pKey => $pValue){
 				$cash_reconciliation_insert[$pKey] = $pValue;
 	    		$cash_reconciliation_table .= '<tr><td style="font-size:9px">'.strtoupper($pKey).'</td><td class="text-center">'.$pValue.'</td></tr>';
 				$total += $pValue;
@@ -251,7 +267,7 @@
 	    					      ($pKey=='ppc' ? $minus + $pValue :
 	    						    ($pKey=='caw' ? $minus + $pValue : $minus)));
 	    	}
-	    	
+	    	/* calculate total according to card sale */
 	    	if(is_array($card_sale) && count($card_sale)>0){ 
 	    		foreach ($card_sale as $key => $value) {
 	    			if($key!='shift_cash'){
@@ -263,12 +279,12 @@
 	    			}
 	    		}
 	    	}
-	    	$total += $excess_in_box;
+	    	$total += $excess_in_box; // To Cash
 	    	$cash_in_box = $total - $minus; // To Calculate Cash IN BOX 
     		$cash_reconciliation_insert['cash_in_box'] = $cash_in_box;
     		$cash_reconciliation_table .= $excess;
     		$cash_reconciliation_table .= '</tbody><thead><tr><th style="font-size:12px;text-align:left">Total Sale</th><th>'.($total).'</th></tr></thead><thead><tr><th style="font-size:12px;text-align:left">Cash In Box</th><th>'.($cash_in_box).'</th></tr></thead></table></div></div>';
-    		
+    		/* Insert Cash-Reconcilation in couchdb  */
     		if(!$returnData['error'] && array_key_exists(0, $shift_data['rows'])){ 
 				$result = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getUpdate(STORE_DESIGN_DOCUMENT_UPDATE_STORE_SHIFT,$shift_data['rows'][0]['id'])->setParam($cash_reconciliation_insert)->execute();
     		}
