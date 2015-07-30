@@ -5,6 +5,7 @@
 			$this->log =  Logger::getLogger("CP-POS|RETAIL CUSTOMER");
 		}
 		function index(){
+			/* Check session  */
 			if(!array_key_exists('user', $_SESSION)){
 				header("LOCATION:index.php");
 			}else if(!array_key_exists('id', $_SESSION['user']['store'])){
@@ -14,10 +15,12 @@
 				}
 			}
 			$data = array('error' => false, 'customerList'=>array());
+			/* query to get all the CAW client mapped to login-store  */
 			$getCustomer = $this->cDB->getDesign(STORE_DESIGN_DOCUMENT)->getView(STORE_DESIGN_DOCUMENT_VIEW_STORE_MYSQL_ID)->setParam(array('include_docs'=>'true', "key"=>'"'.$_SESSION['user']['store']['id'].'"'))->execute();
 			$this->log->trace('CUSTOMER LIST'."\r\n".json_encode($getCustomer));
 			$result = $getCustomer['rows'][0]['doc'];
 			$customerList= array();
+			/* Check for retail_customer  */
 			if(array_key_exists('retail_customer', $result) && count($result['retail_customer'])>0){
 				foreach($result['retail_customer'] as $key => $value){
 					$customerList[$key]['name'] = $value['name'];
