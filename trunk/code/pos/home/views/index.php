@@ -39,11 +39,11 @@
 								</span> 
 								<input type="password" name="password" value="" class="input-sm form-control" placeholder="Password" autocomplete="off"/>
 							</div>
-							<div class="input-group padded">
+							<div class="input-group padded hide">
 								<span class="input-group-addon">
 									<img src="<?php echo IMG ?>inr.png"> 
 								</span> 
-								<input type="text" name="petty_cash" value="" id="petty_cash" class="input-sm form-control" placeholder="Petty Cash" autocomplete="off"/>
+								<input type="hidden" name="petty_cash" value="0" id="petty_cash" class="input-sm form-control" placeholder="Petty Cash" autocomplete="off"/>
 							</div>
 							<div class="row padded">
 								<div class="col-md-7">
@@ -78,7 +78,7 @@
 								<span class="input-group-addon">
 									<i class="glyphicon glyphicon-briefcase"></i> 
 								</span> 
-								<input type="text" name="opening_box_cash" value="" id="opening_box_cash" class="input-sm form-control" placeholder="Box Cash" autocomplete="off"/>
+								<input type="text" name="opening_box_cash" value="" id="opening_box_cash" class="input-sm form-control" placeholder="Cash+Sodexo+TR in Box" autocomplete="off"/>
 							</div>
 							<div class="input-group padded">
 								<span class="input-group-addon">
@@ -115,17 +115,17 @@
 								</span> 
 								<input type="password" name="password" value="" class="input-sm/ form-control" placeholder="Password" autocomplete="off"/>
 							</div>
-							<div class="input-group padded">
+							<div class="input-group padded hide">
 								<span class="input-group-addon">
 									<img src="<?php echo IMG ?>inr.png"> 
 								</span> 
-								<input type="text" name="petty_cash_end" value="" id="petty_cash_end" class="input-sm form-control" placeholder="Petty Cash" autocomplete="off"/>
+								<input type="hidden" name="petty_cash_end" value="0" id="petty_cash_end" class="input-sm form-control" placeholder="Petty Cash" autocomplete="off"/>
 							</div>
-							<div class="input-group padded">
+							<div class="input-group padded hide">
 								<span class="input-group-addon">
 									<i class="glyphicon glyphicon-briefcase"></i> 
 								</span> 
-								<input type="text" name="box_cash" value="" id="box_cash" class="input-sm form-control" placeholder="Box Cash" autocomplete="off"/>
+								<input type="text" name="box_cash" value="0" id="box_cash" class="input-sm form-control" placeholder="Box Cash" autocomplete="off"/>
 							</div>
 
 							<div class="input-group padded">
@@ -152,6 +152,7 @@
 							<input type='hidden' name='qty_50' id='qty_50' value='0'>
 							<input type='hidden' name='qty_100' id='qty_100' value='0'>
 							<input type='hidden' name='qty_500' id='qty_500' value='0'>
+							<input type='hidden' name='qty_1000' id='qty_1000' value='0'>
 							<input type='hidden' name='qty_sodex' id='qty_sodex' value='0'>
 							<input type='hidden' name='amount_sodex' id='amount_sodex' value='0'>
 							<input type='hidden' name='qty_restaurent' id='qty_restaurent' value='0'>
