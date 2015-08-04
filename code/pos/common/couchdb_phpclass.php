@@ -71,6 +71,19 @@ class CouchPHP{
 		$this->genUrl = $this->url.$db."/_all_docs";
 		return $this;		
 	}
+	
+	public function compact(){
+		$db = trim($this->db);
+		if(empty($db)){
+			return '{"error":true,"reason":"no database provided"}';
+		}
+		$url = $this->url.$db;
+		$this->isPost = true;
+		$this->allowContentType = true;
+		$this->genUrl = $this->url.$db."/_compact";
+		$result = $this->curl($this->genUrl);
+		return $result;		
+	}
 
 	public function getDesign($design){
 		$this->genUrl = $this->url.$this->db."/_design/".$design;
