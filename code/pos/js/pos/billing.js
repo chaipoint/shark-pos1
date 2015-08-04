@@ -85,11 +85,10 @@ $(document).ready(function(){
 			});
 			
 			$.each(orderData.products, function (index, data){
-			//alert(JSON.stringify(productNewList));
+			
 				if(data['id'] in productNewList){
 					var productData = productArray[productNewList[data['id']].cat] [productNewList[data['id']].seq];
 					productData['price'] = data['cost'];
-					//productData['service_tax'] = 0.0249;
 					selectedCat = productData['category']['id'];
 					$('#proajax button[value="'+data['id']+'"]').addClass('active-btn');
 					generateSalesTable(data['id'], parseInt(data['qty']), productData);
@@ -627,7 +626,10 @@ $(document).ready(function(){
 				$("#balance").text(amountoBePaid - ($totalAmountWT.toFixed(0)));
 				if(loadedBill){ 
 					$("#customer_type").append('<option  value="coc">COC</option>');
-					$('.payment-type-bt[data-value="'+loadedBill.payment_method+'"]').trigger('click');
+					$('#payment_mode').html('<a class="btn btn-sm btn-primary payment-type-bt btn-success" data-value="'+loadedBill.payment_method+'">'+loadedBill.payment_method+'</a><input type="hidden" name="paid_by" id="paid_by" value="'+loadedBill.payment_method+'">');
+					//$('.payment-type-bt[data-value="'+loadedBill.payment_method+'"]').trigger('click');
+					
+					$('#paid_by').val(loadedBill.payment_method);
 					$("#paid-amount").val(Math.ceil($totalAmountWT.toFixed(2)));
 					$("#balance").text(0);
 					$("#delivery_channel").val(75);
