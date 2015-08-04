@@ -49,6 +49,11 @@
 							<td><input type="text" value="0" class="cash-qty form-control"></td>
 							<td><span class="total pull-left">0</span></td>
 						</tr>
+						<tr class="row" cash-value="1000">
+							<td><button type="button" class="btn btn-sm btn-primary btn1">1000</button></td>
+							<td><input type="text" value="0" class="cash-qty form-control"></td>
+							<td><span class="total pull-left">0</span></td>
+						</tr>
 						<tr class="row" cash-value="sodex">
 							<td><button type="button" class="btn btn-sm btn-warning btn1">Sodex</button></td>
 							<td><input type="text" value="0" id="quantity_sodex" style="width:40%" class="qunt sodex form-control"></td>
