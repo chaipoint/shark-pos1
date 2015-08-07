@@ -1,5 +1,5 @@
 <?php
-	error_reporting(-1); 
+	//error_reporting(-1); 
 	include_once 'common/connection.php' ;
 	require_once 'common/couchdb.phpclass.php';
 	require_once 'common/logger.php';
@@ -7,17 +7,17 @@
 	
 
 echo 'here';
-echo deleteDoc();
+echo deleteDoc1();
 error_reporting(-1); 
 //echo init();
-public function deleteDoc(){ echo 'eneter';
+function deleteDoc1(){ echo 'eneter';
 //global $logger, $db;
 error_reporting(-1);
 //require_once 'common/couchdb.phpclass.php';
 	$couch = new CouchPHP();
 	$deleteArray = array();
 	echo $couch;
-	$result = $couch->getDesign('billing')->getView('handle_updated_bills')->setParam(array("startkey" => '["2015-03-01"]',"endkey" => '["2015-03-31",{},{},{}]'))->execute();
+	//$result = $couch->getDesign('billing')->getView('handle_updated_bills')->setParam(array("startkey" => '["2015-03-01"]',"endkey" => '["2015-03-31",{},{},{}]'))->execute();
 	$i=0;
 	echo 'ccchchh';
 	echo '<pre>';print_r($result);echo '</pre>';
