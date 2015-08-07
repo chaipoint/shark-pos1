@@ -10,7 +10,7 @@ echo 'here';
 echo deleteDoc();
 error_reporting(-1); 
 //echo init();
-public function deleteDoc({ echo 'eneter';
+public function deleteDoc(){ echo 'eneter';
 //global $logger, $db;
 error_reporting(-1);
 //require_once 'common/couchdb.phpclass.php';
