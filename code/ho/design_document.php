@@ -8,7 +8,7 @@
 
 echo 'here';
 echo deleteDoc();
-
+error_reporting(E_ALL); 
 //echo init();
 public function deleteDoc({ echo 'eneter';
 //global $logger, $db;
