@@ -24,7 +24,7 @@ echo checking();
 function checking(){ echo 'Hello';
 	$couch = new CouchPHP();
 	print_r ($couch);
-	$result = $couch->getDesign('billing')->getView('handle_updated_bills')->setParam(array("endkey" => '["2015-02-01"]',"startkey" =>'["2015-02-31",{},{},{}]'))->execute();
+	$result = $couch->getDesign('billing')->getView('handle_updated_bills')->setParam(array("include_docs"=>"true","endkey" => '["2015-02-01"]',"startkey" =>'["2015-02-31",{},{},{}]'))->execute();
 	
 	echo '<pre>'; print_r($result); echo '</pre>';die();
 }
