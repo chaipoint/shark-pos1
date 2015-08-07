@@ -14,7 +14,7 @@ function deleteDoc1(){ echo 'eneter';
 //global $logger, $db;
 error_reporting(-1);
 //require_once 'common/couchdb.phpclass.php';
-	$couch = new CouchPHP();
+	//$couch = new CouchPHP();
 	$deleteArray = array();
 	echo $couch;
 	//$result = $couch->getDesign('billing')->getView('handle_updated_bills')->setParam(array("startkey" => '["2015-03-01"]',"endkey" => '["2015-03-31",{},{},{}]'))->execute();
