@@ -1,8 +1,8 @@
 <?php
-error_reporting(E_ALL); 
-include_once 'common/connection.php' ;
+	//error_reporting(E_ALL); 
+	//include_once 'common/connection.php' ;
 	require_once 'common/couchdb.phpclass.php';
-	require_once 'common/logger.php';
+	//require_once 'common/logger.php';
 	require_once 'constant.php';
 	
 
@@ -13,6 +13,7 @@ echo deleteDoc();
 function deleteDoc(){ echo 'eneter';
 //global $logger, $db;
 //error_reporting(E_ALL);
+require_once 'common/couchdb.phpclass.php';
 	$couch = new CouchPHP();
 	$deleteArray = array();
 	echo $couch;
