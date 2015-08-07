@@ -107,9 +107,9 @@ function deleteDoc(){
 error_reporting(E_ALL);
 	$couch = new CouchPHP();
 	$deleteArray = array();
-	$result = $couch->getDesign('billing')->getView('handle_updated_bills')->setParam(array("startkey" => '["2015-02-01"]',"endkey" => '["2015-02-31",{},{},{}]'))->execute();
+	$result = $couch->getDesign('billing')->getView('handle_updated_bills')->setParam(array("startkey" => '["2015-03-01"]',"endkey" => '["2015-03-31",{},{},{}]'))->execute();
 	$i=0;
-	echo '<pre>';print_r($result);echo '</pre>';die();
+	//echo '<pre>';print_r($result);echo '</pre>';die();
 	foreach($result['rows'] as $key => $value){
 		$deleteArray[$i]["_id"] = $value['id'];
 		$deleteArray[$i]["_rev"] = $value['value'];
@@ -117,7 +117,7 @@ error_reporting(E_ALL);
 		$i++;
 	}
 	//$res = $couch->saveDocument(true)->execute(array("docs"=>$deleteArray));
-	//echo'<pre>'; print_r($deleteArray); echo'</pre>';
+	echo'<pre>'; print_r($deleteArray); echo'</pre>';
 		
 }
 function init(){
