@@ -20,7 +20,8 @@ switch ($param){
 		echo cardSale();
 		break;
 }
-//echo cardSale();
+echo 'here';
+echo deleteDoc();
 function cardSale(){
 global $logger, $db;
 	$couch = new CouchPHP();
