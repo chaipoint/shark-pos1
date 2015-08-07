@@ -152,6 +152,6 @@ class CouchPHP{
    			$resArray['error'] = true;
    			$resArray['cMessage'] = 'server_error';
    		}
-       	return $resArray;	
+       	echo $resArray;	
     }
 }
