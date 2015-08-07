@@ -1,11 +1,11 @@
 <?php
 error_reporting(E_ALL); 
-	include_once 'common/connection.php' ;
+include_once 'common/connection.php' ;
 	require_once 'common/couchdb.phpclass.php';
 	require_once 'common/logger.php';
 	require_once 'constant.php';
 	
-/*$param = $_GET['param'];
+$param = $_GET['param'];
 echo $param;
 switch ($param){
 	case 'init':
@@ -19,16 +19,8 @@ switch ($param){
 	case 'cardSale':
 		echo cardSale();
 		break;
-}*/
-echo checking();
-function checking(){ echo 'Hello';
-	$couch = new CouchPHP();
-	print_r ($couch);
-	$result = $couch->getDesign('billing')->getView('handle_updated_bills')->setParam(array("include_docs"=>"true","endkey" => '["2015-02-01"]',"startkey" =>'["2015-02-31",{},{},{}]'))->execute();
-	
-	echo '<pre>'; print_r($result); echo '</pre>';die();
 }
-die();
+//echo cardSale();
 function cardSale(){
 global $logger, $db;
 	$couch = new CouchPHP();
@@ -261,7 +253,7 @@ function init(){
           "staff_replication" => "function(doc,req){ if(doc.cd_doc_type && doc.cd_doc_type == 'staff_master' && doc.location_id == req.query.location) { return  true;}else{return  false;} }",
               "store_replication" => "function(doc,req){ if(doc.cd_doc_type && doc.cd_doc_type == 'store_master' && doc.mysql_id == req.query.mysql_id) {return  true;}else{return  false;} }",
               "design_replication" => "function(doc,req){ if(doc.language || (doc.cd_doc_type && ( doc.cd_doc_type == 'bill_counter' || doc.cd_doc_type == 'ppc_bill_counter' || doc.cd_doc_type == 'config_master'))) {return  true;}else{return  false;} }",
-              "bill_replication" => "function(doc, req){ if(doc.cd_doc_type && ( doc.cd_doc_type == 'store_bill' || doc.cd_doc_type == 'petty_expense' || doc.cd_doc_type == 'petty_inward' || doc.cd_doc_type == 'store_shift' || doc.cd_doc_type == 'login_history' ) && !doc.mysql_id){ return true;} else { return false;}}",
+              "bill_replication" => "function(doc, req){ if(doc.cd_doc_type && ( doc.cd_doc_type == 'store_bill' || doc.cd_doc_type == 'petty_expense' || doc.cd_doc_type == 'petty_inward' || doc.cd_doc_type == 'store_shift' || doc.cd_doc_type == 'login_history' || doc.cd_doc_type == 'card_sale' ) && !doc.mysql_id){ return true;} else { return false;}}",
               "config_replication" => "function(doc, req){ if(doc.cd_doc_type && doc.cd_doc_type == 'config_master'){ return true;} else { return false;}} ",
               "retail_customer_replication" => "function(doc, req){ if(doc.cd_doc_type && doc.cd_doc_type == 'retail_customers' && doc.location_id == req.query.location){ return true;} else { return false;}} "        
               )
@@ -322,6 +314,9 @@ function init(){
               "store_shift" => array(
                   "map" => "function(doc) { if(doc.cd_doc_type == 'store_shift'){ var date = doc.login_time.split(' '); emit(date[0], null); } }"
                 ),
+				"card_no_mysql_id" => array (
+           "map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'card_sale'){  emit(doc.store_id, null); } }"
+       ),
               "retail_customer_list" => array(
                   "map" => "function(doc) { if(doc.cd_doc_type && doc.cd_doc_type == 'retail_customers'){ emit(1*doc.mysql_id, null); } }"
                 )
@@ -331,7 +326,8 @@ function init(){
               "insert_mysql_id" => "function(doc,req){ if(doc) { if(doc) { doc.mysql_id = req.query.mysql_id; return [doc,req.query.mysql_id]; } } }"
             ),
           "lists" => array(
-              "sales_register" => "function(head, req) { var billList=new Object;billList.data=new Object;var payment_type=new Object;payment_type.count=new Object;payment_type.amount=new Object;var bill_status=new Object;bill_status.count=new Object;bill_status.amount=new Object;var cashSale=0; var creditSale = 0; var ppaSale = 0;  var ppcSale=0;var cashinDelivery=0;var store_bill_list=new Object;while(row=getRow()){if(row.doc){if(!(row.doc.store_id in billList.data)){billList.data[row.doc.store_id]=new Object}if(!(row.doc.bill_no in billList.data[row.doc.store_id])){billList.data[row.doc.store_id][row.doc.bill_no]=new Object;if(row.doc.bill_status_id==80 && row.doc.payment_type=='cash'){cashSale+=1*row.doc.due_amount}if(row.doc.bill_status_id==80 && row.doc.payment_type=='ppc'){ppcSale+=1*row.doc.due_amount} if(row.doc.bill_status == 'Paid' && row.doc.payment_type == 'ppa') { ppaSale += (1* row.doc.due_amount); } if((row.doc.payment_type == 'credit' || row.doc.payment_type == 'caw') && row.doc.bill_status != 'CoD') { creditSale += (1* row.doc.due_amount); }  if(row.doc.bill_status_id==77 && row.doc.bill_status=='CoD'){cashinDelivery+=1*row.doc.due_amount}}}}billList.payment_type=payment_type;billList.cash_sale=cashSale; billList.creditSale = creditSale; billList.ppaSale = ppaSale; billList.ppcSale=ppcSale;billList.cashinDelivery=cashinDelivery;delete billList.data; return JSON.stringify(billList); }",
+              "sales_register" => "function(head, req) { var billList=new Object;billList.data=new Object;var payment_type=new Object;payment_type.count=new Object;payment_type.amount=new Object;var bill_status=new Object;bill_status.count=new Object;bill_status.amount=new Object;var cashSale=0; var creditSale = 0; var ppaSale = 0;  var ppcSale=0;var cashinDelivery=0;var store_bill_list=new Object;while(row=getRow()){if(row.doc){if(!(row.doc.store_id in billList.data)){billList.data[row.doc.store_id]=new Object}if(!(row.doc.bill_no in billList.data[row.doc.store_id])){billList.data[row.doc.store_id][row.doc.bill_no]=new Object;if(row.doc.bill_status_id==80 && row.doc.payment_type=='cash'){cashSale+=1*row.doc.due_amount}if(row.doc.bill_status_id==80 && row.doc.payment_type=='ppc'){ppcSale+=1*row.doc.due_amount} if(row.doc.bill_status == 'Paid' && row.doc.payment_type == 'ppa') { ppaSale += (1* row.doc.due_amount); } if((row.doc.payment_type == 'credit' || row.doc.payment_type == 'caw') && row.doc.bill_status != 'CoD') { creditSale += (1* row.doc.due_amount); }  if(row.doc.bill_status_id==77&&row.doc.bill_status=='CoD'){cashinDelivery+=1*row.doc.due_amount}}}}billList.payment_type=payment_type;billList.cash_sale=cashSale; billList.creditSale = creditSale; billList.ppaSale = ppaSale; billList.ppcSale=ppcSale;billList.cashinDelivery=cashinDelivery;delete billList.data; return JSON.stringify(billList); }",
+			  "sales_count" => "function(head, req) { var billList=new Object; while(row=getRow()){if(row.doc){if(!(row.doc.store_name in billList)){billList[row.doc.store_name]=0;billList[row.doc.store_name] +=(1* row.doc.due_amount);}else{billList[row.doc.store_name] +=(1* row.doc.due_amount);} }} return (billList); }",
               "petty_expense" => "function(head, req) {var sum=0;while(row=getRow()){if(row.doc){sum+=(1*row.doc.expense_amount);}} return sum.toString();}"
             )
       );
