@@ -311,7 +311,7 @@ function uploadBill(){
 	$couch = new CouchPHP();
 	$html = array();
 	$no_bill = $unsuccessful = $successful = $counter = 0;
-	$billData = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_NO_MYSQL_ID)->setParam(array('include_docs'=>'true','limit'=>'1000'))->execute();
+	$billData = $couch->getDesign(DESIGN_HO_DESIGN_DOCUMENT)->getView(DESIGN_HO_DESIGN_DOCUMENT_VIEW_NO_MYSQL_ID)->setParam(array('include_docs'=>'true','limit'=>'10'))->execute();
 	$logger->debug("URL to sccess data ".$couch->getLastUrl());
 
  	if(array_key_exists('rows', $billData)){ 
@@ -385,11 +385,17 @@ function uploadBill(){
 					$insertProducst = 'INSERT INTO cp_pos_storeorders_products (order_id, bill_date, store_id, store_name, product_id, product_name, category_id, category_name, recipe_id, qty, price, tax, service_tax, service_tax_amount, priceBT, discount, discount_amount, taxable_amount, tax_amount, net_amount, priceAD, subTotal) values '.implode(',',$productsArray);
 					$res = $db->db_query($insertProducst);	
 				    $returnResult = $couch->getDesign('design_ho')->getUpdate('insert_mysql_id', $docsData['_id'])->setParam(array('mysql_id'=>$insertId))->execute();				
-				    if($res){				    	
-					    $logger->trace("Bill No ".$docsData['bill_no']." \tBill Id".$docsData['_id']." \tStore".$docsData['store_id']." \tBill Time".$docsData['bill_time']." \tMySQL ID".$insertId);
-				        $successful = 1;
+				   
+				    if(array_key_exists('error', $returnResult)){				    	
+					    $delete_bill = "DELETE FROM cp_pos_storeorders WHERE id = '".$insertId."' ";
+					    $db->db_query($delete_bill);
+					    $delete_product = "DELETE FROM cp_pos_storeorders_products WHERE order_id = '".$insertId."' ";
+					    $db->db_query($delete_product);
+					    $unsuccessful = 1;
 				    }else {
-				    	$unsuccessful = 1;
+				    	
+				    	$logger->trace("Bill No ".$docsData['bill_no']." \tBill Id".$docsData['_id']." \tStore".$docsData['store_id']." \tBill Time".$docsData['bill_time']." \tMySQL ID".$insertId);
+				        $successful = 1;
 				    }
 				}
 			}else{
