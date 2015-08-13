@@ -105,8 +105,11 @@
 		<button class="btn" data-title_id="<?php echo $_SESSION['user']['title']['id'];  ?>" <?php echo (($_SESSION['user']['title']['id']=='4' || $_SESSION['user']['title']['id']=='6')  ? '' :'style="opacity:.65"') ; ?> id="report_data">Sales Reports</button>
 		<button class="btn" id="billing_sync">Data Sync</button>
 		<button class="btn" id="caw_sync" data-store_id="<?php echo $_SESSION['user']['store']['id'];?>">Get Latest Store Data</button>
-		<div class="btn-group" >
-  			<button type="button" class="btn dropdown-toggle" data-toggle="dropdown">
+		<button class="btn" data-title_id="<?php echo $_SESSION['user']['title']['id'];  ?>" <?php echo (($_SESSION['user']['title']['id']=='4' || $_SESSION['user']['title']['id']=='6')  ? '' :'style="opacity:.65"') ; ?> id="audit">Audit Report</button>
+		<button class="btn" data-menu="<?php echo $first;?>" id="start_billing">Start Billing</button>
+
+		<div class="btn-group" style='margin:11px' >
+  			<button type="button" class="btn dropdown-toggle " data-toggle="dropdown">
 				Petty Expense & Inward &nbsp;<span class="caret"></span>
 			</button>
   			<ul class="dropdown-menu" role="menu">
@@ -115,7 +118,6 @@
 				<li><a href="#" id="add_inward">Add Inward</a></li>
 			</ul>
 		</div>
-		<button class="btn" data-menu="<?php echo $first;?>" id="start_billing">Start Billing</button>
 		
 		
 		
