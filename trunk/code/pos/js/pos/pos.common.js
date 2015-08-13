@@ -34,6 +34,10 @@ $(document).ready(function(){
 	
 	//is_shift_running = (is_shift_running==undefined) ? false : is_shift_running;
 	
+	$('a.DTTT_button_print').click(function(){
+		window.print();
+		window.location.reload(true);
+	});
 	$('#start_billing').on('click', function(){
 		var url = $(this).data('menu');
 		//alert(url);
