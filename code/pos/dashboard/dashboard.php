@@ -57,4 +57,22 @@
 			$this->commonView('footer_html');
 			
 		}
+		function audit(){
+			$data = array('error'=>false, 'message' => '', 'data'=> array());
+			
+			require_once DIR.'/sales_register/sales_register.php';
+			$sr = new sales_register();
+			$data['data'] = $sr->getBills($this->getCDate(), $this->getCDate());
+
+			/* Get ppa and ppc sale  */
+			$data['card_sale'] = $this->cDB->getDesign(CARD_SALE_DESIGN_DOCUMENT)->getList(CARD_SALE_DESIGN_DOCUMENT_LIST_TODAYS_SALE, CARD_SALE_DESIGN_DOCUMENT_VIEW_GET_SALE)->setParam(array("include_docs"=>"true", "startkey" => '["'.$this->getCDate().'", "'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]',"endkey" => '["'.$this->getCDate().'","'.$_SESSION['user']['store']['id'].'" ,"'.$_SESSION['user']['counter'].'"]'))->execute();
+			
+			$this->commonView('header_html');
+			$this->commonView('navbar');
+			$this->view($data);
+			//$this->commonView('footer_inner');
+			$this->commonView('footer_html');
+
+		}
+
 	}
