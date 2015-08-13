@@ -38,13 +38,20 @@ margin-right: 99px;
 					</li>
 					<?php } ?>
 					
-					<?php if(MODULE == 'dashboard' ){?>
+					<?php if(MODULE == 'dashboard' && MODE !='audit' ){?>
 					<li><a class="tip" data-placement="left" href="index.php?dispatch=home.index" title="Change Store" style="margin-right:-22px">
 							End Shift |
 						</a>
 					</li>
 					<?php } ?>
 					
+					<?php if(MODULE == 'dashboard' && MODE =='audit' ){?>
+					<li><a class="tip" data-placement="left" href="index.php?dispatch=dashboard" title="Change Store" style="margin-right:-22px">
+							Dashboard |
+						</a>
+					</li>
+					<?php } ?>
+
 					<?php if(MODULE == 'home' && MODE == 'index'){?>
 					<li><a class="tip" data-placement="left" href="index.php?dispatch=store.index" title="Change Store" style="margin-right:-22px">
 							Change Store |
