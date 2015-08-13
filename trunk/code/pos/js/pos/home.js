@@ -145,12 +145,12 @@ $(document).ready(function(){
 			case 'store_ppc_card_load_form':
 				formData.request_type = 'load_ppc_card';
 				if((formData.amount).trim() == ""){msg += "<li>Provide Amount</li>";}
-				else if(!/^[0-9;=?]+$/.test(formData.card_number)){msg += "<li>Provide Correct Card No</li>";}
+				//else if(!/^[0-9;=?]+$/.test(formData.card_number)){msg += "<li>Provide Correct Card No</li>";}
 				break;
 
 			case 'store_ppc_card_balance_check_form':
 				formData.request_type = 'balance_check_ppc_card';
-				if(!/^[0-9;=?]+$/.test(formData.card_number)){msg += "<li>Provide Correct Card No</li>";}
+				//if(!/^[0-9;=?]+$/.test(formData.card_number)){msg += "<li>Provide Correct Card No</li>";}
 				break;
 
 			case 'store_ppa_card_load_form':

@@ -55,6 +55,14 @@ $(document).ready(function(){
 	$('#dashboard').click(function(){
 		window.location.href = 'index.php?dispatch=dashboard.index';
 	});
+	$('#audit').click(function(){ 
+		if($(this).data('title_id')==4 || $(this).data('title_id')==6 ){ 
+			window.location.href = 'index.php?dispatch=dashboard.audit';
+		}else {
+			bootbox.alert('Not Authorised to see the screen!');
+		}
+		
+	});
 	$('#walk-in').click(function(){
 		window.location.href = 'index.php?dispatch=billing.index';
 	});
@@ -311,6 +319,7 @@ var createDataTable = function (path,table,footerRow,filterRow) { //alert(filter
 		}
 		
 		oTable = $('#'+table).DataTable({
+			
 			/*"dom": 'T<"H"lfr>t<"F"ip>',
 			"tableTools": {
 					"sSwfPath": media_path+"swf/copy_csv_xls_pdf.swf",		
