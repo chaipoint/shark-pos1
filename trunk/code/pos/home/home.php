@@ -264,8 +264,10 @@
 	    		$cash_reconciliation_table .= '<tr><td style="font-size:9px">'.strtoupper($pKey).'</td><td class="text-center">'.$pValue.'</td></tr>';
 				$total += $pValue;
 				$minus = ($pKey=='ppa' ? $minus + $pValue :
-	    					      ($pKey=='ppc' ? $minus + $pValue :
-	    						    ($pKey=='caw' ? $minus + $pValue : $minus)));
+	    					      ($pKey=='ppc' ? $minus + $pValue : 
+	    					      	($pKey=='credit' ? $minus + $pValue : 
+	    					      	  ($pKey=='Online-Others' ? $minus + $pValue : 
+	    						        ($pKey=='caw' ? $minus + $pValue : $minus)))));
 	    	}
 	    	/* calculate total according to card sale */
 	    	if(is_array($card_sale) && count($card_sale)>0){ 
